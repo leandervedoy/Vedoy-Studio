@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+  <title id="title">Vedøy</title>
+  <rect width="64" height="64" rx="18" fill="#171714"/>
+  <path d="M14 19h8l10 25 10-25h8L36 51h-8L14 19Z" fill="#fff"/>
+  <path d="M46 13a7 7 0 1 1-7 7 7 7 0 0 1 7-7Zm0 4a3 3 0 1 0 3 3 3 3 0 0 0-3-3Z" fill="#f2d766"/>
+</svg>

@@ -1,0 +1,12 @@
+import { ModuleHeader } from "@/components/studio/module-header";
+
+const checks = [
+  { name: "studio.vedoy.com", type: "Nettside", latency: 428, uptime: "99,99%", status: "healthy" },
+  { name: "api.vedoy.com/health", type: "API", latency: 184, uptime: "99,98%", status: "healthy" },
+  { name: "vedoycollective.no", type: "Nettbutikk", latency: 712, uptime: "99,95%", status: "healthy" },
+  { name: "vedoyassist.no", type: "Domene", latency: 0, uptime: "Venter", status: "building" }
+];
+
+export default function MonitoringPage() {
+  return <><ModuleHeader eyebrow="UTVIKLE" title="Overvåkning" description="Oppdag nedetid, treghet, SSL-problemer og utløp før kundene gjør det." badge="BETA" /><section className="monitor-summary"><div><span className="large-status"><i /> Alt ser bra ut</span><h2>3 av 4 tjenester svarer normalt</h2><p>Siste automatiske kontroll: for 2 minutter siden.</p></div><button className="button button--dark">+ Ny kontroll</button></section><div className="monitor-list"><div className="monitor-list__head"><span>Tjeneste</span><span>Responstid</span><span>Oppetid 30 dager</span><span>Status</span><span /></div>{checks.map((check) => <article key={check.name}><div><span>{check.type === "API" ? "{}" : check.type === "Domene" ? "◎" : "△"}</span><div><strong>{check.name}</strong><small>{check.type}</small></div></div><strong>{check.latency ? `${check.latency} ms` : "—"}</strong><span>{check.uptime}</span><span className={`project-health project-health--${check.status}`}><i />{check.status === "healthy" ? "Frisk" : "Venter"}</span><button className="icon-button">•••</button></article>)}</div><div className="monitor-grid"><article className="studio-panel"><div className="panel-heading"><div><small>SSL OG DOMENER</small><h2>Neste utløp</h2></div></div><div className="expiry-list"><div><span>SSL · studio.vedoy.com</span><strong>87 dager</strong></div><div><span>Domene · vedoycollective.no</span><strong>194 dager</strong></div><div><span>Domene · vedoy.com</span><strong>280 dager</strong></div></div></article><article className="studio-panel"><div className="panel-heading"><div><small>VARSLER</small><h2>Rolig når alt fungerer</h2></div></div><p>Studio kan senere sende varsel på e-post, SMS eller webhook bare når noe faktisk trenger oppmerksomhet.</p><div className="toggle-list"><label><span>E-postvarsler</span><input type="checkbox" defaultChecked /></label><label><span>SMS ved nedetid</span><input type="checkbox" /></label><label><span>Webhook</span><input type="checkbox" /></label></div></article></div></>;
+}

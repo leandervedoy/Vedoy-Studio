@@ -1,0 +1,36 @@
+{
+  "name": "vedoy-studio-fullstack",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Vedøy Studio – domener, hosting, booking, API-er, analyse, Vedi AI, Academy og personlig support i ett Next.js-prosjekt.",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "next dev",
+    "build": "npm run build:booking && next build",
+    "start": "next start",
+    "lint": "npm run typecheck",
+    "typecheck": "npm run build:booking && tsc --noEmit",
+    "build:booking": "npm run build --workspace=@vedoy/booking",
+    "db:setup": "node scripts/setup-db.mjs",
+    "check:project": "node scripts/check-project.mjs",
+    "postinstall": "npm run build:booking"
+  },
+  "dependencies": {
+    "@vedoy/booking": "*",
+    "next": "^16.0.0",
+    "postgres": "^3.4.7",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "typescript": "^5.8.0"
+  },
+  "engines": {
+    "node": ">=20.19"
+  }
+}

@@ -1,0 +1,14 @@
+import { ModuleHeader } from "@/components/studio/module-header";
+import { TrafficChart } from "@/components/studio/traffic-chart";
+import { trafficPoints } from "@/lib/demo-data";
+
+const sources = [
+  { name: "Direkte", value: 42, color: "#171714" },
+  { name: "Google", value: 31, color: "#2563eb" },
+  { name: "Instagram", value: 18, color: "#7c3aed" },
+  { name: "Andre", value: 9, color: "#dfb934" }
+];
+
+export default function AnalyticsPage() {
+  return <><ModuleHeader eyebrow="VOKS" title="Vedøy Statistics" description="Tall som forklares i vanlig språk og kobles til konkrete neste steg." badge="BETA" /><section className="analytics-kpis"><article><small>Besøk</small><strong>1 842</strong><span>↗ 18,4%</span></article><article><small>Konverteringer</small><strong>88</strong><span>↗ 11,2%</span></article><article><small>Bookinger</small><strong>12</strong><span>↗ 20,0%</span></article><article><small>Estimert verdi</small><strong>18 490 kr</strong><span>↗ 8,7%</span></article></section><div className="analytics-grid"><article className="studio-panel studio-panel--large"><div className="panel-heading"><div><small>TRAFIKK</small><h2>Siste sju dager</h2></div><select defaultValue="all"><option value="all">Alle prosjekter</option><option>Vedøy Studio</option><option>Vedøy Collective</option></select></div><TrafficChart points={trafficPoints} /></article><article className="studio-panel"><div className="panel-heading"><div><small>KANALER</small><h2>Hvor kommer de fra?</h2></div></div><div className="source-list">{sources.map((source) => <div key={source.name}><span><i style={{ background: source.color }} />{source.name}</span><div><b style={{ width: `${source.value}%`, background: source.color }} /></div><strong>{source.value}%</strong></div>)}</div></article><article className="studio-panel funnel-panel"><div className="panel-heading"><div><small>KUNDEREISE</small><h2>Fra besøk til kunde</h2></div></div><div className="funnel"><div style={{ width: "100%" }}><span>1 842</span><small>Besøk</small></div><div style={{ width: "76%" }}><span>1 204</span><small>Engasjerte</small></div><div style={{ width: "42%" }}><span>216</span><small>Handlinger</small></div><div style={{ width: "20%" }}><span>88</span><small>Konverteringer</small></div></div></article><article className="studio-panel insight-list"><div className="panel-heading"><div><small>INNSIKT</small><h2>Hva betyr tallene?</h2></div></div><article><span>↗</span><div><strong>Bookingsiden vokser raskest</strong><p>18% flere åpnet kalenderen enn forrige uke.</p></div></article><article><span>!</span><div><strong>Prissiden mister mobilbrukere</strong><p>Vurder kortere tekst og én tydelig hovedknapp.</p></div></article><article><span>✦</span><div><strong>Vedi har tre forslag</strong><p>Åpne Vedi for en prioritert handlingsliste.</p></div></article></article></div></>;
+}
