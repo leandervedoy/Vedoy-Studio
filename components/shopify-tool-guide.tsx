@@ -43,7 +43,10 @@ export function ShopifyToolGuide() {
       <div className="shopify-tool-guide__setup">
         <div><small>VEDØY / SHOPIFY-OPPSETT</small><h3>Det vi setter opp før en bedrift går live.</h3></div>
         <ol><li>Utviklingsbutikk og app i Shopify Dev Dashboard.</li><li>Minste nødvendige API-tilganger, sikre Vercel-miljøvariabler og databasekobling.</li><li>Signaturkontroll av webhooks og test av produkter, ordre og feiltilfeller.</li><li>Pilot med én butikk før løsningen tilbys bredt.</li></ol>
-        <a href="https://shopify.dev/docs/apps/build/scaffold-app" target="_blank" rel="noreferrer">Se Shopify CLI-oppsettet <span aria-hidden>↗</span></a>
+        <div className="shopify-tool-guide__links">
+          <a href="https://vedoy-shopify.vercel.app" target="_blank" rel="noreferrer">Åpne Shopify-piloten <span aria-hidden>↗</span></a>
+          <a href="https://shopify.dev/docs/apps/build/scaffold-app" target="_blank" rel="noreferrer">Se Shopify CLI-oppsettet <span aria-hidden>↗</span></a>
+        </div>
       </div>
     </section>
   );
