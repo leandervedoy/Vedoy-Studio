@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import Link from "next/link";
 import type { DomainSearchResult } from "@/lib/types";
 import { formatNok } from "@/lib/utils";
 
@@ -55,12 +56,12 @@ export function DomainSearch({ compact = false }: { compact?: boolean }) {
                 {result.available ? <>
                   <strong>{formatNok(result.annualPriceNok)}</strong>
                   <small>/ første år</small>
-                  <button className="button button--small" type="button">Velg</button>
+                  <Link className="button button--small" href={`/tjenester/hosting-og-domene?domain=${encodeURIComponent(result.domain)}&domainMode=new#konfigurer-hosting`}>Velg</Link>
                 </> : <button className="button button--small button--ghost" type="button">Se alternativer</button>}
               </div>
             </article>
           ))}
-          <p className="demo-disclaimer">Demodata: tilgjengelighet og priser er eksempler frem til en domenetilbyder er koblet til.</p>
+          <p className="demo-disclaimer">Tilgjengelighet og leverandørpris kontrolleres mot Vercel Registrar når søket utføres.</p>
         </div>
       )}
     </div>

@@ -62,6 +62,7 @@ export function BookingCalendar({
   const activeServices = useMemo(() => services.filter((service) => service.active !== false), [services]);
   const activePlans = useMemo(() => plans.filter((plan) => plan.active !== false), [plans]);
   const activeStaff = useMemo(() => staff.filter((person) => person.active !== false), [staff]);
+  const activeLocations = useMemo(() => (config.locations ?? []).filter((location) => location.active !== false), [config.locations]);
   const today = dateKeyInTimeZone(new Date(), config.timeZone);
   const [visibleMonth, setVisibleMonth] = useState(startOfMonth(initialDate ?? today));
   const [selectedDate, setSelectedDate] = useState(initialDate ?? today);
@@ -70,6 +71,7 @@ export function BookingCalendar({
   const [serviceId, setServiceId] = useState(activeServices[0]?.id ?? "");
   const [planId, setPlanId] = useState("");
   const [staffId, setStaffId] = useState("");
+  const [locationId, setLocationId] = useState("");
   const [selectedSlotId, setSelectedSlotId] = useState("");
   const [slots, setSlots] = useState<AvailabilitySlot[]>([]);
   const [monthBookings, setMonthBookings] = useState<Booking[]>([]);
@@ -129,6 +131,7 @@ export function BookingCalendar({
         date: selectedDate,
         service: selectedService,
         staffId: staffId || undefined,
+        location: locationId || selectedService.location,
         schedule,
         bookings,
         configuration: {
@@ -291,6 +294,15 @@ export function BookingCalendar({
               <select value={staffId} onChange={(event) => setStaffId(event.target.value)}>
                 <option value="">Første ledige</option>
                 {allowedStaff.map((person) => <option key={person.id} value={person.id}>{person.name}</option>)}
+              </select>
+            </label>
+          )}
+          {activeLocations.length > 0 && (
+            <label className="vb-field">
+              <span>{config.labels.chooseLocation}</span>
+              <select value={locationId} onChange={(event) => setLocationId(event.target.value)}>
+                <option value="">Velg lokasjon</option>
+                {activeLocations.map((location) => <option key={location.id} value={location.id}>{location.name}</option>)}
               </select>
             </label>
           )}

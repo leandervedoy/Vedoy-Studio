@@ -1,124 +1,30 @@
 import Link from "next/link";
-import { DashboardPreview } from "@/components/dashboard-preview";
-import { DomainSearch } from "@/components/domain-search";
+import { EditorialFloatIcons } from "@/components/editorial-float-icons";
+import { ScrollIconField } from "@/components/scroll-icon-field";
+import { ProductCustomizer } from "@/components/product-customizer";
 import { ProductGrid } from "@/components/product-grid";
+import { studioServices } from "@/lib/services";
 
-const principles = [
-  { number: "01", title: "Start enkelt", text: "Domene, nettside og e-post uten en jungel av valg." },
-  { number: "02", title: "Drift samlet", text: "Booking, kunder, status og support i samme arbeidsflate." },
-  { number: "03", title: "Voks med innsikt", text: "Tydelige tall og Vedi-forslag som ender i praktiske handlinger." },
-  { number: "04", title: "Utvid når du trenger", text: "API-er, databaser og SDK-er for utviklere og større løsninger." }
+const projects = [
+  { number: "01", label: "vedoyassist.no", name: "Vedøy Assist", text: "Teknologihjelp laget for å være trygg, enkel og personlig.", tag: "IT / SERVICE", className: "project-card--mint", href: "https://vedoyassist.no", image: "/projects/vedoy-assist.png", imageAlt: "Vedøy Assist" },
+  { number: "02", label: "vedoycollective.no", name: "Vedøy Collective", text: "Nettbutikk, kolleksjoner og merkevare bygget for videre vekst.", tag: "COMMERCE / BRAND", className: "project-card--sand", href: "https://vedoycollective.no", image: "/projects/vedoy-collective.jfif", imageAlt: "Vedøy Collective-prosjekt" },
+  { number: "03", label: "KOMMER SNART", name: "Vedøy Hosting", text: "Hostingflyt med drift, domene og support i samme opplevelse. Tjenesten er under utvikling og åpner snart.", tag: "PLANLAGT · FULL-STACK / CLOUD", className: "project-card--green", href: "/tjenester/hosting-og-domene#konfigurer-hosting", image: "/imgs/Logos/vedoy-growth-logo_white.png", imageAlt: "Vedøy Hosting kommer snart" }
 ];
+const steps = [["01", "Fortell", "Beskriv målet eller problemet. Det trenger ikke være teknisk."], ["02", "Avklar", "Vi foreslår løsning, omfang og pris før noe blir bindende."], ["03", "Bygg", "Design og utvikling skjer i tydelige steg med demo underveis."], ["04", "Lanser", "Vi hjelper med publisering, domene, drift og videre forbedringer."]];
 
-const plans = [
-  { name: "Start", price: "299", text: "For en liten virksomhet som vil komme ryddig på nett.", features: ["1 domene", "Nettsidehosting", "Booking Lite", "Personlig oppstart"] },
-  { name: "Growth", price: "699", text: "For bedriften som vil samle drift og få mer ut av nettsiden.", features: ["3 prosjekter", "Full booking", "Statistics", "Vedi AI", "Prioritert support"], popular: true },
-  { name: "Business", price: "Fra 1 499", text: "For team, API-er og løsninger som må formes rundt virksomheten.", features: ["Team og roller", "API og webhooks", "Flere miljøer", "Tilpasset oppfølging"] }
-];
-
-export default function HomePage() {
-  return (
-    <>
-      <section className="hero-section">
-        <div className="container hero-grid">
-          <div className="hero-copy">
-            <p className="eyebrow">DIGITAL INFRASTRUKTUR · HAUGESUND</p>
-            <h1>Alt virksomheten din vil ha på nett.<br /><em>Samlet.</em></h1>
-            <p className="hero-lead">Domener, nettsider, hosting, booking, kunder, API-er, analyse og menneskelig IT-hjelp — laget for å være forståelig fra første klikk.</p>
-            <div className="hero-actions">
-              <Link className="button button--dark button--large" href="/login">Utforsk Studio <span>↗</span></Link>
-              <Link className="button button--ghost button--large" href="#produkter">Se alt som er med</Link>
-            </div>
-            <div className="hero-proof"><span><i /> Ingen binding i demo</span><span><i /> Personlig support</span><span><i /> Bygget modulært</span></div>
-          </div>
-          <div className="hero-visual">
-            <div className="floating-label floating-label--one"><i /> Alle tjenester friske</div>
-            <div className="floating-label floating-label--two">✦ Vedi fant 3 muligheter</div>
-            <DashboardPreview />
-          </div>
-        </div>
-      </section>
-
-      <section className="partner-strip">
-        <div className="container"><p>Ett rolig kontrollsenter for</p><div><span>LOKALE TJENESTER</span><span>NETTBUTIKKER</span><span>KREATIVE</span><span>KONSULENTER</span><span>OPPSTARTER</span></div></div>
-      </section>
-
-      <section className="domain-section" id="domains">
-        <div className="container domain-section__grid">
-          <div>
-            <p className="eyebrow">START MED NAVNET</p>
-            <h2>Finn domenet. Vi hjelper med resten.</h2>
-            <p>Søk etter et navn, se tydelige eksempelpriser og koble domenet til nettside, e-post og booking fra samme sted.</p>
-          </div>
-          <DomainSearch />
-        </div>
-      </section>
-
-      <section className="products-section" id="produkter">
-        <div className="container">
-          <header className="section-heading section-heading--split">
-            <div><p className="eyebrow">VEDØY-ØKOSYSTEMET</p><h2>Bygg. Drift. Voks. Utvikle.</h2></div>
-            <p>Én plattform kan ikke gjøre alt på dag én. Derfor viser Studio tydelig hva som er tilgjengelig, beta og planlagt — men alt følger samme språk og samme konto.</p>
-          </header>
-          <ProductGrid />
-        </div>
-      </section>
-
-      <section className="platform-section" id="hosting">
-        <div className="container platform-grid">
-          <div className="platform-copy">
-            <p className="eyebrow">ETT KONTROLLSENTER</p>
-            <h2>Fra idé til drift uten å miste oversikten.</h2>
-            <p>Vedøy Studio knytter sammen det virksomheten faktisk bruker. Du kan begynne med én nettside og legge til booking, e-post, rapporter og API-er når behovet kommer.</p>
-            <div className="principle-list">
-              {principles.map((principle) => <article key={principle.number}><span>{principle.number}</span><div><h3>{principle.title}</h3><p>{principle.text}</p></div></article>)}
-            </div>
-          </div>
-          <div className="infrastructure-visual">
-            <div className="infra-center"><img src="/vedoy-mark.svg" alt="" /><strong>VEDØY STUDIO</strong><small>Én konto · ett API</small></div>
-            {[{ t: "DOMENER", c: "#dfb934" }, { t: "HOSTING", c: "#171714" }, { t: "BOOKING", c: "#2563eb" }, { t: "VEDI AI", c: "#7c3aed" }, { t: "STATISTICS", c: "#ea580c" }, { t: "ASSIST", c: "#16a34a" }].map((item, index) => <div className={`infra-node infra-node--${index + 1}`} key={item.t} style={{ "--node-color": item.c } as React.CSSProperties}><i />{item.t}</div>)}
-            <svg viewBox="0 0 500 500" aria-hidden><circle cx="250" cy="250" r="150" /><circle cx="250" cy="250" r="205" /></svg>
-          </div>
-        </div>
-      </section>
-
-      <section className="feature-showcase" id="booking">
-        <div className="container feature-showcase__grid">
-          <div className="calendar-mock">
-            <div className="calendar-mock__top"><div><small>VEDØY BOOKING</small><h3>August 2026</h3></div><div><button>‹</button><button>›</button></div></div>
-            <div className="calendar-weekdays">{["Man", "Tir", "Ons", "Tor", "Fre", "Lør", "Søn"].map((day) => <span key={day}>{day}</span>)}</div>
-            <div className="calendar-days">{Array.from({ length: 35 }, (_, index) => { const day = index - 4; const hasEvent = [4, 7, 11, 12, 18, 21, 25].includes(day); return <button key={index} className={day === 12 ? "is-selected" : day < 1 || day > 31 ? "is-muted" : ""}>{day > 0 && day <= 31 ? day : ""}{hasEvent && <i />}</button>; })}</div>
-            <div className="calendar-agenda"><div><span style={{ background: "#2563eb" }} /><strong>10:00</strong><p>Digital IT-hjelp<br /><small>Ingrid Solheim · 60 min</small></p></div><div><span style={{ background: "#7c3aed" }} /><strong>13:00</strong><p>Bedriftssjekk<br /><small>Nordlys Kafé · 120 min</small></p></div></div>
-          </div>
-          <div>
-            <p className="eyebrow">BOOKING SOM PASSER BEDRIFTEN</p>
-            <h2>Kalenderen ser enkel ut. Motoren tenker for deg.</h2>
-            <p>Tjenester, planer, ansatte, åpningstider, buffertid, kapasitet og fargekoder kan tilpasses uten å bygge hele kundereisen på nytt.</p>
-            <ul className="check-list"><li>Outlook-inspirert kunde- og adminvisning</li><li>Planer, abonnement og tilpassede felter</li><li>API-adapter for database og integrasjoner</li><li>Responsiv i helside, kort, modal og smal kolonne</li></ul>
-            <Link className="text-link" href="/booking">Prøv bookingdemoen <span>↗</span></Link>
-          </div>
-        </div>
-      </section>
-
-      <section className="vedi-section" id="vedi">
-        <div className="container vedi-public-grid">
-          <div className="vedi-public-copy"><div className="vedi-mark">✦</div><p className="eyebrow">MØT VEDI</p><h2>KI som ender med et forståelig neste steg.</h2><p>Vedi kan forklare tall, oppsummere aktivitet og hjelpe med nettside, booking og digitale rutiner. Når menneskelig hjelp trengs, går du videre til Vedøy Assist.</p><Link href="/login" className="button button--light">Snakk med Vedi</Link></div>
-          <div className="vedi-public-chat"><div className="public-chat-message"><span>EL</span><p>Hva bør jeg prioritere denne uken?</p></div><div className="public-chat-message is-vedi"><span>✦</span><div><p><strong>Prioriter én komplett kundereise:</strong></p><ol><li>Gjør domenesøket ferdig.</li><li>Koble én nettsidemal til hosting.</li><li>La en testkunde booke fra start til bekreftelse.</li></ol><small>Basert på Studio-aktiviteten din</small></div></div><div className="public-chat-sources"><span>◎ Domener</span><span>□ Booking</span><span>↗ Statistics</span></div></div>
-        </div>
-      </section>
-
-      <section className="developer-section" id="api">
-        <div className="container developer-grid">
-          <div><p className="eyebrow">FOR UTVIKLERE</p><h2>Ferdige byggeklosser. Full kontroll når du trenger det.</h2><p>Bruk den hostede tjenesten, bygg inn en widget eller installer pakkene i egne Next.js- og React-prosjekter.</p><div className="developer-actions"><Link className="button button--dark" href="/docs">Åpne dokumentasjon</Link><span>API · Webhooks · TypeScript</span></div></div>
-          <div className="terminal"><div className="terminal__top"><span><i /><i /><i /></span><small>terminal</small></div><pre><code><span>$</span> npm install @vedoy/booking{"\n\n"}<b>import</b> {`{ BookingCalendar }`} <b>from</b>{"\n"}  <em>"@vedoy/booking"</em>;{"\n\n"}<b>export default function</b> Page() {`{`}{"\n"}  <b>return</b> &lt;BookingCalendar /&gt;;{"\n"}{`}`}</code></pre></div>
-        </div>
-      </section>
-
-      <section className="pricing-section" id="pricing">
-        <div className="container"><header className="section-heading"><p className="eyebrow">ENKLE RAMMER</p><h2>Start lite. Skru på mer når det gir verdi.</h2><p>Prisene under er konseptpriser i prosjektet og bør kvalitetssikres før salg.</p></header><div className="pricing-grid">{plans.map((plan) => <article key={plan.name} className={plan.popular ? "pricing-card is-popular" : "pricing-card"}>{plan.popular && <span className="popular-label">MEST AKTUELL</span>}<h3>{plan.name}</h3><p>{plan.text}</p><div className="price"><strong>{plan.price}</strong><span>kr/mnd</span></div><ul>{plan.features.map((feature) => <li key={feature}>{feature}</li>)}</ul><Link className={plan.popular ? "button button--dark button--wide" : "button button--ghost button--wide"} href="/login">Velg {plan.name}</Link></article>)}</div></div>
-      </section>
-
-      <section className="final-cta" id="contact"><div className="container final-cta__inner"><div><p className="eyebrow">BYGG MED OSS</p><h2>En digital grunnmur som kan vokse med ideene dine.</h2></div><div><p>Åpne demoen, test modulene og se hvordan Vedøy Studio kan bli kontrollsenteret for virksomheten din.</p><Link className="button button--light button--large" href="/login">Åpne Studio-demo <span>↗</span></Link></div></div></section>
-    </>
-  );
-}
+function Header() { return <header className="editorial-header"><Link href="/" className="editorial-logo"><img src="/imgs/Logos/Vedoy_Logo_W.png" alt="Vedøy" /></Link><nav><a href="#tjenester">Tjenester</a><a href="#plattform">Plattform</a><a href="#prosjekter">Prosjekter</a><a href="#hosting">Hosting</a><a href="#kontakt">Kontakt</a></nav><Link href="#kontakt" className="editorial-cta">Start prosjekt <span>↗</span></Link></header>; }
+export default function HomePage() { return <>
+  <section className="editorial-hero"><Header /><div className="hero-orbit" /><div className="hero-copy"><p className="editorial-kicker">VEDØY STUDIO · HAUGESUND · DIGITALT</p><h1>Vi bygger det<br />bedriften din<br /><em>trenger.</em></h1><p className="hero-intro">Nettsider, apper, nettbutikk, hosting og design — profesjonelt utviklet uten unødvendig teknisk rot.</p><div className="hero-actions"><Link href="#kontakt" className="editorial-button">Fortell oss hva du trenger <span>↗</span></Link><a href="#prosjekter" className="editorial-outline">Se prosjekter</a></div></div><div className="hero-status"><i /> Tilgjengelig for nye prosjekter</div><EditorialFloatIcons variant="hero" /><div className="ticker"><div className="ticker-track"><span>SHOPIFY · HOSTING · DOMENE · DESIGN · SEO · PROFILPRODUKTER · NEXT.JS · AUTOMATISERING · NETTSIDER · WEBAPPER ·</span><span aria-hidden="true">SHOPIFY · HOSTING · DOMENE · DESIGN · SEO · PROFILPRODUKTER · NEXT.JS · AUTOMATISERING · NETTSIDER · WEBAPPER ·</span></div></div></section>
+  <section className="intro-section"><div className="section-number">01</div><div><p className="editorial-kicker lime">ET STUDIO SOM KAN BYGGE OG DRIFTE</p><h2>Fra første skisse<br />til løsningen er <em>live.</em></h2></div><p>Vedøy Studio kombinerer design og utvikling, så bedriften kan forholde seg til én partner. Vi kan starte lite, bygge modulært og utvide når behovet faktisk kommer.</p></section>
+  <ScrollIconField variant="mixed" />
+  <section className="services-section" id="tjenester"><div className="section-heading-dark"><p className="editorial-kicker lime">02 · TJENESTER</p><h2>Én partner.<br /><em>Flere muligheter.</em></h2></div><div className="services-grid">{studioServices.map((service) => <Link href={`/tjenester/${service.slug}`} className="service-card" key={service.slug}><small>{service.number}</small><span>↗</span><h3>{service.title}</h3><p>{service.cardText}</p><b>Åpne tjenesten →</b></Link>)}</div></section>
+  <ScrollIconField variant="network" />
+  <section className="ecosystem-section" id="plattform"><div className="ecosystem-heading"><div><p className="editorial-kicker">03 · VEDØY-ØKOSYSTEMET</p><h2>Bygg. Drift. Voks.<br /><em>Utvikle.</em></h2></div><p>Én plattform kan ikke gjøre alt på én dag. Derfor viser vi tydelig hva som er publisert, i beta eller planlagt — men alt følger samme språk og samme konto.</p></div><ProductGrid /></section>
+  <section className="projects-section" id="prosjekter"><div className="section-heading-dark"><p className="editorial-kicker lime">04 · PROSJEKTER</p><h2>Det beste beviset er<br /><em>det vi bygger.</em></h2></div><div className="projects-grid">{projects.map((project) => <a href={project.href} target={project.href.startsWith("http") ? "_blank" : undefined} rel="noreferrer" className={`project-card ${project.className}`} key={project.name}><div className="project-card__visual"><img src={project.image} alt={project.imageAlt} /><div className="project-card__visual-content"><small>{project.label}</small><strong>{project.name === "Vedøy Hosting" ? "Hosting" : project.name.replace("Vedøy ", "")}</strong><button>{project.name === "Vedøy Hosting" ? "KONFIGURER HOSTING ↗" : "ÅPNE PROSJEKT ↗"}</button></div></div><div className="project-card__copy"><small>{project.number}</small><h3>{project.name}</h3><p>{project.text}</p><span>{project.tag}</span></div></a>)}</div></section>
+  <ScrollIconField variant="orbit" />
+  <section className="hosting-section" id="hosting"><div><p className="editorial-kicker lime">05 · HOSTING + DOMENE · KOMMER SNART</p><h2>Vi bygger.<br />Vi kan også<br /><em>holde det på.</em></h2><p>Vedøy Hosting er under utvikling. Når tjenesten åpner, kan Vedøy håndtere publisering, SSL, DNS, backup og teknisk drift med én fast kontakt.</p><Link href="/tjenester/hosting-og-domene" className="editorial-button">Se forhåndsvisning <span>↗</span></Link></div><div className="infra-panel"><header><span><i /> VEDØY INFRA / FORHÅNDSVISNING</span><b>SNART</b></header><div className="infra-map"><span className="infra-node node-ssl">SSL<small>PLANLAGT</small></span><span className="infra-node node-backup">BACKUP<small>PLANLAGT</small></span><span className="infra-node node-dns">DNS<small>PLANLAGT</small></span><span className="infra-node node-client">KUNDE<small>nettleser</small></span><span className="infra-node node-edge">EDGE<small>planlagt</small></span><span className="infra-node node-app">APP<small>Next.js</small></span><span className="infra-node node-data">DATA<small>sikker</small></span></div></div><EditorialFloatIcons variant="hosting" /></section>
+  <section className="products-section" id="profilprodukter"><div className="products-copy"><p className="editorial-kicker lime">06 · PROFILPRODUKTER</p><h2>Bedriften på skjermen.<br />Og ute i <em>verden.</em></h2><p>Last opp logoen din og se en rask visualisering på utvalgte plagg. Vi hjelper med produktvalg, plassering, design og produksjon.</p><Link href="#kontakt" className="dark-button">Få forslag <span>↗</span></Link></div><ProductCustomizer /></section>
+  <section className="process-section"><div className="section-heading-dark"><p className="editorial-kicker lime">07 · SLIK JOBBER VI</p><h2>Enkelt å starte.<br /><em>Tydelig hele veien.</em></h2></div><div className="steps-grid">{steps.map(([number, title, text]) => <article key={number}><small>{number}</small><h3>{title}</h3><p>{text}</p></article>)}</div></section>
+  <section className="contact-section" id="kontakt"><div><p className="editorial-kicker lime">START ET PROSJEKT</p><h2>Hva skal vi<br /><em>bygge?</em></h2><p>Du trenger ikke ha ferdig kravspesifikasjon. Send det du vet, så tar vi resten sammen.</p><a href="mailto:leander@vedoystudio.no" className="contact-link">leander@vedoystudio.no</a><a href="tel:+4745917041" className="contact-link">459 17 041</a><span className="contact-link">Haugesund, Norge</span></div><form className="contact-form" action="/api/contact" method="post"><label>Navn *<input name="name" required /></label><label>Bedrift<input name="company" /></label><label>E-post *<input name="email" type="email" required /></label><label>Telefon<input name="phone" /></label><label className="full">Hva trenger du?<select name="need"><option>Nettside</option><option>Webapp</option><option>Nettbutikk</option><option>Shopify-app eller integrasjon</option><option>Hosting og domene</option><option>Profilprodukter</option></select></label><label className="full">Fortell litt om prosjektet<textarea name="message" rows={4} /></label><button className="editorial-button" type="submit">Send forespørsel →</button><small>Ikke bindende. <a href="/privacy">Personvern</a> · <a href="/terms">Vilkår</a></small></form></section>
+  <footer className="editorial-footer"><div><img src="/imgs/Logos/Vedoy_Logo_W.png" alt="Vedøy Studio" /><p>Nettsider, apper og digitale løsninger fra Haugesund — for bedrifter som vil videre.</p></div><div><a href="mailto:leander@vedoystudio.no">leander@vedoystudio.no</a><a href="tel:+4745917041">459 17 041</a><span>© 2026 VEDØY STUDIO · ORG.NR. 937 024 622</span></div></footer>
+</>; }

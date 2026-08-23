@@ -16,7 +16,7 @@ const columns = [
   },
   {
     title: "Vedøy",
-    links: [["Om oss", "/#about"], ["Priser", "/pricing"], ["Kontakt", "/#contact"], ["Personvern", "/privacy"]]
+    links: [["Om oss", "/about"], ["Priser", "/pricing"], ["Kontakt", "/contact"], ["Personvern", "/privacy"], ["Vilkår", "/terms"]]
   }
 ];
 

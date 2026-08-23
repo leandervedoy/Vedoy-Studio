@@ -4,6 +4,13 @@ export type BookingStatus = "pending" | "confirmed" | "in-progress" | "completed
 export type CalendarView = "month" | "week" | "day";
 export type BookingLayout = "full" | "compact" | "embedded";
 export type BookingLocation = "remote" | "business" | "customer" | "custom";
+export interface BookingLocationOption {
+  id: string;
+  name: string;
+  description?: string;
+  active?: boolean;
+  capacity?: number;
+}
 export type BillingInterval = "one-time" | "monthly" | "yearly";
 export type Weekday = 0 | 1 | 2 | 3 | 4 | 5 | 6;
 
@@ -161,6 +168,7 @@ export interface BookingLabels {
   chooseStaff?: string;
   chooseDate?: string;
   chooseTime?: string;
+  chooseLocation?: string;
   yourDetails?: string;
   confirm?: string;
   noTimes?: string;
@@ -184,6 +192,7 @@ export interface BookingConfiguration {
   showPlans?: boolean;
   showStaff?: boolean;
   showCategories?: boolean;
+  locations?: BookingLocationOption[];
   requirePhone?: boolean;
   allowPastDates?: boolean;
   autoConfirm?: boolean;
@@ -196,6 +205,7 @@ export interface AvailabilityRequest {
   date: string;
   service: BookingService;
   staffId?: string;
+  location?: string;
   schedule: ScheduleData;
   bookings: Booking[];
   configuration: Required<Pick<BookingConfiguration, "locale" | "timeZone" | "slotIntervalMinutes" | "minNoticeMinutes" | "bookingWindowDays">>;

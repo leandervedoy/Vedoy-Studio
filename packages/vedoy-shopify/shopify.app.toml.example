@@ -1,0 +1,18 @@
+# Example only. Generate the real app configuration with Shopify CLI for the pilot.
+client_id = "replace_after_shopify_app_init"
+name = "Vedøy Shopify"
+application_url = "https://shopify.vedoy.no"
+embedded = true
+
+[access_scopes]
+scopes = "read_products,read_orders,read_customers"
+
+[auth]
+redirect_urls = ["https://shopify.vedoy.no/auth/callback"]
+
+[webhooks]
+api_version = "2026-07"
+
+[[webhooks.subscriptions]]
+topics = ["orders/create", "products/update", "customers/create"]
+uri = "https://shopify.vedoy.no/api/webhooks/shopify"

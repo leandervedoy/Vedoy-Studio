@@ -140,6 +140,11 @@ export const bookingConfiguration: BookingConfiguration = {
   showPlans: true,
   showStaff: true,
   showCategories: true,
+  locations: [
+    { id: "remote", name: "Digitalt møte", description: "Telefon eller sikker skjermdeling." },
+    { id: "haugesund", name: "Vedøy · Haugesund", description: "Møte etter avtale." },
+    { id: "customer", name: "Hos kunden", description: "Hjemmebesøk eller bedriftsbesøk." }
+  ],
   requirePhone: false,
   autoConfirm: false,
   layout: "full",

@@ -9,7 +9,6 @@ export const metadata: Metadata = {
   },
   description: "Domener, hosting, booking, API-er, analyse, Vedi AI, Academy og personlig IT-hjelp samlet i én rolig plattform.",
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
-  icons: { icon: "/vedoy-mark.svg" },
   openGraph: {
     title: "Vedøy Studio",
     description: "Digital infrastruktur med skandinavisk enkelhet.",

@@ -8,10 +8,13 @@
   ],
   "scripts": {
     "dev": "next dev",
+    "dev:shopify": "npm run dev --workspace=@vedoy/vedoy-shopify",
     "build": "npm run build:booking && next build",
+    "build:shopify": "npm run build --workspace=@vedoy/vedoy-shopify",
     "start": "next start",
     "lint": "npm run typecheck",
     "typecheck": "npm run build:booking && tsc --noEmit",
+    "typecheck:shopify": "npm run typecheck --workspace=@vedoy/vedoy-shopify",
     "build:booking": "npm run build --workspace=@vedoy/booking",
     "db:setup": "node scripts/setup-db.mjs",
     "check:project": "node scripts/check-project.mjs",
@@ -19,15 +22,17 @@
   },
   "dependencies": {
     "@vedoy/booking": "*",
-    "next": "^16.0.0",
+    "motion": "13.1.0",
+    "next": "^16.3.2",
     "postgres": "^3.4.7",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "stripe": "^22.5.0"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
-    "@types/react": "^19.0.0",
-    "@types/react-dom": "^19.0.0",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
     "typescript": "^5.8.0"
   },
   "engines": {

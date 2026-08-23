@@ -9,7 +9,7 @@ export default function DomainsPage() {
       <section className="subpage-hero">
         <div className="container subpage-hero__grid">
           <div><p className="eyebrow">VEDØY DOMAINS</p><h1>Et godt navn fortjener en ryddig start.</h1><p>Søk etter domener, sammenlign alternativer og få hjelp med DNS, nettside og profesjonell e-post.</p></div>
-          <div className="subpage-callout"><small>TRANSPARENT PRIS</small><strong>Fra 129 kr</strong><span>per år i konseptdemoen</span><p>Ingen skjulte månedsavgifter i domenelaget.</p></div>
+          <div className="subpage-callout"><small>LIVE LEVERANDØRSTATUS</small><strong>Søk og velg</strong><span>pris vises før bestilling</span><p>Tilgjengelighet kontrolleres hos registrar når søket utføres.</p></div>
         </div>
       </section>
       <section className="tool-section"><div className="container"><DomainSearch /></div></section>

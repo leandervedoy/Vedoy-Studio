@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { productGroups, studioProducts } from "@/lib/products";
 
-const statusLabels = { live: "Tilgjengelig", beta: "Beta", planned: "Planlagt" };
+const statusLabels = { live: "Publisert", beta: "Beta", planned: "Planlagt" };
 
 export function ProductGrid() {
   return (

@@ -109,6 +109,44 @@ Den offentlige bookingdemoen bruker et API-adapter mot `/api/bookings`. Adminsid
 4. Koble PostgreSQL og kjør `npm run db:setup` mot databasen.
 5. Sett `NEXT_PUBLIC_DEMO_MODE=false` før ekte kundedrift.
 
+## 7. Hosting, domene og betaling
+
+Den offentlige siden `/tjenester/hosting-og-domene` har en servervalidert konfigurator for 1–5 servere, RAM, lagring, region, backup og domene. Betalingen opprettes på serveren og sendes til Stripe Checkout. Pris kan ikke endres fra nettleseren.
+
+### Stripe
+
+Vercel Marketplace-ressursen kan brukes i testmodus med `STRIPE_SECRET_KEY`. For produksjon må Stripe-ressursen være koblet til riktig Stripe-konto og webhooken må peke til:
+
+```text
+https://vedoy-studio.vercel.app/api/stripe/webhook
+```
+
+Legg signeringsnøkkelen i `STRIPE_WEBHOOK_SECRET`. Webhooken lytter til `checkout.session.completed` og `checkout.session.async_payment_succeeded`. Sett `STRIPE_AUTOMATIC_TAX=true` først når Stripe Tax har en gyldig hovedkontoradresse; ellers behold `false`.
+
+### Domener
+
+Live søk og kjøp bruker Vercel Registrar API. Opprett en Vercel Access Token med nødvendig domenetilgang og legg den i:
+
+```env
+VERCEL_REGISTRAR_TOKEN=...
+VERCEL_REGISTRAR_TEAM_ID=team_...
+DOMAIN_USD_NOK_RATE=12
+```
+
+Uten token er «Kjøp nytt domene» bevisst deaktivert. Eksisterende domene kan fortsatt velges.
+
+### Automatisk serverklargjøring
+
+Betalte ordre kan opprette Hetzner Cloud-servere og lagringsvolumer automatisk:
+
+```env
+HETZNER_API_TOKEN=...
+HETZNER_SSH_KEY_NAMES=vedoy-production
+HETZNER_IMAGE=ubuntu-24.04
+```
+
+Uten disse variablene registreres betalingen og ordrekonfigurasjonen hos Stripe, mens klargjøringen må gjøres manuelt. Ikke aktiver live betaling før minst én av disse leveringsrutinene er operativ og testet.
+
 ## Hva er reelt og hva er prototype?
 
 ### Fungerer i prosjektet
@@ -117,19 +155,25 @@ Den offentlige bookingdemoen bruker et API-adapter mot `/api/bookings`. Adminsid
 - Innlogging med signert, HTTP-only cookie
 - Prosjekt-API med opprettelse
 - Booking-API med konfliktkontroll
-- Domenesøk med deterministiske demodata
+- Seks klikkbare tjenestesider med egne leveranser, prosess og neste steg
+- Hostingkonfigurator med servervalidert pris
+- Stripe Checkout for abonnement, etablering og eventuell domeneregistrering
+- Live Vercel Registrar-adapter for søk, pris og kjøp når token er konfigurert
+- Hetzner Cloud-adapter med idempotent server- og volumoppretting når token og SSH-nøkler er konfigurert
 - Supporthenvendelser
 - API-nøkler med hash ved databasebruk
 - PostgreSQL-adapter og minnebasert demo
 - Vedi med OpenAI Responses API eller smart demomodus
 - Lokal `@vedoy/booking`-pakke
 
-### Krever ekstern leverandør før salg
+### Krever aktivering før ekte salg
 
-- Faktisk registrering og betaling av domener
+- Stripe-ressursen må kobles til en live Stripe-konto, og produksjonswebhook må ha signeringsnøkkel
+- Domenekjøp krever `VERCEL_REGISTRAR_TOKEN`
+- Automatisk serverlevering krever Hetzner-token og minst én SSH-nøkkel; ellers brukes dokumentert manuell levering
 - Automatisk Vercel/Cloudflare-deploy
 - E-postsending og postbokser
-- Stripe/Vipps-betaling
+- Vipps-betaling
 - SMS-varsler
 - Google/Outlook-kalendersynk
 - Full multi-tenant autentisering, roller og fakturering
@@ -141,7 +185,7 @@ Den offentlige bookingdemoen bruker et API-adapter mot `/api/bookings`. Adminsid
 - Bruk sterk `SESSION_SECRET` og separate produksjonsnøkler.
 - Legg alle leverandørhandlinger på serveren og valider tilgang per organisasjon.
 - Gjennomfør tilgjengelighets-, sikkerhets- og personverntest.
-- Opprett vilkår, personvernerklæring og databehandleroversikt.
+- Få bestillingsvilkår, personvernerklæring og databehandleroppsett kvalitetssikret for virksomhetens faktiske drift.
 - Kvalitetssikre priser og kostnader før de vises som ekte tilbud.
 
 ## Teknisk retning
