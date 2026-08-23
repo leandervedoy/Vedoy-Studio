@@ -946,3 +946,16 @@ h1, h2, h3, h4 { letter-spacing: -.035em; }
 .request-empty { color:#817d74; }
 @media (max-width:1050px) { .products-section { grid-template-columns:1fr; }.products-copy { position:static; }.clothing-request-form { grid-template-columns:1fr; }.request-admin-grid { grid-template-columns:1fr; } }
 @media (max-width:600px) { .clothing-request-form { padding:20px; }.clothing-request-form__fields { grid-template-columns:1fr; }.clothing-request-form label.full,.clothing-request-form button,.clothing-request-form .form-feedback { grid-column:auto; }.product-customizer .customizer-stage { height:330px; } }
+
+/* Keep the homepage as a visual teaser; the full request flow lives on the detail page. */
+.products-section { grid-template-columns:1fr 1fr; align-items:center; }
+.products-copy { position:static; }
+.products-copy ul { display:none; }
+.products-section .product-customizer { width:min(100%,540px); margin-top:-52px; }
+.products-section .product-customizer .customizer-stage { height:400px; }
+.clothing-detail-section { display:grid; grid-template-columns:.75fr 1.25fr; gap:70px; align-items:start; padding:120px 10vw; background:#eef0e7; color:#111510; }
+.clothing-detail-section h2 { margin:28px 0; font-size:clamp(52px,6vw,90px); line-height:.9; letter-spacing:-.07em; }
+.clothing-detail-section h2 em { color:#697263; font-family:Georgia,serif; font-weight:400; }
+.clothing-detail-section>div>p:not(.editorial-kicker) { max-width:420px; color:#59645a; line-height:1.7; }
+.clothing-detail-section .product-customizer { width:100%; }
+@media (max-width:900px) { .clothing-detail-section { grid-template-columns:1fr; padding:90px 7vw; gap:40px; } }

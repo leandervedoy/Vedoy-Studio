@@ -14,7 +14,7 @@ const products = [
   { name: "Retro Zip Polo", code: "CUSTOM", type: "Polo", price: "Se pris", image: "/product-mockups/product-8.png", url: "https://www.tapstitch.com/custom-apparel" },
 ] as const;
 
-export function ProductCustomizer() {
+export function ProductCustomizer({ showRequestForm = true }: { showRequestForm?: boolean }) {
   const reduceMotion = useReducedMotion();
   const [selected, setSelected] = useState(0);
   const [logo, setLogo] = useState<string | null>(null);
@@ -115,7 +115,7 @@ export function ProductCustomizer() {
         {products.map((item, index) => <button type="button" className={index === selected ? "is-selected" : ""} onClick={() => setSelected(index)} aria-label={`Vis ${item.name}`} key={item.image} />)}
       </div>
       <p className="customizer-simple-name">{product.name}</p>
-      <form className="clothing-request-form" onSubmit={submitRequest}>
+      {showRequestForm ? <form className="clothing-request-form" onSubmit={submitRequest}>
         <div className="clothing-request-form__heading"><span>FORESPØRSEL · KOMMER SNART</span><h3>Be om bedriftsklær</h3><p>Velg plagget over, last opp logo og fortell hvor mange dere trenger. Dette er ikke en bindende bestilling.</p></div>
         <div className="clothing-request-form__fields">
           <label>Navn *<input name="name" required maxLength={100} /></label>
@@ -128,7 +128,7 @@ export function ProductCustomizer() {
           <button type="submit" disabled={submitState === "sending"}>{submitState === "sending" ? "Lagrer …" : "Send forespørsel →"}</button>
           {submitMessage ? <p className={`form-feedback form-feedback--${submitState}`} role="status">{submitMessage}</p> : null}
         </div>
-      </form>
+      </form> : null}
     </div>
   );
 }
