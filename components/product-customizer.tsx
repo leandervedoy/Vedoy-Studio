@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 
 const products = [
@@ -18,7 +18,10 @@ export function ProductCustomizer() {
   const reduceMotion = useReducedMotion();
   const [selected, setSelected] = useState(0);
   const [logo, setLogo] = useState<string | null>(null);
+  const [logoFile, setLogoFile] = useState<File | null>(null);
   const [uploadMessage, setUploadMessage] = useState("");
+  const [submitState, setSubmitState] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const [submitMessage, setSubmitMessage] = useState("");
   const product = products[selected];
 
   useEffect(() => {
@@ -47,6 +50,7 @@ export function ProductCustomizer() {
         return;
       }
       setLogo(reader.result);
+      setLogoFile(file);
       setUploadMessage(`${file.name} er lastet opp.`);
     };
     reader.readAsDataURL(file);
@@ -58,6 +62,26 @@ export function ProductCustomizer() {
 
   function showNext() {
     setSelected((current) => (current + 1) % products.length);
+  }
+
+  async function submitRequest(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setSubmitState("sending");
+    const form = event.currentTarget;
+    const data = new FormData(form);
+    data.set("productName", product.name);
+    data.set("productCode", product.code);
+    if (logoFile) data.set("logo", logoFile);
+    const response = await fetch("/api/clothing-requests", { method: "POST", body: data });
+    const result = await response.json() as { error?: string };
+    if (!response.ok) {
+      setSubmitState("error");
+      setSubmitMessage(result.error || "Noe gikk galt.");
+      return;
+    }
+    form.reset();
+    setSubmitState("sent");
+    setSubmitMessage("Forespørselen er lagret. Vi tar kontakt med produktvalg og pris.");
   }
 
   return (
@@ -91,6 +115,20 @@ export function ProductCustomizer() {
         {products.map((item, index) => <button type="button" className={index === selected ? "is-selected" : ""} onClick={() => setSelected(index)} aria-label={`Vis ${item.name}`} key={item.image} />)}
       </div>
       <p className="customizer-simple-name">{product.name}</p>
+      <form className="clothing-request-form" onSubmit={submitRequest}>
+        <div className="clothing-request-form__heading"><span>FORESPØRSEL · KOMMER SNART</span><h3>Be om bedriftsklær</h3><p>Velg plagget over, last opp logo og fortell hvor mange dere trenger. Dette er ikke en bindende bestilling.</p></div>
+        <div className="clothing-request-form__fields">
+          <label>Navn *<input name="name" required maxLength={100} /></label>
+          <label>Bedrift<input name="company" maxLength={120} /></label>
+          <label>E-post *<input name="email" type="email" required maxLength={254} /></label>
+          <label>Telefon<input name="phone" maxLength={40} /></label>
+          <label>Antall *<input name="quantity" type="number" required min={1} max={10000} defaultValue={10} /></label>
+          <label className="full">Størrelser, plassering eller annet<textarea name="details" rows={3} maxLength={3000} placeholder="Eksempel: 5 × M, 5 × L, broderi på venstre bryst" /></label>
+          <label className="form-honeypot" aria-hidden="true">Nettside<input name="website" tabIndex={-1} autoComplete="off" /></label>
+          <button type="submit" disabled={submitState === "sending"}>{submitState === "sending" ? "Lagrer …" : "Send forespørsel →"}</button>
+          {submitMessage ? <p className={`form-feedback form-feedback--${submitState}`} role="status">{submitMessage}</p> : null}
+        </div>
+      </form>
     </div>
   );
 }

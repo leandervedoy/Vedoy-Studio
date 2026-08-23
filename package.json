@@ -17,6 +17,7 @@
     "typecheck:shopify": "npm run typecheck --workspace=@vedoy/vedoy-shopify",
     "build:booking": "npm run build --workspace=@vedoy/booking",
     "db:setup": "node scripts/setup-db.mjs",
+    "db:migrate:requests": "node scripts/migrate-requests.mjs",
     "check:project": "node scripts/check-project.mjs",
     "postinstall": "npm run build:booking"
   },

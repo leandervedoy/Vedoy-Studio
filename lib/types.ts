@@ -91,6 +91,35 @@ export interface StudioTicket {
   createdAt: string;
 }
 
+export interface ContactRequest {
+  id: string;
+  name: string;
+  company?: string;
+  email: string;
+  phone?: string;
+  need: string;
+  message?: string;
+  status: "new" | "contacted" | "closed";
+  createdAt: string;
+}
+
+export interface ClothingRequest {
+  id: string;
+  name: string;
+  company?: string;
+  email: string;
+  phone?: string;
+  productName: string;
+  productCode: string;
+  quantity: number;
+  details?: string;
+  logoFilename?: string;
+  logoContentType?: string;
+  logoData?: string;
+  status: "new" | "contacted" | "quoted" | "closed";
+  createdAt: string;
+}
+
 export interface StudioActivity {
   id: string;
   organizationId: string;

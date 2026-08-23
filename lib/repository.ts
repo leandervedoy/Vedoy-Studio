@@ -3,6 +3,8 @@ import { getDemoStore } from "@/lib/demo-store";
 import { databaseEnabled, getSql } from "@/lib/db";
 import type {
   AcademyCourse,
+  ClothingRequest,
+  ContactRequest,
   StudioApiKey,
   StudioBooking,
   StudioCustomer,
@@ -14,6 +16,12 @@ import type {
 import { randomId, slugify } from "@/lib/utils";
 
 const ORGANIZATION_ID = "org_vedoy";
+
+function requireDatabase() {
+  const sql = getSql();
+  if (!sql) throw new Error("Databasen er ikke konfigurert.");
+  return sql;
+}
 
 function asIso(value: Date | string): string {
   return value instanceof Date ? value.toISOString() : new Date(value).toISOString();
@@ -512,6 +520,63 @@ export async function createTicket(input: {
     values (${ticket.id}, ${ticket.organizationId}, ${ticket.subject}, ${ticket.message}, ${ticket.priority}, ${ticket.status}, ${ticket.createdAt})
   `;
   return ticket;
+}
+
+export async function createContactRequest(input: Omit<ContactRequest, "id" | "status" | "createdAt">): Promise<string> {
+  const sql = requireDatabase();
+  const id = randomId("lead");
+  await sql`
+    insert into contact_requests (id, organization_id, name, company, email, phone, need, message)
+    values (
+      ${id}, ${ORGANIZATION_ID}, ${input.name}, ${input.company ?? null}, ${input.email},
+      ${input.phone ?? null}, ${input.need}, ${input.message ?? null}
+    )
+  `;
+  return id;
+}
+
+export async function createClothingRequest(input: Omit<ClothingRequest, "id" | "status" | "createdAt" | "logoData"> & { logo?: Buffer }): Promise<string> {
+  const sql = requireDatabase();
+  const id = randomId("clothing");
+  await sql`
+    insert into clothing_requests (
+      id, organization_id, name, company, email, phone, product_name, product_code,
+      quantity, details, logo_filename, logo_content_type, logo_data
+    ) values (
+      ${id}, ${ORGANIZATION_ID}, ${input.name}, ${input.company ?? null}, ${input.email},
+      ${input.phone ?? null}, ${input.productName}, ${input.productCode}, ${input.quantity},
+      ${input.details ?? null}, ${input.logoFilename ?? null}, ${input.logoContentType ?? null},
+      ${input.logo ?? null}
+    )
+  `;
+  return id;
+}
+
+export async function listContactRequests(): Promise<ContactRequest[]> {
+  const sql = requireDatabase();
+  const rows = await sql<ContactRequest[]>`
+    select id, name, company, email, phone, need, message, status, created_at as "createdAt"
+    from contact_requests where organization_id = ${ORGANIZATION_ID}
+    order by created_at desc limit 250
+  `;
+  return rows.map((row) => ({ ...row, createdAt: asIso(row.createdAt) }));
+}
+
+export async function listClothingRequests(): Promise<ClothingRequest[]> {
+  const sql = requireDatabase();
+  const rows = await sql<(ClothingRequest & { logoData?: Buffer })[]>`
+    select id, name, company, email, phone, product_name as "productName", product_code as "productCode",
+      quantity, details, logo_filename as "logoFilename", logo_content_type as "logoContentType",
+      logo_data as "logoData", status, created_at as "createdAt"
+    from clothing_requests where organization_id = ${ORGANIZATION_ID}
+    order by created_at desc limit 250
+  `;
+  return rows.map((row) => ({
+    ...row,
+    quantity: Number(row.quantity),
+    logoData: row.logoData ? Buffer.from(row.logoData).toString("base64") : undefined,
+    createdAt: asIso(row.createdAt)
+  }));
 }
 
 export function listAcademyCourses(): AcademyCourse[] {

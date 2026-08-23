@@ -895,3 +895,54 @@ h1, h2, h3, h4 { letter-spacing: -.035em; }
 @media (prefers-reduced-motion:reduce) {
   .editorial-float-field .float-icon,.scroll-icon-field .scroll-icon { transform:none!important; }
 }
+
+/* Customer requests, clothing configurator and administrator inbox */
+.service-card__status { max-width:130px; text-align:right; font-size:9px!important; letter-spacing:.12em; color:#e8dc82!important; }
+.service-card.is-live { background:#10180d; box-shadow:inset 0 3px 0 var(--lime); }
+.service-card.is-live .service-card__status { color:var(--lime)!important; }
+.service-coming-badge,.service-live-badge { display:inline-flex; margin-top:20px; padding:8px 11px; border:1px solid #575132; border-radius:999px; color:#eadb7b; font:800 9px ui-monospace,monospace; letter-spacing:.14em; }
+.service-live-badge { border-color:#60784a; color:var(--lime); }
+.products-section { grid-template-columns:minmax(300px,.65fr) minmax(520px,1.35fr); align-items:start; }
+.products-copy { position:sticky; top:40px; }
+.products-copy ul { margin:28px 0 0; padding:0; list-style:none; border-top:1px solid #c7cbc2; }
+.products-copy li { padding:13px 0; border-bottom:1px solid #c7cbc2; color:#536054; font-size:13px; }
+.products-section .product-customizer { width:100%; margin-top:0; }
+.product-customizer .customizer-stage { height:470px; }
+.clothing-request-form { display:grid; grid-template-columns:.72fr 1.28fr; gap:28px; margin-top:32px; padding:32px; border:1px solid #c7cbc2; background:#f8f9f3; }
+.clothing-request-form__heading span { color:#697262; font:800 9px ui-monospace,monospace; letter-spacing:.14em; }
+.clothing-request-form__heading h3 { margin:16px 0 10px; font-size:28px; letter-spacing:-.045em; }
+.clothing-request-form__heading p { margin:0; color:#697269; font-size:12px; line-height:1.6; }
+.clothing-request-form__fields { display:grid; grid-template-columns:1fr 1fr; gap:15px; }
+.clothing-request-form label { display:grid; gap:7px; color:#697269; font-size:10px; }
+.clothing-request-form label.full,.clothing-request-form button,.clothing-request-form .form-feedback { grid-column:1/-1; }
+.clothing-request-form input,.clothing-request-form textarea { width:100%; padding:11px 12px; border:1px solid #c8cec3; border-radius:8px; background:#fff; color:#121612; }
+.clothing-request-form button { min-height:48px; border:0; border-radius:9px; background:#111510; color:#fff; font-weight:800; cursor:pointer; }
+.clothing-request-form button:disabled,.contact-form button:disabled { opacity:.55; cursor:wait; }
+.form-honeypot { position:absolute!important; left:-10000px!important; width:1px!important; height:1px!important; overflow:hidden!important; }
+.form-feedback { margin:0; padding:11px 13px; border:1px solid #5d7951; border-radius:8px; color:#a9db97; background:#101a0e; font-size:12px; }
+.form-feedback--error { border-color:#784c46; color:#ffc2b8; background:#1b0f0d; }
+.clothing-request-form .form-feedback { color:#315229; background:#edf7e8; }
+.clothing-request-form .form-feedback--error { color:#7b3028; background:#fff0ed; }
+.contact-booking-button { margin:28px 0 10px; }
+.footer-admin-link { display:inline-block; margin-top:18px; color:#343a34!important; font-size:9px; letter-spacing:.08em; transition:color .2s; }
+.footer-admin-link:hover,.footer-admin-link:focus { color:#9aa49a!important; }
+.admin-database-warning { margin-bottom:24px; padding:18px 20px; border:1px solid #d9b96e; background:#fff8df; }
+.admin-database-warning p { margin:5px 0 0; color:#6e6244; }
+.request-admin-grid { display:grid; grid-template-columns:1fr 1fr; gap:22px; align-items:start; }
+.request-admin-panel { min-width:0; }
+.request-list { display:grid; gap:12px; }
+.request-list>article { padding:18px; border:1px solid #e0ded6; border-radius:12px; background:#fff; }
+.request-list header { display:flex; justify-content:space-between; gap:16px; }
+.request-list header strong,.request-list header span { display:block; }
+.request-list header span { margin-top:4px; color:#77736a; font-size:12px; }
+.request-list header b { color:#527641; font:800 9px ui-monospace,monospace; }
+.request-list dl { display:grid; gap:7px; margin:16px 0 0; }
+.request-list dl>div { display:grid; grid-template-columns:75px 1fr; gap:10px; font-size:12px; }
+.request-list dt { color:#918c82; }.request-list dd { margin:0; overflow-wrap:anywhere; }
+.request-list>article>p { color:#5f5c55; font-size:13px; line-height:1.6; white-space:pre-wrap; }
+.request-list time { display:block; margin-top:15px; color:#97938a; font-size:10px; }
+.request-logo { height:130px; margin:16px 0; display:grid; place-items:center; border:1px dashed #d6d3cb; background:#f7f6f2; }
+.request-logo img { max-width:90%; max-height:110px; object-fit:contain; }
+.request-empty { color:#817d74; }
+@media (max-width:1050px) { .products-section { grid-template-columns:1fr; }.products-copy { position:static; }.clothing-request-form { grid-template-columns:1fr; }.request-admin-grid { grid-template-columns:1fr; } }
+@media (max-width:600px) { .clothing-request-form { padding:20px; }.clothing-request-form__fields { grid-template-columns:1fr; }.clothing-request-form label.full,.clothing-request-form button,.clothing-request-form .form-feedback { grid-column:auto; }.product-customizer .customizer-stage { height:330px; } }

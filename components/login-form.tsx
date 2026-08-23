@@ -3,7 +3,7 @@
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 
-export function LoginForm({ demoAllowed }: { demoAllowed: boolean }) {
+export function LoginForm({ demoAllowed, next = "/studio" }: { demoAllowed: boolean; next?: string }) {
   const router = useRouter();
   const [email, setEmail] = useState(demoAllowed ? "demo@vedoy.no" : "");
   const [password, setPassword] = useState(demoAllowed ? "vedoydemo" : "");
@@ -22,7 +22,7 @@ export function LoginForm({ demoAllowed }: { demoAllowed: boolean }) {
       });
       const data = await response.json() as { error?: string };
       if (!response.ok) throw new Error(data.error || "Innlogging feilet.");
-      router.push("/studio");
+      router.push(next.startsWith("/studio") ? next : "/studio");
       router.refresh();
     } catch (reason) {
       setError(reason instanceof Error ? reason.message : "Innlogging feilet.");
