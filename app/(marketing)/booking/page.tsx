@@ -9,7 +9,7 @@ export default async function BookingPage() {
   const stripe = statuses.find((item) => item.id === "stripe");
   const demoIntegrations = statuses.filter((item) => item.demo && item.id !== "stripe");
   return (
-    <>
+    <div className="booking-page">
       <section className="subpage-hero subpage-hero--compact"><div className="container"><p className="eyebrow">INTERAKTIV DEMO</p><h1>Prøv Vedøy Booking.</h1><p>Velg en tjeneste, trykk på en dato og send en testbestilling. Demoen bruker API-et i prosjektet.</p></div></section>
       <section className="booking-public-section"><div className="container">
         <div className="demo-disclaimer" role="status">
@@ -19,6 +19,6 @@ export default async function BookingPage() {
         </div>
         <PublicBooking /><p className="demo-disclaimer">Dette er en produktdemo. Ingen betaling, e-post/SMS eller ekstern kalenderhendelse sendes før integrasjonene er konfigurert og testet.</p>
       </div></section>
-    </>
+    </div>
   );
 }

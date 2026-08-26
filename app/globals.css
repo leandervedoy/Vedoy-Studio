@@ -363,6 +363,16 @@ h1, h2, h3, h4 { letter-spacing: -.035em; }
 .three-columns p { color: #716d64; }
 .booking-public-section { padding: 0 0 110px; }
 .booking-public-section > .container { max-width: 1180px; }
+.booking-page { min-height: 100vh; background: var(--paper); color: var(--ink); overflow: hidden; }
+.booking-page .subpage-hero { padding-top: 92px; }
+.booking-page .subpage-hero h1 { color: var(--ink); }
+.booking-page .subpage-hero .eyebrow { color: #777469; }
+.booking-page .subpage-hero p:not(.eyebrow) { color: #6d6960; }
+.booking-page .booking-public-section { background: var(--paper); }
+.booking-page .demo-disclaimer { width: fit-content; max-width: 100%; margin: 0 0 24px !important; padding: 13px 15px; border: 1px solid var(--line); border-radius: 12px; background: var(--white); color: #625f57 !important; box-shadow: 0 8px 24px rgba(23,23,20,.04); }
+.booking-page .demo-disclaimer strong { color: var(--ink); }
+.booking-page .demo-disclaimer code { color: var(--ink); background: var(--paper-2); border-radius: 4px; padding: 1px 4px; }
+.booking-page .booking-public-section .demo-disclaimer:last-child { width: auto; margin: 15px 0 0 !important; padding: 0; border: 0; background: transparent; box-shadow: none; }
 .pricing-page .section-heading { max-width: 930px; }
 .docs-page { padding: 90px 0 130px; }
 .docs-layout { display: grid; grid-template-columns: 220px minmax(0, 820px); gap: 80px; align-items: start; }
