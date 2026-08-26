@@ -135,10 +135,48 @@ create table if not exists studio_notes (
   content text not null default '',
   color text not null default 'sand' check (color in ('sand', 'lemon', 'mint', 'lavender', 'coral')),
   pinned boolean not null default false,
+  notebook text not null default 'Arbeidsområde',
+  section text not null default 'Generelt',
+  tags jsonb not null default '[]'::jsonb,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
 create index if not exists studio_notes_org_updated_idx on studio_notes (organization_id, pinned desc, updated_at desc);
+create index if not exists studio_notes_org_notebook_idx on studio_notes (organization_id, notebook, section, updated_at desc);
+
+create table if not exists studio_note_versions (
+  id text primary key,
+  note_id text not null references studio_notes(id) on delete cascade,
+  organization_id text not null references organizations(id) on delete cascade,
+  title text not null,
+  content text not null,
+  color text not null,
+  notebook text not null,
+  section text not null,
+  tags jsonb not null default '[]'::jsonb,
+  created_at timestamptz not null default now()
+);
+create index if not exists studio_note_versions_note_idx on studio_note_versions (organization_id, note_id, created_at desc);
+
+create table if not exists studio_note_attachments (
+  id text primary key,
+  note_id text not null references studio_notes(id) on delete cascade,
+  organization_id text not null references organizations(id) on delete cascade,
+  filename text not null,
+  content_type text not null,
+  size_bytes integer not null check (size_bytes between 1 and 2097152),
+  data bytea not null,
+  created_at timestamptz not null default now()
+);
+create index if not exists studio_note_attachments_note_idx on studio_note_attachments (organization_id, note_id, created_at desc);
+
+create table if not exists studio_note_shares (
+  token text primary key,
+  note_id text not null unique references studio_notes(id) on delete cascade,
+  organization_id text not null references organizations(id) on delete cascade,
+  created_at timestamptz not null default now(),
+  revoked_at timestamptz
+);
 
 create table if not exists work_time_entries (
   id text primary key,
@@ -179,15 +217,18 @@ create table if not exists growth_preferences (
 alter table contact_requests enable row level security;
 alter table clothing_requests enable row level security;
 alter table studio_notes enable row level security;
+alter table studio_note_versions enable row level security;
+alter table studio_note_attachments enable row level security;
+alter table studio_note_shares enable row level security;
 alter table work_time_entries enable row level security;
 alter table growth_notifications enable row level security;
 alter table growth_preferences enable row level security;
 do $$ begin
   if exists (select 1 from pg_roles where rolname = 'anon') then
-    revoke all on table contact_requests, clothing_requests, studio_notes, work_time_entries, growth_notifications, growth_preferences from anon;
+    revoke all on table contact_requests, clothing_requests, studio_notes, studio_note_versions, studio_note_attachments, studio_note_shares, work_time_entries, growth_notifications, growth_preferences from anon;
   end if;
   if exists (select 1 from pg_roles where rolname = 'authenticated') then
-    revoke all on table contact_requests, clothing_requests, studio_notes, work_time_entries, growth_notifications, growth_preferences from authenticated;
+    revoke all on table contact_requests, clothing_requests, studio_notes, studio_note_versions, studio_note_attachments, studio_note_shares, work_time_entries, growth_notifications, growth_preferences from authenticated;
   end if;
 end $$;
 

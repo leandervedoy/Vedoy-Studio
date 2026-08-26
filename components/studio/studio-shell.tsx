@@ -104,6 +104,7 @@ export function StudioShell({
             <i><b style={{ width: "34%" }} /></i>
             <small>34 210 av 100 000 API-kall</small>
           </div>
+          <small className="studio-version">Vedøy Growth · v0.1.0 beta</small>
         </div>
       </aside>
       {sidebarOpen && <button className="sidebar-backdrop" aria-label="Lukk meny" onClick={() => setSidebarOpen(false)} />}

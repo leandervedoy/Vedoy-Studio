@@ -19,9 +19,12 @@
     "db:setup": "node scripts/setup-db.mjs",
     "db:migrate:requests": "node scripts/migrate-requests.mjs",
     "db:migrate:notes": "node scripts/migrate-notes.mjs",
+    "db:migrate:notes-workspace": "node scripts/migrate-notes-workspace.mjs",
+    "db:migrate:notes-advanced": "node scripts/migrate-notes-advanced.mjs",
     "db:migrate:growth": "node scripts/migrate-growth.mjs",
     "db:migrate:notifications": "node scripts/migrate-notifications.mjs",
     "check:project": "node scripts/check-project.mjs",
+    "verify:notes": "node scripts/verify-notes-api.mjs",
     "postinstall": "npm run build:booking"
   },
   "dependencies": {

@@ -9,6 +9,10 @@ function clean(value: unknown, max: number) {
   return typeof value === "string" ? value.trim().slice(0, max) : undefined;
 }
 
+function cleanTags(value: unknown) {
+  return Array.isArray(value) ? value.filter((tag): tag is string => typeof tag === "string").map((tag) => clean(tag, 32)).filter((tag): tag is string => Boolean(tag)).slice(0, 12) : undefined;
+}
+
 export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
   if (!(await getSession())) return NextResponse.json({ error: "Ikke innlogget." }, { status: 401 });
   try {
@@ -19,7 +23,10 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
       title: clean(body.title, 160),
       content: clean(body.content, 10000),
       color,
-      pinned: typeof body.pinned === "boolean" ? body.pinned : undefined
+      pinned: typeof body.pinned === "boolean" ? body.pinned : undefined,
+      notebook: clean(body.notebook, 80),
+      section: clean(body.section, 80),
+      tags: cleanTags(body.tags)
     });
     return NextResponse.json({ note });
   } catch (error) {

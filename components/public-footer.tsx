@@ -43,6 +43,7 @@ export function PublicFooter() {
       <div className="container public-footer__bottom">
         <p>© {new Date().getFullYear()} Vedøy. Org.nr. 937 024 622.</p>
         <p>Bygget for små virksomheter med store planer.</p>
+        <p className="app-version">Vedøy Studio v0.1.0 · Beta</p>
       </div>
     </footer>
   );

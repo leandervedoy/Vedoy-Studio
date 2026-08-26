@@ -1,4 +1,5 @@
 import { academyCourses, demoActivities, trafficPoints } from "@/lib/demo-data";
+import { randomBytes } from "node:crypto";
 import { getDemoStore } from "@/lib/demo-store";
 import { databaseEnabled, getSql } from "@/lib/db";
 import type {
@@ -12,6 +13,9 @@ import type {
   StudioOverview,
   StudioProject,
   StudioNote,
+  StudioNoteAttachment,
+  StudioNoteShare,
+  StudioNoteVersion,
   StudioTicket,
   WorkTimeEntry,
   GrowthNotification,
@@ -587,17 +591,17 @@ export async function listClothingRequests(): Promise<ClothingRequest[]> {
 export async function listStudioNotes(): Promise<StudioNote[]> {
   const sql = requireDatabase();
   const rows = await sql<StudioNote[]>`
-    select id, organization_id as "organizationId", title, content, color, pinned,
+    select id, organization_id as "organizationId", title, content, color, pinned, notebook, section, tags,
       created_at as "createdAt", updated_at as "updatedAt"
     from studio_notes
     where organization_id = ${ORGANIZATION_ID}
     order by pinned desc, updated_at desc
     limit 100
   `;
-  return rows.map((row) => ({ ...row, createdAt: asIso(row.createdAt), updatedAt: asIso(row.updatedAt) }));
+  return rows.map((row) => ({ ...row, tags: Array.isArray(row.tags) ? row.tags.map(String) : [], createdAt: asIso(row.createdAt), updatedAt: asIso(row.updatedAt) }));
 }
 
-export async function createStudioNote(input: Pick<StudioNote, "title" | "content" | "color" | "pinned">): Promise<StudioNote> {
+export async function createStudioNote(input: Pick<StudioNote, "title" | "content" | "color" | "pinned" | "notebook" | "section" | "tags">): Promise<StudioNote> {
   const sql = requireDatabase();
   const note: StudioNote = {
     id: randomId("note"),
@@ -606,40 +610,156 @@ export async function createStudioNote(input: Pick<StudioNote, "title" | "conten
     content: input.content.trim(),
     color: input.color,
     pinned: input.pinned,
+    notebook: input.notebook.trim() || "Arbeidsområde",
+    section: input.section.trim() || "Generelt",
+    tags: input.tags.map((tag) => tag.trim()).filter(Boolean).slice(0, 12),
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString()
   };
   await sql`
-    insert into studio_notes (id, organization_id, title, content, color, pinned, created_at, updated_at)
-    values (${note.id}, ${note.organizationId}, ${note.title}, ${note.content}, ${note.color}, ${note.pinned}, ${note.createdAt}, ${note.updatedAt})
+    insert into studio_notes (id, organization_id, title, content, color, pinned, notebook, section, tags, created_at, updated_at)
+    values (${note.id}, ${note.organizationId}, ${note.title}, ${note.content}, ${note.color}, ${note.pinned}, ${note.notebook}, ${note.section}, ${JSON.stringify(note.tags)}::jsonb, ${note.createdAt}, ${note.updatedAt})
   `;
   return note;
 }
 
 export async function updateStudioNote(
   id: string,
-  patch: Partial<Pick<StudioNote, "title" | "content" | "color" | "pinned">>
+  patch: Partial<Pick<StudioNote, "title" | "content" | "color" | "pinned" | "notebook" | "section" | "tags">>
 ): Promise<StudioNote> {
   const sql = requireDatabase();
+  const tags = patch.tags ? JSON.stringify(patch.tags.map((tag) => tag.trim()).filter(Boolean).slice(0, 12)) : null;
+  await sql`
+    insert into studio_note_versions (id, note_id, organization_id, title, content, color, notebook, section, tags, created_at)
+    select ${randomId("notev")}, id, organization_id, title, content, color, notebook, section, tags, now()
+    from studio_notes where id = ${id} and organization_id = ${ORGANIZATION_ID}
+  `;
   const rows = await sql<StudioNote[]>`
     update studio_notes
     set title = coalesce(${patch.title?.trim() || null}, title),
       content = coalesce(${patch.content?.trim() ?? null}, content),
       color = coalesce(${patch.color ?? null}, color),
       pinned = coalesce(${patch.pinned ?? null}, pinned),
+      notebook = coalesce(${patch.notebook?.trim() || null}, notebook),
+      section = coalesce(${patch.section?.trim() || null}, section),
+      tags = coalesce(${tags}::jsonb, tags),
       updated_at = now()
     where id = ${id} and organization_id = ${ORGANIZATION_ID}
-    returning id, organization_id as "organizationId", title, content, color, pinned,
+    returning id, organization_id as "organizationId", title, content, color, pinned, notebook, section, tags,
       created_at as "createdAt", updated_at as "updatedAt"
   `;
   const note = rows[0];
   if (!note) throw new Error("Notatet finnes ikke.");
-  return { ...note, createdAt: asIso(note.createdAt), updatedAt: asIso(note.updatedAt) };
+  await sql`
+    delete from studio_note_versions where id in (
+      select id from studio_note_versions where note_id = ${id} and organization_id = ${ORGANIZATION_ID}
+      order by created_at desc offset 50
+    )
+  `;
+  return { ...note, tags: Array.isArray(note.tags) ? note.tags.map(String) : [], createdAt: asIso(note.createdAt), updatedAt: asIso(note.updatedAt) };
 }
 
 export async function deleteStudioNote(id: string): Promise<void> {
   const sql = requireDatabase();
   await sql`delete from studio_notes where id = ${id} and organization_id = ${ORGANIZATION_ID}`;
+}
+
+export async function listStudioNoteVersions(noteId: string): Promise<StudioNoteVersion[]> {
+  const sql = requireDatabase();
+  const rows = await sql<StudioNoteVersion[]>`
+    select id, note_id as "noteId", title, content, color, notebook, section, tags, created_at as "createdAt"
+    from studio_note_versions
+    where note_id = ${noteId} and organization_id = ${ORGANIZATION_ID}
+    order by created_at desc limit 50
+  `;
+  return rows.map((row) => ({ ...row, tags: Array.isArray(row.tags) ? row.tags.map(String) : [], createdAt: asIso(row.createdAt) }));
+}
+
+export async function restoreStudioNoteVersion(noteId: string, versionId: string): Promise<StudioNote> {
+  const versions = await listStudioNoteVersions(noteId);
+  const version = versions.find((item) => item.id === versionId);
+  if (!version) throw new Error("Versjonen finnes ikke.");
+  return updateStudioNote(noteId, { title: version.title, content: version.content, color: version.color, notebook: version.notebook, section: version.section, tags: version.tags });
+}
+
+export async function listStudioNoteAttachments(noteId: string): Promise<StudioNoteAttachment[]> {
+  const sql = requireDatabase();
+  const rows = await sql<StudioNoteAttachment[]>`
+    select id, note_id as "noteId", filename, content_type as "contentType", size_bytes as "sizeBytes", created_at as "createdAt"
+    from studio_note_attachments where note_id = ${noteId} and organization_id = ${ORGANIZATION_ID}
+    order by created_at desc
+  `;
+  return rows.map((row) => ({ ...row, sizeBytes: Number(row.sizeBytes), createdAt: asIso(row.createdAt) }));
+}
+
+export async function createStudioNoteAttachment(noteId: string, input: { filename: string; contentType: string; data: Buffer }): Promise<StudioNoteAttachment> {
+  const sql = requireDatabase();
+  const id = randomId("notea");
+  const rows = await sql<StudioNoteAttachment[]>`
+    insert into studio_note_attachments (id, note_id, organization_id, filename, content_type, size_bytes, data)
+    select ${id}, id, organization_id, ${input.filename}, ${input.contentType}, ${input.data.length}, ${input.data}
+    from studio_notes where id = ${noteId} and organization_id = ${ORGANIZATION_ID}
+    returning id, note_id as "noteId", filename, content_type as "contentType", size_bytes as "sizeBytes", created_at as "createdAt"
+  `;
+  const attachment = rows[0];
+  if (!attachment) throw new Error("Notatet finnes ikke.");
+  return { ...attachment, sizeBytes: Number(attachment.sizeBytes), createdAt: asIso(attachment.createdAt) };
+}
+
+export async function getStudioNoteAttachment(noteId: string, attachmentId: string): Promise<(StudioNoteAttachment & { data: Buffer }) | null> {
+  const sql = requireDatabase();
+  const rows = await sql<Array<StudioNoteAttachment & { data: Buffer }>>`
+    select id, note_id as "noteId", filename, content_type as "contentType", size_bytes as "sizeBytes", data, created_at as "createdAt"
+    from studio_note_attachments where id = ${attachmentId} and note_id = ${noteId} and organization_id = ${ORGANIZATION_ID}
+  `;
+  const attachment = rows[0];
+  return attachment ? { ...attachment, sizeBytes: Number(attachment.sizeBytes), createdAt: asIso(attachment.createdAt) } : null;
+}
+
+export async function deleteStudioNoteAttachment(noteId: string, attachmentId: string): Promise<void> {
+  const sql = requireDatabase();
+  await sql`delete from studio_note_attachments where id = ${attachmentId} and note_id = ${noteId} and organization_id = ${ORGANIZATION_ID}`;
+}
+
+export async function getStudioNoteShare(noteId: string): Promise<StudioNoteShare | null> {
+  const sql = requireDatabase();
+  const rows = await sql<StudioNoteShare[]>`
+    select token, note_id as "noteId", created_at as "createdAt" from studio_note_shares
+    where note_id = ${noteId} and organization_id = ${ORGANIZATION_ID} and revoked_at is null
+  `;
+  return rows[0] ? { ...rows[0], createdAt: asIso(rows[0].createdAt) } : null;
+}
+
+export async function createStudioNoteShare(noteId: string): Promise<StudioNoteShare> {
+  const sql = requireDatabase();
+  const token = randomBytes(24).toString("base64url");
+  const rows = await sql<StudioNoteShare[]>`
+    insert into studio_note_shares (token, note_id, organization_id, created_at, revoked_at)
+    select ${token}, id, organization_id, now(), null from studio_notes
+    where id = ${noteId} and organization_id = ${ORGANIZATION_ID}
+    on conflict (note_id) do update set token = excluded.token, created_at = now(), revoked_at = null
+    returning token, note_id as "noteId", created_at as "createdAt"
+  `;
+  const share = rows[0];
+  if (!share) throw new Error("Notatet finnes ikke.");
+  return { ...share, createdAt: asIso(share.createdAt) };
+}
+
+export async function revokeStudioNoteShare(noteId: string): Promise<void> {
+  const sql = requireDatabase();
+  await sql`update studio_note_shares set revoked_at = now() where note_id = ${noteId} and organization_id = ${ORGANIZATION_ID}`;
+}
+
+export async function getSharedStudioNote(token: string): Promise<StudioNote | null> {
+  const sql = requireDatabase();
+  const rows = await sql<StudioNote[]>`
+    select n.id, n.organization_id as "organizationId", n.title, n.content, n.color, n.pinned, n.notebook, n.section, n.tags,
+      n.created_at as "createdAt", n.updated_at as "updatedAt"
+    from studio_notes n join studio_note_shares s on s.note_id = n.id
+    where s.token = ${token} and s.revoked_at is null limit 1
+  `;
+  const note = rows[0];
+  return note ? { ...note, tags: Array.isArray(note.tags) ? note.tags.map(String) : [], createdAt: asIso(note.createdAt), updatedAt: asIso(note.updatedAt) } : null;
 }
 
 export async function listWorkTimeEntries(ownerEmail: string): Promise<WorkTimeEntry[]> {

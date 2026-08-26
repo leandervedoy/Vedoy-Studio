@@ -129,8 +129,38 @@ export interface StudioNote {
   content: string;
   color: StudioNoteColor;
   pinned: boolean;
+  notebook: string;
+  section: string;
+  tags: string[];
   createdAt: string;
   updatedAt: string;
+}
+
+export interface StudioNoteVersion {
+  id: string;
+  noteId: string;
+  title: string;
+  content: string;
+  color: StudioNoteColor;
+  notebook: string;
+  section: string;
+  tags: string[];
+  createdAt: string;
+}
+
+export interface StudioNoteAttachment {
+  id: string;
+  noteId: string;
+  filename: string;
+  contentType: string;
+  sizeBytes: number;
+  createdAt: string;
+}
+
+export interface StudioNoteShare {
+  token: string;
+  noteId: string;
+  createdAt: string;
 }
 
 export interface WorkTimeEntry {
