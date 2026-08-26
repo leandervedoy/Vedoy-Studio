@@ -9,13 +9,14 @@
   "scripts": {
     "dev": "next dev",
     "dev:shopify": "npm run dev --workspace=@vedoy/vedoy-shopify",
-    "build": "npm run build:booking && next build",
+    "build": "npm run build:booking && npm run build:notes && next build",
     "build:shopify": "npm run build --workspace=@vedoy/vedoy-shopify",
     "start": "next start",
     "lint": "npm run typecheck",
-    "typecheck": "npm run build:booking && tsc --noEmit",
+    "typecheck": "npm run build:booking && npm run build:notes && tsc --noEmit",
     "typecheck:shopify": "npm run typecheck --workspace=@vedoy/vedoy-shopify",
     "build:booking": "npm run build --workspace=@vedoy/booking",
+    "build:notes": "npm run build --workspace=@vedoy/notes",
     "db:setup": "node scripts/setup-db.mjs",
     "db:migrate:requests": "node scripts/migrate-requests.mjs",
     "db:migrate:notes": "node scripts/migrate-notes.mjs",
@@ -25,10 +26,11 @@
     "db:migrate:notifications": "node scripts/migrate-notifications.mjs",
     "check:project": "node scripts/check-project.mjs",
     "verify:notes": "node scripts/verify-notes-api.mjs",
-    "postinstall": "npm run build:booking"
+    "postinstall": "npm run build:booking && npm run build:notes"
   },
   "dependencies": {
     "@vedoy/booking": "*",
+    "@vedoy/notes": "*",
     "motion": "13.1.0",
     "next": "^16.3.2",
     "postgres": "^3.4.7",

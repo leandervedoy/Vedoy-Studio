@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "@vedoy/booking/styles.css";
 import "./globals.css";
+import "@vedoy/notes/styles.css";
 
 export const metadata: Metadata = {
   title: {

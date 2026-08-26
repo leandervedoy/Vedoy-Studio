@@ -61,7 +61,7 @@ export const studioProducts: StudioProduct[] = [
     name: "Vedøy E-post",
     description: "Profesjonell e-post, maler, varsler og en enkel felles innboks.",
     icon: "✉",
-    href: "/projects/email",
+    href: "https://mail.vedoystudio.no",
     group: "Drift",
     status: "planned",
     accent: "#0891b2",

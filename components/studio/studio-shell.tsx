@@ -28,7 +28,7 @@ const sections = [
       { href: "/studio/hours", icon: "◷", label: "Timeregistrering" },
       { href: "/studio/booking", icon: "□", label: "Booking" },
       { href: "/studio/customers", icon: "◉", label: "Kunder og CRM" },
-      { href: "/studio/email", icon: "✉", label: "E-post" },
+      { href: "https://mail.vedoystudio.no", icon: "✉", label: "E-post" },
       { href: "/studio/support", icon: "☺", label: "Vedøy Assist" }
     ]
   },
