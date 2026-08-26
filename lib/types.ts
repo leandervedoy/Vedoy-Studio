@@ -142,6 +142,34 @@ export interface WorkTimeEntry {
   note: string;
 }
 
+export interface GrowthNotification {
+  id: string;
+  organizationId: string;
+  userEmail: string;
+  type: "lead" | "booking" | "system";
+  title: string;
+  detail: string;
+  href?: string;
+  readAt?: string;
+  createdAt: string;
+}
+
+export interface GrowthPreferences {
+  userEmail: string;
+  inAppNotifications: boolean;
+  emailBooking: boolean;
+  emailSystem: boolean;
+  dailyDigest: boolean;
+}
+
+export interface GrowthCompanyProfile {
+  name: string;
+  organizationNumber: string;
+  location: string;
+  timezone: string;
+  description: string;
+}
+
 export interface StudioActivity {
   id: string;
   organizationId: string;

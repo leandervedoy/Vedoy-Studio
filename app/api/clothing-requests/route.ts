@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createClothingRequest } from "@/lib/repository";
+import { createClothingRequest, createGrowthNotification } from "@/lib/repository";
 
 const acceptedTypes = new Set(["image/png", "image/jpeg", "image/webp", "image/svg+xml"]);
 const maxLogoSize = 5 * 1024 * 1024;
@@ -36,6 +36,9 @@ export async function POST(request: Request) {
       logoContentType: logo?.type,
       logo: logo ? Buffer.from(await logo.arrayBuffer()) : undefined
     });
+    if (process.env.ADMIN_EMAIL) {
+      void createGrowthNotification({ userEmail: process.env.ADMIN_EMAIL, type: "lead", title: "Ny forespørsel om profilprodukter", detail: `${name} har sendt inn forespørsel om ${clean(form.get("productName"), 140) || "profilprodukter"}.`, href: "/studio/requests" }).catch((error) => console.error("clothing_notification_failed", error));
+    }
     return NextResponse.json({ ok: true, id }, { status: 201 });
   } catch (error) {
     console.error("clothing_request_failed", error);

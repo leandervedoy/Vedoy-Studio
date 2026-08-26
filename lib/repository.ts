@@ -13,7 +13,10 @@ import type {
   StudioProject,
   StudioNote,
   StudioTicket,
-  WorkTimeEntry
+  WorkTimeEntry,
+  GrowthNotification,
+  GrowthPreferences,
+  GrowthCompanyProfile
 } from "@/lib/types";
 import { randomId, slugify } from "@/lib/utils";
 
@@ -673,6 +676,82 @@ export async function stopWorkTimer(ownerEmail: string): Promise<void> {
     update work_time_entries set ended_at = now()
     where organization_id = ${ORGANIZATION_ID} and owner_email = ${ownerEmail.toLowerCase()} and ended_at is null
   `;
+}
+
+export async function listGrowthNotifications(userEmail: string): Promise<GrowthNotification[]> {
+  const sql = requireDatabase();
+  const rows = await sql<GrowthNotification[]>`
+    select id, organization_id as "organizationId", user_email as "userEmail", type, title, detail,
+      href, read_at as "readAt", created_at as "createdAt"
+    from growth_notifications
+    where organization_id = ${ORGANIZATION_ID} and user_email = ${userEmail.toLowerCase()}
+    order by created_at desc limit 50
+  `;
+  return rows.map((row) => ({ ...row, readAt: row.readAt ? asIso(row.readAt) : undefined, createdAt: asIso(row.createdAt) }));
+}
+
+export async function createGrowthNotification(input: Omit<GrowthNotification, "id" | "organizationId" | "createdAt" | "readAt">): Promise<void> {
+  const sql = requireDatabase();
+  await sql`
+    insert into growth_notifications (id, organization_id, user_email, type, title, detail, href)
+    values (${randomId("notice")}, ${ORGANIZATION_ID}, ${input.userEmail.toLowerCase()}, ${input.type}, ${input.title}, ${input.detail}, ${input.href ?? null})
+  `;
+}
+
+export async function markGrowthNotificationsRead(userEmail: string): Promise<void> {
+  const sql = requireDatabase();
+  await sql`
+    update growth_notifications set read_at = now()
+    where organization_id = ${ORGANIZATION_ID} and user_email = ${userEmail.toLowerCase()} and read_at is null
+  `;
+}
+
+export async function getGrowthPreferences(userEmail: string): Promise<GrowthPreferences> {
+  const sql = requireDatabase();
+  const rows = await sql<GrowthPreferences[]>`
+    select user_email as "userEmail", in_app_notifications as "inAppNotifications", email_booking as "emailBooking",
+      email_system as "emailSystem", daily_digest as "dailyDigest"
+    from growth_preferences where organization_id = ${ORGANIZATION_ID} and user_email = ${userEmail.toLowerCase()} limit 1
+  `;
+  return rows[0] ?? { userEmail: userEmail.toLowerCase(), inAppNotifications: true, emailBooking: true, emailSystem: true, dailyDigest: false };
+}
+
+export async function saveGrowthPreferences(userEmail: string, patch: Omit<GrowthPreferences, "userEmail">): Promise<GrowthPreferences> {
+  const sql = requireDatabase();
+  const email = userEmail.toLowerCase();
+  const rows = await sql<GrowthPreferences[]>`
+    insert into growth_preferences (organization_id, user_email, in_app_notifications, email_booking, email_system, daily_digest)
+    values (${ORGANIZATION_ID}, ${email}, ${patch.inAppNotifications}, ${patch.emailBooking}, ${patch.emailSystem}, ${patch.dailyDigest})
+    on conflict (organization_id, user_email) do update set
+      in_app_notifications = excluded.in_app_notifications, email_booking = excluded.email_booking,
+      email_system = excluded.email_system, daily_digest = excluded.daily_digest, updated_at = now()
+    returning user_email as "userEmail", in_app_notifications as "inAppNotifications", email_booking as "emailBooking",
+      email_system as "emailSystem", daily_digest as "dailyDigest"
+  `;
+  return rows[0];
+}
+
+export async function getGrowthCompanyProfile(): Promise<GrowthCompanyProfile> {
+  const sql = requireDatabase();
+  const rows = await sql<GrowthCompanyProfile[]>`
+    select name, coalesce(organization_number, '') as "organizationNumber", coalesce(location, '') as location,
+      coalesce(timezone, 'Europe/Oslo') as timezone, coalesce(description, '') as description
+    from organizations where id = ${ORGANIZATION_ID} limit 1
+  `;
+  return rows[0] ?? { name: "Vedøy", organizationNumber: "", location: "Haugesund", timezone: "Europe/Oslo", description: "" };
+}
+
+export async function saveGrowthCompanyProfile(profile: GrowthCompanyProfile): Promise<GrowthCompanyProfile> {
+  const sql = requireDatabase();
+  const rows = await sql<GrowthCompanyProfile[]>`
+    update organizations set name = ${profile.name}, organization_number = ${profile.organizationNumber || null},
+      location = ${profile.location || null}, timezone = ${profile.timezone}, description = ${profile.description}
+    where id = ${ORGANIZATION_ID}
+    returning name, coalesce(organization_number, '') as "organizationNumber", coalesce(location, '') as location,
+      coalesce(timezone, 'Europe/Oslo') as timezone, coalesce(description, '') as description
+  `;
+  if (!rows[0]) throw new Error("Virksomheten ble ikke funnet.");
+  return rows[0];
 }
 
 export function listAcademyCourses(): AcademyCourse[] {

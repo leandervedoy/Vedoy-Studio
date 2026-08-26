@@ -91,6 +91,9 @@ create table if not exists support_tickets (
   status text not null check (status in ('open','in-progress','resolved')),
   created_at timestamptz not null default now()
 );
+alter table organizations add column if not exists organization_number text;
+alter table organizations add column if not exists timezone text not null default 'Europe/Oslo';
+alter table organizations add column if not exists description text not null default '';
 
 create table if not exists contact_requests (
   id text primary key,
@@ -149,16 +152,42 @@ create table if not exists work_time_entries (
 create index if not exists work_time_entries_org_owner_idx on work_time_entries (organization_id, owner_email, started_at desc);
 create unique index if not exists work_time_entries_one_open_idx on work_time_entries (organization_id, owner_email) where ended_at is null;
 
+create table if not exists growth_notifications (
+  id text primary key,
+  organization_id text not null references organizations(id) on delete cascade,
+  user_email text not null,
+  type text not null check (type in ('lead', 'booking', 'system')),
+  title text not null,
+  detail text not null,
+  href text,
+  read_at timestamptz,
+  created_at timestamptz not null default now()
+);
+create index if not exists growth_notifications_user_idx on growth_notifications (organization_id, user_email, read_at, created_at desc);
+
+create table if not exists growth_preferences (
+  organization_id text not null references organizations(id) on delete cascade,
+  user_email text not null,
+  in_app_notifications boolean not null default true,
+  email_booking boolean not null default true,
+  email_system boolean not null default true,
+  daily_digest boolean not null default false,
+  updated_at timestamptz not null default now(),
+  primary key (organization_id, user_email)
+);
+
 alter table contact_requests enable row level security;
 alter table clothing_requests enable row level security;
 alter table studio_notes enable row level security;
 alter table work_time_entries enable row level security;
+alter table growth_notifications enable row level security;
+alter table growth_preferences enable row level security;
 do $$ begin
   if exists (select 1 from pg_roles where rolname = 'anon') then
-    revoke all on table contact_requests, clothing_requests, studio_notes, work_time_entries from anon;
+    revoke all on table contact_requests, clothing_requests, studio_notes, work_time_entries, growth_notifications, growth_preferences from anon;
   end if;
   if exists (select 1 from pg_roles where rolname = 'authenticated') then
-    revoke all on table contact_requests, clothing_requests, studio_notes, work_time_entries from authenticated;
+    revoke all on table contact_requests, clothing_requests, studio_notes, work_time_entries, growth_notifications, growth_preferences from authenticated;
   end if;
 end $$;
 

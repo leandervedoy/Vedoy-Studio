@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { Brand } from "@/components/brand";
+import { NotificationCenter } from "@/components/studio/notification-center";
 import { cn } from "@/lib/utils";
 
 const sections = [
@@ -112,7 +113,7 @@ export function StudioShell({
           <div className="studio-search"><span>⌕</span><input placeholder="Søk i Studio …" aria-label="Søk i Studio" /><kbd>⌘ K</kbd></div>
           <div className="studio-topbar__actions">
             <Link className="button button--small button--ghost" href="/booking" target="_blank">Se kundeside ↗</Link>
-            <button className="notification-button" type="button" aria-label="Varsler">◌<i /></button>
+            <NotificationCenter />
             <div className="account-menu">
               <button type="button" onClick={() => setAccountOpen((value) => !value)} aria-expanded={accountOpen}>
                 <span>EL</span><div><strong>{userName}</strong><small>Eier</small></div><i>⌄</i>
