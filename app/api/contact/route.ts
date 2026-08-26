@@ -26,7 +26,8 @@ export async function POST(request: Request) {
       message: clean(body.message, 3000) || undefined
     });
     if (process.env.ADMIN_EMAIL) {
-      void createGrowthNotification({ userEmail: process.env.ADMIN_EMAIL, type: "lead", title: "Ny henvendelse", detail: `${name} ønsker hjelp med ${need}.`, href: "/studio/requests" }).catch((error) => console.error("contact_notification_failed", error));
+      try { await createGrowthNotification({ userEmail: process.env.ADMIN_EMAIL, type: "lead", title: "Ny henvendelse", detail: `${name} ønsker hjelp med ${need}.`, href: "/studio/requests" }); }
+      catch (error) { console.error("contact_notification_failed", error); }
     }
     return NextResponse.json({ ok: true, id }, { status: 201 });
   } catch (error) {

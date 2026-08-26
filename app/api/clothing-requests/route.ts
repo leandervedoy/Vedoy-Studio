@@ -37,7 +37,8 @@ export async function POST(request: Request) {
       logo: logo ? Buffer.from(await logo.arrayBuffer()) : undefined
     });
     if (process.env.ADMIN_EMAIL) {
-      void createGrowthNotification({ userEmail: process.env.ADMIN_EMAIL, type: "lead", title: "Ny forespørsel om profilprodukter", detail: `${name} har sendt inn forespørsel om ${clean(form.get("productName"), 140) || "profilprodukter"}.`, href: "/studio/requests" }).catch((error) => console.error("clothing_notification_failed", error));
+      try { await createGrowthNotification({ userEmail: process.env.ADMIN_EMAIL, type: "lead", title: "Ny forespørsel om profilprodukter", detail: `${name} har sendt inn forespørsel om ${clean(form.get("productName"), 140) || "profilprodukter"}.`, href: "/studio/requests" }); }
+      catch (error) { console.error("clothing_notification_failed", error); }
     }
     return NextResponse.json({ ok: true, id }, { status: 201 });
   } catch (error) {
