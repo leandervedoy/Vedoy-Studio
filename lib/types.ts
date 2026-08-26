@@ -120,6 +120,19 @@ export interface ClothingRequest {
   createdAt: string;
 }
 
+export type StudioNoteColor = "sand" | "lemon" | "mint" | "lavender" | "coral";
+
+export interface StudioNote {
+  id: string;
+  organizationId: string;
+  title: string;
+  content: string;
+  color: StudioNoteColor;
+  pinned: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface StudioActivity {
   id: string;
   organizationId: string;

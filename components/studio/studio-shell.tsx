@@ -23,6 +23,7 @@ const sections = [
     label: "Drift",
     items: [
       { href: "/studio/requests", icon: "✦", label: "Henvendelser" },
+      { href: "/studio/notes", icon: "▤", label: "Notater" },
       { href: "/studio/booking", icon: "□", label: "Booking" },
       { href: "/studio/customers", icon: "◉", label: "Kunder og CRM" },
       { href: "/studio/email", icon: "✉", label: "E-post" },

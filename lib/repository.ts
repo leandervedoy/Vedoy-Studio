@@ -11,6 +11,7 @@ import type {
   StudioDomain,
   StudioOverview,
   StudioProject,
+  StudioNote,
   StudioTicket
 } from "@/lib/types";
 import { randomId, slugify } from "@/lib/utils";
@@ -577,6 +578,64 @@ export async function listClothingRequests(): Promise<ClothingRequest[]> {
     logoData: row.logoData ? Buffer.from(row.logoData).toString("base64") : undefined,
     createdAt: asIso(row.createdAt)
   }));
+}
+
+export async function listStudioNotes(): Promise<StudioNote[]> {
+  const sql = requireDatabase();
+  const rows = await sql<StudioNote[]>`
+    select id, organization_id as "organizationId", title, content, color, pinned,
+      created_at as "createdAt", updated_at as "updatedAt"
+    from studio_notes
+    where organization_id = ${ORGANIZATION_ID}
+    order by pinned desc, updated_at desc
+    limit 100
+  `;
+  return rows.map((row) => ({ ...row, createdAt: asIso(row.createdAt), updatedAt: asIso(row.updatedAt) }));
+}
+
+export async function createStudioNote(input: Pick<StudioNote, "title" | "content" | "color" | "pinned">): Promise<StudioNote> {
+  const sql = requireDatabase();
+  const note: StudioNote = {
+    id: randomId("note"),
+    organizationId: ORGANIZATION_ID,
+    title: input.title.trim() || "Uten tittel",
+    content: input.content.trim(),
+    color: input.color,
+    pinned: input.pinned,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  };
+  await sql`
+    insert into studio_notes (id, organization_id, title, content, color, pinned, created_at, updated_at)
+    values (${note.id}, ${note.organizationId}, ${note.title}, ${note.content}, ${note.color}, ${note.pinned}, ${note.createdAt}, ${note.updatedAt})
+  `;
+  return note;
+}
+
+export async function updateStudioNote(
+  id: string,
+  patch: Partial<Pick<StudioNote, "title" | "content" | "color" | "pinned">>
+): Promise<StudioNote> {
+  const sql = requireDatabase();
+  const rows = await sql<StudioNote[]>`
+    update studio_notes
+    set title = coalesce(${patch.title?.trim() || null}, title),
+      content = coalesce(${patch.content?.trim() ?? null}, content),
+      color = coalesce(${patch.color ?? null}, color),
+      pinned = coalesce(${patch.pinned ?? null}, pinned),
+      updated_at = now()
+    where id = ${id} and organization_id = ${ORGANIZATION_ID}
+    returning id, organization_id as "organizationId", title, content, color, pinned,
+      created_at as "createdAt", updated_at as "updatedAt"
+  `;
+  const note = rows[0];
+  if (!note) throw new Error("Notatet finnes ikke.");
+  return { ...note, createdAt: asIso(note.createdAt), updatedAt: asIso(note.updatedAt) };
+}
+
+export async function deleteStudioNote(id: string): Promise<void> {
+  const sql = requireDatabase();
+  await sql`delete from studio_notes where id = ${id} and organization_id = ${ORGANIZATION_ID}`;
 }
 
 export function listAcademyCourses(): AcademyCourse[] {
