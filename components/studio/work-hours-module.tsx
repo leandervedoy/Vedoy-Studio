@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import type { WorkTimeEntry } from "@/lib/types";
+import { VedoyCalendar } from "@/components/studio/vedoy-calendar";
 
 function secondsFor(entry: WorkTimeEntry, now: number) {
   return Math.max(0, Math.floor(((entry.endedAt ? new Date(entry.endedAt).getTime() : now) - new Date(entry.startedAt).getTime()) / 1000));
@@ -36,7 +37,7 @@ export function WorkHoursModule({ initialEntries, expanded = false }: { initialE
     setBusy(false);
   }
 
-  return <article className={`studio-panel growth-hours${expanded ? " growth-hours--expanded" : ""}`}>
+  return <div className={`growth-hours-layout${expanded ? " growth-hours-layout--expanded" : ""}`}><article className={`studio-panel growth-hours${expanded ? " growth-hours--expanded" : ""}`}>
     <div className="panel-heading"><div><small>VEDØY GROWTH / TIMER</small><h2>Timeregistrering</h2></div>{!expanded && <Link href="/studio/hours">Se oversikt</Link>}</div>
     <div className="growth-hours__status"><i className={active ? "is-active" : ""} /><span>{active ? "Timeren kjører" : "Ingen aktiv timer"}</span></div>
     <strong className="growth-hours__total">{duration(todaySeconds)}</strong><small className="growth-hours__caption">REGISTRERT I DAG</small>
@@ -45,5 +46,5 @@ export function WorkHoursModule({ initialEntries, expanded = false }: { initialE
     <button type="button" className={active ? "button growth-hours__stop" : "button button--dark"} onClick={toggle} disabled={busy}>{busy ? "Lagrer …" : active ? "Stopp timer" : "Start timer"}</button>
     {message && <p className="growth-hours__message" aria-live="polite">{message}</p>}
     {expanded && <div className="growth-hours__history"><h3>Siste økter</h3>{entries.length ? entries.slice(0, 20).map((entry) => <div key={entry.id}><span><strong>{entry.note || "Arbeidsøkt"}</strong><small>{new Intl.DateTimeFormat("nb-NO", { day:"numeric", month:"short", hour:"2-digit", minute:"2-digit" }).format(new Date(entry.startedAt))}</small></span><b>{duration(secondsFor(entry, now))}</b></div>) : <p>Ingen registrerte timer ennå.</p>}</div>}
-  </article>;
+  </article>{expanded && <VedoyCalendar entries={entries} now={now} />}</div>;
 }

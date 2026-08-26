@@ -646,6 +646,28 @@ h1, h2, h3, h4 { letter-spacing: -.035em; }
 .growth-hours__history span strong { font-size:11px; }
 .growth-hours__history span small { color:#858178; font-size:8px; margin-top:3px; }
 .growth-hours__history > div > b { font-size:11px; }
+.growth-hours-layout { display:grid; gap:18px; }
+.growth-hours-layout--expanded { grid-template-columns:minmax(260px,.72fr) minmax(420px,1.28fr); align-items:start; }
+.vedoy-calendar { background:var(--paper); border:1px solid var(--line); border-radius:12px; padding:20px; min-width:0; }
+.vedoy-calendar__header { display:flex; justify-content:space-between; gap:18px; align-items:flex-start; margin-bottom:16px; }
+.vedoy-calendar__header small,.vedoy-calendar__day>small { color:#8a867d; font:650 8px ui-monospace,monospace; letter-spacing:.14em; }
+.vedoy-calendar__header h2 { margin:5px 0 2px; font-size:21px; letter-spacing:-.04em; }
+.vedoy-calendar__header p { margin:0; color:#77736a; font-size:10px; }
+.vedoy-calendar__total { display:grid; text-align:right; font-weight:750; font-size:18px; white-space:nowrap; }
+.vedoy-calendar__total small { color:#8a867d; font-size:8px; font-weight:500; margin-top:2px; }
+.vedoy-calendar__body { display:grid; grid-template-columns:minmax(260px,1.1fr) minmax(155px,.9fr); gap:18px; }
+.vedoy-calendar .vb-calendar { min-width:0; }
+.vedoy-calendar .vb-calendar__toolbar { padding:0 0 12px; }
+.vedoy-calendar .vb-calendar__grid { gap:4px; }
+.vedoy-calendar .vb-calendar__day { min-height:42px; }
+.vedoy-calendar__day { border-left:1px solid var(--line); padding-left:18px; }
+.vedoy-calendar__day h3 { margin:7px 0 15px; font-size:14px; text-transform:capitalize; }
+.vedoy-calendar__day>p { color:#8a867d; font-size:10px; line-height:1.5; }
+.vedoy-calendar__day article { display:flex; gap:8px; align-items:flex-start; padding:10px 0; border-top:1px solid var(--line); }
+.vedoy-calendar__day article i { flex:0 0 6px; width:6px; height:6px; margin-top:5px; border-radius:50%; background:#6d9274; }
+.vedoy-calendar__day article div { min-width:0; flex:1; }.vedoy-calendar__day article strong,.vedoy-calendar__day article span { display:block; }.vedoy-calendar__day article strong { font-size:10px; }.vedoy-calendar__day article span { color:#858178; font-size:8px; margin-top:3px; }.vedoy-calendar__day article b { font-size:9px; white-space:nowrap; }
+@media (max-width:900px) { .growth-hours-layout--expanded { grid-template-columns:1fr; } .vedoy-calendar__body { grid-template-columns:minmax(280px,1fr) minmax(180px,.7fr); } }
+@media (max-width:560px) { .vedoy-calendar { padding:14px; } .vedoy-calendar__body { grid-template-columns:1fr; } .vedoy-calendar__day { border-left:0; border-top:1px solid var(--line); padding:16px 0 0; } }
 .project-detail-page { padding: 120px 0 140px; }
 .project-detail { max-width: 980px; }
 .project-detail .back-link { display: inline-flex; margin-bottom: 70px; color: #6e6a60; font-weight: 700; }
