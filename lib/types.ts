@@ -133,6 +133,15 @@ export interface StudioNote {
   updatedAt: string;
 }
 
+export interface WorkTimeEntry {
+  id: string;
+  organizationId: string;
+  ownerEmail: string;
+  startedAt: string;
+  endedAt?: string;
+  note: string;
+}
+
 export interface StudioActivity {
   id: string;
   organizationId: string;

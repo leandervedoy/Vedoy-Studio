@@ -12,7 +12,8 @@ import type {
   StudioOverview,
   StudioProject,
   StudioNote,
-  StudioTicket
+  StudioTicket,
+  WorkTimeEntry
 } from "@/lib/types";
 import { randomId, slugify } from "@/lib/utils";
 
@@ -636,6 +637,42 @@ export async function updateStudioNote(
 export async function deleteStudioNote(id: string): Promise<void> {
   const sql = requireDatabase();
   await sql`delete from studio_notes where id = ${id} and organization_id = ${ORGANIZATION_ID}`;
+}
+
+export async function listWorkTimeEntries(ownerEmail: string): Promise<WorkTimeEntry[]> {
+  const sql = requireDatabase();
+  const rows = await sql<WorkTimeEntry[]>`
+    select id, organization_id as "organizationId", owner_email as "ownerEmail",
+      started_at as "startedAt", ended_at as "endedAt", note
+    from work_time_entries
+    where organization_id = ${ORGANIZATION_ID} and owner_email = ${ownerEmail.toLowerCase()}
+    order by started_at desc
+    limit 120
+  `;
+  return rows.map((row) => ({ ...row, startedAt: asIso(row.startedAt), endedAt: row.endedAt ? asIso(row.endedAt) : undefined }));
+}
+
+export async function startWorkTimer(ownerEmail: string, note = ""): Promise<WorkTimeEntry> {
+  const sql = requireDatabase();
+  const entry: WorkTimeEntry = {
+    id: randomId("time"), organizationId: ORGANIZATION_ID, ownerEmail: ownerEmail.toLowerCase(),
+    startedAt: new Date().toISOString(), note: note.trim()
+  };
+  const rows = await sql<WorkTimeEntry[]>`
+    insert into work_time_entries (id, organization_id, owner_email, started_at, note)
+    values (${entry.id}, ${entry.organizationId}, ${entry.ownerEmail}, ${entry.startedAt}, ${entry.note})
+    returning id, organization_id as "organizationId", owner_email as "ownerEmail",
+      started_at as "startedAt", ended_at as "endedAt", note
+  `;
+  return { ...rows[0], startedAt: asIso(rows[0].startedAt), endedAt: rows[0].endedAt ? asIso(rows[0].endedAt) : undefined };
+}
+
+export async function stopWorkTimer(ownerEmail: string): Promise<void> {
+  const sql = requireDatabase();
+  await sql`
+    update work_time_entries set ended_at = now()
+    where organization_id = ${ORGANIZATION_ID} and owner_email = ${ownerEmail.toLowerCase()} and ended_at is null
+  `;
 }
 
 export function listAcademyCourses(): AcademyCourse[] {

@@ -605,6 +605,27 @@ h1, h2, h3, h4 { letter-spacing: -.035em; }
 @media (prefers-reduced-motion: reduce) {
   *, *:before, *:after { scroll-behavior:auto!important; animation-duration:.01ms!important; animation-iteration-count:1!important; transition-duration:.01ms!important; }
 }
+
+/* Vedøy Growth: timeregistrering hentet og tilpasset fra vedoy-growth. */
+.growth-hours { min-height:310px; }
+.growth-hours__status { display:flex; align-items:center; gap:8px; color:#77736a; font-size:10px; }
+.growth-hours__status i { width:8px; height:8px; border-radius:50%; background:#bbb7ad; }
+.growth-hours__status i.is-active { background:#1d9d62; box-shadow:0 0 0 5px #e1f4e9; }
+.growth-hours__total { display:block; font-size:clamp(34px,4vw,50px); line-height:1; margin:25px 0 6px; }
+.growth-hours__caption { display:block; color:#8a867d; font:650 8px ui-monospace,monospace; letter-spacing:.14em; margin-bottom:19px; }
+.growth-hours__note { width:100%; min-height:40px; border:1px solid var(--line); background:var(--paper); border-radius:8px; padding:0 11px; margin-bottom:9px; font-size:10px; }
+.growth-hours > .button { width:100%; }
+.growth-hours__stop { background:#fff1ef; border:1px solid #ecc8c1; color:#9e3030; }
+.growth-hours__current { color:#5d5b54; font-size:10px; min-height:40px; margin:0 0 9px; }
+.growth-hours__message { color:#9e3030; font-size:9px; }
+.growth-hours--expanded { max-width:850px; }
+.growth-hours__history { border-top:1px solid var(--line); margin-top:24px; padding-top:20px; }
+.growth-hours__history h3 { font-size:15px; margin:0 0 8px; }
+.growth-hours__history > div { display:flex; justify-content:space-between; align-items:center; gap:15px; padding:12px 0; border-bottom:1px solid var(--line); }
+.growth-hours__history span strong,.growth-hours__history span small { display:block; }
+.growth-hours__history span strong { font-size:11px; }
+.growth-hours__history span small { color:#858178; font-size:8px; margin-top:3px; }
+.growth-hours__history > div > b { font-size:11px; }
 .project-detail-page { padding: 120px 0 140px; }
 .project-detail { max-width: 980px; }
 .project-detail .back-link { display: inline-flex; margin-bottom: 70px; color: #6e6a60; font-weight: 700; }

@@ -24,6 +24,7 @@ const sections = [
     items: [
       { href: "/studio/requests", icon: "✦", label: "Henvendelser" },
       { href: "/studio/notes", icon: "▤", label: "Notater" },
+      { href: "/studio/hours", icon: "◷", label: "Timeregistrering" },
       { href: "/studio/booking", icon: "□", label: "Booking" },
       { href: "/studio/customers", icon: "◉", label: "Kunder og CRM" },
       { href: "/studio/email", icon: "✉", label: "E-post" },
@@ -77,7 +78,7 @@ export function StudioShell({
         </div>
         <div className="organization-switcher">
           <span className="organization-switcher__mark">VØ</span>
-          <div><strong>{organizationName}</strong><small>Studio Growth</small></div>
+          <div><strong>{organizationName}</strong><small>Vedøy Growth</small></div>
           <span aria-hidden>⌄</span>
         </div>
         <nav className="studio-nav" aria-label="Studio-meny">

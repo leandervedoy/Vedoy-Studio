@@ -19,6 +19,7 @@
     "db:setup": "node scripts/setup-db.mjs",
     "db:migrate:requests": "node scripts/migrate-requests.mjs",
     "db:migrate:notes": "node scripts/migrate-notes.mjs",
+    "db:migrate:growth": "node scripts/migrate-growth.mjs",
     "check:project": "node scripts/check-project.mjs",
     "postinstall": "npm run build:booking"
   },
