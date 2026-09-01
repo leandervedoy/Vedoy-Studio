@@ -19,7 +19,7 @@ export const studioProducts: StudioProduct[] = [
     icon: "△",
     href: "/tjenester/hosting-og-domene#konfigurer-hosting",
     group: "Bygg",
-    status: "planned",
+    status: "live",
     accent: "#171714",
     highlights: ["Next.js", "API-hosting", "Deploy-logg"]
   },

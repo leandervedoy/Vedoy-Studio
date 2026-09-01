@@ -9,4 +9,8 @@ out
 *.tsbuildinfo
 .DS_Store
 packages/booking/dist
+
+# Local version snapshots stay outside the published repository history.
+backups/*/
+published-versions/*/
 .env*

@@ -11,7 +11,7 @@ export const dynamic = "force-dynamic";
 export default async function StudioDashboardPage() {
   const session = await requireSession();
   const [overview, notes, timeEntries] = await Promise.all([getOverview(), listStudioNotes(), listWorkTimeEntries(session.email)]);
-  return <>
+  return <div className="growth-dashboard">
     <header className="dashboard-heading"><div><p className="eyebrow">VEDØY GROWTH / BEDRIFTSPLATTFORM</p><h1>Growth-oversikt</h1><p>Drift, kunder, timer og neste steg samlet for virksomheten.</p></div><div className="dashboard-heading__actions"><span className={isUsingDatabase() ? "data-mode is-live" : "data-mode"}><i />{isUsingDatabase() ? "PostgreSQL tilkoblet" : "Demodata i minnet"}</span><Link className="button button--dark" href="/studio/projects">+ Nytt prosjekt</Link></div></header>
     <section className="stat-grid">
       <article><span>◎</span><div><small>Domener</small><strong>{overview.stats.domains}</strong><p>Alle overvåkes</p></div><Link href="/studio/domains">↗</Link></article>
@@ -29,5 +29,5 @@ export default async function StudioDashboardPage() {
       <article className="studio-panel vedi-insight"><div className="vedi-insight__mark">✦</div><div><small>VEDI FORESLÅR</small><h2>Gjør booking tydeligere på forsiden</h2><p>Bookingdemoen får trafikk, men få går videre til tidspunkt. Test en knapp med «Se ledige tider» i hero-seksjonen.</p><Link href="/studio/vedi">Utforsk med Vedi →</Link></div></article>
       <article className="studio-panel"><div className="panel-heading"><div><small>AKTIVITET</small><h2>Siste hendelser</h2></div><button className="icon-button">•••</button></div><div className="activity-list">{overview.activities.map((activity) => <article key={activity.id}><span>{activity.type === "deployment" ? "△" : activity.type === "booking" ? "□" : activity.type === "domain" ? "◎" : "⌁"}</span><div><strong>{activity.title}</strong><p>{activity.detail}</p></div><time>{formatDateTime(activity.createdAt)}</time></article>)}</div></article>
     </section>
-  </>;
+  </div>;
 }

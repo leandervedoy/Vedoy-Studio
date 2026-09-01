@@ -32,7 +32,7 @@ Not available. The required rendered implementation screenshot is missing.
 
 - `npm.cmd run build` passed with TypeScript and 39 generated pages.
 - Local homepage returned HTTP 200.
-- Rendered HTML contains the ecosystem heading, all four groups, Hosting as `Planlagt`, and Assist as `Publisert`.
+- Rendered HTML contains the ecosystem heading, all four groups, Hosting as `Publisert`, and Assist as `Publisert`.
 
 ## Comparison history
 
