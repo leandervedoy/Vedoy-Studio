@@ -120,6 +120,27 @@ export interface ClothingRequest {
   createdAt: string;
 }
 
+export interface HostingRequest {
+  id: string;
+  organizationId: string;
+  name: string;
+  company?: string;
+  email: string;
+  phone?: string;
+  serverCount: number;
+  ramGb: number;
+  storageGb: number;
+  region: string;
+  backups: boolean;
+  domainMode: "new" | "existing" | "none";
+  domain?: string;
+  monthlyNok: number;
+  setupNok: number;
+  details?: string;
+  status: "new" | "contacted" | "quoted" | "closed";
+  createdAt: string;
+}
+
 export type StudioNoteColor = "sand" | "lemon" | "mint" | "lavender" | "coral";
 
 export interface StudioNote {

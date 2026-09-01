@@ -48,13 +48,24 @@ export const studioProducts: StudioProduct[] = [
   {
     id: "booking",
     name: "Vedøy Booking",
-    description: "Outlook-inspirert booking med tjenester, planer, fargekoder og kapasitet.",
+    description: "Booking med tjenester, ansatte, lokasjoner, åpningstider og kapasitet – koblet til Vedøy Calendar.",
     icon: "□",
     href: "/studio/booking",
     group: "Drift",
     status: "beta",
     accent: "#2563eb",
-    highlights: ["Kalender", "Abonnement", "Åpningstider"]
+    highlights: ["Ansatte og lokasjon", "Kalender og påminnelser", "Kapasitet og venteliste"]
+  },
+  {
+    id: "calendar",
+    name: "Vedøy Calendar",
+    description: "Samlet kalender for booking, timeregistrering og samordning av Google-, Microsoft- og e-postkalendere.",
+    icon: "◷",
+    href: "/projects/calendar",
+    group: "Drift",
+    status: "beta",
+    accent: "#0f766e",
+    highlights: ["Booking og timer", "Google / Microsoft", "Konfliktkontroll"]
   },
   {
     id: "email",
@@ -110,6 +121,17 @@ export const studioProducts: StudioProduct[] = [
     status: "beta",
     accent: "#be123c",
     highlights: ["Mikrokurs", "Fremdrift", "Sjekklister"]
+  },
+  {
+    id: "omnicart-tycoon",
+    name: "Omnicart Tycoon",
+    description: "E-commerce simulator for å lære salg, lager, ordre og vekst gjennom en interaktiv butikk.",
+    icon: "✹",
+    href: "/projects/omnicart-tycoon",
+    group: "Voks",
+    status: "planned",
+    accent: "#6366f1",
+    highlights: ["Butikkstrategi", "Lager og ordre", "Simulator"]
   },
   {
     id: "api",

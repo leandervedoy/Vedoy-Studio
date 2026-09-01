@@ -58,12 +58,12 @@ export const studioServices: StudioService[] = [
     title: "Hosting & domene",
     cardText: "DNS, SSL, backup, publisering og teknisk drift samlet hos én kontakt.",
     eyebrow: "DOMENE · SERVER · DRIFT",
-    lead: "Velg kapasitet, domene og drift — med tydelig pris og sikker betaling.",
-    introduction: "Konfiguratoren under beregner en reell bestilling for administrert hosting. Betaling håndteres av Stripe. Domener kontrolleres mot Vercels registrar-API, og servere kan klargjøres gjennom Hetzner når leverandørnøklene er aktivert.",
+    lead: "Velg kapasitet, domene og drift — og send en tydelig forespørsel.",
+    introduction: "Konfiguratoren under beregner et prisanslag for administrert hosting. Du sender en uforpliktende forespørsel som lagres i databasen. Vedøy går gjennom behov, tilgjengelighet og leverandørvalg med deg før en eventuell avtale, betaling eller registrering.",
     deliverables: ["Domene, DNS og SSL", "Valgbar serverkapasitet og lagring", "Overvåking, backup og sikkerhetsoppdateringer", "Publisering og personlig teknisk kontakt"],
-    focus: ["Vercel Registrar", "Hetzner Cloud", "Stripe", "DNS", "SSL", "Backup"],
-    process: ["Velg servere, RAM, lagring, region og domene.", "Pris og domenestatus valideres på serveren.", "Stripe gjennomfører betaling og oppretter abonnementet.", "Ordren klargjøres automatisk når leverandørtilgang er aktivert."],
-    nextStep: "Konfigurer løsningen under, eller kontakt oss dersom du vil flytte en eksisterende tjeneste."
+    focus: ["Vercel Registrar", "Hetzner Cloud", "DNS", "SSL", "Backup", "Manuell levering"],
+    process: ["Velg servere, RAM, lagring, region og domene.", "Pris og domenestatus brukes som grunnlag for forespørselen.", "Forespørselen lagres i Studio og kan sendes på e-post når det er konfigurert.", "Vedøy bekrefter løsning, pris og levering før noe kjøpes eller registreres."],
+    nextStep: "Konfigurer løsningen under. Dette er ikke et automatisk kjøp, og du blir kontaktet før neste steg."
   },
   {
     number: "05",

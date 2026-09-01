@@ -5,6 +5,7 @@ import { databaseEnabled, getSql } from "@/lib/db";
 import type {
   AcademyCourse,
   ClothingRequest,
+  HostingRequest,
   ContactRequest,
   StudioApiKey,
   StudioBooking,
@@ -584,6 +585,43 @@ export async function listClothingRequests(): Promise<ClothingRequest[]> {
     ...row,
     quantity: Number(row.quantity),
     logoData: row.logoData ? Buffer.from(row.logoData).toString("base64") : undefined,
+    createdAt: asIso(row.createdAt)
+  }));
+}
+
+export async function createHostingRequest(input: Omit<HostingRequest, "id" | "organizationId" | "status" | "createdAt">): Promise<string> {
+  const sql = requireDatabase();
+  const id = randomId("hosting");
+  await sql`
+    insert into hosting_requests (
+      id, organization_id, name, company, email, phone, server_count, ram_gb, storage_gb,
+      region, backups, domain_mode, domain, monthly_nok, setup_nok, details
+    ) values (
+      ${id}, ${ORGANIZATION_ID}, ${input.name}, ${input.company ?? null}, ${input.email}, ${input.phone ?? null},
+      ${input.serverCount}, ${input.ramGb}, ${input.storageGb}, ${input.region}, ${input.backups}, ${input.domainMode},
+      ${input.domain ?? null}, ${input.monthlyNok}, ${input.setupNok}, ${input.details ?? null}
+    )
+  `;
+  return id;
+}
+
+export async function listHostingRequests(): Promise<HostingRequest[]> {
+  const sql = requireDatabase();
+  const rows = await sql<HostingRequest[]>`
+    select id, organization_id as "organizationId", name, company, email, phone,
+      server_count as "serverCount", ram_gb as "ramGb", storage_gb as "storageGb", region, backups,
+      domain_mode as "domainMode", domain, monthly_nok as "monthlyNok", setup_nok as "setupNok", details,
+      status, created_at as "createdAt"
+    from hosting_requests where organization_id = ${ORGANIZATION_ID}
+    order by created_at desc limit 250
+  `;
+  return rows.map((row) => ({
+    ...row,
+    serverCount: Number(row.serverCount),
+    ramGb: Number(row.ramGb),
+    storageGb: Number(row.storageGb),
+    monthlyNok: Number(row.monthlyNok),
+    setupNok: Number(row.setupNok),
     createdAt: asIso(row.createdAt)
   }));
 }

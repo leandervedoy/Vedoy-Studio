@@ -1,5 +1,5 @@
 import { ModuleHeader } from "@/components/studio/module-header";
-import { listClothingRequests, listContactRequests } from "@/lib/repository";
+import { listClothingRequests, listContactRequests, listHostingRequests } from "@/lib/repository";
 
 export const dynamic = "force-dynamic";
 
@@ -9,12 +9,13 @@ function formatDate(value: string) {
 
 export default async function RequestsPage() {
   let databaseError = false;
-  const [contacts, clothing] = await Promise.all([
+  const [contacts, clothing, hosting] = await Promise.all([
     listContactRequests().catch(() => { databaseError = true; return []; }),
-    listClothingRequests().catch(() => { databaseError = true; return []; })
+    listClothingRequests().catch(() => { databaseError = true; return []; }),
+    listHostingRequests().catch(() => { databaseError = true; return []; })
   ]);
   return <>
-    <ModuleHeader eyebrow="ADMINISTRATOR" title="Henvendelser" description="Kontaktskjema, nettsidebestillinger og forespørsler om bedriftsklær lagret i Studio-databasen." />
+    <ModuleHeader eyebrow="ADMINISTRATOR" title="Henvendelser" description="Kontaktskjema, nettsidebestillinger, hostingforespørsler og bedriftsklær lagret i Studio-databasen." />
     {databaseError ? <div className="admin-database-warning"><strong>Databasen er ikke klar.</strong><p>Kjør databaseskjemaet og kontroller DATABASE_URL før skjemaene tas i bruk.</p></div> : null}
     <section className="request-admin-grid">
       <article className="studio-panel request-admin-panel">
@@ -33,6 +34,14 @@ export default async function RequestsPage() {
           <dl><div><dt>Kontakt</dt><dd>{item.name}</dd></div><div><dt>E-post</dt><dd><a href={`mailto:${item.email}`}>{item.email}</a></dd></div><div><dt>Produkt</dt><dd>{item.productCode}</dd></div></dl>
           {item.details ? <p>{item.details}</p> : null}<time>{formatDate(item.createdAt)}</time>
         </article>) : <p className="request-empty">Ingen klesforespørsler ennå.</p>}</div>
+      </article>
+      <article className="studio-panel request-admin-panel">
+        <div className="panel-heading"><div><small>HOSTING OG DOMENE</small><h2>{hosting.length} forespørsler</h2></div></div>
+        <div className="request-list">{hosting.length ? hosting.map((item) => <article key={item.id}>
+          <header><div><strong>{item.company || item.name}</strong><span>{item.serverCount} server{item.serverCount === 1 ? "" : "e"} · {item.ramGb} GB RAM · {item.storageGb} GB</span></div><b>{item.status === "new" ? "NY" : item.status.toUpperCase()}</b></header>
+          <dl><div><dt>Kontakt</dt><dd>{item.name}</dd></div><div><dt>E-post</dt><dd><a href={`mailto:${item.email}`}>{item.email}</a></dd></div><div><dt>Domene</dt><dd>{item.domain ? `${item.domainMode} · ${item.domain}` : item.domainMode}</dd></div><div><dt>Prisanslag</dt><dd>{item.monthlyNok} kr/mnd. + {item.setupNok} kr etablering</dd></div></dl>
+          {item.details ? <p>{item.details}</p> : null}<time>{formatDate(item.createdAt)}</time>
+        </article>) : <p className="request-empty">Ingen hostingforespørsler ennå.</p>}</div>
       </article>
     </section>
   </>;

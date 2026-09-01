@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getSession } from "@/lib/auth";
-import { createBooking, listBookings } from "@/lib/repository";
+import { createBooking, createGrowthNotification, listBookings } from "@/lib/repository";
+import { sendAdminLeadEmail } from "@/lib/lead-email";
 
 export async function GET(request: Request) {
   const url = new URL(request.url);
@@ -38,6 +39,11 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
+  const origin = request.headers.get("origin");
+  if (origin) {
+    const host = request.headers.get("x-forwarded-host")?.split(",")[0].trim() || request.headers.get("host") || new URL(request.url).host;
+    if (new URL(origin).host.toLowerCase() !== host.toLowerCase()) return NextResponse.json({ error: "Ugyldig forespørsel." }, { status: 403 });
+  }
   let body: {
     serviceId?: string;
     serviceName?: string;
@@ -91,6 +97,18 @@ export async function POST(request: Request) {
       customerPhone: body.customerPhone,
       notes: body.notes
     });
+    if (process.env.ADMIN_EMAIL) {
+      try {
+        await createGrowthNotification({ userEmail: process.env.ADMIN_EMAIL, type: "booking", title: "Ny bookingforespørsel", detail: `${booking.customerName} har forespurt ${booking.serviceName}.`, href: "/studio/booking" });
+      } catch (error) { console.error("booking_notification_failed", error); }
+    }
+    try {
+      await sendAdminLeadEmail({
+        subject: `Ny bookingforespørsel · ${booking.serviceName}`,
+        replyTo: booking.customerEmail,
+        text: [`Kunde: ${booking.customerName}`, `E-post: ${booking.customerEmail}`, booking.customerPhone ? `Telefon: ${booking.customerPhone}` : "", `Tjeneste: ${booking.serviceName}`, `Start: ${booking.startsAt}`, `Slutt: ${booking.endsAt}`, booking.location ? `Lokasjon: ${booking.location}` : "", booking.notes ? `Notat: ${booking.notes}` : ""].filter(Boolean).join("\n")
+      });
+    } catch (error) { console.error("booking_email_failed", error); }
     return NextResponse.json({ booking }, { status: 201 });
   } catch (error) {
     return NextResponse.json({ error: error instanceof Error ? error.message : "Bookingen kunne ikke lagres." }, { status: 409 });
