@@ -127,7 +127,7 @@ export const studioProducts: StudioProduct[] = [
     name: "Omnicart Tycoon",
     description: "E-commerce simulator for å lære salg, lager, ordre og vekst gjennom en interaktiv butikk.",
     icon: "✹",
-    href: "/projects/omnicart-tycoon",
+    href: "https://vedoy-eccomerce-game.vercel.app/",
     group: "Voks",
     status: "planned",
     accent: "#6366f1",
