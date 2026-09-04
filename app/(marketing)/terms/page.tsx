@@ -14,21 +14,21 @@ export default function TermsPage() {
         <p>VEDØY, Austrheimvegen 94B, 5517 Haugesund. E-post: <a href="mailto:leander@vedoystudio.no">leander@vedoystudio.no</a>. Telefon: <a href="tel:+4745917041">459 17 041</a>.</p>
 
         <h2>2. Avtalen</h2>
-        <p>Hosting- og domenekonfiguratoren sender en uforpliktende forespørsel. Avtalen inngås ikke gjennom skjemaet. Vedøy kontakter kunden for å avklare behov, pris og levering før eventuell separat avtale, betaling eller registrering.</p>
+        <p>Konfiguratoren viser omfang og pris før betaling. Avtalen inngås når Stripe bekrefter betalingen. Vedøy kan kontakte kunden dersom opplysninger må avklares før domenet eller serveren kan leveres. Kundens bestillingsvalg lagres på Stripe-ordren.</p>
 
         <h2>3. Pris og betaling</h2>
-        <p>Prisene i konfiguratoren er oppgitt i norske kroner eks. merverdiavgift og er kun prisanslag. Ingen betaling trekkes fra forespørselsskjemaet. Eventuell månedlig hosting, etablering og domeneregistrering avtales og faktureres separat etter avklaring.</p>
+        <p>Prisene i konfiguratoren er oppgitt i norske kroner eks. merverdiavgift. Hosting faktureres månedlig på forskudd. Etablering og eventuell domeneregistrering betales én gang ved oppstart. Stripe håndterer betaling og abonnement.</p>
 
         <h2>4. Domener</h2>
         <ul>
-          <li>Tilgjengelighet og leverandørpris kontrolleres på nytt før en eventuell registrering.</li>
+          <li>Tilgjengelighet og leverandørpris kontrolleres på nytt før Stripe åpnes og før registrering.</li>
           <li>Et domene er først sikret når registraren har bekreftet kjøpet.</li>
           <li>Kunden må oppgi korrekte registrantopplysninger og følge eventuell e-post for identitetsbekreftelse.</li>
           <li>Første registreringsår inngår i engangsbeløpet. Videre fornyelse og pris fremgår av senere varsel eller egen avtale.</li>
         </ul>
 
         <h2>5. Hosting og levering</h2>
-        <p>Servervalg, RAM, lagring, region og backup brukes som grunnlag for tilbudet. Levering starter først etter separat avtale og nødvendige avklaringer. Vedøy kan bruke underleverandører, blant annet Hetzner Cloud og Vercel. Oppgitt lagring er kapasitet per forespurte server. Backup er et gjenopprettingstiltak og erstatter ikke kundens eget arkiv.</p>
+        <p>Servervalg, RAM, lagring, region og backup følger ordrebekreftelsen. Levering starter etter bekreftet betaling og nødvendige avklaringer. Vedøy kan bruke underleverandører, blant annet Hetzner Cloud og Vercel. Oppgitt lagring er kapasitet per bestilte server. Backup er et gjenopprettingstiltak og erstatter ikke kundens eget arkiv.</p>
 
         <h2>6. Kundens ansvar</h2>
         <p>Kunden er ansvarlig for lovlig innhold, sikre passord, nødvendige lisenser og at tjenesten ikke brukes til skadevare, uønsket masseutsendelse, angrep eller andre ulovlige formål. Vedøy kan stanse en tjeneste som utgjør en sikkerhetsrisiko eller vesentlig mislighold, og varsler når situasjonen tillater det.</p>

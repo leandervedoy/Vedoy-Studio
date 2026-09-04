@@ -99,7 +99,7 @@ export interface ContactRequest {
   phone?: string;
   need: string;
   message?: string;
-  status: "new" | "contacted" | "closed";
+  status: "pending" | "new" | "contacted" | "approved" | "rejected" | "closed";
   createdAt: string;
 }
 
@@ -118,107 +118,6 @@ export interface ClothingRequest {
   logoData?: string;
   status: "new" | "contacted" | "quoted" | "closed";
   createdAt: string;
-}
-
-export interface HostingRequest {
-  id: string;
-  organizationId: string;
-  name: string;
-  company?: string;
-  email: string;
-  phone?: string;
-  serverCount: number;
-  ramGb: number;
-  storageGb: number;
-  region: string;
-  backups: boolean;
-  domainMode: "new" | "existing" | "none";
-  domain?: string;
-  monthlyNok: number;
-  setupNok: number;
-  details?: string;
-  status: "new" | "contacted" | "quoted" | "closed";
-  createdAt: string;
-}
-
-export type StudioNoteColor = "sand" | "lemon" | "mint" | "lavender" | "coral";
-
-export interface StudioNote {
-  id: string;
-  organizationId: string;
-  title: string;
-  content: string;
-  color: StudioNoteColor;
-  pinned: boolean;
-  notebook: string;
-  section: string;
-  tags: string[];
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface StudioNoteVersion {
-  id: string;
-  noteId: string;
-  title: string;
-  content: string;
-  color: StudioNoteColor;
-  notebook: string;
-  section: string;
-  tags: string[];
-  createdAt: string;
-}
-
-export interface StudioNoteAttachment {
-  id: string;
-  noteId: string;
-  filename: string;
-  contentType: string;
-  sizeBytes: number;
-  createdAt: string;
-}
-
-export interface StudioNoteShare {
-  token: string;
-  noteId: string;
-  createdAt: string;
-}
-
-export interface WorkTimeEntry {
-  id: string;
-  organizationId: string;
-  ownerEmail: string;
-  startedAt: string;
-  endedAt?: string;
-  note: string;
-}
-
-export interface GrowthNotification {
-  id: string;
-  organizationId: string;
-  userEmail: string;
-  type: "lead" | "booking" | "system";
-  title: string;
-  detail: string;
-  href?: string;
-  readAt?: string;
-  createdAt: string;
-}
-
-export interface GrowthPreferences {
-  userEmail: string;
-  inAppNotifications: boolean;
-  emailBooking: boolean;
-  emailSystem: boolean;
-  dailyDigest: boolean;
-}
-
-export interface GrowthCompanyProfile {
-  name: string;
-  organizationNumber: string;
-  location: string;
-  timezone: string;
-  description: string;
 }
 
 export interface StudioActivity {

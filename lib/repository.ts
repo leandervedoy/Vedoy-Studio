@@ -1,11 +1,9 @@
 import { academyCourses, demoActivities, trafficPoints } from "@/lib/demo-data";
-import { randomBytes } from "node:crypto";
 import { getDemoStore } from "@/lib/demo-store";
 import { databaseEnabled, getSql } from "@/lib/db";
 import type {
   AcademyCourse,
   ClothingRequest,
-  HostingRequest,
   ContactRequest,
   StudioApiKey,
   StudioBooking,
@@ -13,15 +11,7 @@ import type {
   StudioDomain,
   StudioOverview,
   StudioProject,
-  StudioNote,
-  StudioNoteAttachment,
-  StudioNoteShare,
-  StudioNoteVersion,
-  StudioTicket,
-  WorkTimeEntry,
-  GrowthNotification,
-  GrowthPreferences,
-  GrowthCompanyProfile
+  StudioTicket
 } from "@/lib/types";
 import { randomId, slugify } from "@/lib/utils";
 
@@ -532,14 +522,14 @@ export async function createTicket(input: {
   return ticket;
 }
 
-export async function createContactRequest(input: Omit<ContactRequest, "id" | "status" | "createdAt">): Promise<string> {
+export async function createContactRequest(input: Omit<ContactRequest, "id" | "createdAt" | "status"> & { status?: ContactRequest["status"] }): Promise<string> {
   const sql = requireDatabase();
   const id = randomId("lead");
   await sql`
-    insert into contact_requests (id, organization_id, name, company, email, phone, need, message)
+    insert into contact_requests (id, organization_id, name, company, email, phone, need, message, status)
     values (
       ${id}, ${ORGANIZATION_ID}, ${input.name}, ${input.company ?? null}, ${input.email},
-      ${input.phone ?? null}, ${input.need}, ${input.message ?? null}
+      ${input.phone ?? null}, ${input.need}, ${input.message ?? null}, ${input.status ?? "new"}
     )
   `;
   return id;
@@ -589,333 +579,20 @@ export async function listClothingRequests(): Promise<ClothingRequest[]> {
   }));
 }
 
-export async function createHostingRequest(input: Omit<HostingRequest, "id" | "organizationId" | "status" | "createdAt">): Promise<string> {
-  const sql = requireDatabase();
-  const id = randomId("hosting");
-  await sql`
-    insert into hosting_requests (
-      id, organization_id, name, company, email, phone, server_count, ram_gb, storage_gb,
-      region, backups, domain_mode, domain, monthly_nok, setup_nok, details
-    ) values (
-      ${id}, ${ORGANIZATION_ID}, ${input.name}, ${input.company ?? null}, ${input.email}, ${input.phone ?? null},
-      ${input.serverCount}, ${input.ramGb}, ${input.storageGb}, ${input.region}, ${input.backups}, ${input.domainMode},
-      ${input.domain ?? null}, ${input.monthlyNok}, ${input.setupNok}, ${input.details ?? null}
-    )
-  `;
-  return id;
-}
-
-export async function listHostingRequests(): Promise<HostingRequest[]> {
-  const sql = requireDatabase();
-  const rows = await sql<HostingRequest[]>`
-    select id, organization_id as "organizationId", name, company, email, phone,
-      server_count as "serverCount", ram_gb as "ramGb", storage_gb as "storageGb", region, backups,
-      domain_mode as "domainMode", domain, monthly_nok as "monthlyNok", setup_nok as "setupNok", details,
-      status, created_at as "createdAt"
-    from hosting_requests where organization_id = ${ORGANIZATION_ID}
-    order by created_at desc limit 250
-  `;
-  return rows.map((row) => ({
-    ...row,
-    serverCount: Number(row.serverCount),
-    ramGb: Number(row.ramGb),
-    storageGb: Number(row.storageGb),
-    monthlyNok: Number(row.monthlyNok),
-    setupNok: Number(row.setupNok),
-    createdAt: asIso(row.createdAt)
-  }));
-}
-
-export async function listStudioNotes(): Promise<StudioNote[]> {
-  const sql = requireDatabase();
-  const rows = await sql<StudioNote[]>`
-    select id, organization_id as "organizationId", title, content, color, pinned, notebook, section, tags,
-      created_at as "createdAt", updated_at as "updatedAt"
-    from studio_notes
-    where organization_id = ${ORGANIZATION_ID}
-    order by pinned desc, updated_at desc
-    limit 100
-  `;
-  return rows.map((row) => ({ ...row, tags: Array.isArray(row.tags) ? row.tags.map(String) : [], createdAt: asIso(row.createdAt), updatedAt: asIso(row.updatedAt) }));
-}
-
-export async function createStudioNote(input: Pick<StudioNote, "title" | "content" | "color" | "pinned" | "notebook" | "section" | "tags">): Promise<StudioNote> {
-  const sql = requireDatabase();
-  const note: StudioNote = {
-    id: randomId("note"),
-    organizationId: ORGANIZATION_ID,
-    title: input.title.trim() || "Uten tittel",
-    content: input.content.trim(),
-    color: input.color,
-    pinned: input.pinned,
-    notebook: input.notebook.trim() || "Arbeidsområde",
-    section: input.section.trim() || "Generelt",
-    tags: input.tags.map((tag) => tag.trim()).filter(Boolean).slice(0, 12),
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString()
-  };
-  await sql`
-    insert into studio_notes (id, organization_id, title, content, color, pinned, notebook, section, tags, created_at, updated_at)
-    values (${note.id}, ${note.organizationId}, ${note.title}, ${note.content}, ${note.color}, ${note.pinned}, ${note.notebook}, ${note.section}, ${JSON.stringify(note.tags)}::jsonb, ${note.createdAt}, ${note.updatedAt})
-  `;
-  return note;
-}
-
-export async function updateStudioNote(
-  id: string,
-  patch: Partial<Pick<StudioNote, "title" | "content" | "color" | "pinned" | "notebook" | "section" | "tags">>
-): Promise<StudioNote> {
-  const sql = requireDatabase();
-  const tags = patch.tags ? JSON.stringify(patch.tags.map((tag) => tag.trim()).filter(Boolean).slice(0, 12)) : null;
-  await sql`
-    insert into studio_note_versions (id, note_id, organization_id, title, content, color, notebook, section, tags, created_at)
-    select ${randomId("notev")}, id, organization_id, title, content, color, notebook, section, tags, now()
-    from studio_notes where id = ${id} and organization_id = ${ORGANIZATION_ID}
-  `;
-  const rows = await sql<StudioNote[]>`
-    update studio_notes
-    set title = coalesce(${patch.title?.trim() || null}, title),
-      content = coalesce(${patch.content?.trim() ?? null}, content),
-      color = coalesce(${patch.color ?? null}, color),
-      pinned = coalesce(${patch.pinned ?? null}, pinned),
-      notebook = coalesce(${patch.notebook?.trim() || null}, notebook),
-      section = coalesce(${patch.section?.trim() || null}, section),
-      tags = coalesce(${tags}::jsonb, tags),
-      updated_at = now()
-    where id = ${id} and organization_id = ${ORGANIZATION_ID}
-    returning id, organization_id as "organizationId", title, content, color, pinned, notebook, section, tags,
-      created_at as "createdAt", updated_at as "updatedAt"
-  `;
-  const note = rows[0];
-  if (!note) throw new Error("Notatet finnes ikke.");
-  await sql`
-    delete from studio_note_versions where id in (
-      select id from studio_note_versions where note_id = ${id} and organization_id = ${ORGANIZATION_ID}
-      order by created_at desc offset 50
-    )
-  `;
-  return { ...note, tags: Array.isArray(note.tags) ? note.tags.map(String) : [], createdAt: asIso(note.createdAt), updatedAt: asIso(note.updatedAt) };
-}
-
-export async function deleteStudioNote(id: string): Promise<void> {
-  const sql = requireDatabase();
-  await sql`delete from studio_notes where id = ${id} and organization_id = ${ORGANIZATION_ID}`;
-}
-
-export async function listStudioNoteVersions(noteId: string): Promise<StudioNoteVersion[]> {
-  const sql = requireDatabase();
-  const rows = await sql<StudioNoteVersion[]>`
-    select id, note_id as "noteId", title, content, color, notebook, section, tags, created_at as "createdAt"
-    from studio_note_versions
-    where note_id = ${noteId} and organization_id = ${ORGANIZATION_ID}
-    order by created_at desc limit 50
-  `;
-  return rows.map((row) => ({ ...row, tags: Array.isArray(row.tags) ? row.tags.map(String) : [], createdAt: asIso(row.createdAt) }));
-}
-
-export async function restoreStudioNoteVersion(noteId: string, versionId: string): Promise<StudioNote> {
-  const versions = await listStudioNoteVersions(noteId);
-  const version = versions.find((item) => item.id === versionId);
-  if (!version) throw new Error("Versjonen finnes ikke.");
-  return updateStudioNote(noteId, { title: version.title, content: version.content, color: version.color, notebook: version.notebook, section: version.section, tags: version.tags });
-}
-
-export async function listStudioNoteAttachments(noteId: string): Promise<StudioNoteAttachment[]> {
-  const sql = requireDatabase();
-  const rows = await sql<StudioNoteAttachment[]>`
-    select id, note_id as "noteId", filename, content_type as "contentType", size_bytes as "sizeBytes", created_at as "createdAt"
-    from studio_note_attachments where note_id = ${noteId} and organization_id = ${ORGANIZATION_ID}
-    order by created_at desc
-  `;
-  return rows.map((row) => ({ ...row, sizeBytes: Number(row.sizeBytes), createdAt: asIso(row.createdAt) }));
-}
-
-export async function createStudioNoteAttachment(noteId: string, input: { filename: string; contentType: string; data: Buffer }): Promise<StudioNoteAttachment> {
-  const sql = requireDatabase();
-  const id = randomId("notea");
-  const rows = await sql<StudioNoteAttachment[]>`
-    insert into studio_note_attachments (id, note_id, organization_id, filename, content_type, size_bytes, data)
-    select ${id}, id, organization_id, ${input.filename}, ${input.contentType}, ${input.data.length}, ${input.data}
-    from studio_notes where id = ${noteId} and organization_id = ${ORGANIZATION_ID}
-    returning id, note_id as "noteId", filename, content_type as "contentType", size_bytes as "sizeBytes", created_at as "createdAt"
-  `;
-  const attachment = rows[0];
-  if (!attachment) throw new Error("Notatet finnes ikke.");
-  return { ...attachment, sizeBytes: Number(attachment.sizeBytes), createdAt: asIso(attachment.createdAt) };
-}
-
-export async function getStudioNoteAttachment(noteId: string, attachmentId: string): Promise<(StudioNoteAttachment & { data: Buffer }) | null> {
-  const sql = requireDatabase();
-  const rows = await sql<Array<StudioNoteAttachment & { data: Buffer }>>`
-    select id, note_id as "noteId", filename, content_type as "contentType", size_bytes as "sizeBytes", data, created_at as "createdAt"
-    from studio_note_attachments where id = ${attachmentId} and note_id = ${noteId} and organization_id = ${ORGANIZATION_ID}
-  `;
-  const attachment = rows[0];
-  return attachment ? { ...attachment, sizeBytes: Number(attachment.sizeBytes), createdAt: asIso(attachment.createdAt) } : null;
-}
-
-export async function deleteStudioNoteAttachment(noteId: string, attachmentId: string): Promise<void> {
-  const sql = requireDatabase();
-  await sql`delete from studio_note_attachments where id = ${attachmentId} and note_id = ${noteId} and organization_id = ${ORGANIZATION_ID}`;
-}
-
-export async function getStudioNoteShare(noteId: string): Promise<StudioNoteShare | null> {
-  const sql = requireDatabase();
-  const rows = await sql<StudioNoteShare[]>`
-    select token, note_id as "noteId", created_at as "createdAt" from studio_note_shares
-    where note_id = ${noteId} and organization_id = ${ORGANIZATION_ID} and revoked_at is null
-  `;
-  return rows[0] ? { ...rows[0], createdAt: asIso(rows[0].createdAt) } : null;
-}
-
-export async function createStudioNoteShare(noteId: string): Promise<StudioNoteShare> {
-  const sql = requireDatabase();
-  const token = randomBytes(24).toString("base64url");
-  const rows = await sql<StudioNoteShare[]>`
-    insert into studio_note_shares (token, note_id, organization_id, created_at, revoked_at)
-    select ${token}, id, organization_id, now(), null from studio_notes
-    where id = ${noteId} and organization_id = ${ORGANIZATION_ID}
-    on conflict (note_id) do update set token = excluded.token, created_at = now(), revoked_at = null
-    returning token, note_id as "noteId", created_at as "createdAt"
-  `;
-  const share = rows[0];
-  if (!share) throw new Error("Notatet finnes ikke.");
-  return { ...share, createdAt: asIso(share.createdAt) };
-}
-
-export async function revokeStudioNoteShare(noteId: string): Promise<void> {
-  const sql = requireDatabase();
-  await sql`update studio_note_shares set revoked_at = now() where note_id = ${noteId} and organization_id = ${ORGANIZATION_ID}`;
-}
-
-export async function getSharedStudioNote(token: string): Promise<StudioNote | null> {
-  const sql = requireDatabase();
-  const rows = await sql<StudioNote[]>`
-    select n.id, n.organization_id as "organizationId", n.title, n.content, n.color, n.pinned, n.notebook, n.section, n.tags,
-      n.created_at as "createdAt", n.updated_at as "updatedAt"
-    from studio_notes n join studio_note_shares s on s.note_id = n.id
-    where s.token = ${token} and s.revoked_at is null limit 1
-  `;
-  const note = rows[0];
-  return note ? { ...note, tags: Array.isArray(note.tags) ? note.tags.map(String) : [], createdAt: asIso(note.createdAt), updatedAt: asIso(note.updatedAt) } : null;
-}
-
-export async function listWorkTimeEntries(ownerEmail: string): Promise<WorkTimeEntry[]> {
-  const sql = requireDatabase();
-  const rows = await sql<WorkTimeEntry[]>`
-    select id, organization_id as "organizationId", owner_email as "ownerEmail",
-      started_at as "startedAt", ended_at as "endedAt", note
-    from work_time_entries
-    where organization_id = ${ORGANIZATION_ID} and owner_email = ${ownerEmail.toLowerCase()}
-    order by started_at desc
-    limit 120
-  `;
-  return rows.map((row) => ({ ...row, startedAt: asIso(row.startedAt), endedAt: row.endedAt ? asIso(row.endedAt) : undefined }));
-}
-
-export async function startWorkTimer(ownerEmail: string, note = ""): Promise<WorkTimeEntry> {
-  const sql = requireDatabase();
-  const entry: WorkTimeEntry = {
-    id: randomId("time"), organizationId: ORGANIZATION_ID, ownerEmail: ownerEmail.toLowerCase(),
-    startedAt: new Date().toISOString(), note: note.trim()
-  };
-  const rows = await sql<WorkTimeEntry[]>`
-    insert into work_time_entries (id, organization_id, owner_email, started_at, note)
-    values (${entry.id}, ${entry.organizationId}, ${entry.ownerEmail}, ${entry.startedAt}, ${entry.note})
-    returning id, organization_id as "organizationId", owner_email as "ownerEmail",
-      started_at as "startedAt", ended_at as "endedAt", note
-  `;
-  return { ...rows[0], startedAt: asIso(rows[0].startedAt), endedAt: rows[0].endedAt ? asIso(rows[0].endedAt) : undefined };
-}
-
-export async function stopWorkTimer(ownerEmail: string): Promise<void> {
-  const sql = requireDatabase();
-  await sql`
-    update work_time_entries set ended_at = now()
-    where organization_id = ${ORGANIZATION_ID} and owner_email = ${ownerEmail.toLowerCase()} and ended_at is null
-  `;
-}
-
-export async function listGrowthNotifications(userEmail: string): Promise<GrowthNotification[]> {
-  const sql = requireDatabase();
-  const rows = await sql<GrowthNotification[]>`
-    select id, organization_id as "organizationId", user_email as "userEmail", type, title, detail,
-      href, read_at as "readAt", created_at as "createdAt"
-    from growth_notifications
-    where organization_id = ${ORGANIZATION_ID} and user_email = ${userEmail.toLowerCase()}
-    order by created_at desc limit 50
-  `;
-  return rows.map((row) => ({ ...row, readAt: row.readAt ? asIso(row.readAt) : undefined, createdAt: asIso(row.createdAt) }));
-}
-
-export async function createGrowthNotification(input: Omit<GrowthNotification, "id" | "organizationId" | "createdAt" | "readAt">): Promise<void> {
-  const sql = requireDatabase();
-  await sql`
-    insert into growth_notifications (id, organization_id, user_email, type, title, detail, href)
-    values (${randomId("notice")}, ${ORGANIZATION_ID}, ${input.userEmail.toLowerCase()}, ${input.type}, ${input.title}, ${input.detail}, ${input.href ?? null})
-  `;
-}
-
-export async function markGrowthNotificationsRead(userEmail: string): Promise<void> {
-  const sql = requireDatabase();
-  await sql`
-    update growth_notifications set read_at = now()
-    where organization_id = ${ORGANIZATION_ID} and user_email = ${userEmail.toLowerCase()} and read_at is null
-  `;
-}
-
-export async function getGrowthPreferences(userEmail: string): Promise<GrowthPreferences> {
-  const sql = requireDatabase();
-  const rows = await sql<GrowthPreferences[]>`
-    select user_email as "userEmail", in_app_notifications as "inAppNotifications", email_booking as "emailBooking",
-      email_system as "emailSystem", daily_digest as "dailyDigest"
-    from growth_preferences where organization_id = ${ORGANIZATION_ID} and user_email = ${userEmail.toLowerCase()} limit 1
-  `;
-  return rows[0] ?? { userEmail: userEmail.toLowerCase(), inAppNotifications: true, emailBooking: true, emailSystem: true, dailyDigest: false };
-}
-
-export async function saveGrowthPreferences(userEmail: string, patch: Omit<GrowthPreferences, "userEmail">): Promise<GrowthPreferences> {
-  const sql = requireDatabase();
-  const email = userEmail.toLowerCase();
-  const rows = await sql<GrowthPreferences[]>`
-    insert into growth_preferences (organization_id, user_email, in_app_notifications, email_booking, email_system, daily_digest)
-    values (${ORGANIZATION_ID}, ${email}, ${patch.inAppNotifications}, ${patch.emailBooking}, ${patch.emailSystem}, ${patch.dailyDigest})
-    on conflict (organization_id, user_email) do update set
-      in_app_notifications = excluded.in_app_notifications, email_booking = excluded.email_booking,
-      email_system = excluded.email_system, daily_digest = excluded.daily_digest, updated_at = now()
-    returning user_email as "userEmail", in_app_notifications as "inAppNotifications", email_booking as "emailBooking",
-      email_system as "emailSystem", daily_digest as "dailyDigest"
-  `;
-  return rows[0];
-}
-
-export async function getGrowthCompanyProfile(): Promise<GrowthCompanyProfile> {
-  const sql = requireDatabase();
-  const rows = await sql<GrowthCompanyProfile[]>`
-    select name, coalesce(organization_number, '') as "organizationNumber", coalesce(location, '') as location,
-      coalesce(timezone, 'Europe/Oslo') as timezone, coalesce(description, '') as description
-    from organizations where id = ${ORGANIZATION_ID} limit 1
-  `;
-  return rows[0] ?? { name: "Vedøy", organizationNumber: "", location: "Haugesund", timezone: "Europe/Oslo", description: "" };
-}
-
-export async function saveGrowthCompanyProfile(profile: GrowthCompanyProfile): Promise<GrowthCompanyProfile> {
-  const sql = requireDatabase();
-  const rows = await sql<GrowthCompanyProfile[]>`
-    update organizations set name = ${profile.name}, organization_number = ${profile.organizationNumber || null},
-      location = ${profile.location || null}, timezone = ${profile.timezone}, description = ${profile.description}
-    where id = ${ORGANIZATION_ID}
-    returning name, coalesce(organization_number, '') as "organizationNumber", coalesce(location, '') as location,
-      coalesce(timezone, 'Europe/Oslo') as timezone, coalesce(description, '') as description
-  `;
-  if (!rows[0]) throw new Error("Virksomheten ble ikke funnet.");
-  return rows[0];
-}
-
 export function listAcademyCourses(): AcademyCourse[] {
   return academyCourses;
+}
+
+export async function updateContactRequestStatus(id: string, status: ContactRequest["status"]): Promise<void> {
+  const sql = requireDatabase();
+  await sql`
+    update contact_requests
+    set status = ${status}
+    where id = ${id} and organization_id = ${ORGANIZATION_ID}
+  `;
 }
 
 export function isUsingDatabase(): boolean {
   return databaseEnabled();
 }
+

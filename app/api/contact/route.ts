@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createContactRequest, createGrowthNotification } from "@/lib/repository";
+import { createContactRequest } from "@/lib/repository";
 
 const allowedNeeds = new Set(["Nettside", "Webapp", "Nettbutikk", "Shopify-app eller integrasjon", "Hosting og domene", "Profilprodukter"]);
 
@@ -25,10 +25,6 @@ export async function POST(request: Request) {
       need,
       message: clean(body.message, 3000) || undefined
     });
-    if (process.env.ADMIN_EMAIL) {
-      try { await createGrowthNotification({ userEmail: process.env.ADMIN_EMAIL, type: "lead", title: "Ny henvendelse", detail: `${name} ønsker hjelp med ${need}.`, href: "/studio/requests" }); }
-      catch (error) { console.error("contact_notification_failed", error); }
-    }
     return NextResponse.json({ ok: true, id }, { status: 201 });
   } catch (error) {
     console.error("contact_request_failed", error);

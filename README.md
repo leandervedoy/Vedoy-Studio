@@ -6,7 +6,6 @@ Et stort Next.js-prosjekt som samler flest mulig av Vedøy-idéene i én sammenh
 - Vedøy Hosting og prosjektoversikt
 - Vedøy Builder-prototype
 - Vedøy Booking-pakken
-- Vedøy Notes med notatbøker, historikk, vedlegg og deling
 - Vedøy CRM
 - Vedøy E-post-prototype
 - Vedøy Statistics
@@ -74,13 +73,6 @@ npm run db:setup
 
 Datamodellen ligger i `data/schema.sql`.
 
-Vedøy Notes krever PostgreSQL for varig lagring. Ved oppgradering av en eksisterende installasjon kjøres:
-
-```bash
-npm run db:migrate:notes-workspace
-npm run db:migrate:notes-advanced
-```
-
 ## 4. Vedi AI
 
 Vedi bruker trygg demomodus uten nøkkel. For ekte KI-svar legger du inn:
@@ -109,13 +101,7 @@ import "@vedoy/booking/styles.css";
 
 Den offentlige bookingdemoen bruker et API-adapter mot `/api/bookings`. Adminsiden har bestillingskalender, kundevisning, åpningstider og tjeneste-/planredigering.
 
-## 6. Vedøy Notes
-
-Notes under `/studio/notes` lagrer notatbøker, seksjoner, nøkkelord, sjekklister og festede sider i PostgreSQL. Hver lagring lager en gjenopprettbar versjon. Vedlegg støtter PNG, JPG, WebP, PDF og tekst opptil 2 MB og lagres privat i databasen.
-
-Delingslenker er tilfeldige, skrivebeskyttede og kan deaktiveres av administrator. Delte sider har `noindex`, men alle med lenken kan lese innholdet. Nettleseren beholder dessuten en lokal kladd ved nettbrudd; den erstatter ikke full offline-synk mellom enheter.
-
-## 7. Deploy til Vercel
+## 6. Deploy til Vercel
 
 1. Push hele mappen til GitHub.
 2. Importer repoet i Vercel med rotmappe satt til prosjektroten.
@@ -123,7 +109,7 @@ Delingslenker er tilfeldige, skrivebeskyttede og kan deaktiveres av administrato
 4. Koble PostgreSQL og kjør `npm run db:setup` mot databasen.
 5. Sett `NEXT_PUBLIC_DEMO_MODE=false` før ekte kundedrift.
 
-## 8. Hosting, domene og betaling
+## 7. Hosting, domene og betaling
 
 Den offentlige siden `/tjenester/hosting-og-domene` har en servervalidert konfigurator for 1–5 servere, RAM, lagring, region, backup og domene. Betalingen opprettes på serveren og sendes til Stripe Checkout. Pris kan ikke endres fra nettleseren.
 
