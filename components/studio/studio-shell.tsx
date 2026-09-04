@@ -4,7 +4,6 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { Brand } from "@/components/brand";
-import { NotificationCenter } from "@/components/studio/notification-center";
 import { cn } from "@/lib/utils";
 
 const sections = [
@@ -24,11 +23,9 @@ const sections = [
     label: "Drift",
     items: [
       { href: "/studio/requests", icon: "✦", label: "Henvendelser" },
-      { href: "/studio/notes", icon: "▤", label: "Notater" },
-      { href: "/studio/hours", icon: "◷", label: "Timeregistrering" },
       { href: "/studio/booking", icon: "□", label: "Booking" },
       { href: "/studio/customers", icon: "◉", label: "Kunder og CRM" },
-      { href: "https://mail.vedoystudio.no", icon: "✉", label: "E-post" },
+      { href: "/studio/email", icon: "✉", label: "E-post" },
       { href: "/studio/support", icon: "☺", label: "Vedøy Assist" }
     ]
   },
@@ -79,7 +76,7 @@ export function StudioShell({
         </div>
         <div className="organization-switcher">
           <span className="organization-switcher__mark">VØ</span>
-          <div><strong>{organizationName}</strong><small>Vedøy Growth</small></div>
+          <div><strong>{organizationName}</strong><small>Studio Growth</small></div>
           <span aria-hidden>⌄</span>
         </div>
         <nav className="studio-nav" aria-label="Studio-meny">
@@ -104,7 +101,6 @@ export function StudioShell({
             <i><b style={{ width: "34%" }} /></i>
             <small>34 210 av 100 000 API-kall</small>
           </div>
-          <small className="studio-version">Vedøy Growth · v0.1.0 beta</small>
         </div>
       </aside>
       {sidebarOpen && <button className="sidebar-backdrop" aria-label="Lukk meny" onClick={() => setSidebarOpen(false)} />}
@@ -114,7 +110,7 @@ export function StudioShell({
           <div className="studio-search"><span>⌕</span><input placeholder="Søk i Studio …" aria-label="Søk i Studio" /><kbd>⌘ K</kbd></div>
           <div className="studio-topbar__actions">
             <Link className="button button--small button--ghost" href="/booking" target="_blank">Se kundeside ↗</Link>
-            <NotificationCenter />
+            <button className="notification-button" type="button" aria-label="Varsler">◌<i /></button>
             <div className="account-menu">
               <button type="button" onClick={() => setAccountOpen((value) => !value)} aria-expanded={accountOpen}>
                 <span>EL</span><div><strong>{userName}</strong><small>Eier</small></div><i>⌄</i>
