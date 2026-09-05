@@ -1,12 +1,24 @@
-import { NotesBoard } from "@/components/studio/notes-board";
 import { ModuleHeader } from "@/components/studio/module-header";
-import { listStudioNotes } from "@/lib/repository";
 
 export const dynamic = "force-dynamic";
 
-export default async function NotesPage() {
-  return <>
-    <ModuleHeader eyebrow="DRIFT" title="Notater" description="Et rolig sted for idéer, kundepunkter og neste steg – lagret i Studio." badge="PRIVAT" />
-    <NotesBoard initialNotes={await listStudioNotes()} />
-  </>;
+export default function NotesPage() {
+  return (
+    <section className="studio-canvas-page">
+      <ModuleHeader
+        eyebrow="VEDØY GROWTH"
+        title="Vedøy Canvas"
+        description="Skisser, diagrammer og visuelle notater samlet i Studio. Eksporter som TXT, PDF, PNG, Word og dokumentfiler for Google Docs eller Proton Docs."
+        badge="PRIVAT"
+      />
+      <div className="studio-canvas-frame">
+        <div className="studio-canvas-frame__bar">
+          <div><i aria-hidden /><span>Vedøy Canvas</span><small>Visuelt arbeidsområde</small></div>
+          <a href="https://vedoy-canvas.vercel.app/" target="_blank" rel="noreferrer">Åpne fullskjerm ↗</a>
+        </div>
+        <iframe src="https://vedoy-canvas.vercel.app/" title="Vedøy Canvas" loading="eager" allow="clipboard-read; clipboard-write" />
+        <noscript>JavaScript må være aktivert for å bruke Vedøy Canvas.</noscript>
+      </div>
+    </section>
+  );
 }

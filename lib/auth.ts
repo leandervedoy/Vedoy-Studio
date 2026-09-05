@@ -63,15 +63,6 @@ export async function requireSession(): Promise<SessionPayload> {
   return session;
 }
 
-export function getLoginCredentials(): { email: string; password: string; demoAllowed: boolean } {
-  const demoAllowed = process.env.NEXT_PUBLIC_DEMO_MODE === "true" || process.env.NODE_ENV !== "production";
-  return {
-    email: process.env.ADMIN_EMAIL || (demoAllowed ? "demo@vedoy.no" : ""),
-    password: process.env.ADMIN_PASSWORD || (demoAllowed ? "vedoydemo" : ""),
-    demoAllowed
-  };
-}
-
 export function sessionCookie(token: string) {
   return {
     name: COOKIE_NAME,

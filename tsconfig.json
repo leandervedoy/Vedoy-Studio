@@ -37,6 +37,8 @@
   ],
   "exclude": [
     "node_modules",
+    "backups",
+    "published-versions",
     "packages/booking/src",
     "packages/booking/dist"
   ]

@@ -61,7 +61,7 @@ export const studioProducts: StudioProduct[] = [
     name: "Vedøy Canvas",
     description: "Et samlet arbeidsrom for bedriftsnotater, prosjekter, møter, oppgaver og kunnskap.",
     icon: "▤",
-    href: "/projects/canvas",
+    href: "https://vedoy-canvas.vercel.app/",
     group: "Drift",
     status: "beta",
     accent: "#16835d",
