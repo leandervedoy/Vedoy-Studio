@@ -59,9 +59,9 @@ export const studioServices: StudioService[] = [
     cardText: "DNS, SSL, backup, publisering og teknisk drift samlet hos én kontakt.",
     eyebrow: "DOMENE · SERVER · DRIFT",
     lead: "Velg kapasitet, domene og drift — og send en tydelig forespørsel.",
-    introduction: "Konfiguratoren under beregner et prisanslag for administrert hosting. Du sender en uforpliktende forespørsel som lagres i databasen. Vedøy går gjennom behov, tilgjengelighet og leverandørvalg med deg før en eventuell avtale, betaling eller registrering.",
-    deliverables: ["Domene, DNS og SSL", "Valgbar serverkapasitet og lagring", "Overvåking, backup og sikkerhetsoppdateringer", "Publisering og personlig teknisk kontakt"],
-    focus: ["Vercel Registrar", "Hetzner Cloud", "DNS", "SSL", "Backup", "Manuell levering"],
+    introduction: "Konfiguratoren under beregner et prisanslag for administrert hosting og kan brukes som startpunkt for web-apper, nettbutikker og andre fullstack-apper. Du sender en uforpliktende forespørsel som lagres i databasen. Vedøy går gjennom behov, rammeverk, leverandørvalg og levering før en eventuell avtale, betaling eller registrering.",
+    deliverables: ["Domene, DNS og SSL", "Web-apper, nettbutikker og fullstack-løsninger", "Valg av rammeverk og serverkapasitet", "Overvåking, backup og personlig teknisk kontakt"],
+    focus: ["Next.js", "React", "Vue", "Node", "Shopify", "Vercel / Hetzner"],
     process: ["Velg servere, RAM, lagring, region og domene.", "Pris og domenestatus brukes som grunnlag for forespørselen.", "Forespørselen lagres i Studio og kan sendes på e-post når det er konfigurert.", "Vedøy bekrefter løsning, pris og levering før noe kjøpes eller registreres."],
     nextStep: "Konfigurer løsningen under. Dette er ikke et automatisk kjøp, og du blir kontaktet før neste steg."
   },

@@ -57,6 +57,17 @@ export const studioProducts: StudioProduct[] = [
     highlights: ["Ansatte og lokasjon", "Kalender og påminnelser", "Kapasitet og venteliste"]
   },
   {
+    id: "canvas",
+    name: "Vedøy Canvas",
+    description: "Et samlet arbeidsrom for bedriftsnotater, prosjekter, møter, oppgaver og kunnskap.",
+    icon: "▤",
+    href: "/projects/canvas",
+    group: "Drift",
+    status: "beta",
+    accent: "#16835d",
+    highlights: ["Arbeidsrom", "Oppgaver og sider", "Deling og historikk"]
+  },
+  {
     id: "calendar",
     name: "Vedøy Calendar",
     description: "Samlet kalender for booking, timeregistrering og samordning av Google-, Microsoft- og e-postkalendere.",

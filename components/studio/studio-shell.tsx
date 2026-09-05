@@ -24,7 +24,7 @@ const sections = [
     label: "Drift",
     items: [
       { href: "/studio/requests", icon: "✦", label: "Henvendelser" },
-      { href: "/studio/notes", icon: "▤", label: "Notater" },
+      { href: "/studio/notes", icon: "▤", label: "Vedøy Canvas" },
       { href: "/studio/hours", icon: "◷", label: "Timeregistrering" },
       { href: "/studio/booking", icon: "□", label: "Booking" },
       { href: "/studio/customers", icon: "◉", label: "Kunder og CRM" },
