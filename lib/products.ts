@@ -140,7 +140,7 @@ export const studioProducts: StudioProduct[] = [
     icon: "✹",
     href: "https://vedoy-eccomerce-game.vercel.app/",
     group: "Voks",
-    status: "planned",
+    status: "beta",
     accent: "#6366f1",
     highlights: ["Butikkstrategi", "Lager og ordre", "Simulator"]
   },

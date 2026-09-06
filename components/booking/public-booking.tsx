@@ -11,7 +11,7 @@ import {
   bookingStaff
 } from "@/lib/booking-config";
 
-export function PublicBooking() {
+export function PublicBooking({ embedded = false }: { embedded?: boolean }) {
   const adapter = useMemo(() => new ApiBookingAdapter(), []);
   return (
     <BookingCalendar
@@ -20,7 +20,7 @@ export function PublicBooking() {
       staff={bookingStaff}
       adapter={adapter}
       schedule={bookingSchedule}
-      configuration={bookingConfiguration}
+      configuration={embedded ? { ...bookingConfiguration, layout: "embedded" } : bookingConfiguration}
     />
   );
 }

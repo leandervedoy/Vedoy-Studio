@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { Brand } from "@/components/brand";
+import { BookingFloatingAction } from "@/components/booking/booking-floating-action";
 import { NotificationCenter } from "@/components/studio/notification-center";
 import { cn } from "@/lib/utils";
 
@@ -113,7 +114,6 @@ export function StudioShell({
           <button type="button" className="studio-menu-button" onClick={() => setSidebarOpen(true)} aria-label="Åpne meny">☰</button>
           <div className="studio-search"><span>⌕</span><input placeholder="Søk i Studio …" aria-label="Søk i Studio" /><kbd>⌘ K</kbd></div>
           <div className="studio-topbar__actions">
-            <Link className="button button--small button--ghost" href="/booking" target="_blank">Se kundeside ↗</Link>
             <NotificationCenter />
             <div className="account-menu">
               <button type="button" onClick={() => setAccountOpen((value) => !value)} aria-expanded={accountOpen}>
@@ -131,6 +131,7 @@ export function StudioShell({
         </header>
         <main className="studio-main">{children}</main>
       </div>
+      <BookingFloatingAction />
     </div>
   );
 }

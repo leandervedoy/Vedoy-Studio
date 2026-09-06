@@ -14,7 +14,7 @@ export function ProductGrid() {
           </div>
           <div className="product-grid">
             {studioProducts.filter((product) => product.group === group).map((product) => (
-              <Link key={product.id} href={product.href} target={product.href.startsWith("http") ? "_blank" : undefined} rel={product.href.startsWith("http") ? "noreferrer" : undefined} className="product-card" style={{ "--product-accent": product.accent } as React.CSSProperties}>
+              <Link key={product.id} href={`/projects/${product.id}`} className="product-card" style={{ "--product-accent": product.accent } as React.CSSProperties}>
                 <div className="product-card__top">
                   <span className="product-icon">{product.icon}</span>
                   <span className={`product-status product-status--${product.status}`}>{statusLabels[product.status]}</span>

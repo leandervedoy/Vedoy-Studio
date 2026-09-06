@@ -1,13 +1,112 @@
+import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound, redirect } from "next/navigation";
-const details: Record<string, { title: string; text: string; points: string[]; image?: { src: string; alt: string }; demoUrl?: string }> = {
-  builder: { title: "Vedøy Builder", text: "En rolig byggeflate for profesjonelle nettsider.", points: ["Seksjonsbasert redigering", "Designsystem og temaer", "Forhåndsvisning før publisering"] },
-  email: { title: "Vedøy E-post", text: "En samlet Vedøy-innboks for profesjonell e-post.", points: ["Domene-e-post og teaminnboks", "Redigerbare svarmaler", "Varsler og oppfølging"] },
-  database: { title: "Vedøy Database", text: "Et oversiktlig og sikkert sted for dataene tjenestene dine bygger på.", points: ["PostgreSQL-prosjekter", "Sikre tilkoblinger og miljøer", "Backup- og statusoversikt"] },
-  hosting: { title: "Vedøy Hosting", text: "Kommer snart. Hostingflyten er under utvikling og vises foreløpig som en ikke-bindende forhåndsvisning.", points: ["Planlagt publisering og deploy", "Planlagt DNS, SSL og backup", "Samlet support og drift når tjenesten åpner"] },
-  calendar: { title: "Vedøy Calendar", text: "Én samlet kalender for booking, timeregistrering og samordning av Google-, Microsoft- og e-postkalendere.", points: ["Booking og timeregistrering i samme oversikt", "Konfliktkontroll for ansatte, lokasjoner og ressurser", "Planlagt synk mot Google Calendar og Microsoft Calendar"] },
-  canvas: { title: "Vedøy Canvas", text: "Et profesjonelt arbeidsrom for virksomheter som vil samle notater, prosjekter, møter og oppgaver på ett sted.", points: ["Notatbøker, seksjoner og sider for hvert prosjekt", "Oppgaver, etiketter, vedlegg og søk", "Deling, versjonshistorikk og sikker lagring i Vedøy Growth"] },
-  "omnicart-tycoon": { title: "Omnicart Tycoon", text: "En interaktiv e-commerce simulator der du lærer hvordan produkter, lager, ordre og vekst henger sammen.", points: ["Produkt- og kolleksjonsvalg", "Lager, ordre og marginer", "Scenarioer for vekst og kundereise"], image: { src: "/projects/omnicart-tycoon.jfif", alt: "Omnicart Tycoon e-commerce simulator" }, demoUrl: "https://vedoy-eccomerce-game.vercel.app/" }
+import { notFound } from "next/navigation";
+import { studioProducts } from "@/lib/products";
+
+type ProjectDetail = {
+  title: string;
+  text: string;
+  points: string[];
+  actionHref: string;
+  actionLabel: string;
+  status: "Publisert" | "Beta" | "Planlagt";
+  category: string;
+  image?: { src: string; alt: string };
 };
-export function generateStaticParams() { return Object.keys(details).map((slug) => ({ slug })); }
-export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) { const { slug } = await params; if (slug === "email") redirect("https://mail.vedoystudio.no"); if (slug === "canvas") redirect("https://vedoy-canvas.vercel.app/"); const detail = details[slug]; if (!detail) notFound(); return <section className="project-detail-editorial"><div className="project-detail-editorial__inner"><Link href="/#prosjekter">← Tilbake til Vedøy Studio</Link><p className="editorial-kicker lime">VEDØY STUDIO · UNDER ARBEID</p><h1>{detail.title}<br /><em>kommer steg for steg.</em></h1><p>{detail.text}</p>{detail.image ? <img className="project-detail-editorial__media" src={detail.image.src} alt={detail.image.alt} /> : null}<div><h2>Dette bygger vi</h2><ul>{detail.points.map((point) => <li key={point}>{point}</li>)}</ul></div>{detail.demoUrl ? <a className="editorial-button" href={detail.demoUrl} target="_blank" rel="noreferrer">Åpne Omnicart Tycoon <span>↗</span></a> : null}<Link className="editorial-button" href="/#kontakt">Snakk med oss <span>↗</span></Link></div></section>; }
+
+const projectOverrides: Record<string, ProjectDetail> = {
+  assist: {
+    title: "Vedøy Assist",
+    text: "Personlig teknologihjelp for PC, mobil, TV, internett og digitale spørsmål — forklart steg for steg.",
+    points: ["Fjernhjelp og personlig oppfølging", "Hjemmebesøk i Haugesund", "Trygg hjelp uten unødvendig fagspråk"],
+    actionHref: "https://vedoyassist.no",
+    actionLabel: "Åpne Vedøy Assist",
+    status: "Publisert",
+    category: "IT-hjelp / service",
+    image: { src: "/projects/vedoy-assist.png", alt: "Vedøy Assist" }
+  },
+  collective: {
+    title: "Vedøy Collective",
+    text: "Nettbutikk, kolleksjoner og merkevarearbeid som kobler digital handel med Vedøys kreative retning.",
+    points: ["Kolleksjoner og produktpresentasjon", "Nettbutikk og merkevare", "Et praktisk laboratorium for commerce og vekst"],
+    actionHref: "https://vedoycollective.no",
+    actionLabel: "Åpne Vedøy Collective",
+    status: "Publisert",
+    category: "Commerce / brand",
+    image: { src: "/projects/vedoy-collective.jfif", alt: "Vedøy Collective-prosjekt" }
+  },
+  "omnicart-tycoon": {
+    title: "Omnicart Tycoon",
+    text: "En interaktiv e-commerce-simulator der produktvalg, leverandører, månedlige kostnader, lager, ordre og vekst påvirker samme butikk.",
+    points: ["Produkt-, leverandør- og kolleksjonsvalg", "Lager, ordre, marginer og månedlige utgifter", "Scenarioer for markedsføring, oppgraderinger og vekst"],
+    actionHref: "https://vedoy-eccomerce-game.vercel.app/",
+    actionLabel: "Spill Omnicart Tycoon",
+    status: "Beta",
+    category: "Simulator / commerce",
+    image: { src: "/projects/omnicart-tycoon.jfif", alt: "Omnicart Tycoon e-commerce simulator" }
+  }
+};
+
+const statusLabels = { live: "Publisert", beta: "Beta", planned: "Planlagt" } as const;
+
+function getProject(slug: string): ProjectDetail | undefined {
+  const override = projectOverrides[slug];
+  if (override) return override;
+
+  const product = studioProducts.find((item) => item.id === slug);
+  if (!product) return undefined;
+
+  return {
+    title: product.name,
+    text: product.description,
+    points: product.highlights,
+    actionHref: product.status === "planned" ? "/#kontakt" : product.href,
+    actionLabel: product.status === "planned" ? "Meld interesse" : product.href.startsWith("/studio") ? "Åpne i Vedøy Growth" : `Åpne ${product.name}`,
+    status: statusLabels[product.status],
+    category: product.group
+  };
+}
+
+export function generateStaticParams() {
+  return [...new Set([...studioProducts.map((product) => product.id), ...Object.keys(projectOverrides)])].map((slug) => ({ slug }));
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const project = getProject((await params).slug);
+  return project ? { title: project.title, description: project.text } : {};
+}
+
+export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
+  const project = getProject((await params).slug);
+  if (!project) notFound();
+  const external = project.actionHref.startsWith("http");
+
+  return (
+    <main className="project-detail-editorial">
+      <div className="project-detail-editorial__inner">
+        <Link href="/#prosjekter">← Tilbake til forsiden</Link>
+        <div className="project-detail-editorial__meta">
+          <span>{project.status}</span>
+          <span>{project.category}</span>
+        </div>
+        <p className="editorial-kicker lime">VEDØY-ØKOSYSTEMET · PROSJEKT</p>
+        <h1>{project.title}<br /><em>forklart.</em></h1>
+        <p>{project.text}</p>
+        {project.image ? <img className="project-detail-editorial__media" src={project.image.src} alt={project.image.alt} /> : null}
+        <section>
+          <small>DETTE INNEHOLDER PROSJEKTET</small>
+          <h2>Bygget for et<br /><em>tydelig behov.</em></h2>
+          <ul>{project.points.map((point) => <li key={point}>{point}</li>)}</ul>
+        </section>
+        <div className="project-detail-editorial__actions">
+          {external ? (
+            <a className="editorial-button" href={project.actionHref} target="_blank" rel="noreferrer">{project.actionLabel} <span>↗</span></a>
+          ) : (
+            <Link className="editorial-button" href={project.actionHref}>{project.actionLabel} <span>↗</span></Link>
+          )}
+          <Link className="editorial-outline" href="/#kontakt">Snakk med Vedøy Studio</Link>
+        </div>
+      </div>
+    </main>
+  );
+}
