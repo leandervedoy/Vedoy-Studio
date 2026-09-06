@@ -6,7 +6,7 @@ Et stort Next.js-prosjekt som samler flest mulig av Vedøy-idéene i én sammenh
 - Vedøy Hosting og prosjektoversikt
 - Vedøy Builder-prototype
 - Vedøy Booking-pakken
-- Vedøy Notes med notatbøker, historikk, vedlegg og deling
+- Vedøy Canvas med visuelle arbeidsbøker, sider og deling
 - Vedøy CRM
 - Vedøy E-post-prototype
 - Vedøy Statistics
@@ -37,12 +37,8 @@ npm run dev
 
 Åpne `http://localhost:3000`.
 
-Når `NEXT_PUBLIC_DEMO_MODE=true`, kan du logge inn med:
-
-```text
-demo@vedoy.no
-vedoydemo
-```
+Innlogging skjer gjennom den felles Vedøy Login-tjenesten. Studio bruker en egen
+OAuth-klient og tilgangsliste selv om identiteten deles med andre Vedøy-prosjekter.
 
 ## 2. Bygg og test
 
@@ -109,9 +105,16 @@ import "@vedoy/booking/styles.css";
 
 Den offentlige bookingdemoen bruker et API-adapter mot `/api/bookings`. Adminsiden har bestillingskalender, kundevisning, åpningstider og tjeneste-/planredigering.
 
-## 6. Vedøy Notes
+## 6. Vedøy Canvas
 
-Notes under `/studio/notes` lagrer notatbøker, seksjoner, nøkkelord, sjekklister og festede sider i PostgreSQL. Hver lagring lager en gjenopprettbar versjon. Vedlegg støtter PNG, JPG, WebP, PDF og tekst opptil 2 MB og lagres privat i databasen.
+Canvas åpnes under `/studio/canvas` og bygges inn fra
+`https://vedoy-canvas.vercel.app/`. Den gamle ruten `/studio/notes` videresender
+til Canvas for å bevare eksisterende bokmerker.
+
+### Eldre Studio-notater
+
+Eksisterende Studio-notater og API-ruter beholdes foreløpig, slik at lagrede data,
+historikk, vedlegg og delingslenker ikke slettes under overgangen til Canvas.
 
 Delingslenker er tilfeldige, skrivebeskyttede og kan deaktiveres av administrator. Delte sider har `noindex`, men alle med lenken kan lese innholdet. Nettleseren beholder dessuten en lokal kladd ved nettbrudd; den erstatter ikke full offline-synk mellom enheter.
 
