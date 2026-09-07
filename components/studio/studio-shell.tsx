@@ -4,7 +4,6 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { Brand } from "@/components/brand";
-import { BookingFloatingAction } from "@/components/booking/booking-floating-action";
 import { NotificationCenter } from "@/components/studio/notification-center";
 import { cn } from "@/lib/utils";
 
@@ -131,7 +130,6 @@ export function StudioShell({
         </header>
         <main className="studio-main">{children}</main>
       </div>
-      <BookingFloatingAction />
     </div>
   );
 }

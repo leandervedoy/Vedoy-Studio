@@ -532,6 +532,72 @@ export async function createTicket(input: {
   return ticket;
 }
 
+export async function createCustomer(input: Omit<StudioCustomer, "id" | "organizationId" | "lastActivityAt">): Promise<StudioCustomer> {
+  const now = new Date().toISOString();
+  const customer: StudioCustomer = {
+    id: randomId("cus"),
+    organizationId: ORGANIZATION_ID,
+    name: input.name.trim(),
+    email: input.email.trim().toLowerCase(),
+    phone: input.phone?.trim() || undefined,
+    company: input.company?.trim() || undefined,
+    valueNok: input.valueNok,
+    lastActivityAt: now,
+    tags: input.tags
+  };
+  const sql = getSql();
+  if (!sql) {
+    const store = getDemoStore();
+    if (store.customers.some((item) => item.email.toLowerCase() === customer.email)) throw new Error("En kunde med denne e-postadressen finnes allerede.");
+    store.customers.unshift(customer);
+    return customer;
+  }
+
+  const rows = await sql<StudioCustomer[]>`
+    insert into customers (id, organization_id, name, email, phone, company, value_nok, last_activity_at, tags)
+    values (${customer.id}, ${ORGANIZATION_ID}, ${customer.name}, ${customer.email}, ${customer.phone ?? null}, ${customer.company ?? null}, ${customer.valueNok}, ${customer.lastActivityAt}, ${JSON.stringify(customer.tags)})
+    returning id, organization_id as "organizationId", name, email, phone, company, value_nok as "valueNok", last_activity_at as "lastActivityAt", tags
+  `;
+  return { ...rows[0], valueNok: Number(rows[0].valueNok), lastActivityAt: asIso(rows[0].lastActivityAt) };
+}
+
+export async function updateCustomer(
+  id: string,
+  patch: Pick<StudioCustomer, "name" | "email" | "phone" | "company" | "valueNok" | "tags">
+): Promise<StudioCustomer> {
+  const updatedAt = new Date().toISOString();
+  const next = {
+    name: patch.name.trim(),
+    email: patch.email.trim().toLowerCase(),
+    phone: patch.phone?.trim() || undefined,
+    company: patch.company?.trim() || undefined,
+    valueNok: patch.valueNok,
+    tags: patch.tags
+  };
+  const sql = getSql();
+  if (!sql) {
+    const store = getDemoStore();
+    const customer = store.customers.find((item) => item.id === id);
+    if (!customer) throw new Error("Kunden finnes ikke.");
+    if (store.customers.some((item) => item.id !== id && item.email.toLowerCase() === next.email)) throw new Error("En kunde med denne e-postadressen finnes allerede.");
+    Object.assign(customer, next, { lastActivityAt: updatedAt });
+    return customer;
+  }
+
+  const rows = await sql<Array<StudioCustomer & { tags: string | string[] }>>`
+    update customers set name = ${next.name}, email = ${next.email}, phone = ${next.phone ?? null}, company = ${next.company ?? null}, value_nok = ${next.valueNok}, tags = ${JSON.stringify(next.tags)}, last_activity_at = ${updatedAt}
+    where id = ${id} and organization_id = ${ORGANIZATION_ID}
+    returning id, organization_id as "organizationId", name, email, phone, company, value_nok as "valueNok", last_activity_at as "lastActivityAt", tags
+  `;
+  if (!rows[0]) throw new Error("Kunden finnes ikke.");
+  return {
+    ...rows[0],
+    valueNok: Number(rows[0].valueNok),
+    lastActivityAt: asIso(rows[0].lastActivityAt),
+    tags: typeof rows[0].tags === "string" ? JSON.parse(rows[0].tags) as string[] : rows[0].tags
+  };
+}
+
 export async function createContactRequest(input: Omit<ContactRequest, "id" | "status" | "createdAt">): Promise<string> {
   const sql = requireDatabase();
   const id = randomId("lead");
