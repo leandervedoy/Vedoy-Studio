@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-type PricingType = "website" | "webapp" | "store" | "general";
+type PricingType = "website" | "webapp" | "store" | "general" | "clothing";
 
 type PricingConfig = {
   subject: string;
@@ -99,8 +99,39 @@ const pricing: Record<PricingType, PricingConfig> = {
       { name: "Google Play Console", href: "https://support.google.com/googleplay/android-developer/answer/6112435" },
       { name: "Vercel pricing", href: "https://vercel.com/pricing" }
     ]
+  },
+  clothing: {
+    subject: "profilprodukt",
+    factors: "plagg, trykk eller broderi, antall, størrelser, logo, levering og valgt produksjonspartner",
+    packages: [
+      { label: "01 · TESTDROP", price: "ca. 299–999 kr", description: "En liten test med noen få plagg og enkel logo for å kvalitetssikre uttrykket.", includes: ["5 plagg", "En logo/trykkflate", "Enkel korrektur", "Pris avklares før produksjon"] },
+      { label: "02 · BEDRIFTSTART", price: "ca. 1 500–3 500 kr", description: "En liten profilpakke for team, arrangement eller oppstart.", includes: ["10 plagg", "Produkt- og størrelsesforslag", "Logo og plassering", "Korrektur før produksjon"], featured: true },
+      { label: "03 · TEAMPAKKE", price: "ca. 6 000–14 000 kr", description: "Profilklær for et større team eller en kampanje.", includes: ["50 plagg", "Flere størrelser", "Trykk eller broderi etter behov", "Samlet leveranse"] },
+      { label: "04 · KOLLEKSJON", price: "ca. 12 000–30 000 kr", description: "En mer gjennomført kolleksjon for bedrift, artist eller merkevare.", includes: ["100 plagg", "Flere produkter eller farger", "Produktvisualisering", "Produksjonsunderlag"] },
+      { label: "05 · STØRRE OPPLAG", price: "Fra ca. 50 000 kr", description: "For 500 plagg eller mer. Kontakt oss for konkret tilbud.", includes: ["500+ plagg", "Volumvurdering", "Leveringsplan", "Individuelt tilbud"] }
+    ],
+    examples: [
+      { price: "ca. 299–999 kr", description: "5 plagg med enkel logo og valgt plassering." },
+      { price: "ca. 1 500–3 500 kr", description: "10 plagg til et lite team eller arrangement." },
+      { price: "ca. 6 000–14 000 kr", description: "50 plagg med størrelsesfordeling og korrektur." },
+      { price: "ca. 12 000–30 000 kr", description: "100 plagg som liten kolleksjon eller kampanje." },
+      { price: "Fra ca. 50 000 kr", description: "500 plagg eller mer — kontakt oss for volumpris." }
+    ],
+    runningPrice: "Fra ca. 299 kr/mnd",
+    runningText: "Kan omfatte produktoppdateringer, ny korrektur, nettbutikk eller løpende bestillingshjelp. Produksjon, frakt og leverandørkostnader avtales separat.",
+    sources: [
+      { name: "Tapstitch", href: "https://www.tapstitch.com/custom-apparel" },
+      { name: "Printify", href: "https://printify.com/custom-clothing/" }
+    ]
   }
 };
+
+const subscriptions = [
+  { name: "IT-hjelp", price: "299 kr/mnd", description: "For bedrifter som først og fremst trenger trygg hjelp når noe stopper opp.", features: ["2 timer inkludert per måned", "Oppmøte etter behov", "Telefon eller Teams når mulig", "Ekstra 30 min: 199 kr", "Tid rundes opp til nærmeste halve time"] },
+  { name: "IT + drift", price: "899 kr/mnd", description: "For bedrifter som vil ha både hjelp og en nettside som holdes i orden.", features: ["6 timer IT-hjelp inkludert", "Oppmøte, telefon eller Teams", "Ekstra 30 min: 159 kr", "Nettsidehosting og drift", "2 innholdsoppdateringer per måned", "Vedøy-feil på Vedøy-laget side rettes uten ekstra kostnad"] , featured: true},
+  { name: "Vedøy Growth", price: "1 499 kr/mnd", description: "En samlet bedriftsplattform for drift, kunder, oppgaver og videre vekst.", features: ["6 timer IT-hjelp inkludert", "Ekstra time: 99 kr", "Nettsidehosting", "3 oppdateringer per måned", "Vedøy Growth med CRM, booking og notater", "Fordeler på nye Vedøy-prosjekter"] },
+  { name: "Growth Pro", price: "Fra 2 499 kr/mnd", description: "For team som trenger mer kapasitet, flere brukere og tettere oppfølging.", features: ["10 timer IT-hjelp inkludert", "Flere ansatte og roller", "Prioritert support", "Vedøy Growth og Canvas", "Nettside, app eller butikk kan videreutvikles", "Egen plan etter møte"] }
+];
 
 export function ServicePricing({ type }: { type: PricingType }) {
   const config = pricing[type];
@@ -111,5 +142,6 @@ export function ServicePricing({ type }: { type: PricingType }) {
     <div className="website-pricing__running"><div><small>DRIFT OG VIDEREUTVIKLING</small><strong>{config.runningPrice}</strong></div><p>{config.runningText}</p></div>
     <div className="website-pricing__notice"><strong>Viktig om ca-prisene</strong><p>Alle beløp er veiledende ca-priser, oppgitt ekskl. eventuell MVA. De kan bli både lavere og høyere etter møtet, når vi kjenner behov, omfang og leverandørkostnader. Etter møtet blir vi enige om en konkret pris og du får et spesifisert tilbud før arbeidet blir bindende.</p><p className="website-pricing__sources">Prisene er eksempler basert på Vedøy-vurderinger og relevante leverandørkostnader: {config.sources.map((source, index) => <span key={source.href}>{index ? ", " : ""}<a href={source.href} target="_blank" rel="noreferrer">{source.name}</a></span>)}.</p></div>
     <Link href="/#kontakt" className="editorial-button">Be om konkret pris <span>↗</span></Link>
+    <section className="business-subscriptions"><div className="business-subscriptions__heading"><div><p className="editorial-kicker lime">BEDRIFTSABONNEMENTER</p><h2>Én avtale.<br /><em>Mer ro.</em></h2></div><p>Abonnementene går igjen på tvers av nettsider, webapper, nettbutikker, profilprodukter og andre Vedøy-tjenester. Vi tilpasser innholdet etter virksomheten etter et møte.</p></div><div className="business-subscriptions__grid">{subscriptions.map((plan) => <article className={plan.featured ? "is-featured" : undefined} key={plan.name}><small>{plan.featured ? "ANBEFALT" : "VEDØY BEDRIFT"}</small><h3>{plan.name}</h3><strong>{plan.price}</strong><p>{plan.description}</p><ul>{plan.features.map((feature) => <li key={feature}>{feature}</li>)}</ul></article>)}</div><div className="business-subscriptions__upgrade"><strong>Har dere allerede en løsning?</strong><p>Vi kan oppgradere eller overta nettsider, apper, nettbutikker, hosting, drift og integrasjoner dere allerede bruker. Vi starter med en gjennomgang og foreslår bare det som gir verdi.</p><Link href="/#kontakt" className="editorial-button">Be om gjennomgang <span>↗</span></Link></div></section>
   </section>;
 }

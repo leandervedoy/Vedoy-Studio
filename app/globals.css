@@ -1171,6 +1171,32 @@ h1, h2, h3, h4 { letter-spacing: -.035em; }
 .website-pricing__sources { font-size:12px; }
 .website-pricing__sources a { color:#253e25!important; text-decoration:underline; text-underline-offset:3px; }
 @media (max-width:900px) { .website-pricing { padding:90px 7vw; }.website-pricing__heading,.website-pricing__examples,.website-pricing__running { grid-template-columns:1fr; gap:28px; }.website-pricing__cards { grid-template-columns:1fr; }.website-pricing__cards>article { min-height:0; border-right:0; border-bottom:1px solid #c8cec3; }.website-pricing__cards>article:last-child { border-bottom:0; }.website-pricing__cards h3 { margin-top:58px; }.website-pricing__examples>div:last-child { grid-template-columns:1fr; } }
+.business-subscriptions { margin-top:100px; padding-top:85px; border-top:1px solid #c8cec3; }
+.business-subscriptions__heading { display:grid; grid-template-columns:1fr 1fr; gap:7vw; align-items:end; margin-bottom:45px; }
+.business-subscriptions__heading h2 { margin:20px 0 0; font-size:clamp(48px,5vw,78px); line-height:.9; letter-spacing:-.07em; }
+.business-subscriptions__heading h2 em { color:#6f786c; font-family:Georgia,serif; font-weight:400; }
+.business-subscriptions__heading>p { color:#59635a; line-height:1.7; }
+.business-subscriptions__grid { display:grid; grid-template-columns:repeat(4,1fr); border:1px solid #c8cec3; }
+.business-subscriptions__grid article { padding:25px; background:#f5f6f0; border-right:1px solid #c8cec3; }
+.business-subscriptions__grid article:last-child { border-right:0; }
+.business-subscriptions__grid article.is-featured { background:#111510; color:#f5f6f0; }
+.business-subscriptions__grid small { color:#687367; font:700 9px ui-monospace,monospace; letter-spacing:.12em; }
+.business-subscriptions__grid article.is-featured small { color:var(--lime); }
+.business-subscriptions__grid h3 { margin:50px 0 14px; font-size:25px; }
+.business-subscriptions__grid strong { display:block; font-size:25px; letter-spacing:-.04em; }
+.business-subscriptions__grid p { min-height:70px; color:#687269; line-height:1.55; font-size:12px; }
+.business-subscriptions__grid article.is-featured p { color:#a9b1a7; }
+.business-subscriptions__grid ul { margin:24px 0 0; padding:0; list-style:none; }
+.business-subscriptions__grid li { padding:10px 0; border-top:1px solid #d7dbd2; color:#59635a; font-size:11px; line-height:1.45; }
+.business-subscriptions__grid li:before { content:"✓"; margin-right:8px; color:#438540; font-weight:900; }
+.business-subscriptions__grid article.is-featured li { border-color:#353d35; color:#d7ddd4; }
+.business-subscriptions__grid article.is-featured li:before { color:var(--lime); }
+.business-subscriptions__upgrade { display:grid; grid-template-columns:.7fr 1.3fr auto; gap:30px; align-items:center; padding:32px 0; }
+.business-subscriptions__upgrade strong { font-size:17px; }
+.business-subscriptions__upgrade p { margin:0; color:#59635a; line-height:1.6; font-size:13px; }
+.business-subscriptions__upgrade .editorial-button { white-space:nowrap; }
+@media (max-width:1100px) { .business-subscriptions__grid { grid-template-columns:repeat(2,1fr); }.business-subscriptions__grid article:nth-child(2) { border-right:0; }.business-subscriptions__grid article:nth-child(-n+2) { border-bottom:1px solid #c8cec3; } }
+@media (max-width:900px) { .business-subscriptions__heading,.business-subscriptions__upgrade { grid-template-columns:1fr; gap:22px; }.business-subscriptions__upgrade .editorial-button { justify-self:start; }.business-subscriptions__grid { grid-template-columns:1fr; }.business-subscriptions__grid article,.business-subscriptions__grid article:nth-child(2) { border-right:0; border-bottom:1px solid #c8cec3; }.business-subscriptions__grid article:last-child { border-bottom:0; } }
 
 /* Vedøy Growth dashboard direction: calm workspace with Supabase-inspired signal green, grid texture and motion. */
 .studio-content { background: #f1f3ee; position: relative; overflow: hidden; }

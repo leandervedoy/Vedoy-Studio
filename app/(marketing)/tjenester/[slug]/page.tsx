@@ -43,10 +43,11 @@ export default async function ServicePage({ params, searchParams }: { params: Pr
       {isWebsite ? <ServicePricing type="website" /> : null}
       {isWebApp ? <ServicePricing type="webapp" /> : null}
       {isStore ? <ServicePricing type="store" /> : null}
+      {isClothing ? <ServicePricing type="clothing" /> : null}
       {isHosting ? <HostingConfigurator initialDomain={query.domain} initialDomainMode={query.domainMode === "new" ? "new" : "existing"} domainProviderReady={isDomainProviderConfigured()} /> : null}
       {isClothing ? <section className="clothing-detail-section" id="bestill-profilprodukter"><div><p className="editorial-kicker lime">VEDØY COLLECTIVE · BESTILL NÅ</p><h2>Velg plagg.<br /><em>Last opp logo.</em></h2><p>Prøv logoen på plaggene under og send en uforpliktende forespørsel. Tapstitch kan håndtere produksjon og fulfilment for aktuelle produkter; Vedøy Studio følger deg gjennom valg, korrektur og pris.</p><div className="clothing-partner-note"><strong>Slik fungerer det</strong><span>1. Velg plagg og last opp logo</span><span>2. Send antall, størrelser og detaljer</span><span>3. Vi avklarer produksjon og sender tilbud</span><small>Ingen automatisk betaling eller kjøp skjer når skjemaet sendes.</small></div></div><ProductCustomizer /></section> : null}
       {isShopify ? <ShopifyToolGuide /> : null}
-      {!isWebsite && !isWebApp && !isStore ? <ServicePricing type="general" /> : null}
+      {!isWebsite && !isWebApp && !isStore && !isClothing ? <ServicePricing type="general" /> : null}
       <section className="service-detail-cta"><p className="editorial-kicker lime">NESTE STEG</p><h2>La oss gjøre det<br /><em>konkret.</em></h2><p>{service.nextStep}</p><Link href="/#kontakt" className="editorial-button">Snakk med Vedøy Studio <span>↗</span></Link></section>
     </main>
   );
