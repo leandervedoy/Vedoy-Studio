@@ -896,11 +896,11 @@ h1, h2, h3, h4 { letter-spacing: -.035em; }
 .service-detail-header nav a:hover { color:#fff; }
 .service-detail-header .editorial-cta { justify-self:end; }
 .service-detail-hero { min-height:620px; padding:140px 10vw 82px; display:grid; grid-template-columns:1.2fr .8fr; gap:6vw; align-items:end; background:radial-gradient(circle at 72% 8%,#152016 0,transparent 31%),#050605; border-bottom:1px solid #202620; }
-.service-detail-hero--website { min-height:430px; padding-top:118px; padding-bottom:58px; }
+.service-detail-hero--compact { min-height:430px; padding-top:118px; padding-bottom:58px; }
 .service-back { position:fixed; z-index:40; left:28px; bottom:24px; display:inline-block; padding:8px 0; color:#9ba39a; font-size:12px; text-decoration:none; }
 .service-back:hover { color:#fff; }
 .service-detail-hero h1,.order-result-page h1 { margin:30px 0 0; font-size:clamp(54px,6.4vw,96px); line-height:.88; letter-spacing:-.08em; }
-.service-detail-hero--website h1 { margin-top:22px; font-size:clamp(45px,5.2vw,78px); }
+.service-detail-hero--compact h1 { margin-top:22px; font-size:clamp(45px,5.2vw,78px); }
 .service-detail-hero h1 em,.service-detail-grid h2 em,.service-detail-cta h2 em,.order-result-page h1 em { color:#8f978d; font-family:Georgia,serif; font-weight:400; }
 .service-detail-intro { padding-bottom:18px; }
 .service-detail-intro>strong { display:block; max-width:540px; font-size:clamp(21px,2.2vw,34px); line-height:1.08; letter-spacing:-.045em; }
@@ -1042,7 +1042,7 @@ h1, h2, h3, h4 { letter-spacing: -.035em; }
   .service-detail-header nav { display:none; }
   .service-detail-hero,.service-detail-grid,.hosting-configurator__heading,.shopify-tool-guide__heading,.shopify-tool-guide__setup { grid-template-columns:1fr; }
   .service-detail-hero { min-height:auto; padding:140px 7vw 82px; }
-  .service-detail-hero--website { padding-top:120px; padding-bottom:62px; }
+  .service-detail-hero--compact { padding-top:120px; padding-bottom:62px; }
   .service-back { left:18px; bottom:18px; }
   .service-detail-intro { padding-top:20px; }
   .service-detail-grid>article { min-height:auto; padding:80px 7vw; }
@@ -1170,7 +1170,7 @@ h1, h2, h3, h4 { letter-spacing: -.035em; }
 .website-pricing__heading h2 em { color:#6f786c; font-family:Georgia,serif; font-weight:400; }
 .website-pricing__heading>div:last-child strong { display:block; font-size:19px; line-height:1.4; }
 .website-pricing__heading>div:last-child p { color:#59635a; line-height:1.7; }
-.website-pricing__cards { display:grid; grid-template-columns:repeat(3,1fr); border:1px solid #c8cec3; }
+.website-pricing__cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); border:1px solid #c8cec3; }
 .website-pricing__cards>article { position:relative; min-height:470px; padding:30px; border-right:1px solid #c8cec3; background:#f5f6f0; }
 .website-pricing__cards>article:last-child { border-right:0; }
 .website-pricing__cards>article.is-featured { background:#111510; color:#f5f6f0; }
@@ -1186,7 +1186,7 @@ h1, h2, h3, h4 { letter-spacing: -.035em; }
 .website-pricing__cards .is-featured li:before { color:var(--lime); }
 .website-pricing__examples { display:grid; grid-template-columns:.55fr 1.45fr; gap:7vw; padding:75px 0; border-bottom:1px solid #c8cec3; }
 .website-pricing__examples h3 { margin:15px 0 0; font-size:32px; }
-.website-pricing__examples>div:last-child { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+.website-pricing__examples>div:last-child { display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:16px; }
 .website-pricing__examples article { padding:22px; border:1px solid #c8cec3; border-radius:14px; background:#f5f6f0; }
 .website-pricing__examples article strong { font-size:24px; }
 .website-pricing__examples article p { margin:14px 0 0; color:#657066; font-size:13px; line-height:1.6; }

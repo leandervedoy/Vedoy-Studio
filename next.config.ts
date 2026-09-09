@@ -3,6 +3,9 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   transpilePackages: ["@vedoy/booking"],
+  redirects: async () => [
+    { source: "/tjenester/shopify-og-commerce", destination: "/tjenester/ecommerce", permanent: true }
+  ],
   headers: async () => [
     {
       source: "/(.*)",

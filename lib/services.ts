@@ -93,16 +93,16 @@ export const studioServices: StudioService[] = [
   },
   {
     number: "07",
-    slug: "shopify-og-commerce",
-    title: "Shopify & commerce",
-    cardText: "Nettbutikk, Shopify-app og integrasjoner med riktig oppsett for hvordan bedriften faktisk skal selge.",
-    eyebrow: "SHOPIFY · APP · INTEGRASJON",
-    lead: "Riktig Shopify-verktøy for butikk, app og videre vekst.",
-    introduction: "Noen bedrifter trenger en rask nettbutikk. Andre trenger en installérbar Shopify-app som synkroniserer produkter, ordre eller booking. Vedøy Studio velger riktig spor før vi bygger, slik at løsningen blir enklere å drifte og tryggere å utvide.",
-    deliverables: ["Shopify-butikk eller skreddersydd Next.js-front", "Shopify CLI-oppsett for installérbar bedrift/app", "Produkter, ordre og kundesynk via Admin API", "Webhooks, testing, tilgangsstyring og lansering"],
-    focus: ["Shopify CLI", "Storefront API", "Admin API", "Webhooks", "Next.js", "Vercel"],
-    process: ["Vi velger om dere trenger butikk, embedded app eller en integrasjon.", "Vi avklarer data, tilganger, Shopify-scopes og hvilke systemer som skal snakke sammen.", "Løsningen bygges med testbutikk, sikre miljøvariabler og verifiserte webhooks.", "Vi kjører pilot med reelle ordre eller data før bred lansering."],
-    nextStep: "Fortell om dere skal selge varer, automatisere arbeid i Shopify eller koble Shopify til Booking og Growth."
+    slug: "ecommerce",
+    title: "Ecommerce",
+    cardText: "En rimelig og ryddig nettbutikk med Payhip eller Shopify, valgt etter det kunden faktisk trenger.",
+    eyebrow: "BUTIKK · BETALING · VEKST",
+    lead: "Start rimelig med Payhip, eller velg Shopify når butikken trenger mer.",
+    introduction: "Vedøy Studio bygger ecommerce uten å låse alle kunder til samme plattform. Payhip passer ofte best for digitale produkter, kurs og en enkel start. Shopify passer bedre for større vareutvalg, lager, frakt og integrasjoner. Vi anbefaler den rimeligste løsningen som dekker behovet og fortsatt kan leveres og driftes forsvarlig.",
+    deliverables: ["Payhip- eller Shopify-oppsett", "Produkter, kategorier og kjøpsreise", "Betaling, domene og kundekommunikasjon", "Skreddersydd design og integrasjoner ved behov"],
+    focus: ["Payhip", "Shopify", "Checkout", "Digitale produkter", "Fysiske varer", "Integrasjoner"],
+    process: ["Vi kartlegger produkter, kunder, volum og hvordan butikken skal driftes.", "Du får en tydelig anbefaling mellom Payhip, Shopify og eventuell skreddersøm.", "Butikken bygges og betaling, ordre og kundereise testes før lansering.", "Vi følger opp med drift og oppgraderer plattformen når behovet faktisk vokser."],
+    nextStep: "Fortell hva dere vil selge, antall produkter og om dere trenger lager, frakt, kurs eller medlemskap."
   },
   {
     number: "08",

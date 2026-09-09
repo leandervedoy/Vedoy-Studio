@@ -36,14 +36,14 @@ export const studioProducts: StudioProduct[] = [
   },
   {
     id: "commerce",
-    name: "Vedøy Commerce",
-    description: "Shopify-butikk, installérbar app og produkter eller ordre koblet til resten av driften.",
+    name: "Vedøy Ecommerce",
+    description: "Payhip eller Shopify valgt etter pris, produkter og hvordan kunden faktisk skal selge.",
     icon: "⌘",
-    href: "/tjenester/shopify-og-commerce#shopify-verktoy",
+    href: "/tjenester/ecommerce#velg-handelsplattform",
     group: "Bygg",
     status: "planned",
     accent: "#26a269",
-    highlights: ["Shopify CLI", "Admin API", "Webhooks"]
+    highlights: ["Payhip", "Shopify", "Integrasjoner"]
   },
   {
     id: "booking",

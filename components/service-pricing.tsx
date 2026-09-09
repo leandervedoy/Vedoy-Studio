@@ -59,21 +59,24 @@ const pricing: Record<PricingType, PricingConfig> = {
     subject: "nettbutikk",
     factors: "antall produkter og markeder, design, betalingsmåter, frakt, innhold, migrering og integrasjoner mot andre systemer",
     packages: [
-      { label: "01 · BUTIKKSTART", price: "Fra ca. 23 750 kr", description: "En ryddig nettbutikk med produkter, betaling, frakt og grunnleggende vekstoppsett.", includes: ["Produkt- og kategoristruktur", "Shopify-oppsett", "Betaling og frakt", "Mobil kjøpsreise", "Lansering og opplæring"] },
-      { label: "02 · VEKSTBUTIKK", price: "ca. 35 625–71 250 kr", description: "For butikker som trenger eget uttrykk, mer innhold og flere salgssystemer.", includes: ["Tilpasset butikkdesign", "Migrering av produkter", "E-post og analyse", "Flere markeder ved behov", "Utvalgte integrasjoner"], featured: true },
-      { label: "03 · HEADLESS COMMERCE", price: "Fra ca. 71 250 kr", description: "Skreddersydd handleopplevelse med Shopify som handelsmotor.", includes: ["Next.js-butikkfront", "Shopify Storefront API", "Skreddersydd designsystem", "Avanserte integrasjoner", "Ytelse og skalering"] }
+      { label: "01 · PAYHIP START", price: "ca. 5 900–11 900 kr", description: "Den rimeligste Vedøy-starten for digitale produkter, kurs, medlemskap eller et mindre vareutvalg.", includes: ["Payhip-oppsett", "Inntil 10 produkter", "Tilpasset enkel butikkfront", "Betaling og domene", "Lansering og opplæring"], featured: true },
+      { label: "02 · SHOPIFY START", price: "Fra ca. 23 750 kr", description: "En ryddig nettbutikk med produkter, betaling, frakt og grunnleggende vekstoppsett.", includes: ["Produkt- og kategoristruktur", "Shopify-oppsett", "Betaling og frakt", "Mobil kjøpsreise", "Lansering og opplæring"] },
+      { label: "03 · VEKSTBUTIKK", price: "ca. 35 625–71 250 kr", description: "For butikker som trenger eget uttrykk, mer innhold og flere salgssystemer.", includes: ["Tilpasset butikkdesign", "Migrering av produkter", "E-post og analyse", "Flere markeder ved behov", "Utvalgte integrasjoner"] },
+      { label: "04 · SKREDDERSYDD", price: "Fra ca. 71 250 kr", description: "En egen handleopplevelse med Shopify eller annen handelsmotor i bunnen.", includes: ["Next.js-butikkfront", "Handels-API", "Skreddersydd designsystem", "Avanserte integrasjoner", "Ytelse og skalering"] }
     ],
     examples: [
-      { price: "95 000 kr", description: "Mindre Shopify-butikk med opptil 30 produkter og standardintegrasjoner." },
+      { price: "ca. 5 900–11 900 kr", description: "Payhip-butikk for digitale produkter, kurs eller et lite sortiment." },
+      { price: "Fra ca. 23 750 kr", description: "Mindre Shopify-butikk med opptil 30 produkter og standardintegrasjoner." },
       { price: "175 000 kr", description: "Merkevarebutikk med migrering, eget design, e-postflyt og analyse." },
       { price: "Fra 300 000 kr", description: "Headless nettbutikk med spesialdesign og koblinger mot eksterne systemer." }
     ],
     runningPrice: "Fra ca. 713 kr/mnd",
-    runningText: "Kan omfatte teknisk drift, mindre endringer, overvåking og support. Shopify-abonnement, betalingsgebyrer, apper, domene og annonsekostnader betales separat.",
+    runningText: "Kan omfatte teknisk drift, mindre endringer, overvåking og support. Payhip- eller Shopify-abonnement, transaksjons- og betalingsgebyrer, apper, domene og annonsekostnader betales separat.",
     sources: [
       { name: "DinNettside", href: "https://dinnettside.no/fagstoff/nettside-pris" },
       { name: "Innovena", href: "https://www.innovena.no/nettside/" },
-      { name: "Shopify", href: "https://www.shopify.com/no/pricing" }
+      { name: "Shopify", href: "https://www.shopify.com/no/pricing" },
+      { name: "Payhip", href: "https://payhip.com/pricing" }
     ]
   },
   general: {
