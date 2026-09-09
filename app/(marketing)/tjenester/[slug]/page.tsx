@@ -5,6 +5,7 @@ import { HostingConfigurator } from "@/components/hosting-configurator";
 import { ShopifyToolGuide } from "@/components/shopify-tool-guide";
 import { ProductCustomizer } from "@/components/product-customizer";
 import { ServicePricing } from "@/components/service-pricing";
+import { ServiceCapabilities } from "@/components/website-capabilities";
 import { getStudioService, studioServices } from "@/lib/services";
 import { isDomainProviderConfigured } from "@/lib/vercel-domains";
 
@@ -32,13 +33,13 @@ export default async function ServicePage({ params, searchParams }: { params: Pr
     <main className="service-detail-page">
       <header className="service-detail-header"><Link href="/" className="editorial-logo"><img src="/imgs/Logos/Vedoy_Logo_W.png" alt="Vedøy Studio" /></Link><nav><Link href="/#tjenester">Tjenester</Link><Link href="/#plattform">Plattform</Link><Link href="/#prosjekter">Prosjekter</Link><Link href="/#profilprodukter">Bedriftsklær</Link><Link href="/#kontakt">Kontakt</Link></nav><Link href="/booking" className="editorial-cta">Bestill time <span>↗</span></Link></header>
       <Link href="/#tjenester" className="service-back">← Tilbake til tjenestene</Link>
-      <section className="service-detail-hero">
-        <div><p className="editorial-kicker lime">{service.number} · {service.eyebrow}</p><span className="service-live-badge">KAN BESTILLES NÅ</span><h1>{service.title}<br /><em>bygget ordentlig.</em></h1></div>
+      <section className={`service-detail-hero${isWebsite ? " service-detail-hero--website" : ""}`}>
+        <div><p className="editorial-kicker lime">{service.number} · {service.eyebrow}</p><span className="service-live-badge">KAN BESTILLES NÅ</span><h1>{service.title}<br /><em>{isWebsite ? "for bedrifter." : "bygget ordentlig."}</em></h1></div>
         <div className="service-detail-intro"><strong>{service.lead}</strong><p>{service.introduction}</p><Link href={isHosting ? "#konfigurer-hosting" : isClothing ? "#bestill-profilprodukter" : "/#kontakt"} className="editorial-button">{isHosting ? "Bestill hosting" : isClothing ? "Åpne bestillingsskjema" : "Send bestillingsforespørsel"} <span>↗</span></Link></div>
       </section>
-      <section className="service-detail-grid">
-        <article><small>DETTE KAN INNGÅ</small><h2>Fra behov til<br /><em>ferdig løsning.</em></h2><ul>{service.deliverables.map((item) => <li key={item}>{item}</li>)}</ul></article>
-        <article><small>TEKNOLOGI OG FOKUS</small><div className="service-focus-list">{service.focus.map((item) => <span key={item}>{item}</span>)}</div><p>{service.nextStep}</p></article>
+      <ServiceCapabilities title={service.title} slug={service.slug} simple={service.deliverables} detailed={service.focus} />
+      <section className="service-detail-grid service-detail-grid--combined">
+        <article><div className="service-detail-combined__intro"><small>DETTE KAN INNGÅ · TEKNOLOGI OG FOKUS</small><h2>Fra behov til<br /><em>ferdig løsning.</em></h2></div><div className="service-detail-combined__body"><div><ul>{service.deliverables.map((item) => <li key={item}>{item}</li>)}</ul></div><div><div className="service-focus-list">{service.focus.map((item) => <span key={item}>{item}</span>)}</div><p>{service.nextStep}</p></div></div></article>
       </section>
       <section className="service-process"><p className="editorial-kicker lime">SLIK GJØR VI DET</p><div>{service.process.map((step, index) => <article key={step}><small>0{index + 1}</small><p>{step}</p></article>)}</div></section>
       {isWebsite ? <ServicePricing type="website" /> : null}
