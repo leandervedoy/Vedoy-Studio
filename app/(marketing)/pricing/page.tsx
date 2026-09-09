@@ -4,9 +4,9 @@ import Link from "next/link";
 export const metadata: Metadata = { title: "Priser" };
 
 const plans = [
-  { name: "Start", monthly: "299", description: "For å komme ryddig på nett.", features: ["1 domeneadministrasjon", "1 nettsideprosjekt", "Booking Lite", "Status og SSL", "Personlig oppstart"] },
-  { name: "Growth", monthly: "699", description: "For å samle drift og vekst.", features: ["3 prosjekter", "Full booking", "Vedøy Canvas", "CRM", "Statistics", "Vedi AI", "Prioritert support"], popular: true },
-  { name: "Business", monthly: "1 499", description: "For team og integrasjoner.", features: ["10 prosjekter", "Team og roller", "Vedøy Canvas for team", "API-nøkler", "Webhooks", "Avanserte rapporter", "Fast oppfølging"] }
+  { name: "IT-hjelp", monthly: "299", description: "To timer totalt med IT-hjelp for bedriften.", features: ["2 timer inkludert", "Oppmøte etter behov", "Telefon eller Teams når mulig", "Ekstra 30 min: 199 kr", "Afrunding opp til nærmeste halve time"] },
+  { name: "IT + drift", monthly: "899", description: "Seks timer IT-hjelp, nettsidedrift og to planlagte oppdateringer.", features: ["6 timer IT-hjelp inkludert", "Oppmøte, telefon eller Teams", "Ekstra 30 min: 159 kr", "Hosting og nettsidedrift", "2 oppdateringer per måned", "Feil på Vedøy-laget side: gratis retting"], popular: true },
+  { name: "Vedøy Growth", monthly: "1 499", description: "Seks timer IT-hjelp pluss drift, oppdateringer og Growth-plattformen.", features: ["6 timer IT-hjelp inkludert", "Ekstra time: 99 kr", "Nettsidehosting", "3 oppdateringer per måned", "Vedøy Growth", "Feilretting utenom kvoten ved avtalte bugs"] }
 ];
 
 export default function PricingPage() {

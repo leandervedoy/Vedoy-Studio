@@ -82,14 +82,14 @@ export const studioServices: StudioService[] = [
     number: "06",
     slug: "profilprodukter",
     title: "Profilprodukter",
-    cardText: "Klær og tilbehør med bedriftens egen logo — fra produktvalg til produksjon.",
+    cardText: "Vedøy Collective-klær og tilbehør med bedriftens egen logo — fra produktvalg til produksjonsforespørsel.",
     eyebrow: "KLÆR · LOGO · PRODUKSJON",
-    lead: "Bedriftsklær som føles gjennomtenkte — fra digital forhåndsvisning til ferdig produkt.",
-    introduction: "Last opp logoen på forsiden og prøv den på utvalgte plagg. Vedøy Studio hjelper med produktvalg, plassering, trykk eller broderi og en bestilling som passer bruken og budsjettet.",
-    deliverables: ["Produkt- og størrelsesforslag", "Logojustering og visuell plassering", "Trykk, broderi og produksjonsunderlag", "Tilbud, korrektur og samlet levering"],
+    lead: "Vedøy Collective-klær som føles gjennomtenkte — fra digital forhåndsvisning til ferdig produkt.",
+    introduction: "Vedøy Collective tilbyr utvalgte plagg og tilbehør som kan tilpasses med bedriftens logo. Tapstitch kan brukes som produksjons- og fulfilmentpartner for aktuelle plagg, mens Vedøy Studio hjelper med produktvalg, plassering, trykk og en forespørsel som passer bruken og budsjettet.",
+    deliverables: ["Produkt- og størrelsesforslag", "Logojustering og visuell plassering", "Trykk, broderi og produksjonsunderlag", "Produksjon og fulfilment via valgt partner", "Tilbud, korrektur og samlet levering"],
     focus: ["Arbeidsklær", "T-skjorter", "Hoodies", "Broderi", "Trykk", "Merkevare"],
     process: ["Velg plagg og last opp logo for en rask visualisering.", "Vi kvalitetssikrer fil, størrelse og plassering.", "Du godkjenner korrektur og pris før produksjon.", "Produktene produseres og leveres samlet."],
-    nextStep: "Prøv logoen på plagg på forsiden, og send antall, størrelser og ønsket leveringstid."
+    nextStep: "Prøv logoen på plaggene, og send antall, størrelser og ønsket leveringstid. Vi bekrefter løsning og pris før noe bestilles."
   },
   {
     number: "07",

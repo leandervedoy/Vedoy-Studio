@@ -116,7 +116,7 @@ export function ProductCustomizer({ showRequestForm = true }: { showRequestForm?
       </div>
       <p className="customizer-simple-name">{product.name}</p>
       {showRequestForm ? <form className="clothing-request-form" onSubmit={submitRequest}>
-        <div className="clothing-request-form__heading"><span>FORESPØRSEL · KOMMER SNART</span><h3>Be om bedriftsklær</h3><p>Velg plagget over, last opp logo og fortell hvor mange dere trenger. Dette er ikke en bindende bestilling.</p></div>
+        <div className="clothing-request-form__heading"><span>VEDØY COLLECTIVE · BESTILLINGSFORESPØRSEL</span><h3>Bestill profilprodukter</h3><p>Velg plagget over, last opp logo og fortell hvor mange dere trenger. Forespørselen lagres i Vedøy Studio og er ikke bindende. Vi avklarer tilgjengelighet, produksjon og endelig pris før bestilling.</p></div>
         <div className="clothing-request-form__fields">
           <label>Navn *<input name="name" required maxLength={100} /></label>
           <label>Bedrift<input name="company" maxLength={120} /></label>
