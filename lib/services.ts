@@ -103,6 +103,45 @@ export const studioServices: StudioService[] = [
     focus: ["Shopify CLI", "Storefront API", "Admin API", "Webhooks", "Next.js", "Vercel"],
     process: ["Vi velger om dere trenger butikk, embedded app eller en integrasjon.", "Vi avklarer data, tilganger, Shopify-scopes og hvilke systemer som skal snakke sammen.", "Løsningen bygges med testbutikk, sikre miljøvariabler og verifiserte webhooks.", "Vi kjører pilot med reelle ordre eller data før bred lansering."],
     nextStep: "Fortell om dere skal selge varer, automatisere arbeid i Shopify eller koble Shopify til Booking og Growth."
+  },
+  {
+    number: "08",
+    slug: "trykk-og-print",
+    title: "Trykk & print",
+    cardText: "Plakater, visittkort, klistremerker, flyers og annet materiell med ferdig design og produksjonsunderlag.",
+    eyebrow: "PAPIR · PROFIL · PRODUKSJON",
+    lead: "Fysiske flater som gjør merkevaren tydelig i møter, butikker og ute i byen.",
+    introduction: "Vedøy Studio kan samle design, korrektur og bestilling av trykksaker hos passende produksjonspartner. Vi avklarer format, materiale, antall og levering før du godkjenner et endelig tilbud.",
+    deliverables: ["Plakater, flyers og brosjyrer", "Visittkort og kortprodukter", "Klistremerker, etiketter og emballasjedetaljer", "Design, trykkfiler, korrektur og koordinert produksjon"],
+    focus: ["Plakater", "Visittkort", "Klistremerker", "Flyers", "Etiketter", "Trykklar PDF"],
+    process: ["Vi avklarer bruksområde, format, antall og frist.", "Design og materialvalg tilpasses merkevaren og budsjettet.", "Du godkjenner digital korrektur og endelig pris.", "Produksjon og levering bestilles først etter godkjenning."],
+    nextStep: "Send logo, ønsket produkt, antall og leveringsdato, så finner vi et passende produksjonsoppsett."
+  },
+  {
+    number: "09",
+    slug: "musiker-og-artist",
+    title: "Musiker & artist",
+    cardText: "CD, vinyl, booklet, plateprint, merch og lanseringsmateriell samlet rundt musikken din.",
+    eyebrow: "MUSIKK · FYSISK UTGIVELSE · MERCH",
+    lead: "Fra ferdig master og artwork til en gjennomført fysisk utgivelse og merch-kolleksjon.",
+    introduction: "Vedøy Studio hjelper musikere og artister med design og koordinering av fysiske musikkutgivelser. Det kan omfatte CD med trykk og booklet, vinyl med labels og omslag, plakater og merch. Produksjonspris, minimumsantall og rettigheter avklares før bestilling.",
+    deliverables: ["CD med plateprint, cover og booklet", "Vinyl med egne labels, omslag og innstikk", "T-skjorter, hoodies, plakater og turnémerch", "Artwork, produksjonsfiler og lanseringspakke"],
+    focus: ["CD", "Vinyl", "Booklet", "Artwork", "Merch", "Lansering"],
+    process: ["Vi kartlegger format, opplag, frist og tilgjengelige masterfiler.", "Artwork og merch utvikles som én visuell utgivelse.", "Du godkjenner korrektur, leverandør og totalpris.", "Produksjonen settes i gang etter godkjenning og dokumenterte rettigheter."],
+    nextStep: "Send musikkformat, ønsket opplag, artwork og lanseringsdato. Vi lager et realistisk forslag før noe bestilles."
+  },
+  {
+    number: "10",
+    slug: "kunstner-og-merch",
+    title: "Kunstner & merch",
+    cardText: "Kunsttrykk, plakater, klær, nettbutikk og digitale samlerutgaver for kunstnere.",
+    eyebrow: "KUNST · PRODUKTER · SALG",
+    lead: "Gjør kunsten tilgjengelig som gjennomførte produkter uten å miste det kunstneriske uttrykket.",
+    introduction: "Vedøy Studio kan hjelpe kunstnere med kunsttrykk, plakater, kort, klær, merch, portefølje og nettbutikk. Digitale samlerutgaver og NFT-er kan vurderes når det gir mening, men markedsføres aldri som en garantert investering eller inntektskilde.",
+    deliverables: ["Kunsttrykk, plakater, kort og nummererte opplag", "Klær, merch og produktvisualisering", "Portefølje, nettbutikk og produktpresentasjon", "Digitale samlerutgaver, metadata og rettighetsinformasjon"],
+    focus: ["Kunsttrykk", "Plakater", "Merch", "Nettbutikk", "Digitale utgaver", "NFT ved behov"],
+    process: ["Vi velger verk, produkter, opplag og salgskanal.", "Filer, farger, materialer og produktpresentasjon kvalitetssikres.", "Du godkjenner prøve, pris og rettighetsbruk.", "Butikk eller produksjon lanseres i et kontrollert første opplag."],
+    nextStep: "Send eksempler på kunsten, ønskede produkter og hvordan du vil selge dem, så foreslår vi en liten første lansering."
   }
 ];
 

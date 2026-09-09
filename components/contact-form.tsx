@@ -29,7 +29,7 @@ export function ContactForm() {
   return <form className="contact-form" onSubmit={submit}>
     <label>Navn *<input name="name" required maxLength={100} /></label><label>Bedrift<input name="company" maxLength={120} /></label>
     <label>E-post *<input name="email" type="email" required maxLength={254} /></label><label>Telefon<input name="phone" maxLength={40} /></label>
-    <label className="full">Hva trenger du?<select name="need"><option>Nettside</option><option>Webapp</option><option>Nettbutikk</option><option>Shopify-app eller integrasjon</option><option>Hosting og domene</option><option>Profilprodukter</option></select></label>
+    <label className="full">Hva trenger du?<select name="need"><option>Nettside</option><option>Webapp</option><option>Nettbutikk</option><option>Shopify-app eller integrasjon</option><option>Hosting og domene</option><option>Design og profil</option><option>Profilprodukter</option><option>Trykk og print</option><option>Musiker og artist</option><option>Kunstner og merch</option></select></label>
     <label className="full">Fortell litt om prosjektet<textarea name="message" rows={4} maxLength={3000} /></label>
     <label className="form-honeypot" aria-hidden="true">Nettside<input name="website" tabIndex={-1} autoComplete="off" /></label>
     <button className="editorial-button" type="submit" disabled={state === "sending"}>{state === "sending" ? "Lagrer …" : "Send forespørsel →"}</button>

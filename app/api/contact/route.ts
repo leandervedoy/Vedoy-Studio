@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { createContactRequest, createGrowthNotification } from "@/lib/repository";
 
-const allowedNeeds = new Set(["Nettside", "Webapp", "Nettbutikk", "Shopify-app eller integrasjon", "Hosting og domene", "Profilprodukter"]);
+const allowedNeeds = new Set(["Nettside", "Webapp", "Nettbutikk", "Shopify-app eller integrasjon", "Hosting og domene", "Design og profil", "Profilprodukter", "Trykk og print", "Musiker og artist", "Kunstner og merch"]);
 
 function clean(value: unknown, max: number) {
   return typeof value === "string" ? value.trim().slice(0, max) : "";
