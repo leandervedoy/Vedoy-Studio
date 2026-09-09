@@ -92,7 +92,7 @@ export function ProductCustomizer({ showRequestForm = true }: { showRequestForm?
             <motion.img
               key={product.image}
               src={product.image}
-              alt={`${product.name} fra Tapstitch`}
+              alt={`${product.name} fra Vedøy Collective`}
               initial={reduceMotion ? false : { opacity: 0, scale: 0.97, x: 16 }}
               animate={{ opacity: 1, scale: 1, x: 0 }}
               exit={reduceMotion ? undefined : { opacity: 0, scale: 0.985, x: -12 }}

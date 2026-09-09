@@ -30,9 +30,10 @@ export default async function ServicePage({ params, searchParams }: { params: Pr
 
   return (
     <main className="service-detail-page">
-      <header className="service-detail-header"><Link href="/" className="editorial-logo"><img src="/imgs/Logos/Vedoy_Logo_W.png" alt="Vedøy Studio" /></Link><nav><Link href="/#tjenester">Alle tjenester</Link><Link href="/#prosjekter">Prosjekter</Link><Link href="/#kontakt">Kontakt</Link></nav><Link href="/#kontakt" className="editorial-cta">Start prosjekt <span>↗</span></Link></header>
+      <header className="service-detail-header"><Link href="/" className="editorial-logo"><img src="/imgs/Logos/Vedoy_Logo_W.png" alt="Vedøy Studio" /></Link><nav><Link href="/#tjenester">Tjenester</Link><Link href="/#plattform">Plattform</Link><Link href="/#prosjekter">Prosjekter</Link><Link href="/#profilprodukter">Bedriftsklær</Link><Link href="/#kontakt">Kontakt</Link></nav><Link href="/booking" className="editorial-cta">Bestill time <span>↗</span></Link></header>
+      <Link href="/#tjenester" className="service-back">← Tilbake til tjenestene</Link>
       <section className="service-detail-hero">
-        <div><Link href="/#tjenester" className="service-back">← Tilbake til tjenestene</Link><p className="editorial-kicker lime">{service.number} · {service.eyebrow}</p><span className="service-live-badge">KAN BESTILLES NÅ</span><h1>{service.title}<br /><em>bygget ordentlig.</em></h1></div>
+        <div><p className="editorial-kicker lime">{service.number} · {service.eyebrow}</p><span className="service-live-badge">KAN BESTILLES NÅ</span><h1>{service.title}<br /><em>bygget ordentlig.</em></h1></div>
         <div className="service-detail-intro"><strong>{service.lead}</strong><p>{service.introduction}</p><Link href={isHosting ? "#konfigurer-hosting" : isClothing ? "#bestill-profilprodukter" : "/#kontakt"} className="editorial-button">{isHosting ? "Bestill hosting" : isClothing ? "Åpne bestillingsskjema" : "Send bestillingsforespørsel"} <span>↗</span></Link></div>
       </section>
       <section className="service-detail-grid">

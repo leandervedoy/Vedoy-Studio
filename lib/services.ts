@@ -85,7 +85,7 @@ export const studioServices: StudioService[] = [
     cardText: "Vedøy Collective-klær og tilbehør med bedriftens egen logo — fra produktvalg til produksjonsforespørsel.",
     eyebrow: "KLÆR · LOGO · PRODUKSJON",
     lead: "Vedøy Collective-klær som føles gjennomtenkte — fra digital forhåndsvisning til ferdig produkt.",
-    introduction: "Vedøy Collective tilbyr utvalgte plagg og tilbehør som kan tilpasses med bedriftens logo. Tapstitch kan brukes som produksjons- og fulfilmentpartner for aktuelle plagg, mens Vedøy Studio hjelper med produktvalg, plassering, trykk og en forespørsel som passer bruken og budsjettet.",
+    introduction: "Vedøy Studio kan tilby bedrifter klær via klesmerket Vedøy Collective. Plagg og tilbehør kan tilpasses med bedriftens logo, mens vi hjelper med produktvalg, plassering, trykk, korrektur og en forespørsel som passer bruken og budsjettet.",
     deliverables: ["Produkt- og størrelsesforslag", "Logojustering og visuell plassering", "Trykk, broderi og produksjonsunderlag", "Produksjon og fulfilment via valgt partner", "Tilbud, korrektur og samlet levering"],
     focus: ["Arbeidsklær", "T-skjorter", "Hoodies", "Broderi", "Trykk", "Merkevare"],
     process: ["Velg plagg og last opp logo for en rask visualisering.", "Vi kvalitetssikrer fil, størrelse og plassering.", "Du godkjenner korrektur og pris før produksjon.", "Produktene produseres og leveres samlet."],

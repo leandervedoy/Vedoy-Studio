@@ -120,7 +120,7 @@ const pricing: Record<PricingType, PricingConfig> = {
     runningPrice: "Fra ca. 299 kr/mnd",
     runningText: "Kan omfatte produktoppdateringer, ny korrektur, nettbutikk eller løpende bestillingshjelp. Produksjon, frakt og leverandørkostnader avtales separat.",
     sources: [
-      { name: "Tapstitch", href: "https://www.tapstitch.com/custom-apparel" },
+      { name: "Vedøy Collective", href: "/tjenester/profilprodukter" },
       { name: "Printify", href: "https://printify.com/custom-clothing/" }
     ]
   }
