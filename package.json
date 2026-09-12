@@ -25,6 +25,7 @@
     "db:migrate:growth": "node scripts/migrate-growth.mjs",
     "db:migrate:notifications": "node scripts/migrate-notifications.mjs",
     "db:migrate:services": "node --env-file-if-exists=.env.local scripts/migrate-services.mjs",
+    "db:migrate:page-builder": "node --env-file-if-exists=.env.local scripts/migrate-page-builder.mjs",
     "check:project": "node scripts/check-project.mjs",
     "verify:notes": "node scripts/verify-notes-api.mjs",
     "verify:services": "node --env-file-if-exists=.env.local scripts/verify-services.mjs",
@@ -32,16 +33,22 @@
     "postinstall": "npm run build:booking && npm run build:notes"
   },
   "dependencies": {
+    "@ai-sdk/anthropic": "^4.0.53",
+    "@ai-sdk/openai": "^4.0.66",
+    "@ai-sdk/react": "^4.0.102",
     "@supabase/supabase-js": "2.116.0",
     "@vedoy/booking": "*",
     "@vedoy/notes": "*",
+    "@vercel/analytics": "^2.0.1",
+    "ai": "^7.0.99",
     "motion": "13.1.0",
     "next": "^16.3.2",
     "next-intl": "^4.14.3",
     "postgres": "^3.4.7",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
-    "stripe": "^22.5.0"
+    "stripe": "^22.5.0",
+    "zod": "^4.6.2"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",

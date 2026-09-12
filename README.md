@@ -206,6 +206,52 @@ Uten disse variablene registreres betalingen og ordrekonfigurasjonen hos Stripe,
 - Full multi-tenant autentisering, roller og fakturering
 - Dra-og-slipp-nettsidebygger
 
+## Intern AI-sidebygger
+
+`/studio/builder` (videresendt til `/admin/builder`) er en administratorkun arbeidsflate for Vedøy Studio. Den
+lagrer sidetittel, URL, synlighet og visuelle blokker i PostgreSQL. Du kan
+opprette Hero-, funksjons-, pris- og kontaktseksjoner manuelt eller be
+Co-Pilot om å bygge og redigere dem. Høyre side viser alltid utkastet med din
+innloggede forhåndsvisning; en side blir først offentlig når du velger
+«Publiser side» eller gir AI-en eksplisitt tillatelse til å publisere.
+
+Før første bruk må tabellene kjøres mot den samme `DATABASE_URL` som Studio:
+
+```powershell
+npm.cmd run db:migrate:page-builder
+```
+
+Legg også inn én av disse servervariablene lokalt og i Vercel. API-nøkler skal
+aldri få `NEXT_PUBLIC_`-prefiks:
+
+```env
+AI_PAGE_BUILDER_PROVIDER=openai
+AI_PAGE_BUILDER_MODEL=gpt-5-mini
+OPENAI_API_KEY=...
+
+# Alternativt
+AI_PAGE_BUILDER_PROVIDER=anthropic
+AI_PAGE_BUILDER_MODEL=claude-sonnet-4-5
+ANTHROPIC_API_KEY=...
+```
+
+Uten database eller modellnøkkel er siden med vilje ikke publiserbar. Dette
+hindrer at utkast eller uautoriserte AI-endringer blir synlige for kunder.
+
+### Kostnadskontroll
+
+Sidebyggeren reserverer hvert AI-kall atomisk i `studio_ai_usage`. Standard er
+10 kall per organisasjon per døgn og maksimalt 1200 genererte tokens per kall.
+Sett lavere grenser i Vercel hvis du vil være ekstra forsiktig:
+
+```env
+AI_PAGE_BUILDER_DAILY_REQUEST_LIMIT=10
+AI_PAGE_BUILDER_MAX_OUTPUT_TOKENS=1200
+```
+
+Dette er en hard bruksgrense, ikke en garanti for en bestemt kronepris, siden
+leverandørpriser kan endres. Ingen automatiske retries brukes.
+
 ## Produksjonssjekkliste
 
 - Bytt enkel admininnlogging med Auth.js, Clerk eller annen identitetsleverandør.

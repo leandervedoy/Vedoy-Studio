@@ -11,13 +11,15 @@ export const metadata: Metadata = {
     default: "Vedøy Studio – bygg, drift og vekst på ett sted",
     template: "%s · Vedøy Studio"
   },
-  description: "Domener, hosting, booking, API-er, analyse, Vedi AI, Academy og personlig IT-hjelp samlet i én rolig plattform.",
+  description: "Vedøy Studio tilbyr nettsider, webapper, nettbutikker, hosting, IT-hjelp, design og Vedøy Growth for små og mellomstore virksomheter.",
+  keywords: ["nettsider for bedrifter", "webapp utvikling", "nettbutikk", "hosting", "IT-hjelp", "Vedøy Growth", "profilprodukter"],
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
   openGraph: {
     title: "Vedøy Studio",
     description: "Digital infrastruktur med skandinavisk enkelhet.",
     type: "website",
-    locale: "nb_NO"
+    locale: "nb_NO",
+    siteName: "Vedøy Studio"
   }
 };
 

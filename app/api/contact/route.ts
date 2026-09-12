@@ -17,13 +17,18 @@ export async function POST(request: Request) {
     if (name.length < 2 || !/^\S+@\S+\.\S+$/.test(email) || !allowedNeeds.has(need)) {
       return NextResponse.json({ error: "Kontroller navn, e-post og hva du trenger." }, { status: 400 });
     }
+    const attribution = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "landing_page"]
+      .map((key) => `${key}=${clean(body[key], 180)}`)
+      .filter((value) => !value.endsWith("="))
+      .join(" | ");
+    const message = clean(body.message, 3000);
     const id = await createContactRequest({
       name,
       company: clean(body.company, 120) || undefined,
       email,
       phone: clean(body.phone, 40) || undefined,
       need,
-      message: clean(body.message, 3000) || undefined
+      message: [message, attribution ? `Kampanjeinformasjon: ${attribution}` : ""].filter(Boolean).join("\n\n") || undefined
     });
     if (process.env.ADMIN_EMAIL) {
       try { await createGrowthNotification({ userEmail: process.env.ADMIN_EMAIL, type: "lead", title: "Ny henvendelse", detail: `${name} ønsker hjelp med ${need}.`, href: "/studio/requests" }); }

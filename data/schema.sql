@@ -259,6 +259,39 @@ create table if not exists studio_services (
 );
 create index if not exists studio_services_public_idx on studio_services (organization_id, published, sort_order);
 
+create table if not exists studio_pages (
+  id text primary key,
+  organization_id text not null references organizations(id) on delete cascade,
+  slug text not null,
+  title text not null,
+  visibility text not null default 'draft' check (visibility in ('draft', 'published')),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  unique (organization_id, slug)
+);
+create index if not exists studio_pages_public_idx on studio_pages (organization_id, visibility, updated_at desc);
+
+create table if not exists studio_page_blocks (
+  id text primary key,
+  page_id text not null references studio_pages(id) on delete cascade,
+  organization_id text not null references organizations(id) on delete cascade,
+  block_type text not null check (block_type in ('hero', 'features', 'pricing', 'contact')),
+  position integer not null check (position between 1 and 9999),
+  content jsonb not null default '{}'::jsonb,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  unique (page_id, position)
+);
+create index if not exists studio_page_blocks_page_idx on studio_page_blocks (organization_id, page_id, position);
+
+create table if not exists studio_ai_usage (
+  organization_id text not null references organizations(id) on delete cascade,
+  usage_date date not null default current_date,
+  request_count integer not null default 0 check (request_count >= 0),
+  updated_at timestamptz not null default now(),
+  primary key (organization_id, usage_date)
+);
+
 alter table contact_requests enable row level security;
 alter table clothing_requests enable row level security;
 alter table hosting_requests enable row level security;
@@ -270,12 +303,15 @@ alter table work_time_entries enable row level security;
 alter table growth_notifications enable row level security;
 alter table growth_preferences enable row level security;
 alter table studio_services enable row level security;
+alter table studio_pages enable row level security;
+alter table studio_page_blocks enable row level security;
+alter table studio_ai_usage enable row level security;
 do $$ begin
   if exists (select 1 from pg_roles where rolname = 'anon') then
-    revoke all on table contact_requests, clothing_requests, hosting_requests, studio_notes, studio_note_versions, studio_note_attachments, studio_note_shares, work_time_entries, growth_notifications, growth_preferences, studio_services from anon;
+    revoke all on table contact_requests, clothing_requests, hosting_requests, studio_notes, studio_note_versions, studio_note_attachments, studio_note_shares, work_time_entries, growth_notifications, growth_preferences, studio_services, studio_pages, studio_page_blocks, studio_ai_usage from anon;
   end if;
   if exists (select 1 from pg_roles where rolname = 'authenticated') then
-    revoke all on table contact_requests, clothing_requests, hosting_requests, studio_notes, studio_note_versions, studio_note_attachments, studio_note_shares, work_time_entries, growth_notifications, growth_preferences, studio_services from authenticated;
+    revoke all on table contact_requests, clothing_requests, hosting_requests, studio_notes, studio_note_versions, studio_note_attachments, studio_note_shares, work_time_entries, growth_notifications, growth_preferences, studio_services, studio_pages, studio_page_blocks, studio_ai_usage from authenticated;
   end if;
 end $$;
 
