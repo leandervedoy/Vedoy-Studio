@@ -1,3 +1,9 @@
+import { getSql } from "@/lib/db";
+import type { ServiceInput } from "@/lib/service-input";
+import { randomId } from "@/lib/utils";
+
+export type ServiceRenderType = "general" | "website" | "webapp" | "store" | "hosting" | "clothing" | "ecommerce";
+
 export type StudioService = {
   number: string;
   slug: string;
@@ -10,6 +16,10 @@ export type StudioService = {
   focus: string[];
   process: string[];
   nextStep: string;
+  id?: string;
+  renderType?: ServiceRenderType;
+  published?: boolean;
+  sortOrder?: number;
 };
 
 export const studioServices: StudioService[] = [
@@ -142,9 +152,155 @@ export const studioServices: StudioService[] = [
     focus: ["Kunsttrykk", "Plakater", "Merch", "Nettbutikk", "Digitale utgaver", "NFT ved behov"],
     process: ["Vi velger verk, produkter, opplag og salgskanal.", "Filer, farger, materialer og produktpresentasjon kvalitetssikres.", "Du godkjenner prøve, pris og rettighetsbruk.", "Butikk eller produksjon lanseres i et kontrollert første opplag."],
     nextStep: "Send eksempler på kunsten, ønskede produkter og hvordan du vil selge dem, så foreslår vi en liten første lansering."
+  },
+  {
+    number: "11",
+    slug: "vedoy-growth",
+    title: "Vedøy Growth",
+    cardText: "Bedriftsplattform for kunder, CRM, booking, notater, timer, avvik og videre oppfølging.",
+    eyebrow: "CRM · DRIFT · ARBEIDSFLYT",
+    lead: "Én rolig arbeidsflate for små virksomheter som vil samle kunder, oppgaver og drift.",
+    introduction: "Vedøy Growth samler praktiske arbeidsflater som CRM, kunder, booking, timeregistrering, notater og status. Målet er å gi små bedrifter en enklere måte å følge opp henvendelser, kunder, interne saker og videre vekst uten å måtte hoppe mellom mange systemer.",
+    deliverables: ["Kunde- og CRM-oversikt", "Booking, timeregistrering og interne oppgaver", "Notater, Vedøy Canvas og dokumentasjon", "Planlagte moduler for avvik, tillitsvalgt og trygg oppfølging", "Tilgang, roller og videre automatisering"],
+    focus: ["Supabase", "CRM", "Booking", "Notater", "Avvik", "Roller", "Automatisering"],
+    process: ["Vi setter opp virksomheten og hvilke arbeidsflater dere faktisk trenger.", "Kunder, tjenester, bookinger og interne rutiner kobles inn stegvis.", "Teamet får en ryddig startside med tydelige neste steg.", "Nye moduler kan legges til når de gir reell verdi."],
+    nextStep: "Fortell hvilke deler av driften dere vil samle først: kunder, booking, timer, avvik, notater eller oppfølging."
   }
 ];
 
-export function getStudioService(slug: string) {
-  return studioServices.find((service) => service.slug === slug);
+function fallbackService(service: StudioService, index: number): StudioService {
+  const renderTypes: Partial<Record<string, ServiceRenderType>> = {
+    nettsider: "website",
+    webapper: "webapp",
+    nettbutikk: "store",
+    "hosting-og-domene": "hosting",
+    profilprodukter: "clothing",
+    ecommerce: "ecommerce"
+  };
+  return {
+    ...service,
+    id: `fallback_${service.slug}`,
+    renderType: renderTypes[service.slug] ?? "general",
+    published: true,
+    sortOrder: index + 1
+  };
+}
+
+function textArray(value: unknown): string[] {
+  if (Array.isArray(value)) return value.filter((item): item is string => typeof item === "string");
+  if (typeof value === "string") {
+    try { return textArray(JSON.parse(value)); } catch { return []; }
+  }
+  return [];
+}
+
+function mapServiceRow(row: Record<string, unknown>): StudioService {
+  return {
+    id: String(row.id),
+    number: String(row.number),
+    slug: String(row.slug),
+    title: String(row.title),
+    cardText: String(row.cardText),
+    eyebrow: String(row.eyebrow),
+    lead: String(row.lead),
+    introduction: String(row.introduction),
+    deliverables: textArray(row.deliverables),
+    focus: textArray(row.focus),
+    process: textArray(row.process),
+    nextStep: String(row.nextStep),
+    renderType: String(row.renderType) as ServiceRenderType,
+    published: Boolean(row.published),
+    sortOrder: Number(row.sortOrder)
+  };
+}
+
+function mergeCoreServices(rows: StudioService[]): StudioService[] {
+  const seen = new Set(rows.map((service) => service.slug));
+  const additions = studioServices
+    .filter((service) => !seen.has(service.slug))
+    .map((service, index) => fallbackService(service, rows.length + index));
+  return [...rows, ...additions].sort((a, b) => (a.sortOrder ?? 999) - (b.sortOrder ?? 999));
+}
+
+export async function listStudioServices(options: { includeUnpublished?: boolean } = {}): Promise<StudioService[]> {
+  const sql = getSql();
+  if (!sql) return studioServices.map(fallbackService);
+  try {
+    const rows = await sql<Record<string, unknown>[]>`
+      select id, number, slug, title, card_text as "cardText", eyebrow, lead, introduction,
+        deliverables, focus, process, next_step as "nextStep", render_type as "renderType",
+        published, sort_order as "sortOrder"
+      from studio_services
+      where organization_id = 'org_vedoy'
+        and (${options.includeUnpublished ?? false} or published = true)
+      order by sort_order asc, created_at asc
+    `;
+    const mapped = rows.map(mapServiceRow);
+    return options.includeUnpublished ? mapped : mergeCoreServices(mapped);
+  } catch (error) {
+    console.error("Tjenestekatalogen kunne ikke leses fra databasen; bruker innebygd reserve.", error);
+    return studioServices.map(fallbackService);
+  }
+}
+
+export async function getStudioService(slug: string) {
+  return (await listStudioServices()).find((service) => service.slug === slug);
+}
+
+export async function getNextStudioServiceNumber(): Promise<string> {
+  const sql = getSql();
+  if (!sql) throw new Error("Databasen er ikke konfigurert.");
+  const [row] = await sql<{ nextNumber: number }[]>`
+    select coalesce(max(nullif(regexp_replace(number, '\\D', '', 'g'), '')::integer), 0) + 1 as "nextNumber"
+    from studio_services
+    where organization_id = 'org_vedoy'
+  `;
+  return String(row?.nextNumber ?? 1).padStart(2, "0");
+}
+
+export async function createStudioService(input: Omit<StudioService, "id">): Promise<StudioService> {
+  const sql = getSql();
+  if (!sql) throw new Error("Databasen er ikke konfigurert.");
+  const id = randomId("service");
+  const rows = await sql<Record<string, unknown>[]>`
+    insert into studio_services (
+      id, organization_id, number, slug, title, card_text, eyebrow, lead, introduction,
+      deliverables, focus, process, next_step, render_type, published, sort_order
+    ) values (
+      ${id}, 'org_vedoy', ${input.number}, ${input.slug}, ${input.title}, ${input.cardText},
+      ${input.eyebrow}, ${input.lead}, ${input.introduction}, ${JSON.stringify(input.deliverables)},
+      ${JSON.stringify(input.focus)}, ${JSON.stringify(input.process)}, ${input.nextStep},
+      ${input.renderType ?? "general"}, ${input.published ?? false}, ${input.sortOrder ?? 999}
+    ) returning id, number, slug, title, card_text as "cardText", eyebrow, lead, introduction,
+      deliverables, focus, process, next_step as "nextStep", render_type as "renderType",
+      published, sort_order as "sortOrder"
+  `;
+  return mapServiceRow(rows[0]);
+}
+
+export async function updateStudioService(id: string, input: ServiceInput): Promise<StudioService> {
+  const sql = getSql();
+  if (!sql) throw new Error("Databasen er ikke konfigurert.");
+  const rows = await sql<Record<string, unknown>[]>`
+    update studio_services set
+      slug = ${input.slug}, title = ${input.title}, card_text = ${input.cardText},
+      eyebrow = ${input.eyebrow}, lead = ${input.lead}, introduction = ${input.introduction},
+      deliverables = ${JSON.stringify(input.deliverables)}, focus = ${JSON.stringify(input.focus)},
+      process = ${JSON.stringify(input.process)}, next_step = ${input.nextStep},
+      render_type = ${input.renderType ?? "general"}, published = ${input.published ?? false},
+      sort_order = ${input.sortOrder ?? 999}, updated_at = now()
+    where id = ${id} and organization_id = 'org_vedoy'
+    returning id, number, slug, title, card_text as "cardText", eyebrow, lead, introduction,
+      deliverables, focus, process, next_step as "nextStep", render_type as "renderType",
+      published, sort_order as "sortOrder"
+  `;
+  if (!rows[0]) throw new Error("Tjenesten finnes ikke.");
+  return mapServiceRow(rows[0]);
+}
+
+export async function deleteStudioService(id: string): Promise<void> {
+  const sql = getSql();
+  if (!sql) throw new Error("Databasen er ikke konfigurert.");
+  const result = await sql`delete from studio_services where id = ${id} and organization_id = 'org_vedoy' returning id`;
+  if (!result[0]) throw new Error("Tjenesten finnes ikke.");
 }

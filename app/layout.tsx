@@ -1,7 +1,10 @@
 import type { Metadata, Viewport } from "next";
+import { NextIntlClientProvider } from "next-intl";
+import { getLocale } from "next-intl/server";
 import "@vedoy/booking/styles.css";
 import "./globals.css";
 import "@vedoy/notes/styles.css";
+import "./marketing-navigation.css";
 
 export const metadata: Metadata = {
   title: {
@@ -24,10 +27,11 @@ export const viewport: Viewport = {
   themeColor: "#f7f5ef"
 };
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  const locale = await getLocale();
   return (
-    <html lang="nb">
-      <body>{children}</body>
+    <html lang={locale}>
+      <body><NextIntlClientProvider>{children}</NextIntlClientProvider></body>
     </html>
   );
 }

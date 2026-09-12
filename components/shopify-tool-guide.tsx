@@ -4,14 +4,14 @@ const options = [
     title: "Payhip for enkel handel.",
     text: "Riktig for digitale produkter, kurs, medlemskap, coaching og mindre vareutvalg. Vedøy bygger uttrykket og oppsettet, mens Payhip håndterer checkout og produktlevering.",
     tools: ["Payhip", "Direkte checkout", "Digitale produkter", "Medlemskap"],
-    fit: "Best for: lav oppstartskostnad og rask lansering."
+    fit: "Fra 399 kr/mnd hos Vedøy: 100 kr plattformhåndtering + 299 kr fast Vedøy-drift. Payhip-gebyrer kommer i tillegg."
   },
   {
     label: "02 · BUTIKK I VEKST",
     title: "Shopify for mer handel.",
     text: "Riktig når bedriften trenger større vareutvalg, lager, frakt, rabatter og flere integrasjoner. Vi kan sette opp Shopify eller bygge en egen Next.js-front mot Shopify.",
     tools: ["Shopify", "Produkter og lager", "Frakt", "Storefront API"],
-    fit: "Best for: fysiske varer, vekst og mer avansert drift."
+    fit: "Fra 799 kr/mnd hos Vedøy: minst 500 kr i plattformbudsjett + 299 kr fast Vedøy-drift. Betalingsgebyrer og apper kommer i tillegg."
   },
   {
     label: "03 · SKREDDERSYDD",
@@ -27,7 +27,7 @@ export function EcommercePlatformGuide() {
     <section className="shopify-tool-guide" id="velg-handelsplattform">
       <div className="shopify-tool-guide__heading">
         <div><p className="editorial-kicker lime">VELG HANDELSPLATTFORM</p><h2>Payhip eller<br /><em>Shopify?</em></h2></div>
-        <p>Kunden velger ikke på teknisk navn alene. Vi anbefaler Payhip når enkelhet og lav pris er viktigst, og Shopify når butikken trenger mer lager, frakt, vekst og integrasjoner.</p>
+        <p>Kunden velger ikke på teknisk navn alene. Vi anbefaler Payhip når enkelhet og lav pris er viktigst, og Shopify når butikken trenger mer lager, frakt, vekst og integrasjoner. Vedøy-drift har samme faste grunnpris på 299 kr/mnd for begge.</p>
       </div>
       <div className="shopify-tool-guide__options">
         {options.map((option) => (
@@ -42,7 +42,7 @@ export function EcommercePlatformGuide() {
       </div>
       <div className="shopify-tool-guide__setup">
         <div><small>VEDØY / PRISPRINSIPP</small><h3>Den rimeligste løsningen som fortsatt er trygg å levere.</h3></div>
-        <ol><li>Vi velger Payhip, Shopify eller skreddersøm ut fra behovet.</li><li>Vedøy-prisen dekker avtalt oppsett, testing og en forsvarlig levering.</li><li>Plattform, betaling, apper og andre leverandørkostnader vises separat.</li><li>Du får en konkret totalpris før arbeidet blir bindende.</li></ol>
+        <ol><li>Payhip: fra 100 kr/mnd for plattformhåndtering, pluss 299 kr/mnd i Vedøy-drift.</li><li>Shopify: plattformbudsjett fra 500 kr/mnd, pluss 299 kr/mnd i Vedøy-drift.</li><li>Transaksjonsgebyrer, betalingsgebyrer, apper og domene vises separat.</li><li>Du får en konkret totalpris før arbeidet blir bindende.</li></ol>
         <div className="shopify-tool-guide__links">
           <a href="/#kontakt">Be om plattformvalg <span aria-hidden>↗</span></a>
           <a href="https://payhip.com/pricing" target="_blank" rel="noreferrer">Se Payhip-priser <span aria-hidden>↗</span></a>

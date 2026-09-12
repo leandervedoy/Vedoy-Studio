@@ -15,6 +15,8 @@ type OAuthTokens = {
 };
 
 type UserInfo = {
+  picture?: string;
+  preferred_username?: string;
   email?: string;
   email_verified?: boolean;
   name?: string;
@@ -101,7 +103,8 @@ export async function GET(request: NextRequest) {
 
   const token = createSessionToken({
     email,
-    name: user.name?.trim() || email.split("@")[0],
+    name: user.preferred_username?.trim() || user.name?.trim() || email.split("@")[0],
+    avatarUrl: user.picture?.startsWith("https://") ? user.picture : undefined,
     organizationId: "org_vedoy",
     role: email === process.env.ADMIN_EMAIL?.trim().toLowerCase() ? "owner" : "member",
   });

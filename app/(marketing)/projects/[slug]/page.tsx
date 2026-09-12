@@ -9,9 +9,11 @@ type ProjectDetail = {
   points: string[];
   actionHref: string;
   actionLabel: string;
-  status: "Publisert" | "Beta" | "Planlagt";
+  status: "Publisert" | "Beta" | "Planlagt" | "Demo";
   category: string;
   image?: { src: string; alt: string };
+  secondaryActions?: Array<{ href: string; label: string }>;
+  note?: string;
 };
 
 const projectOverrides: Record<string, ProjectDetail> = {
@@ -44,10 +46,25 @@ const projectOverrides: Record<string, ProjectDetail> = {
     status: "Beta",
     category: "Simulator / commerce",
     image: { src: "/projects/omnicart-tycoon.jfif", alt: "Omnicart Tycoon e-commerce simulator" }
+  },
+  calendar: {
+    title: "Vedøy Calendar",
+    text: "Kalenderlaget som binder booking, timeregistrering og arbeidsplan sammen i Vedøy Growth. Prosjektet bruker bookingpakken som visuell kalender, men lar data høre hjemme der de faktisk oppstår.",
+    points: ["Bookingavtaler kan vises som kalenderhendelser", "Timeregistrering får dag-for-dag oversikt i Growth", "Google og Microsoft kan kobles senere når OAuth og kundekontoer er klart", "Konfliktkontroll og kapasitet kan brukes før en bestilling godkjennes", "Fungerer først som intern Growth-modul og kan pakkes videre som egen kalenderpakke"],
+    actionHref: "/studio/hours",
+    actionLabel: "Åpne timeregistrering",
+    status: "Beta",
+    category: "Drift / kalender",
+    secondaryActions: [
+      { href: "/studio/booking", label: "Åpne booking i Growth" },
+      { href: "/booking", label: "Test offentlig booking" },
+      { href: "/#kontakt", label: "Bestill kalenderoppsett" }
+    ],
+    note: "Vedøy Calendar er ikke en ekstern kalenderkonto ennå. Booking og timer kan vises i Studio, mens Google/Microsoft-synk settes opp som en egen integrasjon når kunden trenger det."
   }
 };
 
-const statusLabels = { live: "Publisert", beta: "Beta", planned: "Planlagt" } as const;
+const statusLabels = { live: "Publisert", beta: "Beta", planned: "Planlagt", demo: "Demo" } as const;
 
 function getProject(slug: string): ProjectDetail | undefined {
   const override = projectOverrides[slug];
@@ -61,9 +78,15 @@ function getProject(slug: string): ProjectDetail | undefined {
     text: product.description,
     points: product.highlights,
     actionHref: product.status === "planned" ? "/#kontakt" : product.href,
-    actionLabel: product.status === "planned" ? "Meld interesse" : product.href.startsWith("/studio") ? "Åpne i Vedøy Growth" : `Åpne ${product.name}`,
+    actionLabel: product.status === "planned" ? "Bestill når klart" : product.status === "demo" ? "Åpne demo" : product.href.startsWith("/studio") ? "Åpne i Vedøy Growth" : `Åpne ${product.name}`,
     status: statusLabels[product.status],
-    category: product.group
+    category: product.group,
+    secondaryActions: product.status === "planned" ? [{ href: "/#kontakt", label: "Be om tidlig tilgang" }] : product.status === "demo" ? [{ href: "/#kontakt", label: "Bestill oppsett" }] : undefined,
+    note: product.status === "planned"
+      ? "Dette er merket Planlagt. Du kan melde interesse eller bestille en avklaring, men løsningen settes opp manuelt før noe blir aktivt for kunder."
+      : product.status === "demo"
+        ? "Dette er merket Demo. Funksjonen kan utforskes, men ekte kundeleveranse avtales og settes opp manuelt før bruk."
+        : undefined
   };
 }
 
@@ -92,6 +115,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         <p className="editorial-kicker lime">VEDØY-ØKOSYSTEMET · PROSJEKT</p>
         <h1>{project.title}<br /><em>forklart.</em></h1>
         <p>{project.text}</p>
+        {project.note ? <aside className="project-detail-editorial__notice"><strong>{project.status}</strong><p>{project.note}</p></aside> : null}
         {project.image ? <img className="project-detail-editorial__media" src={project.image.src} alt={project.image.alt} /> : null}
         <section>
           <small>DETTE INNEHOLDER PROSJEKTET</small>
@@ -104,6 +128,11 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           ) : (
             <Link className="editorial-button" href={project.actionHref}>{project.actionLabel} <span>↗</span></Link>
           )}
+          {project.secondaryActions?.map((action) => action.href.startsWith("http") ? (
+            <a key={action.href + action.label} className="editorial-outline" href={action.href} target="_blank" rel="noreferrer">{action.label}</a>
+          ) : (
+            <Link key={action.href + action.label} className="editorial-outline" href={action.href}>{action.label}</Link>
+          ))}
           <Link className="editorial-outline" href="/#kontakt">Snakk med Vedøy Studio</Link>
         </div>
       </div>

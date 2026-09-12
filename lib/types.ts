@@ -1,4 +1,4 @@
-export type ProductStatus = "live" | "beta" | "planned";
+export type ProductStatus = "live" | "beta" | "planned" | "demo";
 export type ProjectStatus = "healthy" | "building" | "attention" | "paused";
 export type BookingStatus = "pending" | "confirmed" | "in-progress" | "completed" | "cancelled" | "no-show";
 export type TicketStatus = "open" | "in-progress" | "resolved";
@@ -275,6 +275,7 @@ export interface DomainSearchResult {
 }
 
 export interface SessionPayload {
+  avatarUrl?: string;
   email: string;
   name: string;
   organizationId: string;

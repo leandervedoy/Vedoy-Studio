@@ -70,8 +70,8 @@ const pricing: Record<PricingType, PricingConfig> = {
       { price: "175 000 kr", description: "Merkevarebutikk med migrering, eget design, e-postflyt og analyse." },
       { price: "Fra 300 000 kr", description: "Headless nettbutikk med spesialdesign og koblinger mot eksterne systemer." }
     ],
-    runningPrice: "Fra ca. 713 kr/mnd",
-    runningText: "Kan omfatte teknisk drift, mindre endringer, overvåking og support. Payhip- eller Shopify-abonnement, transaksjons- og betalingsgebyrer, apper, domene og annonsekostnader betales separat.",
+    runningPrice: "299 kr/mnd i fast Vedøy-drift",
+    runningText: "Samme faste Vedøy-pris gjelder for Payhip og Shopify. Payhip starter fra 100 kr/mnd i plattformhåndtering, mens Shopify beregnes med minst 500 kr/mnd i plattformbudsjett. Transaksjons- og betalingsgebyrer, apper, domene og annonsekostnader betales separat.",
     sources: [
       { name: "DinNettside", href: "https://dinnettside.no/fagstoff/nettside-pris" },
       { name: "Innovena", href: "https://www.innovena.no/nettside/" },

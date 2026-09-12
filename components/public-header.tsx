@@ -14,7 +14,7 @@ const links = [
   { href: "/docs", label: "Utviklere" }
 ];
 
-export function PublicHeader() {
+export function LegacyPublicHeader() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
 
@@ -52,3 +52,5 @@ export function PublicHeader() {
     </header>
   );
 }
+
+export { MarketingHeader as PublicHeader } from "@/components/marketing-header";

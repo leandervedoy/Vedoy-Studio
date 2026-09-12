@@ -63,6 +63,16 @@ export async function requireSession(): Promise<SessionPayload> {
   return session;
 }
 
+export function isAdminSession(session: SessionPayload | null): session is SessionPayload {
+  return Boolean(session && (session.role === "owner" || session.role === "admin"));
+}
+
+export async function requireAdminSession(): Promise<SessionPayload> {
+  const session = await requireSession();
+  if (!isAdminSession(session)) redirect("/studio");
+  return session;
+}
+
 export function sessionCookie(token: string) {
   return {
     name: COOKIE_NAME,

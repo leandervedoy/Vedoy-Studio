@@ -2,12 +2,16 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Brand } from "@/components/brand";
 import { NotificationCenter } from "@/components/studio/notification-center";
 import { cn } from "@/lib/utils";
+import type { SessionPayload } from "@/lib/types";
 
-const sections = [
+type NavItem = { href: string; icon: string; label: string; exact?: boolean; adminOnly?: boolean };
+type NavSection = { label: string; items: NavItem[] };
+
+const sections: NavSection[] = [
   {
     label: "Oversikt",
     items: [{ href: "/studio", icon: "⌂", label: "Dashboard", exact: true }]
@@ -15,6 +19,7 @@ const sections = [
   {
     label: "Bygg",
     items: [
+      { href: "/studio/services", icon: "≡", label: "Tjenester", adminOnly: true },
       { href: "/studio/domains", icon: "◎", label: "Domener" },
       { href: "/studio/projects", icon: "△", label: "Hosting og prosjekter" },
       { href: "/studio/builder", icon: "▦", label: "Nettsidebygger" }
@@ -53,16 +58,38 @@ const sections = [
 export function StudioShell({
   children,
   userName,
+  userRole,
   organizationName
 }: {
   children: React.ReactNode;
   userName: string;
+  userRole: SessionPayload["role"];
   organizationName: string;
 }) {
   const pathname = usePathname();
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [compactViewport, setCompactViewport] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia("(max-width: 1050px)");
+    const update = () => setCompactViewport(media.matches);
+    update();
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, []);
+
+  function toggleSidebar() {
+    if (compactViewport) setSidebarOpen((value) => !value);
+    else setSidebarCollapsed((value) => !value);
+  }
+
+  function closeSidebar() {
+    if (compactViewport) setSidebarOpen(false);
+    else setSidebarCollapsed(true);
+  }
 
   async function logout() {
     await fetch("/api/auth/logout", { method: "POST" });
@@ -71,11 +98,11 @@ export function StudioShell({
   }
 
   return (
-    <div className="studio-shell">
+    <div className={cn("studio-shell", sidebarCollapsed && "is-sidebar-collapsed")}>
       <aside className={cn("studio-sidebar", sidebarOpen && "is-open")}> 
         <div className="studio-sidebar__brand">
           <Brand />
-          <button type="button" className="sidebar-close" onClick={() => setSidebarOpen(false)} aria-label="Lukk meny">×</button>
+          <button type="button" className="sidebar-close" onClick={closeSidebar} aria-label="Lukk meny">×</button>
         </div>
         <div className="organization-switcher">
           <span className="organization-switcher__mark">VØ</span>
@@ -86,10 +113,10 @@ export function StudioShell({
           {sections.map((section) => (
             <div className="studio-nav__section" key={section.label}>
               <small>{section.label}</small>
-              {section.items.map((item) => {
-                const active = ("exact" in item && item.exact) ? pathname === item.href : pathname.startsWith(item.href);
+              {section.items.filter((item) => !item.adminOnly || userRole === "owner" || userRole === "admin").map((item) => {
+                const active = item.exact ? pathname === item.href : pathname.startsWith(item.href);
                 return (
-                  <Link key={item.href} href={item.href} className={cn(active && "is-active")} onClick={() => setSidebarOpen(false)}>
+                  <Link key={item.href} href={item.href} title={item.label} className={cn(active && "is-active")} onClick={() => setSidebarOpen(false)}>
                     <i>{item.icon}</i><span>{item.label}</span>{active && <b />}
                   </Link>
                 );
@@ -110,13 +137,13 @@ export function StudioShell({
       {sidebarOpen && <button className="sidebar-backdrop" aria-label="Lukk meny" onClick={() => setSidebarOpen(false)} />}
       <div className="studio-content">
         <header className="studio-topbar">
-          <button type="button" className="studio-menu-button" onClick={() => setSidebarOpen(true)} aria-label="Åpne meny">☰</button>
+          <button type="button" className="studio-menu-button" onClick={toggleSidebar} aria-label={compactViewport ? (sidebarOpen ? "Lukk meny" : "Åpne meny") : (sidebarCollapsed ? "Utvid meny" : "Gjør meny smalere")} aria-expanded={compactViewport ? sidebarOpen : !sidebarCollapsed}>☰</button>
           <div className="studio-search"><span>⌕</span><input placeholder="Søk i Studio …" aria-label="Søk i Studio" /><kbd>⌘ K</kbd></div>
           <div className="studio-topbar__actions">
             <NotificationCenter />
             <div className="account-menu">
               <button type="button" onClick={() => setAccountOpen((value) => !value)} aria-expanded={accountOpen}>
-                <span>EL</span><div><strong>{userName}</strong><small>Eier</small></div><i>⌄</i>
+                <span>EL</span><div><strong>{userName}</strong><small>{userRole === "owner" ? "Eier" : userRole === "admin" ? "Administrator" : "Medlem"}</small></div><i>⌄</i>
               </button>
               {accountOpen && (
                 <div className="account-popover">

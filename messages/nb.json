@@ -1,0 +1,4 @@
+{
+  "nav": { "services": "Tjenester", "platform": "Plattform", "projects": "Prosjekter", "clothing": "Bedriftsklær", "contact": "Kontakt", "navigation": "Hovedmeny", "language": "Velg språk", "login": "Logg inn", "account": "Min konto", "openStudio": "Åpne Studio", "openMenu": "Åpne meny", "closeMenu": "Lukk meny", "languageError": "Kunne ikke endre språk. Prøv igjen." },
+  "stats": { "eyebrow": "VEDØY I TALL", "title": "Fra idé", "emphasis": "til noe ekte.", "description": "Prosjekter du kan utforske. Tjenester du kan ta i bruk.", "projects": "Publiserte prosjekter", "services": "Tjenester vi tilbyr", "projectsNote": "Fra personlig IT-hjelp til netthandel og spill. Inkluderer publiserte betaversjoner.", "servicesNote": "Fra første idé til design, utvikling og drift. Demoer er ikke medregnet.", "projectsLink": "Utforsk prosjektene", "servicesLink": "Finn din tjeneste" }
+}

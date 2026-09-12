@@ -41,7 +41,7 @@ export const studioProducts: StudioProduct[] = [
     icon: "⌘",
     href: "/tjenester/ecommerce#velg-handelsplattform",
     group: "Bygg",
-    status: "planned",
+    status: "demo",
     accent: "#26a269",
     highlights: ["Payhip", "Shopify", "Integrasjoner"]
   },
@@ -55,6 +55,17 @@ export const studioProducts: StudioProduct[] = [
     status: "beta",
     accent: "#2563eb",
     highlights: ["Ansatte og lokasjon", "Kalender og påminnelser", "Kapasitet og venteliste"]
+  },
+  {
+    id: "growth",
+    name: "Vedøy Growth",
+    description: "Bedriftsplattformen som samler kunder, booking, notater, timer og videre drift.",
+    icon: "✦",
+    href: "/studio",
+    group: "Drift",
+    status: "beta",
+    accent: "#14b86a",
+    highlights: ["CRM og kunder", "Booking og timer", "Notater og oppfølging"]
   },
   {
     id: "canvas",
@@ -187,6 +198,39 @@ export const studioProducts: StudioProduct[] = [
     status: "live",
     accent: "#0369a1",
     highlights: ["Menneskelig hjelp", "Fjernhjelp", "Bedriftsavtaler"]
+  },
+  {
+    id: "avvik",
+    name: "Vedøy Avvik",
+    description: "Planlagt avvikssystem for å registrere, følge opp og dokumentere saker på ett sted.",
+    icon: "!",
+    href: "/projects/avvik",
+    group: "Utvikle",
+    status: "planned",
+    accent: "#ef4444",
+    highlights: ["Avvikslogg", "Ansvar og frister", "Historikk"]
+  },
+  {
+    id: "tillitsvalgt",
+    name: "Vedøy Tillitsvalgt",
+    description: "Planlagt trygg kanal for å finne riktig kontaktperson, sende henvendelser og følge opp dialog.",
+    icon: "◇",
+    href: "/projects/tillitsvalgt",
+    group: "Utvikle",
+    status: "planned",
+    accent: "#0ea5e9",
+    highlights: ["Kontaktoversikt", "Trygg henvendelse", "Status"]
+  },
+  {
+    id: "developers",
+    name: "Vedøy Developers",
+    description: "Dokumentasjon, GitHub, Node.js-biblioteker, API-er og ressurser for utviklere.",
+    icon: "</>",
+    href: "/developers",
+    group: "Utvikle",
+    status: "beta",
+    accent: "#111827",
+    highlights: ["Dokumentasjon", "GitHub", "API-er"]
   }
 ];
 

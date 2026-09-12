@@ -2,6 +2,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
 import postgres from "postgres";
+import { seedServices } from "./seed-services.mjs";
 
 const url = process.env.DATABASE_URL;
 if (!url) {
@@ -20,6 +21,7 @@ try {
   const seed = await fs.readFile(path.join(process.cwd(), "data", "seed.sql"), "utf8");
   await sql.unsafe(schema);
   await sql.unsafe(seed);
+  await seedServices(sql);
   console.log("✓ Vedøy Studio-databasen er satt opp og fylt med demodata.");
 } catch (error) {
   console.error("Databaseoppsett feilet:", error);

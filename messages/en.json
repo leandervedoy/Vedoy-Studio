@@ -1,0 +1,4 @@
+{
+  "nav": { "services": "Services", "platform": "Platform", "projects": "Projects", "clothing": "Branded clothing", "contact": "Contact", "navigation": "Main navigation", "language": "Choose language", "login": "Log in", "account": "My account", "openStudio": "Open Studio", "openMenu": "Open menu", "closeMenu": "Close menu", "languageError": "Could not change language. Please try again." },
+  "stats": { "eyebrow": "VEDØY IN NUMBERS", "title": "From an idea", "emphasis": "to something real.", "description": "Projects you can explore. Services you can put to work.", "projects": "Published projects", "services": "Services we offer", "projectsNote": "From personal IT support to commerce and games. Includes published beta releases.", "servicesNote": "From the first idea to design, development and operations. Demos are excluded.", "projectsLink": "Explore the projects", "servicesLink": "Find your service" }
+}

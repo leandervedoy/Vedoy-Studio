@@ -236,6 +236,29 @@ create table if not exists growth_preferences (
   primary key (organization_id, user_email)
 );
 
+create table if not exists studio_services (
+  id text primary key,
+  organization_id text not null references organizations(id) on delete cascade,
+  number text not null,
+  slug text not null,
+  title text not null,
+  card_text text not null,
+  eyebrow text not null,
+  lead text not null,
+  introduction text not null,
+  deliverables jsonb not null default '[]'::jsonb,
+  focus jsonb not null default '[]'::jsonb,
+  process jsonb not null default '[]'::jsonb,
+  next_step text not null default '',
+  render_type text not null default 'general' check (render_type in ('general','website','webapp','store','hosting','clothing','ecommerce')),
+  published boolean not null default false,
+  sort_order integer not null default 0 check (sort_order between 0 and 9999),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  unique (organization_id, slug)
+);
+create index if not exists studio_services_public_idx on studio_services (organization_id, published, sort_order);
+
 alter table contact_requests enable row level security;
 alter table clothing_requests enable row level security;
 alter table hosting_requests enable row level security;
@@ -246,12 +269,13 @@ alter table studio_note_shares enable row level security;
 alter table work_time_entries enable row level security;
 alter table growth_notifications enable row level security;
 alter table growth_preferences enable row level security;
+alter table studio_services enable row level security;
 do $$ begin
   if exists (select 1 from pg_roles where rolname = 'anon') then
-    revoke all on table contact_requests, clothing_requests, hosting_requests, studio_notes, studio_note_versions, studio_note_attachments, studio_note_shares, work_time_entries, growth_notifications, growth_preferences from anon;
+    revoke all on table contact_requests, clothing_requests, hosting_requests, studio_notes, studio_note_versions, studio_note_attachments, studio_note_shares, work_time_entries, growth_notifications, growth_preferences, studio_services from anon;
   end if;
   if exists (select 1 from pg_roles where rolname = 'authenticated') then
-    revoke all on table contact_requests, clothing_requests, hosting_requests, studio_notes, studio_note_versions, studio_note_attachments, studio_note_shares, work_time_entries, growth_notifications, growth_preferences from authenticated;
+    revoke all on table contact_requests, clothing_requests, hosting_requests, studio_notes, studio_note_versions, studio_note_attachments, studio_note_shares, work_time_entries, growth_notifications, growth_preferences, studio_services from authenticated;
   end if;
 end $$;
 
