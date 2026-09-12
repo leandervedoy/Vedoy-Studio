@@ -12,7 +12,7 @@ const columns = [
   },
   {
     title: "Utviklere",
-    links: [["Dokumentasjon", "/docs"], ["API", "/docs#api"], ["Status", "/status"], ["GitHub-oppsett", "/docs#deploy"]]
+    links: [["Dokumentasjon", "/docs"], ["API", "/docs#api"], ["Status", "/status"], ["GitHub-oppsett", "/docs#deploy"], ["Discord", "https://discord.gg/KzMBaGgy?event=1548167190279102535"]]
   },
   {
     title: "Vedøy",
@@ -34,7 +34,13 @@ export function PublicFooter() {
             <h3>{column.title}</h3>
             <ul>
               {column.links.map(([label, href]) => (
-                <li key={label}><Link href={href}>{label}</Link></li>
+                <li key={label}>
+                  {href.startsWith("http") ? (
+                    <a href={href} target="_blank" rel="noopener noreferrer">{label}</a>
+                  ) : (
+                    <Link href={href}>{label}</Link>
+                  )}
+                </li>
               ))}
             </ul>
           </div>
