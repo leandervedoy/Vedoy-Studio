@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { BookingAccessPanel } from "@/components/booking/booking-access-panel";
 import { PublicBooking } from "@/components/booking/public-booking";
 import { getIntegrationStatuses } from "@/lib/integration-status";
 
@@ -17,6 +18,7 @@ export default async function BookingPage() {
           Bookinger lagres som forespørsler og får status <code>pending</code>. Det trekkes ingen betaling fra denne demoen. {stripe?.status === "healthy" ? "Stripe er tilgjengelig for en senere, separat betalingsflyt." : "Stripe er ikke ferdig konfigurert, så ingen betaling blir trukket."}
           <br /><small>{demoIntegrations.map((item) => `${item.name}: ${item.status}`).join(" · ")}</small>
         </div>
+        <BookingAccessPanel />
         <PublicBooking /><p className="demo-disclaimer">Dette er en produktdemo. Bookingforespørselen lagres i databasen når den er konfigurert, og kan varsle admin på e-post. Ingen betaling, e-post/SMS til kunden eller ekstern kalenderhendelse sendes før integrasjonene er konfigurert og testet.</p>
       </div></section>
     </div>

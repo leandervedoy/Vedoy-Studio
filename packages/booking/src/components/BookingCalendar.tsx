@@ -83,6 +83,7 @@ export function BookingCalendar({
   const [phone, setPhone] = useState("");
   const [notes, setNotes] = useState("");
   const [customValues, setCustomValues] = useState<Record<string, string | boolean>>({});
+  const [activeStep, setActiveStep] = useState<1 | 2 | 3>(1);
 
   const categories = useMemo(() => ["all", ...Array.from(new Set(activeServices.map((service) => service.category).filter(Boolean) as string[]))], [activeServices]);
   const filteredServices = useMemo(() => {
@@ -101,6 +102,13 @@ export function BookingCalendar({
     return true;
   });
   const selectedSlot = slots.find((slot) => slot.id === selectedSlotId);
+  const usesWizard = config.layout === "wizard";
+
+  function goToStep(step: 1 | 2 | 3) {
+    if (step === 2 && !selectedService) return;
+    if (step === 3 && (!selectedService || !selectedSlot)) return;
+    setActiveStep(step);
+  }
 
   useEffect(() => {
     if (!activeServices.some((service) => service.id === serviceId)) {
@@ -153,7 +161,7 @@ export function BookingCalendar({
       }
     });
     return () => { cancelled = true; };
-  }, [adapter, availabilityProvider, config.bookingWindowDays, config.minNoticeMinutes, config.slotIntervalMinutes, config.timeZone, schedule, selectedDate, selectedService, staffId]);
+  }, [adapter, availabilityProvider, config.bookingWindowDays, config.minNoticeMinutes, config.slotIntervalMinutes, config.timeZone, locationId, schedule, selectedDate, selectedService, staffId]);
 
   const markers = useMemo(() => {
     const result: Record<string, MonthCalendarMarker> = {};
@@ -234,8 +242,29 @@ export function BookingCalendar({
         <p>{config.labels.subtitle}</p>
       </header>
 
-      <div className="vb-booking__layout">
-        <aside className="vb-panel vb-service-panel">
+      {usesWizard && (
+        <ol className="vb-progress" aria-label="Fremdrift i bestillingen">
+          {[
+            { step: 1 as const, label: config.labels.chooseService },
+            { step: 2 as const, label: config.labels.chooseDate },
+            { step: 3 as const, label: config.labels.yourDetails }
+          ].map((item) => {
+            const isActive = activeStep === item.step;
+            const isComplete = activeStep > item.step;
+            const canOpen = item.step === 1 || (item.step === 2 && Boolean(selectedService)) || (item.step === 3 && Boolean(selectedSlot));
+            return (
+              <li key={item.step} className={isActive ? "is-active" : isComplete ? "is-complete" : ""}>
+                <button type="button" disabled={!canOpen} onClick={() => goToStep(item.step)} aria-current={isActive ? "step" : undefined}>
+                  <span>{isComplete ? "✓" : item.step}</span>{item.label}
+                </button>
+              </li>
+            );
+          })}
+        </ol>
+      )}
+
+      <div className={`vb-booking__layout ${usesWizard ? "vb-booking__layout--wizard" : ""}`}>
+        {(!usesWizard || activeStep === 1) && <aside className="vb-panel vb-service-panel">
           <div className="vb-section-heading">
             <span className="vb-step">1</span>
             <div><h3>{config.labels.chooseService}</h3><p>Filtrer og velg det som passer.</p></div>
@@ -306,9 +335,17 @@ export function BookingCalendar({
               </select>
             </label>
           )}
+          {usesWizard && (
+            <div className="vb-step-panel-actions">
+              <button type="button" className="vb-button vb-button--primary" onClick={() => goToStep(2)} disabled={!selectedService}>
+                Velg dato og tid <span aria-hidden="true">→</span>
+              </button>
+            </div>
+          )}
         </aside>
+        }
 
-        <main className="vb-panel vb-calendar-panel">
+        {(!usesWizard || activeStep === 2) && <main className="vb-panel vb-calendar-panel">
           <div className="vb-section-heading">
             <span className="vb-step">2</span>
             <div><h3>{config.labels.chooseDate}</h3><p>Klikk på en dato og velg tid.</p></div>
@@ -345,9 +382,20 @@ export function BookingCalendar({
               </div>
             )}
           </section>
+          {usesWizard && (
+            <div className="vb-step-panel-actions vb-step-panel-actions--split">
+              <button type="button" className="vb-button vb-button--ghost" onClick={() => goToStep(1)}>
+                <span aria-hidden="true">←</span> Endre tjeneste
+              </button>
+              <button type="button" className="vb-button vb-button--primary" onClick={() => goToStep(3)} disabled={!selectedSlot}>
+                Fortsett <span aria-hidden="true">→</span>
+              </button>
+            </div>
+          )}
         </main>
+        }
 
-        <aside className="vb-panel vb-summary-panel">
+        {(!usesWizard || activeStep === 3) && <aside className="vb-panel vb-summary-panel">
           <div className="vb-section-heading">
             <span className="vb-step">3</span>
             <div><h3>{config.labels.yourDetails}</h3><p>Kontroller valgene og fullfør.</p></div>
@@ -390,7 +438,15 @@ export function BookingCalendar({
             </button>
             {message && <p className={`vb-message ${message === config.labels.bookingSuccess ? "is-success" : ""}`} role="status">{message}</p>}
           </form>
+          {usesWizard && (
+            <div className="vb-step-panel-actions">
+              <button type="button" className="vb-button vb-button--ghost" onClick={() => goToStep(2)}>
+                <span aria-hidden="true">←</span> Endre dato og tid
+              </button>
+            </div>
+          )}
         </aside>
+        }
       </div>
     </section>
   );

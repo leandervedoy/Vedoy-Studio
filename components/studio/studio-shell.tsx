@@ -14,7 +14,7 @@ type NavSection = { label: string; items: NavItem[] };
 const sections: NavSection[] = [
   {
     label: "Oversikt",
-    items: [{ href: "/studio", icon: "⌂", label: "Dashboard", exact: true }]
+    items: [{ href: "/studio", icon: "⌂", label: "Dashboard", exact: true }, { href: "/studio/team", icon: "◌", label: "Team" }, { href: "/studio/companies", icon: "✦", label: "Bedriftsoppsett", adminOnly: true }]
   },
   {
     label: "Bygg",
@@ -41,6 +41,8 @@ const sections: NavSection[] = [
     label: "Voks",
     items: [
       { href: "/studio/analytics", icon: "↗", label: "Statistics" },
+ { href: "/studio/news", icon: "▤", label: "Vedøy News" },
+ { href: "/studio/account", icon: "◎", label: "Konto og profil" },
       { href: "/studio/vedi", icon: "✦", label: "Vedi AI" },
       { href: "/studio/academy", icon: "◇", label: "Academy" }
     ]
@@ -72,6 +74,10 @@ export function StudioShell({
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [compactViewport, setCompactViewport] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
+  const [search, setSearch] = useState("");
+  const [searchOpen, setSearchOpen] = useState(false);
+  const searchItems = sections.flatMap((section) => section.items.filter((item) => !item.adminOnly || userRole === "owner" || userRole === "admin").map((item) => ({ ...item, section: section.label })));
+  const searchResults = searchItems.filter((item) => item.label.toLowerCase().includes(search.trim().toLowerCase())).slice(0, 6);
 
   useEffect(() => {
     const media = window.matchMedia("(max-width: 1050px)");
@@ -79,6 +85,33 @@ export function StudioShell({
     update();
     media.addEventListener("change", update);
     return () => media.removeEventListener("change", update);
+  }, []);
+
+  useEffect(() => {
+    const onKey = (event: KeyboardEvent) => {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+        event.preventDefault();
+        setSearchOpen(true);
+        window.setTimeout(() => document.getElementById("studio-global-search")?.focus(), 0);
+      }
+      if (event.key === "Escape") setSearchOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
+  useEffect(() => {
+    const applyAppearance = () => {
+      try {
+        const value = JSON.parse(localStorage.getItem("vedoy-studio-appearance") || "{}");
+        if (value.accent) document.documentElement.style.setProperty("--studio-accent", value.accent);
+        if (value.surface) document.documentElement.style.setProperty("--studio-panel", value.surface);
+        document.documentElement.classList.toggle("studio-compact", Boolean(value.compact));
+      } catch { /* brukerens lokale innstilling er valgfri */ }
+    };
+    applyAppearance();
+    window.addEventListener("vedoy-studio-appearance", applyAppearance);
+    return () => window.removeEventListener("vedoy-studio-appearance", applyAppearance);
   }, []);
 
   function toggleSidebar() {
@@ -95,6 +128,12 @@ export function StudioShell({
     await fetch("/api/auth/logout", { method: "POST" });
     router.push("/");
     router.refresh();
+  }
+
+  function goToResult(href: string) {
+    setSearch(""); setSearchOpen(false);
+    if (href.startsWith("http")) window.location.href = href;
+    else router.push(href);
   }
 
   return (
@@ -138,7 +177,10 @@ export function StudioShell({
       <div className="studio-content">
         <header className="studio-topbar">
           <button type="button" className="studio-menu-button" onClick={toggleSidebar} aria-label={compactViewport ? (sidebarOpen ? "Lukk meny" : "Åpne meny") : (sidebarCollapsed ? "Utvid meny" : "Gjør meny smalere")} aria-expanded={compactViewport ? sidebarOpen : !sidebarCollapsed}>☰</button>
-          <div className="studio-search"><span>⌕</span><input placeholder="Søk i Studio …" aria-label="Søk i Studio" /><kbd>⌘ K</kbd></div>
+          <div className="studio-search-wrap">
+            <div className="studio-search"><span>⌕</span><input id="studio-global-search" value={search} onFocus={() => setSearchOpen(true)} onChange={(event) => { setSearch(event.target.value); setSearchOpen(true); }} onKeyDown={(event) => { if (event.key === "Enter" && searchResults[0]) goToResult(searchResults[0].href); }} placeholder="Søk i Studio …" aria-label="Søk i Studio" /><kbd>⌘ K</kbd></div>
+            {searchOpen && <div className="studio-search-results" role="listbox">{searchResults.length ? searchResults.map((item) => <button key={item.href} type="button" onClick={() => goToResult(item.href)}><i>{item.icon}</i><span><strong>{item.label}</strong><small>{item.section}</small></span><b>↵</b></button>) : <p>Ingen treff i Studio.</p>}</div>}
+          </div>
           <div className="studio-topbar__actions">
             <NotificationCenter />
             <div className="account-menu">

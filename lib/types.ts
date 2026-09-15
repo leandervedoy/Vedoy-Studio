@@ -2,6 +2,8 @@ export type ProductStatus = "live" | "beta" | "planned" | "demo";
 export type ProjectStatus = "healthy" | "building" | "attention" | "paused";
 export type BookingStatus = "pending" | "confirmed" | "in-progress" | "completed" | "cancelled" | "no-show";
 export type TicketStatus = "open" | "in-progress" | "resolved";
+export type NewsPostStatus = "draft" | "published";
+export type NewsAuthorType = "user" | "vedi";
 
 export interface StudioProduct {
   id: string;
@@ -91,6 +93,12 @@ export interface StudioTicket {
   createdAt: string;
 }
 
+export interface VedoyNewsPost {
+  id: string; organizationId: string; slug: string; title: string; excerpt: string; content: string;
+  category: string; status: NewsPostStatus; authorType: NewsAuthorType; authorName: string;
+  authorAvatarUrl?: string; sortOrder: number; publishedAt?: string; createdAt: string; updatedAt: string;
+}
+
 export interface ContactRequest {
   id: string;
   name: string;
@@ -139,6 +147,49 @@ export interface HostingRequest {
   details?: string;
   status: "new" | "contacted" | "quoted" | "closed";
   createdAt: string;
+}
+
+export type GrowthSubscriptionPlan = "trial" | "start" | "team" | "plus";
+export type CompanyRegistrationStatus = "received" | "reviewing" | "activated" | "declined";
+export type ProvisioningRequestStatus = "received" | "reviewing" | "ordered" | "ready" | "needs-info" | "cancelled";
+
+export interface CompanyInviteDraft {
+  name: string;
+  email: string;
+  role: Exclude<TeamRole, "owner">;
+}
+
+export interface CompanyRegistration {
+  id: string;
+  companyName: string;
+  organizationNumber?: string;
+  ownerName: string;
+  ownerEmail: string;
+  ownerTitle: "owner" | "managing-director";
+  phone?: string;
+  subscriptionPlan: GrowthSubscriptionPlan;
+  seatLimit: number;
+  invitedMembers: CompanyInviteDraft[];
+  status: CompanyRegistrationStatus;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface DomainEmailOrder {
+  id: string;
+  companyName: string;
+  contactName: string;
+  contactEmail: string;
+  phone?: string;
+  domain: string;
+  domainMode: "new" | "transfer" | "existing";
+  mailboxCount: number;
+  requestedAddresses: string[];
+  emailPackage: "standard" | "none";
+  notes?: string;
+  status: ProvisioningRequestStatus;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export type StudioNoteColor = "sand" | "lemon" | "mint" | "lavender" | "coral";
@@ -281,4 +332,18 @@ export interface SessionPayload {
   organizationId: string;
   role: "owner" | "admin" | "member";
   expiresAt: number;
+}
+
+export type TeamRole = "owner" | "admin" | "manager" | "editor" | "member";
+export interface TeamMember {
+  id: string;
+  organizationId: string;
+  email: string;
+  name: string;
+  avatarUrl?: string;
+  role: TeamRole;
+  teamName: string;
+  sortOrder: number;
+  createdAt: string;
+  updatedAt: string;
 }

@@ -1,0 +1,5 @@
+import Link from "next/link";
+import { listNewsPosts } from "@/lib/repository";
+export const dynamic = "force-dynamic";
+export const metadata = { title: "Vedøy News", description: "Announcements, prosjekter og innsikt fra Vedøy." };
+export default async function NewsPage() { const posts = await listNewsPosts(true); return <main className="news-page"><header><Link href="/">VEDØY STUDIO</Link><span>NEWS · ANNOUNCEMENTS · PROJECTS</span></header><section className="news-hero"><p className="editorial-kicker lime">VEDØY NEWS</p><h1>Updates from<br /><em>Vedøy.</em></h1><p>Announcements, prosjekter og idéer fra Vedøy Studio, Growth og Collective.</p></section><section className="news-grid">{posts.length ? posts.map((post) => <article key={post.id}><small><span className="news-avatar">{post.authorType === "vedi" ? "🤖" : (post.authorName[0] || "V")}</span>{post.category} · {post.authorName}{post.authorType === "vedi" ? " · KI" : ""}</small><h2><Link href={`/news/${post.slug}`}>{post.title}</Link></h2><p>{post.excerpt}</p><Link href={`/news/${post.slug}`}>Read story ↗</Link></article>) : <p>Ingen innlegg er publisert ennå.</p>}</section></main>; }

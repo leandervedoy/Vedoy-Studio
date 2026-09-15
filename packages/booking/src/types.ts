@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 
 export type BookingStatus = "pending" | "confirmed" | "in-progress" | "completed" | "cancelled" | "no-show";
 export type CalendarView = "month" | "week" | "day";
-export type BookingLayout = "full" | "compact" | "embedded";
+export type BookingLayout = "full" | "compact" | "embedded" | "wizard";
 export type BookingLocation = "remote" | "business" | "customer" | "custom";
 export interface BookingLocationOption {
   id: string;

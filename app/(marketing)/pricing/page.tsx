@@ -38,6 +38,16 @@ export default function PricingPage() {
           </article>)}
         </div>
 
+        <section className="pricing-growth-access" id="vedoy-growth">
+          <header><p className="eyebrow">VEDØY GROWTH · TILGANG</p><h2>Start gratis.<br />Skaler når dere trenger mer.</h2><p>Gratis prøvetid og betalte nivåer gjelder et eget Vedøy Growth-arbeidsområde. Registrering blir gjennomgått før tilgang aktiveres, og betaling startes ikke automatisk.</p></header>
+          <div>
+            <article><small>GRATIS PRØVE</small><h3>Prøv Growth</h3><strong>0 kr</strong><span>7 dager · én bruker</span><Link href="/start-bedrift?plan=trial&source=pricing">Registrer gratis <b>↗</b></Link></article>
+            <article><small>START</small><h3>Growth Start</h3><strong>29 kr</strong><span>per måned · én bruker</span><Link href="/start-bedrift?plan=start&source=pricing">Velg Start <b>↗</b></Link></article>
+            <article className="is-featured"><small>FOR SMÅ TEAM</small><h3>Growth Team</h3><strong>299 kr</strong><span>per måned · inntil 10 brukere</span><Link href="/start-bedrift?plan=team&source=pricing">Velg Team <b>↗</b></Link></article>
+            <article><small>MER STØTTE</small><h3>Growth Plus</h3><strong>699 kr</strong><span>per måned · inntil 25 brukere</span><Link href="/start-bedrift?plan=plus&source=pricing">Velg Plus <b>↗</b></Link></article>
+          </div>
+        </section>
+
         <section className="pricing-examples">
           <div><p className="eyebrow">EKSEMPLER PÅ TILLEGG</p><h2>Det som kan komme i tillegg.</h2><p>Vi avklarer alt før bestilling. Ingen domene- eller hostingkjøp skjer automatisk fra dette skjemaet.</p></div>
           <ul>

@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { Analytics } from "@vercel/analytics/next";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale } from "next-intl/server";
 import "@vedoy/booking/styles.css";
@@ -33,7 +34,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   const locale = await getLocale();
   return (
     <html lang={locale}>
-      <body><NextIntlClientProvider>{children}</NextIntlClientProvider></body>
+      <body><NextIntlClientProvider>{children}</NextIntlClientProvider><Analytics /></body>
     </html>
   );
 }

@@ -21,11 +21,112 @@ import type {
   WorkTimeEntry,
   GrowthNotification,
   GrowthPreferences,
-  GrowthCompanyProfile
+  GrowthCompanyProfile,
+  VedoyNewsPost,
+  TeamMember,
+  TeamRole,
+  CompanyRegistration,
+  CompanyInviteDraft,
+  CompanyRegistrationStatus,
+  DomainEmailOrder,
+  ProvisioningRequestStatus
 } from "@/lib/types";
 import { randomId, slugify } from "@/lib/utils";
 
 const ORGANIZATION_ID = "org_vedoy";
+
+function parseJsonArray<T>(value: unknown): T[] {
+  if (Array.isArray(value)) return value as T[];
+  if (typeof value !== "string") return [];
+  try {
+    const parsed = JSON.parse(value);
+    return Array.isArray(parsed) ? parsed as T[] : [];
+  } catch {
+    return [];
+  }
+}
+
+function companyRegistrationRow(row: CompanyRegistration): CompanyRegistration {
+  return {
+    ...row,
+    seatLimit: Number(row.seatLimit),
+    invitedMembers: parseJsonArray<CompanyInviteDraft>(row.invitedMembers),
+    createdAt: asIso(row.createdAt),
+    updatedAt: asIso(row.updatedAt)
+  };
+}
+
+function domainEmailOrderRow(row: DomainEmailOrder): DomainEmailOrder {
+  return {
+    ...row,
+    mailboxCount: Number(row.mailboxCount),
+    requestedAddresses: parseJsonArray<string>(row.requestedAddresses).map(String),
+    createdAt: asIso(row.createdAt),
+    updatedAt: asIso(row.updatedAt)
+  };
+}
+
+function teamMemberRow(row: TeamMember): TeamMember {
+  return { ...row, sortOrder: Number(row.sortOrder), createdAt: asIso(row.createdAt), updatedAt: asIso(row.updatedAt) };
+}
+
+export async function listTeamMembers(): Promise<TeamMember[]> {
+  const sql = getSql(); if (!sql) return [];
+  const rows = await sql<TeamMember[]>`select id, organization_id as "organizationId", email, name, avatar_url as "avatarUrl", role, team_name as "teamName", sort_order as "sortOrder", created_at as "createdAt", updated_at as "updatedAt" from growth_team_members where organization_id = ${ORGANIZATION_ID} order by team_name asc, sort_order asc, created_at asc`;
+  return rows.map(teamMemberRow);
+}
+
+export async function getTeamSessionRole(email: string): Promise<"owner" | "admin" | "member"> {
+  const sql = getSql(); if (!sql) return "member";
+  const rows = await sql<{ role: TeamRole }[]>`select role from growth_team_members where organization_id = ${ORGANIZATION_ID} and email = ${email.toLowerCase()} limit 1`;
+  return rows[0]?.role === "owner" ? "owner" : rows[0]?.role === "admin" ? "admin" : "member";
+}
+
+export async function syncTeamMemberOnLogin(input: { email: string; name: string; avatarUrl?: string; owner: boolean }): Promise<void> {
+  const sql = getSql(); if (!sql) return;
+  await sql`insert into growth_team_members (id, organization_id, email, name, avatar_url, role, sort_order) values (${randomId("team")}, ${ORGANIZATION_ID}, ${input.email.toLowerCase()}, ${input.name}, ${input.avatarUrl || null}, ${input.owner ? "owner" : "member"}, ${input.owner ? 0 : 100}) on conflict (organization_id, email) do update set name = excluded.name, avatar_url = excluded.avatar_url, role = case when excluded.role = 'owner' then 'owner' else growth_team_members.role end, updated_at = now()`;
+}
+
+export async function addTeamMember(input: { email: string; name: string; role: Exclude<TeamRole, "owner">; teamName: string }): Promise<TeamMember> {
+  const sql = requireDatabase();
+  const rows = await sql<TeamMember[]>`insert into growth_team_members (id, organization_id, email, name, role, team_name, sort_order) values (${randomId("team")}, ${ORGANIZATION_ID}, ${input.email.toLowerCase()}, ${input.name}, ${input.role}, ${input.teamName}, 100) on conflict (organization_id, email) do update set name = excluded.name, role = case when growth_team_members.role = 'owner' then 'owner' else excluded.role end, team_name = excluded.team_name, updated_at = now() returning id, organization_id as "organizationId", email, name, avatar_url as "avatarUrl", role, team_name as "teamName", sort_order as "sortOrder", created_at as "createdAt", updated_at as "updatedAt"`;
+  return teamMemberRow(rows[0]);
+}
+
+export async function updateTeamMember(id: string, input: { role?: Exclude<TeamRole, "owner">; teamName?: string; sortOrder?: number }): Promise<TeamMember> {
+  const sql = requireDatabase();
+  const rows = await sql<TeamMember[]>`update growth_team_members set role = case when role = 'owner' then role else coalesce(${input.role ?? null}, role) end, team_name = coalesce(${input.teamName ?? null}, team_name), sort_order = coalesce(${input.sortOrder ?? null}, sort_order), updated_at = now() where id = ${id} and organization_id = ${ORGANIZATION_ID} returning id, organization_id as "organizationId", email, name, avatar_url as "avatarUrl", role, team_name as "teamName", sort_order as "sortOrder", created_at as "createdAt", updated_at as "updatedAt"`;
+  if (!rows[0]) throw new Error("Teammedlemmet ble ikke funnet.");
+  return teamMemberRow(rows[0]);
+}
+
+function newsRow(row: VedoyNewsPost): VedoyNewsPost {
+  return { ...row, sortOrder: Number(row.sortOrder), publishedAt: row.publishedAt ? asIso(row.publishedAt) : undefined, createdAt: asIso(row.createdAt), updatedAt: asIso(row.updatedAt) };
+}
+
+export async function listNewsPosts(publishedOnly = false): Promise<VedoyNewsPost[]> {
+  const sql = getSql();
+  if (!sql) return [];
+  const rows = await sql<VedoyNewsPost[]>`select id, organization_id as "organizationId", slug, title, excerpt, content, category, status, author_type as "authorType", author_name as "authorName", author_avatar_url as "authorAvatarUrl", sort_order as "sortOrder", published_at as "publishedAt", created_at as "createdAt", updated_at as "updatedAt" from vedoy_news_posts where organization_id = ${ORGANIZATION_ID} ${publishedOnly ? sql`and status = 'published'` : sql``} order by sort_order asc, published_at desc nulls last, created_at desc`;
+  return rows.map(newsRow);
+}
+
+export async function getNewsPost(slug: string, publishedOnly = true): Promise<VedoyNewsPost | null> {
+  const sql = getSql(); if (!sql) return null;
+  const rows = await sql<VedoyNewsPost[]>`select id, organization_id as "organizationId", slug, title, excerpt, content, category, status, author_type as "authorType", author_name as "authorName", author_avatar_url as "authorAvatarUrl", sort_order as "sortOrder", published_at as "publishedAt", created_at as "createdAt", updated_at as "updatedAt" from vedoy_news_posts where organization_id = ${ORGANIZATION_ID} and slug = ${slug} ${publishedOnly ? sql`and status = 'published'` : sql``} limit 1`;
+  return rows[0] ? newsRow(rows[0]) : null;
+}
+
+export async function createNewsPost(input: Omit<VedoyNewsPost, "id" | "organizationId" | "createdAt" | "updatedAt">): Promise<VedoyNewsPost> {
+  const sql = requireDatabase(); const id = randomId("news");
+  const rows = await sql<VedoyNewsPost[]>`insert into vedoy_news_posts (id, organization_id, slug, title, excerpt, content, category, status, author_type, author_name, author_avatar_url, sort_order, published_at) values (${id}, ${ORGANIZATION_ID}, ${input.slug}, ${input.title}, ${input.excerpt}, ${input.content}, ${input.category}, ${input.status}, ${input.authorType}, ${input.authorName}, ${input.authorAvatarUrl || null}, ${input.sortOrder}, ${input.publishedAt || null}) returning id, organization_id as "organizationId", slug, title, excerpt, content, category, status, author_type as "authorType", author_name as "authorName", author_avatar_url as "authorAvatarUrl", sort_order as "sortOrder", published_at as "publishedAt", created_at as "createdAt", updated_at as "updatedAt"`;
+  return newsRow(rows[0]);
+}
+
+export async function updateNewsPost(id: string, input: Partial<Omit<VedoyNewsPost, "id" | "organizationId" | "createdAt" | "updatedAt">>): Promise<VedoyNewsPost> {
+  const sql = requireDatabase(); const rows = await sql<VedoyNewsPost[]>`update vedoy_news_posts set title = coalesce(${input.title ?? null}, title), slug = coalesce(${input.slug ?? null}, slug), excerpt = coalesce(${input.excerpt ?? null}, excerpt), content = coalesce(${input.content ?? null}, content), category = coalesce(${input.category ?? null}, category), status = coalesce(${input.status ?? null}, status), sort_order = coalesce(${input.sortOrder ?? null}, sort_order), published_at = case when ${input.status ?? null} = 'published' then coalesce(published_at, now()) else published_at end, updated_at = now() where id = ${id} and organization_id = ${ORGANIZATION_ID} returning id, organization_id as "organizationId", slug, title, excerpt, content, category, status, author_type as "authorType", author_name as "authorName", author_avatar_url as "authorAvatarUrl", sort_order as "sortOrder", published_at as "publishedAt", created_at as "createdAt", updated_at as "updatedAt"`;
+  if (!rows[0]) throw new Error("Innlegget ble ikke funnet."); return newsRow(rows[0]);
+}
 
 function requireDatabase() {
   const sql = getSql();
@@ -690,6 +791,88 @@ export async function listHostingRequests(): Promise<HostingRequest[]> {
     setupNok: Number(row.setupNok),
     createdAt: asIso(row.createdAt)
   }));
+}
+
+export async function createCompanyRegistration(input: Omit<CompanyRegistration, "id" | "status" | "createdAt" | "updatedAt">): Promise<CompanyRegistration> {
+  const sql = requireDatabase();
+  const id = randomId("company");
+  const rows = await sql<CompanyRegistration[]>`
+    insert into company_registrations (
+      id, company_name, organization_number, owner_name, owner_email, owner_title, phone,
+      subscription_plan, seat_limit, invited_members
+    ) values (
+      ${id}, ${input.companyName}, ${input.organizationNumber ?? null}, ${input.ownerName}, ${input.ownerEmail}, ${input.ownerTitle}, ${input.phone ?? null},
+      ${input.subscriptionPlan}, ${input.seatLimit}, ${JSON.stringify(input.invitedMembers)}::jsonb
+    )
+    returning id, company_name as "companyName", organization_number as "organizationNumber", owner_name as "ownerName",
+      owner_email as "ownerEmail", owner_title as "ownerTitle", phone, subscription_plan as "subscriptionPlan",
+      seat_limit as "seatLimit", invited_members as "invitedMembers", status, created_at as "createdAt", updated_at as "updatedAt"
+  `;
+  return companyRegistrationRow(rows[0]);
+}
+
+export async function listCompanyRegistrations(): Promise<CompanyRegistration[]> {
+  const sql = requireDatabase();
+  const rows = await sql<CompanyRegistration[]>`
+    select id, company_name as "companyName", organization_number as "organizationNumber", owner_name as "ownerName",
+      owner_email as "ownerEmail", owner_title as "ownerTitle", phone, subscription_plan as "subscriptionPlan",
+      seat_limit as "seatLimit", invited_members as "invitedMembers", status, created_at as "createdAt", updated_at as "updatedAt"
+    from company_registrations order by created_at desc limit 250
+  `;
+  return rows.map(companyRegistrationRow);
+}
+
+export async function updateCompanyRegistrationStatus(id: string, status: CompanyRegistrationStatus): Promise<CompanyRegistration> {
+  const sql = requireDatabase();
+  const rows = await sql<CompanyRegistration[]>`
+    update company_registrations set status = ${status}, updated_at = now() where id = ${id}
+    returning id, company_name as "companyName", organization_number as "organizationNumber", owner_name as "ownerName",
+      owner_email as "ownerEmail", owner_title as "ownerTitle", phone, subscription_plan as "subscriptionPlan",
+      seat_limit as "seatLimit", invited_members as "invitedMembers", status, created_at as "createdAt", updated_at as "updatedAt"
+  `;
+  if (!rows[0]) throw new Error("Bedriftsregistreringen ble ikke funnet.");
+  return companyRegistrationRow(rows[0]);
+}
+
+export async function createDomainEmailOrder(input: Omit<DomainEmailOrder, "id" | "status" | "createdAt" | "updatedAt">): Promise<DomainEmailOrder> {
+  const sql = requireDatabase();
+  const id = randomId("domain_email");
+  const rows = await sql<DomainEmailOrder[]>`
+    insert into domain_email_orders (
+      id, company_name, contact_name, contact_email, phone, domain, domain_mode,
+      mailbox_count, requested_addresses, email_package, notes
+    ) values (
+      ${id}, ${input.companyName}, ${input.contactName}, ${input.contactEmail}, ${input.phone ?? null}, ${input.domain}, ${input.domainMode},
+      ${input.mailboxCount}, ${JSON.stringify(input.requestedAddresses)}::jsonb, ${input.emailPackage}, ${input.notes ?? null}
+    )
+    returning id, company_name as "companyName", contact_name as "contactName", contact_email as "contactEmail", phone,
+      domain, domain_mode as "domainMode", mailbox_count as "mailboxCount", requested_addresses as "requestedAddresses",
+      email_package as "emailPackage", notes, status, created_at as "createdAt", updated_at as "updatedAt"
+  `;
+  return domainEmailOrderRow(rows[0]);
+}
+
+export async function listDomainEmailOrders(): Promise<DomainEmailOrder[]> {
+  const sql = requireDatabase();
+  const rows = await sql<DomainEmailOrder[]>`
+    select id, company_name as "companyName", contact_name as "contactName", contact_email as "contactEmail", phone,
+      domain, domain_mode as "domainMode", mailbox_count as "mailboxCount", requested_addresses as "requestedAddresses",
+      email_package as "emailPackage", notes, status, created_at as "createdAt", updated_at as "updatedAt"
+    from domain_email_orders order by created_at desc limit 250
+  `;
+  return rows.map(domainEmailOrderRow);
+}
+
+export async function updateDomainEmailOrderStatus(id: string, status: ProvisioningRequestStatus): Promise<DomainEmailOrder> {
+  const sql = requireDatabase();
+  const rows = await sql<DomainEmailOrder[]>`
+    update domain_email_orders set status = ${status}, updated_at = now() where id = ${id}
+    returning id, company_name as "companyName", contact_name as "contactName", contact_email as "contactEmail", phone,
+      domain, domain_mode as "domainMode", mailbox_count as "mailboxCount", requested_addresses as "requestedAddresses",
+      email_package as "emailPackage", notes, status, created_at as "createdAt", updated_at as "updatedAt"
+  `;
+  if (!rows[0]) throw new Error("Domenebestillingen ble ikke funnet.");
+  return domainEmailOrderRow(rows[0]);
 }
 
 export async function listStudioNotes(): Promise<StudioNote[]> {

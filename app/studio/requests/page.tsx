@@ -1,5 +1,5 @@
 import { ModuleHeader } from "@/components/studio/module-header";
-import { listClothingRequests, listContactRequests, listHostingRequests } from "@/lib/repository";
+import { listBookings, listClothingRequests, listContactRequests, listHostingRequests } from "@/lib/repository";
 
 export const dynamic = "force-dynamic";
 
@@ -9,15 +9,24 @@ function formatDate(value: string) {
 
 export default async function RequestsPage() {
   let databaseError = false;
-  const [contacts, clothing, hosting] = await Promise.all([
+  const [contacts, clothing, hosting, bookings] = await Promise.all([
     listContactRequests().catch(() => { databaseError = true; return []; }),
     listClothingRequests().catch(() => { databaseError = true; return []; }),
-    listHostingRequests().catch(() => { databaseError = true; return []; })
+    listHostingRequests().catch(() => { databaseError = true; return []; }),
+    listBookings().catch(() => { databaseError = true; return []; })
   ]);
   return <>
     <ModuleHeader eyebrow="ADMINISTRATOR" title="Henvendelser" description="Kontaktskjema, nettsidebestillinger, hostingforespørsler og bedriftsklær lagret i Studio-databasen." />
     {databaseError ? <div className="admin-database-warning"><strong>Databasen er ikke klar.</strong><p>Kjør databaseskjemaet og kontroller DATABASE_URL før skjemaene tas i bruk.</p></div> : null}
     <section className="request-admin-grid">
+      <article className="studio-panel request-admin-panel">
+        <div className="panel-heading"><div><small>BOOKINGER</small><h2>{bookings.length} bookingforespørsler</h2></div></div>
+        <div className="request-list">{bookings.length ? bookings.map((item) => <article key={item.id}>
+          <header><div><strong>{item.customerName}</strong><span>{item.serviceName}</span></div><b>{item.status === "pending" ? "AVVENTER" : item.status.toUpperCase()}</b></header>
+          <dl><div><dt>E-post</dt><dd><a href={`mailto:${item.customerEmail}`}>{item.customerEmail}</a></dd></div>{item.customerPhone ? <div><dt>Telefon</dt><dd><a href={`tel:${item.customerPhone}`}>{item.customerPhone}</a></dd></div> : null}<div><dt>Tidspunkt</dt><dd>{formatDate(item.startsAt)} – {new Intl.DateTimeFormat("nb-NO", { hour: "2-digit", minute: "2-digit" }).format(new Date(item.endsAt))}</dd></div></dl>
+          {item.location ? <p>Sted: {item.location}</p> : null}{item.notes ? <p>{item.notes}</p> : null}<time>{formatDate(item.createdAt)}</time>
+        </article>) : <p className="request-empty">Ingen bookingforespørsler ennå.</p>}</div>
+      </article>
       <article className="studio-panel request-admin-panel">
         <div className="panel-heading"><div><small>KONTAKT OG NETTSIDE</small><h2>{contacts.length} henvendelser</h2></div></div>
         <div className="request-list">{contacts.length ? contacts.map((item) => <article key={item.id}>

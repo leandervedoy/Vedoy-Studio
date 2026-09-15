@@ -1,6 +1,7 @@
 import { timingSafeEqual } from "node:crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { createSessionToken, sessionCookie } from "@/lib/auth";
+import { getTeamSessionRole, syncTeamMemberOnLogin } from "@/lib/repository";
 
 export const runtime = "nodejs";
 
@@ -101,12 +102,16 @@ export async function GET(request: NextRequest) {
     return loginError(request, "Vedøy-kontoen er gyldig, men har ikke tilgang til Vedøy Studio ennå.");
   }
 
+  const name = user.preferred_username?.trim() || user.name?.trim() || email.split("@")[0];
+  const avatarUrl = user.picture?.startsWith("https://") ? user.picture : undefined;
+  const owner = email === process.env.ADMIN_EMAIL?.trim().toLowerCase();
+  await syncTeamMemberOnLogin({ email, name, avatarUrl, owner });
   const token = createSessionToken({
     email,
-    name: user.preferred_username?.trim() || user.name?.trim() || email.split("@")[0],
-    avatarUrl: user.picture?.startsWith("https://") ? user.picture : undefined,
+    name,
+    avatarUrl,
     organizationId: "org_vedoy",
-    role: email === process.env.ADMIN_EMAIL?.trim().toLowerCase() ? "owner" : "member",
+    role: owner ? "owner" : await getTeamSessionRole(email),
   });
   const response = NextResponse.redirect(new URL(next, request.url));
   response.cookies.set(sessionCookie(token));

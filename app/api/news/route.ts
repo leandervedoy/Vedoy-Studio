@@ -1,0 +1,5 @@
+import { NextResponse } from "next/server";
+import { requireSession } from "@/lib/auth";
+import { createNewsPost, listNewsPosts } from "@/lib/repository";
+export async function GET() { await requireSession(); return NextResponse.json({ posts: await listNewsPosts(false) }); }
+export async function POST(request: Request) { const session = await requireSession(); const body = await request.json(); const post = await createNewsPost({ slug: String(body.slug || body.title || "innlegg").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, ""), title: String(body.title || "").trim().slice(0, 160), excerpt: String(body.excerpt || "").trim().slice(0, 500), content: String(body.content || "").trim().slice(0, 20000), category: String(body.category || "Announcements").slice(0, 60), status: "draft", authorType: body.authorType === "vedi" ? "vedi" : "user", authorName: body.authorType === "vedi" ? "Vedi" : session.name, authorAvatarUrl: body.authorType === "vedi" ? undefined : session.avatarUrl, sortOrder: Number(body.sortOrder || 0) }); return NextResponse.json({ post }, { status: 201 }); }

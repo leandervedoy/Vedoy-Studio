@@ -13,6 +13,7 @@ import {
 
 export function PublicBooking({ embedded = false }: { embedded?: boolean }) {
   const adapter = useMemo(() => new ApiBookingAdapter(), []);
+  const publicConfiguration = { ...bookingConfiguration, showPlans: false };
   return (
     <BookingCalendar
       services={bookingServices}
@@ -20,7 +21,7 @@ export function PublicBooking({ embedded = false }: { embedded?: boolean }) {
       staff={bookingStaff}
       adapter={adapter}
       schedule={bookingSchedule}
-      configuration={embedded ? { ...bookingConfiguration, layout: "embedded" } : bookingConfiguration}
+      configuration={embedded ? { ...publicConfiguration, layout: "embedded" } : publicConfiguration}
     />
   );
 }

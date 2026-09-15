@@ -91,9 +91,44 @@ create table if not exists support_tickets (
   status text not null check (status in ('open','in-progress','resolved')),
   created_at timestamptz not null default now()
 );
+
+create table if not exists growth_team_members (
+  id text primary key,
+  organization_id text not null references organizations(id) on delete cascade,
+  email text not null,
+  name text not null,
+  avatar_url text,
+  role text not null default 'member' check (role in ('owner','admin','manager','editor','member')),
+  team_name text not null default 'Vedøy Studio',
+  sort_order integer not null default 100,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  unique (organization_id, email)
+);
+create index if not exists growth_team_members_org_role_idx on growth_team_members (organization_id, sort_order, role);
 alter table organizations add column if not exists organization_number text;
 alter table organizations add column if not exists timezone text not null default 'Europe/Oslo';
 alter table organizations add column if not exists description text not null default '';
+
+create table if not exists vedoy_news_posts (
+  id text primary key,
+  organization_id text not null references organizations(id) on delete cascade,
+  slug text not null,
+  title text not null,
+  excerpt text not null default '',
+  content text not null default '',
+  category text not null default 'Announcements',
+  status text not null default 'draft' check (status in ('draft','published')),
+  author_type text not null default 'user' check (author_type in ('user','vedi')),
+  author_name text not null,
+  author_avatar_url text,
+  sort_order integer not null default 0,
+  published_at timestamptz,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  unique (organization_id, slug)
+);
+create index if not exists vedoy_news_posts_org_status_idx on vedoy_news_posts (organization_id, status, sort_order, published_at desc);
 
 create table if not exists contact_requests (
   id text primary key,
@@ -149,6 +184,46 @@ create table if not exists hosting_requests (
   created_at timestamptz not null default now()
 );
 create index if not exists hosting_requests_org_created_idx on hosting_requests (organization_id, created_at desc);
+
+-- Offentlige oppstartsforespørsler. Disse holdes adskilt fra en aktiv Studio-organisasjon
+-- til en administrator har kontrollert virksomheten og opprettet et isolert arbeidsområde.
+create table if not exists company_registrations (
+  id text primary key,
+  company_name text not null,
+  organization_number text,
+  owner_name text not null,
+  owner_email text not null,
+  owner_title text not null check (owner_title in ('owner','managing-director')),
+  phone text,
+  subscription_plan text not null check (subscription_plan in ('trial','start','team','plus')),
+  seat_limit integer not null check (seat_limit between 1 and 100),
+  invited_members jsonb not null default '[]'::jsonb,
+  status text not null default 'received' check (status in ('received','reviewing','activated','declined')),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+create index if not exists company_registrations_status_created_idx on company_registrations (status, created_at desc);
+alter table company_registrations enable row level security;
+
+-- Leveres manuelt via Domeneshop inntil Vedøy har en godkjent forhandlerintegrasjon.
+create table if not exists domain_email_orders (
+  id text primary key,
+  company_name text not null,
+  contact_name text not null,
+  contact_email text not null,
+  phone text,
+  domain text not null,
+  domain_mode text not null check (domain_mode in ('new','transfer','existing')),
+  mailbox_count integer not null check (mailbox_count between 0 and 100),
+  requested_addresses jsonb not null default '[]'::jsonb,
+  email_package text not null check (email_package in ('standard','none')),
+  notes text,
+  status text not null default 'received' check (status in ('received','reviewing','ordered','ready','needs-info','cancelled')),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+create index if not exists domain_email_orders_status_created_idx on domain_email_orders (status, created_at desc);
+alter table domain_email_orders enable row level security;
 
 create table if not exists studio_notes (
   id text primary key,

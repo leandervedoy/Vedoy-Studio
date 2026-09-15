@@ -147,7 +147,7 @@ export const bookingConfiguration: BookingConfiguration = {
   ],
   requirePhone: false,
   autoConfirm: false,
-  layout: "full",
+  layout: "wizard",
   theme: {
     accent: "#171714",
     accentContrast: "#ffffff",

@@ -294,6 +294,69 @@ export const academyCourses: AcademyCourse[] = [
     minutes: 16,
     progress: 0,
     category: "KI"
+  },
+  {
+    id: "course_files",
+    title: "Filer, mapper og ryddig skrivebord",
+    description: "Lær å opprette mapper, gi filer gode navn, flytte dokumenter og finne dem igjen.",
+    level: "Nybegynner",
+    minutes: 15,
+    progress: 0,
+    category: "PC-grunnkurs"
+  },
+  {
+    id: "course_browser",
+    title: "Nettleseren som arbeidsverktøy",
+    description: "Faner, bokmerker, nedlastinger, søk og enkle grep som gjør nettleseren tryggere.",
+    level: "Nybegynner",
+    minutes: 14,
+    progress: 0,
+    category: "PC-grunnkurs"
+  },
+  {
+    id: "course_hardware",
+    title: "Hva delene i PC-en gjør",
+    description: "Forstå skjerm, tastatur, mus, lagring, minne, prosessor, porter og Wi-Fi uten teknisk språk.",
+    level: "Nybegynner",
+    minutes: 18,
+    progress: 0,
+    category: "PC-grunnkurs"
+  },
+  {
+    id: "course_updates",
+    title: "Oppdateringer, Wi-Fi og enkel feilsøking",
+    description: "Hva du kan sjekke selv når PC-en er treg, internett faller ut eller noe ikke vil åpne.",
+    level: "Nybegynner",
+    minutes: 16,
+    progress: 0,
+    category: "PC-grunnkurs"
+  },
+  {
+    id: "course_share",
+    title: "Deling, utskrift og digital orden",
+    description: "Send filer på riktig måte, del med andre og forstå forskjellen på kopi, lenke og vedlegg.",
+    level: "Nybegynner",
+    minutes: 13,
+    progress: 0,
+    category: "PC-grunnkurs"
+  },
+  {
+    id: "course_microsoft_365",
+    title: "Slik bruker du Microsoft 365",
+    description: "Kom i gang med Word, Excel, Outlook, Teams og OneDrive – og velg hva som faktisk passer bedriften.",
+    level: "Nybegynner",
+    minutes: 24,
+    progress: 0,
+    category: "Arbeidsverktøy"
+  },
+  {
+    id: "course_google_workspace",
+    title: "Slik bruker du Google Workspace",
+    description: "Kom i gang med Gmail, Drive, Docs, Sheets og Meet – med fokus på enkel samhandling.",
+    level: "Nybegynner",
+    minutes: 24,
+    progress: 0,
+    category: "Arbeidsverktøy"
   }
 ];
 

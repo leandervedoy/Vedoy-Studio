@@ -4,14 +4,14 @@ const options = [
     title: "Payhip for enkel handel.",
     text: "Riktig for digitale produkter, kurs, medlemskap, coaching og mindre vareutvalg. Vedøy bygger uttrykket og oppsettet, mens Payhip håndterer checkout og produktlevering.",
     tools: ["Payhip", "Direkte checkout", "Digitale produkter", "Medlemskap"],
-    fit: "Fra 399 kr/mnd hos Vedøy: 100 kr plattformhåndtering + 299 kr fast Vedøy-drift. Payhip-gebyrer kommer i tillegg."
+    fit: "Payhip Free: $0/mnd + 5 % per salg. Plus: $29/mnd + 2 %. Pro: $99/mnd uten Payhip-transaksjonsgebyr. Stripe/PayPal-gebyrer kommer i tillegg, og Vedøy-drift prises separat."
   },
   {
     label: "02 · BUTIKK I VEKST",
     title: "Shopify for mer handel.",
     text: "Riktig når bedriften trenger større vareutvalg, lager, frakt, rabatter og flere integrasjoner. Vi kan sette opp Shopify eller bygge en egen Next.js-front mot Shopify.",
     tools: ["Shopify", "Produkter og lager", "Frakt", "Storefront API"],
-    fit: "Fra 799 kr/mnd hos Vedøy: minst 500 kr i plattformbudsjett + 299 kr fast Vedøy-drift. Betalingsgebyrer og apper kommer i tillegg."
+    fit: "Shopify har ikke ren pay-as-you-go: Basic er fra 289 kr/mnd ved årlig fakturering (389 kr/mnd månedlig), pluss kort-/betalingsgebyrer og eventuelle apper. Vedøy-drift prises separat."
   },
   {
     label: "03 · SKREDDERSYDD",
@@ -42,7 +42,7 @@ export function EcommercePlatformGuide() {
       </div>
       <div className="shopify-tool-guide__setup">
         <div><small>VEDØY / PRISPRINSIPP</small><h3>Den rimeligste løsningen som fortsatt er trygg å levere.</h3></div>
-        <ol><li>Payhip: fra 100 kr/mnd for plattformhåndtering, pluss 299 kr/mnd i Vedøy-drift.</li><li>Shopify: plattformbudsjett fra 500 kr/mnd, pluss 299 kr/mnd i Vedøy-drift.</li><li>Transaksjonsgebyrer, betalingsgebyrer, apper og domene vises separat.</li><li>Du får en konkret totalpris før arbeidet blir bindende.</li></ol>
+        <ol><li>Payhip kan startes uten månedspris, men tar transaksjonsgebyr på gratisplanen.</li><li>Shopify krever et løpende abonnement; det finnes ikke en ren pay-as-you-go-plan.</li><li>Transaksjonsgebyrer, betalingsgebyrer, apper og domene vises separat.</li><li>Vedøy gir en konkret totalpris før arbeidet blir bindende.</li></ol>
         <div className="shopify-tool-guide__links">
           <a href="/#kontakt">Be om plattformvalg <span aria-hidden>↗</span></a>
           <a href="https://payhip.com/pricing" target="_blank" rel="noreferrer">Se Payhip-priser <span aria-hidden>↗</span></a>
