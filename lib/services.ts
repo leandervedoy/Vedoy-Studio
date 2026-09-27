@@ -165,6 +165,19 @@ export const studioServices: StudioService[] = [
     focus: ["Supabase", "CRM", "Booking", "Notater", "Avvik", "Roller", "Automatisering"],
     process: ["Vi setter opp virksomheten og hvilke arbeidsflater dere faktisk trenger.", "Kunder, tjenester, bookinger og interne rutiner kobles inn stegvis.", "Teamet får en ryddig startside med tydelige neste steg.", "Nye moduler kan legges til når de gir reell verdi."],
     nextStep: "Fortell hvilke deler av driften dere vil samle først: kunder, booking, timer, avvik, notater eller oppfølging."
+  },
+  {
+    number: "12",
+    slug: "vedoy-css",
+    title: "Vedøy CSS",
+    cardText: "Et gjennomtenkt designsystem med komponenter, typografi og mønstre som gjør digitale flater raskere å bygge og enklere å holde konsistente.",
+    eyebrow: "DESIGNSYSTEM · KOMPONENTER · FRONTEND",
+    lead: "Ett visuelt språk for nettsider, webapper og Growth.",
+    introduction: "Vedøy CSS er Vedøy Studio sitt frontend- og designsystem. Det samler farger, typografi, avstander, knapper, skjemaer, kort og responsive mønstre i en felles struktur. Målet er at nye sider skal føles som en del av samme produkt, samtidig som systemet er fleksibelt nok til å tilpasses hver virksomhet.",
+    deliverables: ["Design tokens for farger, typografi, avstander og flater", "Tilgjengelige UI-komponenter for nettsider og webapper", "Responsive layout- og innholdsmønstre", "Dokumentasjon og eksempler for videre arbeid", "Tilpasning til eksisterende merkevare eller ny visuell retning"],
+    focus: ["CSS", "Design tokens", "Tilgjengelighet", "Responsive design", "Next.js", "React"],
+    process: ["Vi kartlegger dagens flater og hva som bør bli mer konsistent.", "Vi etablerer en liten, tydelig grunnmur med tokens og komponenter.", "Komponentene prøves i reelle sider og arbeidsflyter.", "Systemet dokumenteres slik at teamet kan bruke det videre uten å starte på nytt."],
+    nextStep: "Send en lenke til dagens nettside eller et eksempel på uttrykket dere ønsker å bygge videre på, så foreslår vi en passende første versjon av designsystemet."
   }
 ];
 
