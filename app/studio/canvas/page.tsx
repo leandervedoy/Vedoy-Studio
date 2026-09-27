@@ -1,4 +1,5 @@
 import { ModuleHeader } from "@/components/studio/module-header";
+import Image from "next/image";
 
 export const dynamic = "force-dynamic";
 
@@ -13,7 +14,7 @@ export default function CanvasPage() {
       />
       <div className="studio-canvas-frame">
         <div className="studio-canvas-frame__bar">
-          <div><i aria-hidden /><span>Vedøy Canvas</span><small>Visuelt arbeidsområde</small></div>
+          <div><Image src="/imgs/Logos/Vedoy_Canvas_Fjord.png" width={28} height={28} alt="" /><span>Vedøy Canvas</span><small>Visuelt arbeidsområde</small></div>
           <a href="https://vedoy-canvas.vercel.app/" target="_blank" rel="noreferrer">Åpne fullskjerm ↗</a>
         </div>
         <iframe src="https://vedoy-canvas.vercel.app/" title="Vedøy Canvas" loading="eager" allow="clipboard-read; clipboard-write" />
