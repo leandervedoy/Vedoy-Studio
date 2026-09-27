@@ -8,7 +8,7 @@ import { NotificationCenter } from "@/components/studio/notification-center";
 import { cn } from "@/lib/utils";
 import type { SessionPayload } from "@/lib/types";
 
-type NavItem = { href: string; icon: string; label: string; exact?: boolean; adminOnly?: boolean };
+type NavItem = { href: string; icon: string; label: string; exact?: boolean; adminOnly?: boolean; locked?: boolean };
 type NavSection = { label: string; items: NavItem[] };
 
 const sections: NavSection[] = [
@@ -19,10 +19,10 @@ const sections: NavSection[] = [
   {
     label: "Bygg",
     items: [
-      { href: "/studio/services", icon: "≡", label: "Tjenester", adminOnly: true },
+      { href: "/studio/services", icon: "≡", label: "Tjenester", adminOnly: true, locked: true },
       { href: "/studio/domains", icon: "◎", label: "Domener" },
       { href: "/studio/projects", icon: "△", label: "Hosting og prosjekter" },
-      { href: "/studio/builder", icon: "▦", label: "Nettsidebygger" }
+      { href: "/studio/builder", icon: "▦", label: "Nettsidebygger", locked: true }
     ]
   },
   {
@@ -43,16 +43,16 @@ const sections: NavSection[] = [
       { href: "/studio/analytics", icon: "↗", label: "Statistics" },
  { href: "/studio/news", icon: "▤", label: "Vedøy News" },
  { href: "/studio/account", icon: "◎", label: "Konto og profil" },
-      { href: "/studio/vedi", icon: "✦", label: "Vedi AI" },
-      { href: "/studio/academy", icon: "◇", label: "Academy" }
+      { href: "/studio/vedi", icon: "✦", label: "Vedi AI", locked: true },
+      { href: "/studio/academy", icon: "◇", label: "Academy", locked: true }
     ]
   },
   {
     label: "Utvikle",
     items: [
-      { href: "/studio/apis", icon: "{}", label: "API og nøkler" },
-      { href: "/studio/databases", icon: "◫", label: "Databaser" },
-      { href: "/studio/monitoring", icon: "⌁", label: "Overvåkning" }
+      { href: "/studio/apis", icon: "{}", label: "API og nøkler", locked: true },
+      { href: "/studio/databases", icon: "◫", label: "Databaser", locked: true },
+      { href: "/studio/monitoring", icon: "⌁", label: "Overvåkning", locked: true }
     ]
   }
 ];
@@ -153,10 +153,11 @@ export function StudioShell({
             <div className="studio-nav__section" key={section.label}>
               <small>{section.label}</small>
               {section.items.filter((item) => !item.adminOnly || userRole === "owner" || userRole === "admin").map((item) => {
+                const target = item.locked ? `/studio/locked?module=${encodeURIComponent(item.label)}` : item.href;
                 const active = item.exact ? pathname === item.href : pathname.startsWith(item.href);
                 return (
-                  <Link key={item.href} href={item.href} title={item.label} className={cn(active && "is-active")} onClick={() => setSidebarOpen(false)}>
-                    <i>{item.icon}</i><span>{item.label}</span>{active && <b />}
+                  <Link key={item.href} href={target} title={item.label} className={cn(active && "is-active")} onClick={() => setSidebarOpen(false)}>
+                    <i>{item.icon}</i><span>{item.label}</span>{item.locked ? <em aria-label="Låst">⌑</em> : active && <b />}
                   </Link>
                 );
               })}
