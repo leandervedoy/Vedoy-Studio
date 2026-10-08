@@ -138,6 +138,24 @@ function asIso(value: Date | string): string {
   return value instanceof Date ? value.toISOString() : new Date(value).toISOString();
 }
 
+let bookingPaymentColumnsReady: Promise<void> | undefined;
+
+async function ensureBookingPaymentColumns(): Promise<void> {
+  const sql = getSql();
+  if (!sql) return;
+  bookingPaymentColumnsReady ??= (async () => {
+    await sql`alter table bookings add column if not exists payment_status text not null default 'not_required'`;
+    await sql`alter table bookings add column if not exists payment_required boolean not null default false`;
+    await sql`alter table bookings add column if not exists payment_amount_nok integer`;
+    await sql`alter table bookings add column if not exists stripe_checkout_session_id text`;
+    await sql`alter table bookings add column if not exists stripe_payment_intent_id text`;
+    await sql`alter table bookings add column if not exists paid_at timestamptz`;
+    await sql`alter table bookings drop constraint if exists bookings_payment_status_check`;
+    await sql`alter table bookings add constraint bookings_payment_status_check check (payment_status in ('not_required','unpaid','paid','failed'))`;
+    await sql`create index if not exists bookings_stripe_checkout_idx on bookings (stripe_checkout_session_id)`;
+  })();
+  await bookingPaymentColumnsReady;
+}
 export async function getOverview(): Promise<StudioOverview> {
   const [projects, domains, bookings, customers] = await Promise.all([
     listProjects(),
@@ -267,6 +285,7 @@ export async function listDomains(): Promise<StudioDomain[]> {
 export async function listBookings(): Promise<StudioBooking[]> {
   const sql = getSql();
   if (!sql) return getDemoStore().bookings;
+  await ensureBookingPaymentColumns();
 
   const rows = await sql<StudioBooking[]>`
     select
@@ -362,6 +381,8 @@ export async function createBooking(input: {
     return booking;
   }
 
+  await ensureBookingPaymentColumns();
+
   await sql.begin(async (tx) => {
     // Serialiser bookingopprettelser per organisasjon for å unngå to samtidige innsettinger.
     await tx`select pg_advisory_xact_lock(hashtext(${ORGANIZATION_ID}))`;
@@ -423,6 +444,7 @@ export async function attachBookingCheckoutSession(id: string, sessionId: string
     if (item) item.stripeCheckoutSessionId = sessionId;
     return;
   }
+  await ensureBookingPaymentColumns();
   await sql`update bookings set stripe_checkout_session_id = ${sessionId} where id = ${id} and organization_id = ${ORGANIZATION_ID}`;
 }
 
@@ -436,6 +458,7 @@ export async function markBookingPayment(
     if (item) Object.assign(item, patch);
     return;
   }
+  await ensureBookingPaymentColumns();
   await sql`
     update bookings set
       payment_status = ${patch.paymentStatus},
