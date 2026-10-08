@@ -27,13 +27,13 @@
         "./*"
       ],
       "@vedoy/booking": [
-        "./packages/booking/dist/index.d.ts"
+        "./packages/booking/dist/index"
       ],
       "@vedoy/booking/styles.css": [
         "./packages/booking/dist/styles.css"
       ],
       "@vedoy/notes": [
-        "./packages/notes/dist/index.d.ts"
+        "./packages/notes/dist/index"
       ],
       "@vedoy/notes/styles.css": [
         "./packages/notes/dist/styles.css"
