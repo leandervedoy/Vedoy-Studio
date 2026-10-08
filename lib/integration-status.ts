@@ -17,19 +17,19 @@ function hasValue(value: string | undefined): boolean {
 
 export async function getIntegrationStatuses(): Promise<IntegrationStatus[]> {
   const stripeKey = process.env.STRIPE_SECRET_KEY;
-  const stripePrice = process.env.STRIPE_BOOKING_PRO_PRICE_ID;
+  const stripePayments = process.env.STRIPE_BOOKING_PAYMENTS_ENABLED;
   const stripeWebhook = process.env.STRIPE_WEBHOOK_SECRET;
   let stripe: IntegrationStatus = {
     id: "stripe",
     name: "Stripe",
     status: "not_configured",
-    detail: "Demo: Stripe-nøkler og Booking Pro Price ID mangler.",
+    detail: "Demo: Stripe-nøkler og booking payments flag mangler.",
     demo: true
   };
 
-  if ([stripeKey, stripePrice, stripeWebhook].some(Boolean) && ![stripeKey, stripePrice, stripeWebhook].every(hasValue)) {
-    stripe = { ...stripe, status: "misconfigured", detail: "Stripe er delvis konfigurert. Legg inn secret key, Booking Pro Price ID og webhook secret.", demo: true };
-  } else if (hasValue(stripeKey) && hasValue(stripePrice) && hasValue(stripeWebhook)) {
+  if ([stripeKey, stripeWebhook, stripePayments].some(Boolean) && ![stripeKey, stripeWebhook, stripePayments].every(hasValue)) {
+    stripe = { ...stripe, status: "misconfigured", detail: "Stripe er delvis konfigurert. Legg inn secret key, booking payments flag og webhook secret.", demo: true };
+  } else if (hasValue(stripeKey) && stripePayments === "true" && hasValue(stripeWebhook)) {
     try {
       await getStripe().balance.retrieve();
       stripe = { id: "stripe", name: "Stripe", status: "healthy", detail: "Stripe API svarer. Betalinger kan aktiveres etter webhook-test.", demo: false };

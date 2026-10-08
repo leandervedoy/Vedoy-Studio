@@ -3,8 +3,8 @@ export class AiError extends Error { constructor(public status: number, message:
 export async function aiContext(request: Request) {
   const token = request.headers.get("authorization")?.match(/^Bearer (\S+)$/)?.[1];
   if (!token) throw new AiError(401, "sign_in_required");
-  const url = process.env.NEXT_PUBLIC_AI_SUPABASE_URL;
-  const key = process.env.NEXT_PUBLIC_AI_SUPABASE_PUBLISHABLE_KEY;
+  const url = process.env.NEXT_PUBLIC_AI_NEON_DATA_API_URL;
+  const key = process.env.NEXT_PUBLIC_AI_NEON_PUBLISHABLE_KEY;
   if (!url || !key) throw new AiError(503, "setup_required");
   const db = createClient(url, key, { global: { headers: { Authorization: `Bearer ${token}` } }, auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false } });
   const { data, error } = await db.auth.getUser(token);

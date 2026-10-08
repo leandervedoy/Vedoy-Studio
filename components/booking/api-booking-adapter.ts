@@ -45,8 +45,9 @@ export class ApiBookingAdapter implements BookingAdapter {
         notes: input.notes
       })
     });
-    const data = await response.json() as { booking?: StudioBooking; error?: string };
+    const data = await response.json() as { booking?: StudioBooking; checkoutUrl?: string | null; error?: string };
     if (!response.ok || !data.booking) throw new Error(data.error || "Kunne ikke lagre bookingen.");
+    if (data.checkoutUrl && typeof window !== "undefined") window.location.assign(data.checkoutUrl);
     return toPackageBooking(data.booking);
   }
 

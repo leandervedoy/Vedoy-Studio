@@ -1,6 +1,7 @@
 export type ProductStatus = "live" | "beta" | "planned" | "demo";
 export type ProjectStatus = "healthy" | "building" | "attention" | "paused";
 export type BookingStatus = "pending" | "confirmed" | "in-progress" | "completed" | "cancelled" | "no-show";
+export type BookingPaymentStatus = "not_required" | "unpaid" | "paid" | "failed";
 export type TicketStatus = "open" | "in-progress" | "resolved";
 export type NewsPostStatus = "draft" | "published";
 export type NewsAuthorType = "user" | "vedi";
@@ -58,6 +59,12 @@ export interface StudioBooking {
   customerPhone?: string;
   notes?: string;
   status: BookingStatus;
+  paymentStatus: BookingPaymentStatus;
+  paymentRequired: boolean;
+  paymentAmountNok?: number;
+  stripeCheckoutSessionId?: string;
+  stripePaymentIntentId?: string;
+  paidAt?: string;
   createdAt: string;
 }
 

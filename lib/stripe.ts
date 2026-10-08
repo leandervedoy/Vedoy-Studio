@@ -6,7 +6,7 @@ let stripeClient: Stripe | undefined;
 export function getStripe() {
   const secretKey = process.env.STRIPE_SECRET_KEY;
   if (!secretKey) throw new Error("Stripe er ikke konfigurert.");
-  stripeClient ??= new Stripe(secretKey);
+  stripeClient ??= new Stripe(secretKey, { apiVersion: "2026-08-26.dahlia" as Stripe.LatestApiVersion });
   return stripeClient;
 }
 

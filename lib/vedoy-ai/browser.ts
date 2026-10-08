@@ -1,9 +1,9 @@
 "use client";
-import { createClient, type SupabaseClient } from "@supabase/supabase-js";
-let client: SupabaseClient | undefined;
+import { createClient, type SupabaseClient as NeonDataApiClient } from "@supabase/supabase-js";
+let client: NeonDataApiClient | undefined;
 export function aiBrowser() {
-  const url = process.env.NEXT_PUBLIC_AI_SUPABASE_URL;
-  const key = process.env.NEXT_PUBLIC_AI_SUPABASE_PUBLISHABLE_KEY;
+  const url = process.env.NEXT_PUBLIC_AI_NEON_DATA_API_URL;
+  const key = process.env.NEXT_PUBLIC_AI_NEON_PUBLISHABLE_KEY;
   if (!url || !key) return null;
   client ??= createClient(url, key, { auth: { flowType: "pkce", storageKey: "vedoy-ai-auth", detectSessionInUrl: true } });
   return client;

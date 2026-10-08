@@ -106,6 +106,8 @@ export const demoBookings: StudioBooking[] = [
     customerPhone: "+47 900 00 001",
     notes: "Trenger hjelp med e-post på ny PC.",
     status: "confirmed",
+    paymentStatus: "not_required",
+    paymentRequired: false,
     createdAt: isoAfter(-2)
   },
   {
@@ -119,6 +121,8 @@ export const demoBookings: StudioBooking[] = [
     customerEmail: "hei@nordlyskafe.no",
     notes: "Gjennomgang av nettside, booking og e-post.",
     status: "pending",
+    paymentStatus: "not_required",
+    paymentRequired: false,
     createdAt: isoAfter(-1)
   },
   {
@@ -133,6 +137,8 @@ export const demoBookings: StudioBooking[] = [
     customerPhone: "+47 900 00 002",
     notes: "TV og Wi-Fi.",
     status: "confirmed",
+    paymentStatus: "not_required",
+    paymentRequired: false,
     createdAt: isoAfter(-3)
   }
 ];

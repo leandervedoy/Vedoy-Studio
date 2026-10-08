@@ -12,7 +12,7 @@ const columns = [
   },
   {
     title: "Utviklere",
-    links: [["Dokumentasjon", "/docs"], ["API", "/docs#api"], ["Status", "/status"], ["GitHub-oppsett", "/docs#deploy"], ["Discord", "https://discord.gg/KzMBaGgy?event=1548167190279102535"]]
+    links: [["Dokumentasjon", "/docs"], ["API", "/docs#api"], ["Status", "/status"], ["GitHub-oppsett", "/docs#deploy"], ["Join our Discord", "https://discord.gg/uAt7v6ksuC"]]
   },
   {
     title: "Vedøy",

@@ -16,18 +16,18 @@ function safeNext(value: string | null) {
 }
 
 export async function GET(request: NextRequest) {
-  const supabaseUrl = process.env.VEDOY_LOGIN_SUPABASE_URL;
+  const neonAuthUrl = process.env.VEDOY_LOGIN_NEON_AUTH_URL;
   const clientId = process.env.VEDOY_LOGIN_CLIENT_ID;
   const callbackUrl = process.env.VEDOY_LOGIN_CALLBACK_URL;
 
-  if (!supabaseUrl || !clientId || !callbackUrl) {
+  if (!neonAuthUrl || !clientId || !callbackUrl) {
     return NextResponse.redirect(new URL("/login?authError=Vedøy%20Login%20er%20ikke%20konfigurert.", request.url));
   }
 
   const verifier = base64Url(randomBytes(32));
   const challenge = createHash("sha256").update(verifier).digest("base64url");
   const state = base64Url(randomBytes(24));
-  const authorizeUrl = new URL("/auth/v1/oauth/authorize", supabaseUrl);
+  const authorizeUrl = new URL("/auth/v1/oauth/authorize", neonAuthUrl);
   authorizeUrl.search = new URLSearchParams({
     response_type: "code",
     client_id: clientId,

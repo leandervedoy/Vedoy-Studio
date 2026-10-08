@@ -285,6 +285,12 @@ export async function listBookings(): Promise<StudioBooking[]> {
       customer_phone as "customerPhone",
       notes,
       status,
+      payment_status as "paymentStatus",
+      payment_required as "paymentRequired",
+      payment_amount_nok as "paymentAmountNok",
+      stripe_checkout_session_id as "stripeCheckoutSessionId",
+      stripe_payment_intent_id as "stripePaymentIntentId",
+      paid_at as "paidAt",
       created_at as "createdAt"
     from bookings
     where organization_id = ${ORGANIZATION_ID}
@@ -295,6 +301,12 @@ export async function listBookings(): Promise<StudioBooking[]> {
     ...row,
     startsAt: asIso(row.startsAt),
     endsAt: asIso(row.endsAt),
+    paymentStatus: row.paymentStatus,
+    paymentRequired: Boolean(row.paymentRequired),
+    paymentAmountNok: row.paymentAmountNok == null ? undefined : Number(row.paymentAmountNok),
+    stripeCheckoutSessionId: row.stripeCheckoutSessionId || undefined,
+    stripePaymentIntentId: row.stripePaymentIntentId || undefined,
+    paidAt: row.paidAt ? asIso(row.paidAt) : undefined,
     createdAt: asIso(row.createdAt)
   }));
 }
@@ -312,6 +324,8 @@ export async function createBooking(input: {
   customerEmail: string;
   customerPhone?: string;
   notes?: string;
+  paymentRequired?: boolean;
+  paymentAmountNok?: number;
 }): Promise<StudioBooking> {
   const booking: StudioBooking = {
     id: randomId("bk"),
@@ -329,6 +343,9 @@ export async function createBooking(input: {
     customerPhone: input.customerPhone?.trim(),
     notes: input.notes?.trim(),
     status: "pending",
+    paymentStatus: input.paymentRequired ? "unpaid" : "not_required",
+    paymentRequired: Boolean(input.paymentRequired),
+    paymentAmountNok: input.paymentAmountNok,
     createdAt: new Date().toISOString()
   };
 
@@ -374,12 +391,12 @@ export async function createBooking(input: {
     await tx`
       insert into bookings (
         id, organization_id, service_id, service_name, plan_id, staff_id, location, custom_fields, starts_at, ends_at,
-        customer_name, customer_email, customer_phone, notes, status, created_at
+        customer_name, customer_email, customer_phone, notes, status, payment_status, payment_required, payment_amount_nok, created_at
       ) values (
         ${booking.id}, ${booking.organizationId}, ${booking.serviceId}, ${booking.serviceName},
         ${booking.planId ?? null}, ${booking.staffId ?? null}, ${booking.location ?? null}, ${JSON.stringify(booking.customFields ?? {})},
         ${booking.startsAt}, ${booking.endsAt}, ${booking.customerName}, ${booking.customerEmail},
-        ${booking.customerPhone ?? null}, ${booking.notes ?? null}, ${booking.status}, ${booking.createdAt}
+        ${booking.customerPhone ?? null}, ${booking.notes ?? null}, ${booking.status}, ${booking.paymentStatus}, ${booking.paymentRequired}, ${booking.paymentAmountNok ?? null}, ${booking.createdAt}
       )
     `;
 
@@ -399,6 +416,35 @@ export async function createBooking(input: {
   return booking;
 }
 
+export async function attachBookingCheckoutSession(id: string, sessionId: string): Promise<void> {
+  const sql = getSql();
+  if (!sql) {
+    const item = getDemoStore().bookings.find((booking) => booking.id === id);
+    if (item) item.stripeCheckoutSessionId = sessionId;
+    return;
+  }
+  await sql`update bookings set stripe_checkout_session_id = ${sessionId} where id = ${id} and organization_id = ${ORGANIZATION_ID}`;
+}
+
+export async function markBookingPayment(
+  id: string,
+  patch: { paymentStatus: StudioBooking["paymentStatus"]; stripeCheckoutSessionId?: string; stripePaymentIntentId?: string; paidAt?: string }
+): Promise<void> {
+  const sql = getSql();
+  if (!sql) {
+    const item = getDemoStore().bookings.find((booking) => booking.id === id);
+    if (item) Object.assign(item, patch);
+    return;
+  }
+  await sql`
+    update bookings set
+      payment_status = ${patch.paymentStatus},
+      stripe_checkout_session_id = coalesce(${patch.stripeCheckoutSessionId ?? null}, stripe_checkout_session_id),
+      stripe_payment_intent_id = coalesce(${patch.stripePaymentIntentId ?? null}, stripe_payment_intent_id),
+      paid_at = coalesce(${patch.paidAt ?? null}, paid_at)
+    where id = ${id} and organization_id = ${ORGANIZATION_ID}
+  `;
+}
 export async function updateBooking(
   id: string,
   patch: Partial<Pick<StudioBooking, "status" | "startsAt" | "endsAt" | "notes">>

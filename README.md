@@ -55,7 +55,7 @@ Uten `DATABASE_URL` bruker appen et minnelager på serveren. Det er fint for des
 
 For varig data:
 
-1. Opprett PostgreSQL hos for eksempel Neon, Supabase, Railway eller Prisma Postgres.
+1. Opprett PostgreSQL hos for eksempel Neon, Railway eller Prisma Postgres.
 2. Legg adressen i `.env.local`:
 
 ```env
@@ -271,11 +271,11 @@ Prosjektet bruker Next.js App Router og Route Handlers. PostgreSQL-laget er bevi
 
 `/api/vedoy-ai/billing` henter pris fra Stripe på serveren, oppretter Checkout og åpner kundeportalen for aktive abonnenter. Sett `AI_STRIPE_PRICE_ID` til en aktiv gjentakende live-pris og `AI_PUBLIC_URL` til korrekt HTTPS-domene. Betaling aktiveres bare når live Stripe og `OPENAI_API_KEY` er konfigurert. AI-tilgang kontrolleres mot aktuell Stripe-status ved hvert kall; ingen tilgang tildeles fra retur-URL eller usignerte webhooks. Kundeportalen må være konfigurert med oppsigelse og fakturaer i Stripe. Avklar pris, MVA og vilkår før betalingsknappen aktiveres.
 
-Brukeren kan eksportere egne appdata som JSON under Innstillinger. Ved kontosletting på det delte Supabase-prosjektet må andre Vedøy-apper tas med i vurderingen; appen sletter derfor bare egne assistenter og samtaler. Logger inkluderer ikke samtaletekst eller tokens.
+Brukeren kan eksportere egne appdata som JSON under Innstillinger. Ved kontosletting på det delte Neon-prosjektet må andre Vedøy-apper tas med i vurderingen; appen sletter derfor bare egne assistenter og samtaler. Logger inkluderer ikke samtaletekst eller tokens.
 
 Lanseringskontroll: test e-post/OAuth callback, opprett/rediger/slett med to testbrukere, Stripe testbetaling/oppsigelse, reelt AI-svar, mobil og eksport. Build og 401-sjekker alene verifiserer ikke disse flytene.
 
-Vedøy AI ligger på `/ai` og bruker det felles Supabase-prosjektet «Vedoy», med egne `vedoy_ai_*`-tabeller. Hver bruker kan opprette, redigere og slette egne assistenter, favorittmerke eller skjule assistenter, lagre samtaler og velge norsk eller engelsk. Vedøy sine systemassistenter er felles og kan skjules individuelt uten å bli slettet for andre.
+Vedøy AI ligger på `/ai` og bruker det felles Neon-prosjektet «Vedoy», med egne `vedoy_ai_*`-tabeller. Hver bruker kan opprette, redigere og slette egne assistenter, favorittmerke eller skjule assistenter, lagre samtaler og velge norsk eller engelsk. Vedøy sine systemassistenter er felles og kan skjules individuelt uten å bli slettet for andre.
 
 Lokal oppstart:
 
@@ -287,12 +287,12 @@ npm.cmd run dev
 Åpne `http://localhost:3000/ai`. Følgende variabler må finnes i `.env.local` og i Vercel:
 
 ```env
-NEXT_PUBLIC_AI_SUPABASE_URL=https://niedmgyyougvgiiuwcvw.supabase.co
-NEXT_PUBLIC_AI_SUPABASE_PUBLISHABLE_KEY=sb_publishable_...
+NEXT_PUBLIC_AI_NEON_DATA_API_URL=https://<your-neon-data-api-host>
+NEXT_PUBLIC_AI_NEON_PUBLISHABLE_KEY=neon_publishable_...
 OPENAI_API_KEY=sk-...
 OPENAI_MODEL=gpt-5-mini
 ```
 
-Innlogging med e-postlenke fungerer gjennom Supabase Auth. For «Logg inn med Vedøy», opprett en Custom OIDC-provider i Supabase med identifikatoren `custom:vedoy`, bruk Vedøy Login sin issuer/client-konfigurasjon, og legg Supabase sin callback-URL inn som tillatt redirect hos Vedøy Login. Legg både lokal `/ai` og produksjonsadressen til i Supabase Auth sine Redirect URLs.
+Innlogging med e-postlenke fungerer gjennom Neon Auth. For «Logg inn med Vedøy», opprett en Custom OIDC-provider i Neon med identifikatoren `custom:vedoy`, bruk Vedøy Login sin issuer/client-konfigurasjon, og legg Neon sin callback-URL inn som tillatt redirect hos Vedøy Login. Legg både lokal `/ai` og produksjonsadressen til i Neon Auth sine Redirect URLs.
 
-Databaseskjemaet finnes i `supabase/migrations/20260910205231_vedoy_ai_workspace.sql`. RLS begrenser alle private rader til innlogget bruker. AI-kallet går via serveren, og en databasefunksjon reserverer maksimalt 50 meldinger per bruker per dag. OpenAI-nøkkelen skal aldri ha `NEXT_PUBLIC_`-prefiks.
+Databaseskjemaet finnes i `neon/migrations/20260910205231_vedoy_ai_workspace.sql`. RLS begrenser alle private rader til innlogget bruker. AI-kallet går via serveren, og en databasefunksjon reserverer maksimalt 50 meldinger per bruker per dag. OpenAI-nøkkelen skal aldri ha `NEXT_PUBLIC_`-prefiks.

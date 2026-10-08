@@ -25,6 +25,18 @@
     "paths": {
       "@/*": [
         "./*"
+      ],
+      "@vedoy/booking": [
+        "./packages/booking/dist/index.d.ts"
+      ],
+      "@vedoy/booking/styles.css": [
+        "./packages/booking/dist/styles.css"
+      ],
+      "@vedoy/notes": [
+        "./packages/notes/dist/index.d.ts"
+      ],
+      "@vedoy/notes/styles.css": [
+        "./packages/notes/dist/styles.css"
       ]
     }
   },

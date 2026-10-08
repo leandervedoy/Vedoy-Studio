@@ -1481,7 +1481,7 @@ h1, h2, h3, h4 { letter-spacing: -.035em; }
 @media (max-width:1100px) { .business-subscriptions__grid { grid-template-columns:repeat(2,1fr); }.business-subscriptions__grid article:nth-child(2) { border-right:0; }.business-subscriptions__grid article:nth-child(-n+2) { border-bottom:1px solid #c8cec3; } }
 @media (max-width:900px) { .business-subscriptions__heading,.business-subscriptions__upgrade { grid-template-columns:1fr; gap:22px; }.business-subscriptions__upgrade .editorial-button { justify-self:start; }.business-subscriptions__grid { grid-template-columns:1fr; }.business-subscriptions__grid article,.business-subscriptions__grid article:nth-child(2) { border-right:0; border-bottom:1px solid #c8cec3; }.business-subscriptions__grid article:last-child { border-bottom:0; } }
 
-/* Vedøy Growth dashboard direction: calm workspace with Supabase-inspired signal green, grid texture and motion. */
+/* Vedøy Growth dashboard direction: calm workspace with Neon-inspired signal green, grid texture and motion. */
 .studio-content { background: #f1f3ee; position: relative; overflow: hidden; }
 .studio-content::before { content:""; position:absolute; inset:0 0 auto; height:420px; pointer-events:none; background: radial-gradient(circle at 78% 0%, rgba(105,230,164,.16), transparent 34%), linear-gradient(180deg, rgba(232,248,237,.72), transparent 76%); }
 .studio-main { position:relative; z-index:1; }
@@ -1525,7 +1525,7 @@ h1, h2, h3, h4 { letter-spacing: -.035em; }
 @media (max-width:760px) { .studio-canvas-frame { min-height:620px; height:calc(100vh - 175px); border-radius:12px; }.studio-canvas-frame__bar small { display:none; } }
 @media (max-width:700px) { .growth-dashboard .dashboard-heading { padding:22px 19px; border-radius:16px; }.growth-dashboard .dashboard-heading__actions { align-items:stretch; }.growth-dashboard .dashboard-heading__actions > * { flex:1; }.growth-dashboard::after { inset:-20px -14px auto; } }
 
-/* Supabase-backed service catalogue administration */
+/* Neon-backed service catalogue administration */
 .section-heading-dark__topline { display:flex; align-items:center; justify-content:space-between; gap:16px; }
 .section-heading-dark__topline .editorial-kicker { margin:0; }
 .services-admin-add { display:grid; place-items:center; width:28px; height:28px; flex:0 0 auto; border:1px solid rgba(184,255,57,.68); border-radius:50%; color:#b8ff39; font:500 21px/1 ui-monospace,monospace; transition:transform .2s ease, background .2s ease, color .2s ease; }

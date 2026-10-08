@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { getSession } from "@/lib/auth";
-import { createBooking, createGrowthNotification, listBookings } from "@/lib/repository";
+import { attachBookingCheckoutSession, createBooking, createGrowthNotification, listBookings } from "@/lib/repository";
+import { bookingPaymentsReady, createBookingCheckoutSession } from "@/lib/booking-payments";
+import { bookingServices } from "@/lib/booking-config";
 import { sendAdminLeadEmail } from "@/lib/lead-email";
 
 export async function GET(request: Request) {
@@ -83,6 +85,8 @@ export async function POST(request: Request) {
   }
 
   try {
+    const service = bookingServices.find((item) => item.id === body.serviceId);
+    const paymentsReady = bookingPaymentsReady();
     const booking = await createBooking({
       serviceId: body.serviceId,
       serviceName: body.serviceName,
@@ -95,8 +99,12 @@ export async function POST(request: Request) {
       customerName: body.customerName,
       customerEmail: body.customerEmail,
       customerPhone: body.customerPhone,
-      notes: body.notes
+      notes: body.notes,
+      paymentRequired: paymentsReady,
+      paymentAmountNok: paymentsReady ? service?.price : undefined
     });
+    const checkout = await createBookingCheckoutSession(booking);
+    if (checkout?.id) await attachBookingCheckoutSession(booking.id, checkout.id);
     if (process.env.ADMIN_EMAIL) {
       try {
         await createGrowthNotification({ userEmail: process.env.ADMIN_EMAIL, type: "booking", title: "Ny bookingforespørsel", detail: `${booking.customerName} har forespurt ${booking.serviceName}.`, href: "/studio/booking" });
@@ -109,7 +117,7 @@ export async function POST(request: Request) {
         text: [`Kunde: ${booking.customerName}`, `E-post: ${booking.customerEmail}`, booking.customerPhone ? `Telefon: ${booking.customerPhone}` : "", `Tjeneste: ${booking.serviceName}`, `Start: ${booking.startsAt}`, `Slutt: ${booking.endsAt}`, booking.location ? `Lokasjon: ${booking.location}` : "", booking.notes ? `Notat: ${booking.notes}` : ""].filter(Boolean).join("\n")
       });
     } catch (error) { console.error("booking_email_failed", error); }
-    return NextResponse.json({ booking }, { status: 201 });
+    return NextResponse.json({ booking: checkout?.id ? { ...booking, stripeCheckoutSessionId: checkout.id } : booking, checkoutUrl: checkout?.url || null }, { status: 201 });
   } catch (error) {
     return NextResponse.json({ error: error instanceof Error ? error.message : "Bookingen kunne ikke lagres." }, { status: 409 });
   }

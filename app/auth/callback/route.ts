@@ -60,14 +60,14 @@ export async function GET(request: NextRequest) {
     return loginError(request, "Innloggingen er ugyldig eller har utløpt. Prøv igjen.");
   }
 
-  const supabaseUrl = process.env.VEDOY_LOGIN_SUPABASE_URL;
+  const neonAuthUrl = process.env.VEDOY_LOGIN_NEON_AUTH_URL;
   const clientId = process.env.VEDOY_LOGIN_CLIENT_ID;
   const callbackUrl = process.env.VEDOY_LOGIN_CALLBACK_URL;
-  if (!supabaseUrl || !clientId || !callbackUrl) {
+  if (!neonAuthUrl || !clientId || !callbackUrl) {
     return loginError(request, "Vedøy Login er ikke konfigurert.");
   }
 
-  const tokenResponse = await fetch(new URL("/auth/v1/oauth/token", supabaseUrl), {
+  const tokenResponse = await fetch(new URL("/auth/v1/oauth/token", neonAuthUrl), {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body: new URLSearchParams({
@@ -84,7 +84,7 @@ export async function GET(request: NextRequest) {
     return loginError(request, tokens.error_description || "Vedøy Login kunne ikke fullføre innloggingen.");
   }
 
-  const userResponse = await fetch(new URL("/auth/v1/oauth/userinfo", supabaseUrl), {
+  const userResponse = await fetch(new URL("/auth/v1/oauth/userinfo", neonAuthUrl), {
     headers: { Authorization: `Bearer ${tokens.access_token}` },
     cache: "no-store",
   });

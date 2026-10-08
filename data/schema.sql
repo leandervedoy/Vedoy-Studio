@@ -49,13 +49,29 @@ create table if not exists bookings (
   customer_phone text,
   notes text,
   status text not null check (status in ('pending','confirmed','in-progress','completed','cancelled','no-show')),
+  payment_status text not null default 'not_required' check (payment_status in ('not_required','unpaid','paid','failed')),
+  payment_required boolean not null default false,
+  payment_amount_nok integer,
+  stripe_checkout_session_id text,
+  stripe_payment_intent_id text,
+  paid_at timestamptz,
   created_at timestamptz not null default now(),
   check (ends_at > starts_at)
 );
 alter table bookings drop constraint if exists bookings_status_check;
 alter table bookings add constraint bookings_status_check
   check (status in ('pending','confirmed','in-progress','completed','cancelled','no-show'));
+alter table bookings add column if not exists payment_status text not null default 'not_required';
+alter table bookings add column if not exists payment_required boolean not null default false;
+alter table bookings add column if not exists payment_amount_nok integer;
+alter table bookings add column if not exists stripe_checkout_session_id text;
+alter table bookings add column if not exists stripe_payment_intent_id text;
+alter table bookings add column if not exists paid_at timestamptz;
+alter table bookings drop constraint if exists bookings_payment_status_check;
+alter table bookings add constraint bookings_payment_status_check
+  check (payment_status in ('not_required','unpaid','paid','failed'));
 create index if not exists bookings_org_starts_idx on bookings (organization_id, starts_at);
+create index if not exists bookings_stripe_checkout_idx on bookings (stripe_checkout_session_id);
 
 create table if not exists customers (
   id text primary key,

@@ -20,7 +20,7 @@ export default function DevelopersPage() {
         <p className="editorial-kicker lime">VEDØY DEVELOPERS</p>
         <h1>Ressurser for å bygge med Vedøy.</h1>
         <p>Her samles dokumentasjon, GitHub, API-er og gjenbrukbare biblioteker etter hvert som Vedøy-plattformen blir mer moden. Siden er laget for utviklere, samarbeidspartnere og kunder som vil forstå hva som kan kobles sammen.</p>
-        <div className="hero-actions"><a className="editorial-button" href="https://discord.gg/aBbPzsWZ?event=1547558121273032724" target="_blank" rel="noreferrer">Bli med i utviklerfellesskapet <span>↗</span></a><Link className="editorial-outline" href="/#plattform">Se økosystemet</Link></div>
+        <div className="hero-actions"><a className="editorial-button" href="https://discord.gg/uAt7v6ksuC" target="_blank" rel="noreferrer">Join our Discord <span>↗</span></a><Link className="editorial-outline" href="/#plattform">Se økosystemet</Link></div>
       </section>
       <section className="developers-resources">
         {resources.map((resource) => <article key={resource.label}><small>{resource.label}</small><h2>{resource.label}</h2><p>{resource.text}</p></article>)}

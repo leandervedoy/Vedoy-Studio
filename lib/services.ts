@@ -162,7 +162,7 @@ export const studioServices: StudioService[] = [
     lead: "Én rolig arbeidsflate for små virksomheter som vil samle kunder, oppgaver og drift.",
     introduction: "Vedøy Growth samler praktiske arbeidsflater som CRM, kunder, booking, timeregistrering, notater og status. Målet er å gi små bedrifter en enklere måte å følge opp henvendelser, kunder, interne saker og videre vekst uten å måtte hoppe mellom mange systemer.",
     deliverables: ["Kunde- og CRM-oversikt", "Booking, timeregistrering og interne oppgaver", "Notater, Vedøy Canvas og dokumentasjon", "Planlagte moduler for avvik, tillitsvalgt og trygg oppfølging", "Tilgang, roller og videre automatisering"],
-    focus: ["Supabase", "CRM", "Booking", "Notater", "Avvik", "Roller", "Automatisering"],
+    focus: ["Neon", "CRM", "Booking", "Notater", "Avvik", "Roller", "Automatisering"],
     process: ["Vi setter opp virksomheten og hvilke arbeidsflater dere faktisk trenger.", "Kunder, tjenester, bookinger og interne rutiner kobles inn stegvis.", "Teamet får en ryddig startside med tydelige neste steg.", "Nye moduler kan legges til når de gir reell verdi."],
     nextStep: "Fortell hvilke deler av driften dere vil samle først: kunder, booking, timer, avvik, notater eller oppfølging."
   },

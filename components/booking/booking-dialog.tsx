@@ -34,7 +34,7 @@ export function BookingDialog({ onClose }: { onClose: () => void }) {
           <button className="booking-dialog__close" type="button" onClick={onClose} aria-label="Lukk bestilling" autoFocus>×</button>
         </header>
         <div className="booking-dialog__notice">
-          Ingen betaling trekkes. Vedøy bekrefter tidspunktet etter at forespørselen er mottatt.
+          Hvis betaling er aktivert, sendes du trygt videre til Stripe etter at tidspunktet er reservert. Vedøy bekrefter timen etterpå.
         </div>
         <div className="booking-dialog__content">
           <PublicBooking embedded />
