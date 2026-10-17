@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { DeveloperResources } from "@/components/developer-resources";
 
 const resources = [
   { label: "Dokumentasjon", text: "Hvordan Vedøy Studio, Growth, Booking, Calendar og Canvas henger sammen." },
@@ -22,6 +23,7 @@ export default function DevelopersPage() {
         <p>Her samles dokumentasjon, GitHub, API-er og gjenbrukbare biblioteker etter hvert som Vedøy-plattformen blir mer moden. Siden er laget for utviklere, samarbeidspartnere og kunder som vil forstå hva som kan kobles sammen.</p>
         <div className="hero-actions"><a className="editorial-button" href="https://discord.gg/uAt7v6ksuC" target="_blank" rel="noreferrer">Join our Discord <span>↗</span></a><Link className="editorial-outline" href="/#plattform">Se økosystemet</Link></div>
       </section>
+      <DeveloperResources />
       <section className="developers-resources">
         {resources.map((resource) => <article key={resource.label}><small>{resource.label}</small><h2>{resource.label}</h2><p>{resource.text}</p></article>)}
       </section>

@@ -1,0 +1,23 @@
+.section { padding: 110px 7vw; background: #0b1515; color: #f5f7ef; scroll-margin-top: 80px; }
+.heading { display: grid; grid-template-columns: 1.2fr 1fr; gap: 48px; align-items: end; max-width: 1480px; margin: 0 auto 56px; }
+.heading h2 { margin: 20px 0 0; font-size: clamp(42px, 5vw, 76px); line-height: 1.05; letter-spacing: -.05em; }
+.heading h2 em { color: #b8ff39; font-weight: inherit; }
+.heading > p { max-width: 460px; margin: 0; color: #b9c8c2; font-size: 18px; line-height: 1.7; }
+.grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: 1480px; margin: 0 auto; border: 1px solid #34443e; }
+.card { display: flex; flex-direction: column; padding: 32px; min-width: 0; }
+.card + .card { border-left: 1px solid #34443e; }
+.number { color: #b8ff39; font: 12px ui-monospace, monospace; letter-spacing: .1em; }
+.card h3 { margin: 42px 0 16px; font-size: clamp(23px, 2.3vw, 32px); line-height: 1.15; letter-spacing: -.04em; }
+.card p { margin: 0 0 32px; color: #b9c8c2; line-height: 1.7; }
+.links { display: flex; flex-wrap: wrap; gap: 16px 24px; margin-top: auto; }
+.links a { color: #f5f7ef; font-size: 14px; font-weight: 600; text-decoration: underline; text-underline-offset: 5px; padding-block: 10px; }
+.links a:hover { color: #b8ff39; }
+.links a:focus-visible { outline: 2px solid #b8ff39; outline-offset: 6px; }
+@media (max-width: 800px) {
+  .section { padding: 72px 7vw; }
+  .heading { grid-template-columns: 1fr; gap: 24px; margin-bottom: 32px; }
+  .grid { grid-template-columns: 1fr; }
+  .card { padding: 28px; }
+  .card + .card { border-left: 0; border-top: 1px solid #34443e; }
+  .card h3 { margin-top: 24px; }
+}
