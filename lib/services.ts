@@ -1,5 +1,6 @@
 import { getSql } from "@/lib/db";
 import type { ServiceInput } from "@/lib/service-input";
+import { upcomingServiceDetails } from "@/lib/service-stories";
 import { randomId } from "@/lib/utils";
 
 export type ServiceRenderType = "general" | "website" | "webapp" | "store" | "hosting" | "clothing" | "ecommerce";
@@ -257,7 +258,7 @@ export async function listStudioServices(options: { includeUnpublished?: boolean
 }
 
 export async function getStudioService(slug: string) {
-  return (await listStudioServices()).find((service) => service.slug === slug);
+  return (await listStudioServices()).find((service) => service.slug === slug) ?? upcomingServiceDetails[slug];
 }
 
 export async function getNextStudioServiceNumber(): Promise<string> {

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import "@/app/service-showcase.css";
 import { MarketingHeader } from "@/components/marketing-header";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -8,6 +9,8 @@ import { ProductCustomizer } from "@/components/product-customizer";
 import { ServicePricing } from "@/components/service-pricing";
 import { ServiceCapabilities } from "@/components/website-capabilities";
 import { getStudioService } from "@/lib/services";
+import { serviceStories } from "@/lib/service-stories";
+import { ServiceShowcase } from "@/components/service-showcase";
 import { isDomainProviderConfigured } from "@/lib/vercel-domains";
 
 const serviceCtas: Record<string, { label: string; href: string }> = {
@@ -41,16 +44,19 @@ export default async function ServicePage({ params, searchParams }: { params: Pr
   const isStore = service.renderType === "store";
   const isEcommerce = service.renderType === "ecommerce";
   const isClothing = service.renderType === "clothing";
-  const serviceCta = serviceCtas[service.slug] ?? { label: `Bestill ${service.title.toLocaleLowerCase("nb-NO")}`, href: "/#kontakt" };
+  const isUpcoming = service.slug === "vedoy-phone" || service.slug === "vedoy-rewards";
+  const story = serviceStories[service.slug];
+  const serviceCta = isUpcoming ? { label: "Meld interesse", href: "/#kontakt" } : serviceCtas[service.slug] ?? { label: `Bestill ${service.title.toLocaleLowerCase("nb-NO")}`, href: "/#kontakt" };
 
   return (
     <main className="service-detail-page">
       <MarketingHeader variant="service" />
       <Link href="/#tjenester" className="service-back">← Tilbake til tjenestene</Link>
       <section className="service-detail-hero service-detail-hero--compact">
-        <div><p className="editorial-kicker lime">{service.number} · {service.eyebrow}</p><span className="service-live-badge">{isEcommerce ? "DEMO · KAN UTFORSKES" : "KAN BESTILLES NÅ"}</span><h1>{service.title}<br /><em>{isWebsite ? "for bedrifter." : "bygget ordentlig."}</em></h1></div>
+        <div><p className="editorial-kicker lime">{service.number} · {service.eyebrow}</p><span className="service-live-badge">{isUpcoming ? "KOMMER SNART · UNDER UTVIKLING" : isEcommerce ? "DEMO · KAN UTFORSKES" : "KAN BESTILLES NÅ"}</span><h1>{service.title}<br /><em>{story ? story.heroEmphasis : isWebsite ? "for bedrifter." : "bygget ordentlig."}</em></h1></div>
         <div className="service-detail-intro"><strong>{service.lead}</strong><p>{service.introduction}</p><Link href={serviceCta.href} className="editorial-button">{serviceCta.label} <span>↗</span></Link></div>
       </section>
+      {story ? <ServiceShowcase story={story} upcoming={isUpcoming} /> : null}
       <ServiceCapabilities title={service.title} slug={service.slug} simple={service.deliverables} detailed={service.focus} />
       <section className="service-detail-grid service-detail-grid--combined">
         <article><div className="service-detail-combined__intro"><small>DETTE KAN INNGÅ · TEKNOLOGI OG FOKUS</small><h2>Fra behov til<br /><em>ferdig løsning.</em></h2></div><div className="service-detail-combined__body"><div><ul>{service.deliverables.map((item) => <li key={item}>{item}</li>)}</ul></div><div><div className="service-focus-list">{service.focus.map((item) => <span key={item}>{item}</span>)}</div><p>{service.nextStep}</p></div></div></article>
@@ -63,8 +69,8 @@ export default async function ServicePage({ params, searchParams }: { params: Pr
       {isHosting ? <HostingConfigurator initialDomain={query.domain} initialDomainMode={query.domainMode === "new" ? "new" : "existing"} domainProviderReady={isDomainProviderConfigured()} /> : null}
       {isClothing ? <section className="clothing-detail-section" id="bestill-profilprodukter"><div><p className="editorial-kicker lime">VEDØY COLLECTIVE · BESTILL NÅ</p><h2>Velg plagg.<br /><em>Last opp logo.</em></h2><p>Prøv logoen på plaggene under og send en uforpliktende forespørsel. Vedøy Studio kan tilby bedrifter klær via Vedøy Collective, og følger deg gjennom produktvalg, korrektur, produksjonspartner og pris før noe bestilles.</p><div className="clothing-partner-note"><strong>Slik fungerer det</strong><span>1. Velg plagg og last opp logo</span><span>2. Send antall, størrelser og detaljer</span><span>3. Vi avklarer produksjon og sender tilbud</span><small>Ingen automatisk betaling eller kjøp skjer når skjemaet sendes.</small></div></div><ProductCustomizer /></section> : null}
       {isEcommerce ? <EcommercePlatformGuide /> : null}
-      {!isWebsite && !isWebApp && !isStore && !isEcommerce && !isClothing ? <ServicePricing type="general" /> : null}
-      <section className="service-detail-cta"><p className="editorial-kicker lime">NESTE STEG</p><h2>La oss gjøre det<br /><em>konkret.</em></h2><p>{service.nextStep}</p><Link href={serviceCta.href} className="editorial-button">{serviceCta.label} <span>↗</span></Link></section>
+      {!isUpcoming && !isWebsite && !isWebApp && !isStore && !isEcommerce && !isClothing ? <ServicePricing type="general" /> : null}
+      <section className="service-detail-cta"><p className="editorial-kicker lime">{isUpcoming ? "MELD INTERESSE · IKKE TIL SALGS ENNÅ" : "NESTE STEG"}</p><h2>La oss gjøre det<br /><em>konkret.</em></h2><p>{service.nextStep}</p><Link href={serviceCta.href} className="editorial-button">{serviceCta.label} <span>↗</span></Link></section>
     </main>
   );
 }
