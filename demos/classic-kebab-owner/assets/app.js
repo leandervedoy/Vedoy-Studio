@@ -70,3 +70,64 @@
 })();
 
 /* source filters and price calculator shortcuts */
+
+/* Delightful, accessible presentation motion and interactive examples. */
+(function(){
+ 'use strict';
+ var prefersReduced=window.matchMedia('(prefers-reduced-motion: reduce)');
+ if(!prefersReduced.matches&&'IntersectionObserver' in window){
+   document.documentElement.classList.add('has-js');
+   var observer=new IntersectionObserver(function(entries){
+     entries.forEach(function(entry){if(entry.isIntersecting){entry.target.classList.add('is-visible');observer.unobserve(entry.target)}});
+   },{threshold:.06,rootMargin:'0px 0px -24px 0px'});
+   document.querySelectorAll('[data-reveal]').forEach(function(el){observer.observe(el)});
+ } else {
+   document.querySelectorAll('[data-reveal]').forEach(function(el){el.classList.add('is-visible')});
+ }
+ var typeEl=document.getElementById('typewriter');
+ if(typeEl&&!prefersReduced.matches) {
+   var phrases=['egen nettside','bestillingsapp','ett ordresystem','flere faste kunder'];
+   var pi=0,pos=0,removing=false;
+   function tick(){
+     var phrase=phrases[pi];
+     if(!removing){pos++;typeEl.textContent=phrase.slice(0,pos);if(pos>=phrase.length){removing=true;setTimeout(tick,1850);return}}
+     else {pos--;typeEl.textContent=phrase.slice(0,pos);if(pos<=0){removing=false;pi=(pi+1)%phrases.length;setTimeout(tick,350);return}}
+     setTimeout(tick,removing?43:85);
+   }
+   typeEl.textContent='';tick();
+ }
+ var game=document.getElementById('gameField'),target=document.getElementById('gameTarget'),start=document.getElementById('gameStart'),overlay=document.getElementById('gameOverlay'),hitsOut=document.getElementById('gameHits'),timeOut=document.getElementById('gameTime'),gameMsg=document.getElementById('gameMessage');
+ if(game&&target&&start&&overlay){
+   var points=0,remaining=12,interval=null,playing=false;
+   function move(){
+     // Limit target center to the safe playing area.
+     var x=15+Math.random()*70,y=22+Math.random()*56;
+     target.style.left=x+'%';target.style.top=y+'%';
+   }
+   function end(win){
+     if(interval){clearInterval(interval);interval=null}
+     playing=false;target.disabled=true;overlay.hidden=false;start.disabled=false;
+     overlay.innerHTML=win?'<span>🏆</span><strong>Du klarte det!</strong><small>En ekte kampanje kunne gitt en kontrollert rabatt.</small>':'<span>🌯</span><strong>Tiden er ute!</strong><small>Prøv gjerne igjen – dette er bare en demo.</small>';
+     gameMsg.textContent=win?'Demo fullført! Ingen ekte rabattkode opprettes.':'Et morsomt konsept for å engasjere gjestene.';
+     start.textContent='Spill igjen ↗';
+   }
+   start.addEventListener('click',function(){
+     if(interval)clearInterval(interval);
+     points=0;remaining=12;playing=true;target.disabled=false;overlay.hidden=true;start.disabled=true;move();
+     hitsOut.textContent='0 av 5 treff';timeOut.textContent='12 sekunder';gameMsg.textContent='Fang fem kebaber før tiden går ut.';
+     interval=setInterval(function(){remaining--;timeOut.textContent=remaining+' sekunder';if(remaining<=0)end(false)},1000);
+   });
+   target.addEventListener('click',function(){if(!playing)return;points++;hitsOut.textContent=points+' av 5 treff';if(points>=5){end(true)}else move()});
+ }
+ var stamps=document.querySelectorAll('[data-stamp]'),stampButton=document.getElementById('stampButton'),counter=document.getElementById('stampCounter'),stampMessage=document.getElementById('stampMessage');
+ if(stamps.length&&stampButton){
+  var value=0;
+  stampButton.addEventListener('click',function(){
+    value=value>=5?0:value+1;
+    stamps.forEach(function(el,i){el.classList.toggle('filled',i<value)});
+    counter.textContent=value+' / 5';
+    if(value===5){stampMessage.textContent='🎉 Simulert belønning oppnådd! Ingen ekte rabatt.';stampButton.textContent='Nullstill demoen ↻'}
+    else {stampMessage.textContent=value+' simulerte kjøp. Ingenting lagres.';stampButton.textContent='Simuler en bestilling ↗'}
+  });
+ }
+})();
