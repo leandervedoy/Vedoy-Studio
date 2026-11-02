@@ -46,5 +46,27 @@
  var statuses=['Ny bestilling','Godkjent','Tilberedes','Klar for henting','Fullført'];
  function refresh(){var count=0,total=0;Object.keys(cart).forEach(function(k){count+=cart[k];total+=cart[k]*menu[k].price});byId('cartCount').textContent=count;byId('cartTotal').textContent=fmt(total);byId('placeOrder').disabled=count===0}
  document.querySelectorAll('[data-item]').forEach(function(btn){btn.addEventListener('click',function(){cart[btn.dataset.item]++;refresh();byId('orderMessage').textContent='Lagt til i handlekurven. Dette er fortsatt bare en demo.'})});
- byId('placeOrder').addEventListener('click',function(){var names=Object.keys(cart).filter(function(k){return cart[k]>0}).map(function(k){return cart[k]+' × '+menu[k].name});if(!names.length)return;last++;var row=document.createElement('div');row.className='order';var left=document.createElement('div');var strong=document.createElement('strong');strong.textContent='Demo #'+last+' · Direkte';var subt=document.createElement('span');subt.textContent=names.join(', ');left.appendChild(strong);left.appendChild(document.createElement('br'));left.appendChild(subt);var state=0;var status=document.createElement('span');status.className='order-chip';status.textContent=statuses[state];var next=document.createElement('button');next.className='advance';next.textContent='Neste status →';next.type='button';next.addEventListener('click',function(){state=Math.min(statuses.length-1,state+1);status.textContent=statuses[state];if(state===statuses.length-1){next.disabled=true;next.textContent='Fullført ✓'}if(latestStatus===status)byId('customerOrderStatus').textContent='Din simulerte bestilling #'+last+' · '+statuses[state]});row.appendChild(left);row.appendChild(status);row.appendChild(next);byId('demoOrders').prepend(row);latestStatus=status;byId('customerOrderStatus').hidden=false;byId('customerOrderStatus').textContent='Din simulerte bestilling #'+last+' · '+statuses[0];Object.keys(cart).forEach(function(k){cart[k]=0});refresh();byId('orderMessage').textContent='Bestillingen ble kun simulert. Se resultatet i restaurantpanelet.';tab(true)});
+ byId('placeOrder').addEventListener('click',function(){var names=Object.keys(cart).filter(function(k){return cart[k]>0}).map(function(k){return cart[k]+' × '+menu[k].name});if(!names.length)return;last++;var row=document.createElement('div');row.className='order';row.dataset.source='direct';var left=document.createElement('div');var strong=document.createElement('strong');strong.textContent='Demo #'+last+' · Direkte';var subt=document.createElement('span');subt.textContent=names.join(', ');left.appendChild(strong);left.appendChild(document.createElement('br'));left.appendChild(subt);var state=0;var status=document.createElement('span');status.className='order-chip';status.textContent=statuses[state];var next=document.createElement('button');next.className='advance';next.textContent='Neste status →';next.type='button';next.addEventListener('click',function(){state=Math.min(statuses.length-1,state+1);status.textContent=statuses[state];if(state===statuses.length-1){next.disabled=true;next.textContent='Fullført ✓'}if(latestStatus===status)byId('customerOrderStatus').textContent='Din simulerte bestilling #'+last+' · '+statuses[state]});row.appendChild(left);row.appendChild(status);row.appendChild(next);byId('demoOrders').prepend(row);latestStatus=status;byId('customerOrderStatus').hidden=false;byId('customerOrderStatus').textContent='Din simulerte bestilling #'+last+' · '+statuses[0];Object.keys(cart).forEach(function(k){cart[k]=0});refresh();byId('orderMessage').textContent='Bestillingen ble kun simulert. Se resultatet i restaurantpanelet.';tab(true)});
+  var filterButtons=document.querySelectorAll('[data-filter-source]');
+  function applyOrderFilter(source){
+    document.querySelectorAll('#demoOrders .order').forEach(function(row){
+      row.hidden=source!=='all'&&row.dataset.source!==source;
+    });
+    filterButtons.forEach(function(btn){
+      var on=btn.dataset.filterSource===source;
+      btn.classList.toggle('active',on);
+      btn.setAttribute('aria-pressed',String(on));
+    });
+  }
+  filterButtons.forEach(function(btn){btn.addEventListener('click',function(){applyOrderFilter(btn.dataset.filterSource)})});
+  document.querySelectorAll('[data-plan-monthly]').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var target=byId('monthlyFee'),value=Number(btn.dataset.planMonthly);
+      if(!target||!Number.isFinite(value))return;
+      target.value=String(value);calc();
+      byId('kalkulator').scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
+    });
+  });
 })();
+
+/* source filters and price calculator shortcuts */
