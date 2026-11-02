@@ -131,3 +131,52 @@
   });
  }
 })();
+
+/* Vedoy Growth – sales preview, no external data, no persistence */
+(function(){
+  'use strict';
+  var tabs=Array.from(document.querySelectorAll('[data-growth-tab]'));
+  var panel=document.getElementById('growthPanel');
+  if(!tabs.length||!panel)return;
+  var content={
+    oversikt:{title:'Dagens oversikt',description:'Se raskt hva som trenger oppfølging – uten å lete i flere systemer.',kpis:[['AKTIVE KUNDER','24'],['ÅPNE HENVENDELSER','4'],['KOMMENDE BOOKINGER','3']],activities:[['Følg opp nye kundehenvendelser','Til oppfølging'],['Oppdater tilbud på nettsiden','Innhold'],['Se kommende bookinger','Kalender']],benefit:'Bedre kontroll på dagen.',explanation:'Samle oppgaver, henvendelser og viktig drift i ett bilde. Mindre leting gir mer tid til selve restauranten.'},
+    kunder:{title:'Kunder og CRM',description:'Hold kontaktinformasjon, oppfølging og nye forespørsler samlet.',kpis:[['KUNDEKORT','24'],['VENTER PÅ SVAR','4'],['NYE HENVENDELSER','7']],activities:[['Se hvem som venter på svar','CRM'],['Følg opp forespørsel om catering','Eksempel'],['Oppdater kontaktinformasjon','Kundekort']],benefit:'Kundene blir ikke glemt.',explanation:'Ett kontaktpunkt for kundeoppfølging gjør det enklere å håndtere spørsmål, tilbud og tilbakemeldinger. CRM-modulen er i beta.'},
+    prosjekter:{title:'Prosjekter og publisering',description:'Hold orden på nettsiden, pågående oppgaver og neste endring.',kpis:[['PÅGÅENDE PROSJEKTER','2'],['PLANLAGTE ENDRINGER','3'],['KLARE TIL GJENNOMGANG','1']],activities:[['Oppdatere menybilde','Nettside'],['Klargjøre kampanjeside','Prosjekt'],['Gjennomgå ny versjon','Utkast']],benefit:'Tydelig fremdrift.',explanation:'Når nye funksjoner eller kampanjer utvikles, kan bedriften følge med på hva som skjer og hva som skal godkjennes.'},
+    booking:{title:'Booking og timeregistrering',description:'Planlegg avtaler, hold oversikt over tidsbruk og finn ledige tidspunkter.',kpis:[['AVTALER DENNE UKEN','3'],['REGISTRERTE TIMER','12'],['OPPGAVER TIL PLANLEGGING','2']],activities:[['Gjennomgå kommende avtaler','Kalender'],['Registrer utført arbeid','Timer'],['Planlegg ny oppfølgingssamtale','Booking']],benefit:'Ryddigere planlegging.',explanation:'Hold avtaler og arbeidstimer på ett sted, og gjør det enklere å vite hvem som skal gjøre hva.'},
+    notater:{title:'Notater og Vedoy Canvas',description:'Samle idéer, møtenotater og oppgaver i en ryddig arbeidsflate.',kpis:[['ARBEIDSOMRÅDER','2'],['NOTATER','8'],['ÅPNE OPPGAVER','5']],activities:[['Idé til ny sommerspesial','Notat'],['Sjekkliste for åpningsdagen','Canvas'],['Planlegg neste kampanje','Arbeidsområde']],benefit:'Gode idéer blir til handling.',explanation:'En samlet arbeidsflate gjør det lettere å dokumentere beslutninger og holde teamet oppdatert.'}
+  };
+  var get=function(id){return document.getElementById(id)};
+  function render(tab){
+    var data=content[tab];if(!data)return;
+    tabs.forEach(function(button){var active=button.dataset.growthTab===tab;button.classList.toggle('active',active);button.setAttribute('aria-selected',String(active));button.tabIndex=active?0:-1;if(active)panel.setAttribute('aria-labelledby',button.id)});
+    get('growthPanelTitle').textContent=data.title;
+    get('growthPanelDescription').textContent=data.description;
+    for(var i=0;i<3;i++){
+      get('growthKpiLabel'+(i+1)).textContent=data.kpis[i][0];
+      get('growthKpiValue'+(i+1)).textContent=data.kpis[i][1];
+      get('growthKpiNote'+(i+1)).textContent='Eksempeltall';
+    }
+    get('growthActivityHeading').textContent=tab==='oversikt'?'Neste steg':'Eksempler på oppgaver';
+    var list=get('growthActivityList');
+    list.replaceChildren();
+    data.activities.forEach(function(item){
+      var li=document.createElement('li'),dot=document.createElement('span'),small=document.createElement('small');
+      dot.className='business-activity-dot';small.textContent=item[1];li.appendChild(dot);li.appendChild(document.createTextNode(item[0]));li.appendChild(small);list.appendChild(li);
+    });
+    get('growthBenefitTitle').textContent=data.benefit;
+    get('growthBenefitText').textContent=data.explanation;
+  }
+  tabs.forEach(function(button,index){
+    button.tabIndex=button.classList.contains('active')?0:-1;
+    button.addEventListener('click',function(){render(button.dataset.growthTab)});
+    button.addEventListener('keydown',function(e){
+      if(!['ArrowDown','ArrowUp','ArrowRight','ArrowLeft','Home','End'].includes(e.key))return;
+      e.preventDefault();var next=index;
+      if(e.key==='Home')next=0;
+      else if(e.key==='End')next=tabs.length-1;
+      else if(e.key==='ArrowDown'||e.key==='ArrowRight')next=(index+1)%tabs.length;
+      else next=(index+tabs.length-1)%tabs.length;
+      tabs[next].focus();render(tabs[next].dataset.growthTab);
+    });
+  });
+})();
