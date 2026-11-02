@@ -41,6 +41,7 @@ const sections: NavSection[] = [
     label: "Voks",
     items: [
       { href: "/studio/analytics", icon: "↗", label: "Statistics" },
+      { href: "/studio/cashback", icon: "◈", label: "Cashback" },
  { href: "/studio/news", icon: "▤", label: "Vedøy News" },
  { href: "/studio/account", icon: "◎", label: "Konto og profil" },
       { href: "/studio/vedi", icon: "✦", label: "Vedi AI", locked: true },
