@@ -216,3 +216,6 @@
 @media(max-width:760px){.proof-section,.security-showcase,.fun-section{padding:76px 0}.proof-heading,.security-heading,.proof-comparison,.fun-grid{grid-template-columns:1fr}.proof-stats{grid-template-columns:1fr}.proof-stat{min-height:0}.proof-comparison{padding:26px;gap:20px}.security-map{gap:8px;padding:12px}.security-node{min-height:125px;padding:11px 6px}.security-node strong{font-size:12px}.security-node small{font-size:9px}.security-link{font-size:16px}.security-grid{grid-template-columns:1fr 1fr}.security-sources{flex-direction:column;align-items:flex-start}.end-order-note{margin:-40px 0 55px!important}}
 @media(max-width:480px){.security-grid{grid-template-columns:1fr}.security-map{flex-wrap:wrap}.security-node{min-width:28%}.fun-card{padding:21px}.stamp-panel{padding:17px}.stamps span{width:41px;height:41px}.proof-comparison{padding:22px}.proof-summary strong{font-size:22px}.proof-stat>strong{font-size:47px}.end-order-cta{font-size:13px!important}}
 @media(prefers-reduced-motion:reduce){.has-js [data-reveal]{opacity:1;transform:none;transition:none}.type-caret{animation:none}.game-target{transition:none}}
+
+/* Semantic hidden state wins over custom layouts */
+[hidden]{display:none!important}
