@@ -54,11 +54,11 @@ export async function POST(request: Request) {
       if (!challenge.ok || result.success !== true) return denied("Botkontrollen mislyktes.", 403);
     }
     // Reuse Studio's durable contact_requests for a simple persisted quota.
-    const counts = await sql<{ count: number }[]>\`
+    const counts = await sql<{ count: number }[]>`
       select count(*)::int as count from contact_requests
-      where organization_id = \${"org_vedoy"} and lower(email) = \${email}
+      where organization_id = ${"org_vedoy"} and lower(email) = ${email}
         and created_at >= now() - interval '1 hour'
-    \`;
+    `;
     if (Number(counts[0]?.count || 0) >= 3) return denied("For mange forespørsler. Prøv igjen senere.", 429);
 
     // Never trust names, prices, or version numbers from the public browser.
@@ -86,7 +86,7 @@ export async function POST(request: Request) {
         userEmail: process.env.ADMIN_EMAIL || "leander@vedoy.store",
         type: "lead",
         title: "Ny prisforespørsel",
-        detail: \`${input.companyName} ønsker \${inquiry.main.title}.\`,
+        detail: `${input.companyName} ønsker ${inquiry.main.title}.`,
         href: "/studio/requests"
       });
     } catch (error) {
