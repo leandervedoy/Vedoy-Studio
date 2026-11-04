@@ -3,12 +3,9 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Brand } from "@/components/brand";
 import { getSession } from "@/lib/auth";
+import { safeStudioNext } from "@/lib/vedoy-owner-access.mjs";
 
 export const metadata: Metadata = { title: "Logg inn" };
-
-function safeNext(value: string | undefined) {
-  return value?.startsWith("/studio") ? value : "/studio";
-}
 
 export default async function LoginPage({
   searchParams,
@@ -16,7 +13,7 @@ export default async function LoginPage({
   searchParams: Promise<{ next?: string; authError?: string }>;
 }) {
   const params = await searchParams;
-  const next = safeNext(params.next);
+  const next = safeStudioNext(params.next);
   if (await getSession()) redirect(next);
   const loginHref = `/api/auth/login?next=${encodeURIComponent(next)}`;
 
