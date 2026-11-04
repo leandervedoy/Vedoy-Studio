@@ -141,7 +141,7 @@ export function PricingExperience({ prices, hero, turnstileSiteKey }: { prices: 
           <label className="vp-consent"><input type="checkbox" checked={form.consent} onChange={e=>setForm({...form,consent:e.target.checked})}/><span>Jeg samtykker til at Vedøy kontakter meg om forespørselen. Se <Link href="/privacy" target="_blank">personvernerklæringen</Link>.</span></label>
           {turnstileSiteKey ? <div ref={challengeRef}/> : <p className="vp-message">Kontaktskjemaet er ikke aktivert ennå. Bruk kontaktsiden.</p>}
           {message ? <p role="alert" className={status==="error"?"vp-message error":"vp-message"}>{message}</p> : null}
-          <button type="submit" className="vp-primary" disabled={!form.consent||!token||status==="submitting"}>{status==="submitting"?"Lagrer …":"Send forespørsel"} <ArrowRight size={16}/></button>
+          {turnstileSiteKey ? <button type="submit" className="vp-primary" disabled={!form.consent||!token||status==="submitting"}>{status==="submitting"?"Lagrer …":"Send forespørsel"} <ArrowRight size={16}/></button> : <Link className="vp-primary" href="/#kontakt">Kontakt oss om valgt pakke <ArrowRight size={16}/></Link>}
         </form>}
       </div>
     </div>}
