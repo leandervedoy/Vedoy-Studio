@@ -82,7 +82,7 @@ export function PricingExperience({ prices, hero, turnstileSiteKey }: { prices: 
   function open(main:string,addonCode?:string){setSelection({main,addon:addonCode});setToken("");setStatus("idle");setMessage("");}
   async function send(event:React.FormEvent<HTMLFormElement>){
     event.preventDefault();
-    if(!selection || !token || !form.consent || status==="submitting")return;
+    if(!selection || (turnstileSiteKey && !token) || !form.consent || status==="submitting")return;
     setStatus("submitting");setMessage("");
     try {
       const response=await fetch("/api/pricing/leads",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({...form,planCode:selection.main,addonCode:selection.addon,answers,turnstileToken:token})});
@@ -139,9 +139,9 @@ export function PricingExperience({ prices, hero, turnstileSiteKey }: { prices: 
           <label>Telefon (valgfritt)<input type="tel" value={form.phone} onChange={e=>setForm({...form,phone:e.target.value})}/></label>
           <input type="text" className="vp-hidden-field" tabIndex={-1} autoComplete="off" aria-hidden="true" value={form.honeypot} onChange={e=>setForm({...form,honeypot:e.target.value})}/>
           <label className="vp-consent"><input type="checkbox" checked={form.consent} onChange={e=>setForm({...form,consent:e.target.checked})}/><span>Jeg samtykker til at Vedøy kontakter meg om forespørselen. Se <Link href="/privacy" target="_blank">personvernerklæringen</Link>.</span></label>
-          {turnstileSiteKey ? <div ref={challengeRef}/> : <p className="vp-message">Kontaktskjemaet er ikke aktivert ennå. Bruk kontaktsiden.</p>}
+          {turnstileSiteKey ? <div ref={challengeRef}/> : <p className="vp-message">Forespørselen sendes til Vedøy Studios eksisterende CRM og kontrolleres mot gjeldende priser fra Developer Portal.</p>}
           {message ? <p role="alert" className={status==="error"?"vp-message error":"vp-message"}>{message}</p> : null}
-          {turnstileSiteKey ? <button type="submit" className="vp-primary" disabled={!form.consent||!token||status==="submitting"}>{status==="submitting"?"Lagrer …":"Send forespørsel"} <ArrowRight size={16}/></button> : <Link className="vp-primary" href="/#kontakt">Kontakt oss om valgt pakke <ArrowRight size={16}/></Link>}
+          <button type="submit" className="vp-primary" disabled={!form.consent||(Boolean(turnstileSiteKey)&&!token)||status==="submitting"}>{status==="submitting"?"Lagrer …":"Send forespørsel"} <ArrowRight size={16}/></button>
         </form>}
       </div>
     </div>}
