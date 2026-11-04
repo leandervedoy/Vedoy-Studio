@@ -10,15 +10,11 @@ export type Opinion = {
  proposedBody:string|null; approvedPostId:string|null; createdAt:string; updatedAt:string;
 };
 const ORG="org_vedoy";
-const fields=String.raw`id, author_id as "authorId", author_name as "authorName", title, excerpt, body,
- status, feedback, proposed_title as "proposedTitle", proposed_excerpt as "proposedExcerpt",
- proposed_body as "proposedBody", approved_post_id as "approvedPostId",
- created_at as "createdAt", updated_at as "updatedAt"`;
 function db(){const sql=getSql();if(!sql)throw new Error("Databasen er ikke konfigurert.");return sql;}
 function mapRow(row:Opinion):Opinion {
  return {...row,createdAt:new Date(row.createdAt).toISOString(),updatedAt:new Date(row.updatedAt).toISOString()};
 }
-function slugify(s:string){return s.normalize("NFKD").toLowerCase().replace(/[\\u0300-\\u036f]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,75)||"mening";}
+function slugify(s:string){return s.normalize("NFKD").toLowerCase().replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,75)||"mening";}
 export async function submitOpinion(session:SessionPayload,input:{title:string;excerpt:string;body:string}):Promise<Opinion>{
  const sql=db(),authorId=newsUserId(session),id=randomUUID();
  // Daily creation cap to discourage spam; moderation is always mandatory.
