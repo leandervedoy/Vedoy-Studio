@@ -20,14 +20,15 @@ export default async function NewsArticle({params}:{params:Promise<{slug:string}
   const post=await getNewsPost((await params).slug);
   if(!post)notFound();
   const category=decodeNewsCategory(post.category);
+  const opinion=category.topic==="meninger";
   const date=post.publishedAt||post.createdAt;
   const words=post.content.trim().split(/\s+/).length;
   const minutes=Math.max(1,Math.ceil(words/220));
   const structured={
-    "@context":"https://schema.org","@type":"NewsArticle",
+    "@context":"https://schema.org","@type":opinion?"OpinionNewsArticle":"NewsArticle",
     headline:post.title,description:post.excerpt,
     datePublished:date,dateModified:post.updatedAt,
-    author:{"@type":"Organization",name:"Vedoy News"},
+    author:opinion?{"@type":"Person",name:post.authorName}:{"@type":"Organization",name:"Vedoy News"},
     publisher:{"@type":"Organization",name:"Vedoy Studio"},
     mainEntityOfPage:"https://vedoystudio.no/news/"+post.slug
   };
@@ -35,9 +36,10 @@ export default async function NewsArticle({params}:{params:Promise<{slug:string}
     <div className={styles.articleInner}>
       <Link href={"/news?project="+category.project} className={styles.back}>← {category.projectLabel} / Nyheter</Link>
       <p className={styles.articleMeta}>{category.projectLabel.toUpperCase()} / {category.topicLabel.toUpperCase()}</p>
+      {opinion?<aside className={styles.opinionDisclaimer} aria-label="Merking av meningsinnlegg"><strong>MENING · EKSTERN SKRIBENT</strong><p>Dette er et meningsinnlegg. Synspunktene er forfatterens egne og representerer ikke nødvendigvis Vedøy News eller Vedøy Studio. Redaksjonen har godkjent publiseringen, men står ikke ansvarlig for forfatterens standpunkter.</p></aside>:null}
       <h1>{post.title}</h1>
       <p className={styles.articleSummary}>{post.excerpt}</p>
-      <div className={styles.byline}><span>{post.authorName}{post.authorType==="vedi"?" · KI-assistert":""}</span><time dateTime={date}>{new Date(date).toLocaleDateString("nb-NO",{day:"numeric",month:"long",year:"numeric"})}</time><span>{minutes} min lesing</span></div>
+      <div className={styles.byline}><span>{opinion?"Mening av ":"Av "}{post.authorName}{post.authorType==="vedi"?" · KI-assistert":""}</span><time dateTime={date}>{new Date(date).toLocaleDateString("nb-NO",{day:"numeric",month:"long",year:"numeric"})}</time><span>{minutes} min lesing</span></div>
       <article className={styles.articleBody}>{post.content.split(/\n\n+/).map((paragraph,index)=><p key={index}>{paragraph}</p>)}</article>
       <NewsSponsors placement="article"/>
       <NewsComments slug={post.slug}/>
