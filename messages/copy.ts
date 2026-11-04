@@ -1,6 +1,7 @@
 // Norwegian source and reviewed English translation. Customer-authored text is never machine-translated.
 export const copyEntries: [string, string][] = [
   ["VEDØY STUDIO · HAUGESUND · DIGITALT", "VEDØY STUDIO · HAUGESUND · DIGITAL"],
+  ["Egne Vedøy-prosjekter og produktdemoer – ikke kundeanmeldelser. Klikk for å se løsninger og hva som er i beta.", "Our own Vedøy projects and product demos—not customer testimonials. Explore what is live or in beta."],
   ["Få tilbud på nettside", "Get a website quote"], ["Be om gratis prosjektprat", "Request a free project consultation"], ["Nettsider som hjelper småbedrifter å bli funnet og få henvendelser. Design, utvikling og drift fra Haugesund – med tydelige avtaler.", "Websites that help small businesses get found and receive enquiries. Design, development, and maintenance from Haugesund, with clear agreements."],
   ["Vi bygger det", "We build what"], ["bedriften din", "your business"], ["trenger.", "needs."],
   ["Nettsider, apper, nettbutikk, hosting, design, profilprodukter og trykk — samlet hos én partner.", "Websites, apps, online stores, hosting, design, branded products and print — with one partner."],
