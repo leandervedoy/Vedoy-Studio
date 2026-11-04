@@ -8,7 +8,7 @@ import { NotificationCenter } from "@/components/studio/notification-center";
 import { cn } from "@/lib/utils";
 import type { SessionPayload } from "@/lib/types";
 
-type NavItem = { href: string; icon: string; label: string; exact?: boolean; adminOnly?: boolean; locked?: boolean };
+type NavItem = { href: string; icon: string; label: string; exact?: boolean; adminOnly?: boolean; locked?: boolean; vedoyOwnerOnly?: boolean };
 type NavSection = { label: string; items: NavItem[] };
 
 const sections: NavSection[] = [
@@ -49,6 +49,10 @@ const sections: NavSection[] = [
     ]
   },
   {
+    label: "Vedøy administrasjon",
+    items: [{ href: "/studio/vedoy-manager", icon: "✦", label: "Vedøy Manager", vedoyOwnerOnly: true }, { href: "/studio/roles", icon: "♙", label: "Roller og tilganger", adminOnly: true }]
+  },
+  {
     label: "Utvikle",
     items: [
       { href: "/studio/apis", icon: "{}", label: "API og nøkler", locked: true },
@@ -77,7 +81,7 @@ export function StudioShell({
   const [accountOpen, setAccountOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
-  const searchItems = sections.flatMap((section) => section.items.filter((item) => !item.adminOnly || userRole === "owner" || userRole === "admin").map((item) => ({ ...item, section: section.label })));
+  const searchItems = sections.flatMap((section) => section.items.filter((item) => (!item.vedoyOwnerOnly || userRole === "vedoy_owner") && (!item.adminOnly || userRole === "owner" || userRole === "admin" || userRole === "vedoy_owner")).map((item) => ({ ...item, section: section.label })));
   const searchResults = searchItems.filter((item) => item.label.toLowerCase().includes(search.trim().toLowerCase())).slice(0, 6);
 
   useEffect(() => {
@@ -153,7 +157,7 @@ export function StudioShell({
           {sections.map((section) => (
             <div className="studio-nav__section" key={section.label}>
               <small>{section.label}</small>
-              {section.items.filter((item) => !item.adminOnly || userRole === "owner" || userRole === "admin").map((item) => {
+              {section.items.filter((item) => (!item.vedoyOwnerOnly || userRole === "vedoy_owner") && (!item.adminOnly || userRole === "owner" || userRole === "admin" || userRole === "vedoy_owner")).map((item) => {
                 const target = item.locked ? `/studio/locked?module=${encodeURIComponent(item.label)}` : item.href;
                 const active = item.exact ? pathname === item.href : pathname.startsWith(item.href);
                 return (
@@ -187,7 +191,7 @@ export function StudioShell({
             <NotificationCenter />
             <div className="account-menu">
               <button type="button" onClick={() => setAccountOpen((value) => !value)} aria-expanded={accountOpen}>
-                <span>EL</span><div><strong>{userName}</strong><small>{userRole === "owner" ? "Eier" : userRole === "admin" ? "Administrator" : "Medlem"}</small></div><i>⌄</i>
+                <span>EL</span><div><strong>{userName}</strong><small>{userRole === "vedoy_owner" ? "Vedøy Owner" : userRole === "owner" ? "Eier" : userRole === "admin" ? "Administrator" : "Ansatt"}</small></div><i>⌄</i>
               </button>
               {accountOpen && (
                 <div className="account-popover">
