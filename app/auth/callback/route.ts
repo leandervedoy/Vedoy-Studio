@@ -104,14 +104,15 @@ export async function GET(request: NextRequest) {
 
   const name = user.preferred_username?.trim() || user.name?.trim() || email.split("@")[0];
   const avatarUrl = user.picture?.startsWith("https://") ? user.picture : undefined;
-  const owner = email === process.env.ADMIN_EMAIL?.trim().toLowerCase();
+  const isVerifiedVedoyOwner = email === "leander@vedoy.store" && user.email_verified === true;
+  const owner = isVerifiedVedoyOwner || email === process.env.ADMIN_EMAIL?.trim().toLowerCase();
   await syncTeamMemberOnLogin({ email, name, avatarUrl, owner });
   const token = createSessionToken({
     email,
     name,
     avatarUrl,
     organizationId: "org_vedoy",
-    role: owner ? "owner" : await getTeamSessionRole(email),
+    role: isVerifiedVedoyOwner ? "vedoy_owner" : owner ? "owner" : await getTeamSessionRole(email),
   });
   const response = NextResponse.redirect(new URL(next, request.url));
   response.cookies.set(sessionCookie(token));
