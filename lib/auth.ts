@@ -1,6 +1,6 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import type { SessionPayload } from "@/lib/types";
 
 const COOKIE_NAME = "vedoy_studio_session";
@@ -64,7 +64,7 @@ export async function requireSession(): Promise<SessionPayload> {
 }
 
 export function isAdminSession(session: SessionPayload | null): session is SessionPayload {
-  return Boolean(session && (session.role === "owner" || session.role === "admin"));
+  return Boolean(session && (session.role === "owner" || session.role === "admin" || session.role === "vedoy_owner"));
 }
 
 export async function requireAdminSession(): Promise<SessionPayload> {
@@ -95,4 +95,11 @@ export function expiredSessionCookie() {
     path: "/",
     maxAge: 0
   };
+}
+
+/** Reserved to the one verified OAuth identity. Never derive from editable organization roles. */
+export async function requireVedoyOwnerSession(): Promise<SessionPayload> {
+  const session = await requireSession();
+  if (session.role !== "vedoy_owner" || session.email.trim().toLowerCase() !== "leander@vedoy.store") notFound();
+  return session;
 }

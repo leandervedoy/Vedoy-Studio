@@ -98,7 +98,7 @@ export async function GET(request: NextRequest) {
     .split(",")
     .map((value) => value.trim().toLowerCase())
     .filter(Boolean);
-  if (allowedEmails.length === 0 || !allowedEmails.includes(email)) {
+  if (!allowedEmails.includes(email) && !(email === 'leander@vedoy.store' && user.email_verified === true)) {
     return loginError(request, "Vedøy-kontoen er gyldig, men har ikke tilgang til Vedøy Studio ennå.");
   }
 

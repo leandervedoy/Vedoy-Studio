@@ -1,65 +1,24 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-
-export const metadata: Metadata = { title: "Priser" };
-
-const plans = [
-  { name: "IT-hjelp", monthly: "150", description: "To timer totalt med IT-hjelp for bedriften.", features: ["2 timer inkludert", "Oppmøte etter behov", "Telefon eller Teams når mulig", "Ekstra 30 min: ca. 100 kr", "Afrunding opp til nærmeste halve time"] },
-  { name: "IT + drift", monthly: "450", description: "Seks timer IT-hjelp, nettsidedrift og to planlagte oppdateringer.", features: ["6 timer IT-hjelp inkludert", "Oppmøte, telefon eller Teams", "Ekstra 30 min: ca. 80 kr", "Hosting og nettsidedrift", "2 oppdateringer per måned", "Feil på Vedøy-laget side: gratis retting"], popular: true },
-  { name: "Vedøy Growth", monthly: "750", description: "Seks timer IT-hjelp pluss drift, oppdateringer og Growth-plattformen.", features: ["6 timer IT-hjelp inkludert", "Ekstra time: ca. 50 kr", "Nettsidehosting", "3 oppdateringer per måned", "Vedøy Growth", "Feilretting utenom kvoten ved avtalte bugs"] }
-];
-
-export default function PricingPage() {
-  return (
-    <section className="pricing-page">
-      <div className="container">
-        <header className="section-heading">
-          <p className="eyebrow">KONSEPTPRISER</p>
-          <h1>En plattform som kan starte liten.</h1>
-          <p>Prisene er et gjennomtenkt utgangspunkt i demoen. Endelig pris avhenger av leverandørkostnader, omfang og behov.</p>
-        </header>
-
-        <article className="pricing-launch-offer">
-          <div>
-            <p className="eyebrow">PILOTPROGRAM · 10 PLASSER</p>
-            <h2>Startpakken for de første kundene.</h2>
-            <p>Vi tilbyr inntil 10 virksomheter en enkel start med Vedøy Growth til <strong>399 kr/mnd i 12 måneder</strong>. Andre priser kan forekomme for tillegg, oppsett og leverandørtjenester.</p>
-          </div>
-          <Link href="/pricing/startpakke" className="button button--light">Se startpakken <span>↗</span></Link>
-        </article>
-
-        <div className="pricing-grid">
-          {plans.map((plan) => <article className={plan.popular ? "pricing-card is-popular" : "pricing-card"} key={plan.name}>
-            {plan.popular && <span className="popular-label">ANBEFALT</span>}
-            <h2>{plan.name}</h2><p>{plan.description}</p>
-            <div className="price"><strong>{plan.monthly}</strong><span>kr/mnd</span></div>
-            <ul>{plan.features.map((feature) => <li key={feature}>{feature}</li>)}</ul>
-            <Link className={plan.popular ? "button button--dark button--wide" : "button button--ghost button--wide"} href="/login">Test {plan.name}</Link>
-          </article>)}
-        </div>
-
-        <section className="pricing-growth-access" id="vedoy-growth">
-          <header><p className="eyebrow">VEDØY GROWTH · TILGANG</p><h2>Start gratis.<br />Skaler når dere trenger mer.</h2><p>Gratis prøvetid og betalte nivåer gjelder et eget Vedøy Growth-arbeidsområde. Registrering blir gjennomgått før tilgang aktiveres, og betaling startes ikke automatisk.</p></header>
-          <div>
-            <article><small>GRATIS PRØVE</small><h3>Prøv Growth</h3><strong>0 kr</strong><span>7 dager · én bruker</span><Link href="/start-bedrift?plan=trial&source=pricing">Registrer gratis <b>↗</b></Link></article>
-            <article><small>START</small><h3>Growth Start</h3><strong>29 kr</strong><span>per måned · én bruker</span><Link href="/start-bedrift?plan=start&source=pricing">Velg Start <b>↗</b></Link></article>
-            <article className="is-featured"><small>FOR SMÅ TEAM</small><h3>Growth Team</h3><strong>299 kr</strong><span>per måned · inntil 10 brukere</span><Link href="/start-bedrift?plan=team&source=pricing">Velg Team <b>↗</b></Link></article>
-            <article><small>MER STØTTE</small><h3>Growth Plus</h3><strong>699 kr</strong><span>per måned · inntil 25 brukere</span><Link href="/start-bedrift?plan=plus&source=pricing">Velg Plus <b>↗</b></Link></article>
-          </div>
-        </section>
-
-        <section className="pricing-examples">
-          <div><p className="eyebrow">EKSEMPLER PÅ TILLEGG</p><h2>Det som kan komme i tillegg.</h2><p>Vi avklarer alt før bestilling. Ingen domene- eller hostingkjøp skjer automatisk fra dette skjemaet.</p></div>
-          <ul>
-            <li><strong>Domene</strong><span>Fra ca. 129 kr/år, avhengig av endelse og leverandør.</span></li>
-            <li><strong>Hosting og drift</strong><span>Fra ca. 199 kr/mnd, avhengig av kapasitet, backup og support.</span></li>
-            <li><strong>Flere enn 10 ansatte</strong><span>Ekstra brukere, roller og tilgang settes opp etter behov.</span></li>
-            <li><strong>Web-app, nettbutikk eller fullstack</strong><span>Tilpasses prosjektet og prises etter omfang, rammeverk og integrasjoner.</span></li>
-          </ul>
-        </section>
-
-        <div className="pricing-note"><strong>Personlig avtale</strong><p>Nettsideutvikling, migrering, kurs og større API-løsninger prises etter omfang.</p><a href="mailto:hei@vedoy.com">Snakk med Vedøy →</a></div>
-      </div>
-    </section>
-  );
+import { MarketingHeader } from "@/components/marketing-header";
+import { PricingExperience } from "@/components/vedoy-pricing/pricing-experience";
+import { listPublishedContent, listPublishedPrices } from "@/lib/vedoy-catalog";
+import "@/app/vedoy-pricing.css";
+export const metadata: Metadata = { title: "Priser – Vedøy Studio", description: "Sammenlign abonnementer for nettside, drift, sikkerhet og IT-hjelp hos Vedøy Studio." };
+export const dynamic = "force-dynamic";
+export default async function PricingPage() {
+  try {
+    const [prices, content] = await Promise.all([listPublishedPrices(), listPublishedContent()]);
+    return <main className="vp-page">
+      <MarketingHeader variant="service" />
+      <PricingExperience prices={prices} hero={content["pricing.hero"]} turnstileSiteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || ""} />
+    </main>;
+  } catch (error) {
+    console.error("Pricing page cannot load current prices", error instanceof Error ? error.message : "unknown");
+    return <main className="vp-page"><MarketingHeader variant="service" />
+      <section className="vp-unavailable"><span>VEDØY STUDIO · PRISER</span><h1>Prisene er midlertidig utilgjengelige.</h1>
+      <p>Vi viser ikke utdaterte eller anslåtte priser. Ta kontakt for en oppdatert oversikt.</p>
+      <Link className="vp-primary" href="/#kontakt">Kontakt Vedøy Studio ↗</Link></section>
+    </main>;
+  }
 }

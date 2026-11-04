@@ -337,7 +337,7 @@ export interface SessionPayload {
   email: string;
   name: string;
   organizationId: string;
-  role: "owner" | "admin" | "member";
+  role: "vedoy_owner" | "owner" | "admin" | "member" | "employee";
   expiresAt: number;
 }
 
