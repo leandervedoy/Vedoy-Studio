@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { listPublishedPrices, money } from "@/lib/vedoy-catalog";
+import { listPublishedPrices, money, type CatalogPrice } from "@/lib/vedoy-catalog";
 export const metadata: Metadata = { title:"Vedøy Growth · Pilotprogram" };
 export const dynamic = "force-dynamic";
 export default async function StartpakkePage() {
-  let pilot;
+  let pilot: CatalogPrice | undefined;
   try { pilot = (await listPublishedPrices("campaign")).find(p => p.code === "growth-pilot"); } catch { /* never show unverified prices */ }
   return <section className="pricing-page pricing-start-page"><div className="container">
     <Link href="/pricing" className="back-link">← Tilbake til priser</Link>
