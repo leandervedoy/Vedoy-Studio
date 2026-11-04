@@ -57,7 +57,7 @@ export default async function PricingPage() {
               return <article className={plan.featured ? "pricing-card is-popular" : "pricing-card"} key={plan.code}>
                 {plan.featured ? <span className="popular-label">ANBEFALT</span> : null}
                 <h3>{plan.title}</h3><p>{plan.description}</p>
-                <div className="price"><strong>{priceAmount(plan.amount_ore)}</strong><span>{plan.billing_period === "month" ? "kr er oppgitt per måned" : plan.billing_period === "one_time" ? "engangspris" : plan.billing_period === "year" ? "per år" : "per time"}</span></div>
+                <div className="price"><strong>{priceAmount(plan.amount_ore)}</strong><span>{plan.billing_period === "month" ? "per måned" : plan.billing_period === "one_time" ? "engangspris" : plan.billing_period === "year" ? "per år" : "per time"}</span></div>
                 <p>{vatLabel(plan.vat_mode)}</p>
                 {plan.setup_ore > 0 ? <p>Oppsett: {priceAmount(plan.setup_ore)}</p> : null}
                 <ul>{plan.features.map(feature => <li key={feature}>{feature}</li>)}</ul>
