@@ -16,7 +16,7 @@ function safeNext(value: string | null) {
 }
 
 export async function GET(request: NextRequest) {
-  const neonAuthUrl = process.env.VEDOY_LOGIN_NEON_AUTH_URL;
+  const neonAuthUrl = process.env.VEDOY_LOGIN_NEON_AUTH_URL || process.env.VITE_NEON_AUTH_URL;
   const clientId = process.env.VEDOY_LOGIN_CLIENT_ID;
   const callbackUrl = process.env.VEDOY_LOGIN_CALLBACK_URL;
 
