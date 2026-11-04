@@ -14,17 +14,17 @@ import { ServiceShowcase } from "@/components/service-showcase";
 import { isDomainProviderConfigured } from "@/lib/vercel-domains";
 
 const serviceCtas: Record<string, { label: string; href: string }> = {
-  nettsider: { label: "Bestill nettside", href: "/#kontakt" },
-  webapper: { label: "Be om tilbud på webapp", href: "/#kontakt" },
-  nettbutikk: { label: "Bestill nettbutikk", href: "/#kontakt" },
+  nettsider: { label: "Be om tilbud på nettside", href: "/?need=Nettside&source=service-nettsider#kontakt" },
+  webapper: { label: "Be om tilbud på webapp", href: "/?need=Webapp&source=service-webapp#kontakt" },
+  nettbutikk: { label: "Be om tilbud på nettbutikk", href: "/?need=Nettbutikk&source=service-nettbutikk#kontakt" },
   "hosting-og-domene": { label: "Konfigurer hosting og domene", href: "#konfigurer-hosting" },
-  "design-og-profil": { label: "Bestill design og profil", href: "/#kontakt" },
+  "design-og-profil": { label: "Be om tilbud på design", href: "/?need=Design%20og%20profil&source=service-design#kontakt" },
   profilprodukter: { label: "Bestill klær med logo", href: "#bestill-profilprodukter" },
   ecommerce: { label: "Velg Payhip eller Shopify", href: "#velg-handelsplattform" },
-  "trykk-og-print": { label: "Bestill trykk og print", href: "/#kontakt" },
-  "musiker-og-artist": { label: "Be om en artistpakke", href: "/#kontakt" },
-  "kunstner-og-merch": { label: "Bestill kunst og merch", href: "/#kontakt" },
-  "vedoy-growth": { label: "Bestill Vedøy Growth", href: "/#kontakt" }
+  "trykk-og-print": { label: "Be om tilbud på trykk", href: "/?need=Trykk%20og%20print&source=service-trykk#kontakt" },
+  "musiker-og-artist": { label: "Be om en artistpakke", href: "/?need=Musiker%20og%20artist&source=service-artist#kontakt" },
+  "kunstner-og-merch": { label: "Be om tilbud på kunst og merch", href: "/?need=Kunstner%20og%20merch&source=service-kunst#kontakt" },
+  "vedoy-growth": { label: "Be om Growth-tilbud", href: "/?need=Ved%C3%B8y%20Growth&source=service-growth#kontakt" }
 };
 
 export const dynamic = "force-dynamic";
@@ -46,7 +46,7 @@ export default async function ServicePage({ params, searchParams }: { params: Pr
   const isClothing = service.renderType === "clothing";
   const isUpcoming = service.slug === "vedoy-phone" || service.slug === "vedoy-rewards";
   const story = serviceStories[service.slug];
-  const serviceCta = isUpcoming ? { label: "Meld interesse", href: "/#kontakt" } : serviceCtas[service.slug] ?? { label: `Bestill ${service.title.toLocaleLowerCase("nb-NO")}`, href: "/#kontakt" };
+  const serviceCta = isUpcoming ? { label: "Meld interesse", href: "/?need=Prosjektprat&source=upcoming#kontakt" } : serviceCtas[service.slug] ?? { label: `Be om tilbud på ${service.title.toLocaleLowerCase("nb-NO")}`, href: "/?need=Prosjektprat&source=service#kontakt" };
 
   return (
     <main className="service-detail-page">

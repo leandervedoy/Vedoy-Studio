@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   },
   description: "Vedøy Studio tilbyr nettsider, webapper, nettbutikker, hosting, IT-hjelp, design og Vedøy Growth for små og mellomstore virksomheter.",
   keywords: ["nettsider for bedrifter", "webapp utvikling", "nettbutikk", "hosting", "IT-hjelp", "Vedøy Growth", "profilprodukter"],
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://www.vedoystudio.no"),
   openGraph: {
     title: "Vedøy Studio",
     description: "Digital infrastruktur med skandinavisk enkelhet.",
