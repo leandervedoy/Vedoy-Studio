@@ -78,9 +78,9 @@ export async function editorDecision(id:string,actor:string,action:"reject"|"req
  const status=action==="reject"?"rejected":action==="propose"?"author_approval":"changes_requested";
  const rows=await sql`update vedoy_news_opinions set
  status=${status}, feedback=${input.feedback},
- proposed_title=${action==="propose"?input.title:null},
- proposed_excerpt=${action==="propose"?input.excerpt:null},
- proposed_body=${action==="propose"?input.body:null}, updated_at=now()
+ proposed_title=${action==="propose"?(input.title??null):null},
+ proposed_excerpt=${action==="propose"?(input.excerpt??null):null},
+ proposed_body=${action==="propose"?(input.body??null):null}, updated_at=now()
  where id=${id} and status='pending_review' returning id`;
  if(!rows.length)throw new Error("Saken er allerede behandlet eller venter på forfatter.");
  await sql`insert into vedoy_news_opinion_events(id,opinion_id,actor_id,event,note)
