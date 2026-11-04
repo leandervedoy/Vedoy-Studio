@@ -19,6 +19,7 @@ export default async function NewsPage({searchParams}:{searchParams:Promise<{pro
   const all=(await listNewsPosts(true)).filter(post=>postMatchesNewsFilters(post.category,project||undefined,topic||undefined));
   const posts=q?all.filter(post=>(post.title+" "+post.excerpt+" "+post.content).toLocaleLowerCase("nb-NO").includes(q.toLocaleLowerCase("nb-NO"))):all;
   const projectLabel=NEWS_PROJECTS.find(item=>item.slug===project)?.label;
+  const opinions=posts.filter(post=>decodeNewsCategory(post.category).topic==="meninger").slice(0,2);
   function url(nextProject:string,nextTopic:string){
     const query=new URLSearchParams();
     if(nextProject)query.set("project",nextProject);
@@ -31,7 +32,7 @@ export default async function NewsPage({searchParams}:{searchParams:Promise<{pro
       <Link className={styles.brand} href="/news">VEDOY <span>NEWS.</span></Link>
       <nav className={styles.topLinks} aria-label="Nyhetsnavigasjon">
         <Link href="/">Vedoy Studio</Link>
-        <Link href="/news/rss.xml">RSS</Link>
+        <Link href="/news?topic=meninger">Meninger</Link><Link href="/news/meninger/skriv">Skriv mening</Link><Link href="/news/rss.xml">RSS</Link>
         <Link href="/studio/news">Redaksjon</Link>
       </nav>
     </header>
@@ -63,7 +64,7 @@ export default async function NewsPage({searchParams}:{searchParams:Promise<{pro
           {posts.length?posts.slice(0,30).map(post=>{
             const classification=decodeNewsCategory(post.category);
             return <article className={styles.story} key={post.id}>
-              <div className={styles.storyMeta}><span>{classification.projectLabel} / {classification.topicLabel}</span><time dateTime={post.publishedAt||post.createdAt}>{new Date(post.publishedAt||post.createdAt).toLocaleDateString("nb-NO",{day:"numeric",month:"short",year:"numeric"})}</time></div>
+              <div className={styles.storyMeta}><span>{classification.topic==="meninger"?"MENING · ": ""}{classification.projectLabel} / {classification.topicLabel}</span><time dateTime={post.publishedAt||post.createdAt}>{new Date(post.publishedAt||post.createdAt).toLocaleDateString("nb-NO",{day:"numeric",month:"short",year:"numeric"})}</time></div>
               <h2><Link href={"/news/"+post.slug}>{post.title}</Link></h2>
               <p>{post.excerpt}</p>
               <Link className={styles.storyLink} href={"/news/"+post.slug}>Les artikkel ↗</Link>
@@ -73,6 +74,7 @@ export default async function NewsPage({searchParams}:{searchParams:Promise<{pro
       </section>
       <aside className={styles.side} aria-label="Mer fra Vedoy News">
         <div className={styles.sideBox}><p className={styles.eyebrow}>VEDOY LABS</p><h3>Følg utviklingen.</h3><p>Se hvilke apper, verktøy og plattformer vi bygger — og hva som skjer underveis.</p><Link href="/#prosjekter">Se prosjektene ↗</Link></div>
+        {opinions.length?<div className={styles.sideBox}><p className={styles.eyebrow}>MENINGER / UTVIKLERE</p><h3>Stemmer fra miljøet.</h3>{opinions.map(post=><p key={post.id}><Link href={"/news/"+post.slug}>{post.title} ↗</Link></p>)}<Link href="/news/meninger/skriv">Skriv din mening ↗</Link></div>:<div className={styles.sideBox}><p className={styles.eyebrow}>MENINGER</p><h3>Har du et perspektiv?</h3><p>Utviklere kan dele egne meninger om teknologi, kode og sikkerhet. Innlegg merkes tydelig og gjennomgås før publisering.</p><Link href="/news/meninger/skriv">Send inn en mening ↗</Link></div>}
         <NewsSponsors placement="index"/>
         <div className={styles.sideBox}><p className={styles.eyebrow}>ÅPENT FORMAT</p><h3>Få nyhetene i din egen leser.</h3><p>Abonner gratis via RSS. Ingen sporing eller konto kreves.</p><Link href="/news/rss.xml">Åpne RSS-feed ↗</Link></div>
       </aside>
