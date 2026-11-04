@@ -43,6 +43,8 @@ alter table public.vjobs_profiles enable row level security;
 alter table public.vjobs_jobs enable row level security;
 alter table public.vjobs_applications enable row level security;
 revoke all on public.vjobs_profiles, public.vjobs_jobs, public.vjobs_applications from anon;
+-- Public task discovery without exposing owner IDs or private application records.
+grant select (id,title,description,category,city,pay_ore,estimated_minutes,min_age,employer_name,backup_enabled,status,created_at) on public.vjobs_jobs to anon;
 grant select,insert,update on public.vjobs_profiles to authenticated;
 grant select,insert,update on public.vjobs_jobs to authenticated;
 grant select,insert,update on public.vjobs_applications to authenticated;
@@ -58,7 +60,7 @@ create policy vjobs_profiles_self_update on public.vjobs_profiles for update to 
    account_type='business' or not exists (select 1 from public.vjobs_jobs j where j.owner_id=auth.uid())
  ));
 drop policy if exists vjobs_jobs_read on public.vjobs_jobs;
-create policy vjobs_jobs_read on public.vjobs_jobs for select to authenticated
+create policy vjobs_jobs_read on public.vjobs_jobs for select to anon, authenticated
  using (status='open' or owner_id=auth.uid());
 drop policy if exists vjobs_jobs_business_insert on public.vjobs_jobs;
 create policy vjobs_jobs_business_insert on public.vjobs_jobs for insert to authenticated
