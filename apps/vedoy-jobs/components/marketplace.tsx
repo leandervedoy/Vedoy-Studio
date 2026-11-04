@@ -34,7 +34,11 @@ export function Marketplace(){
  const supabase=getSupabase();
  async function refresh(activeUser?:User|null){
   const active=activeUser===undefined?user:activeUser;
-  if(!supabase||!active){setJobs([]);setApplications([]);setMyJobs([]);setProfile(null);setLoading(false);return;}
+  if(!supabase){setJobs([]);setApplications([]);setMyJobs([]);setProfile(null);setLoading(false);return;}
+  if(!active){
+    const {data,error}=await supabase.from("vjobs_jobs").select("id,title,description,category,city,pay_ore,estimated_minutes,min_age,employer_name,backup_enabled,status,created_at").eq("status","open").order("created_at",{ascending:false}).limit(100);
+    setJobs((data||[]) as Job[]);if(error)setNotice("Kunne ikke hente offentlige oppdrag.");setProfile(null);setApplications([]);setMyJobs([]);setLoading(false);return;
+  }
   const [p,j,a,o]=await Promise.all([
     supabase.from("vjobs_profiles").select("*").eq("user_id",active.id).maybeSingle(),
     supabase.from("vjobs_jobs").select("*").eq("status","open").order("created_at",{ascending:false}).limit(100),
@@ -64,7 +68,7 @@ export function Marketplace(){
  // Intentional: refresh is called only on auth changes and manual actions, not every render.
  // eslint-disable-next-line react-hooks/exhaustive-deps
  },[]);
- const sampleMode=!backend||!user;
+ const sampleMode=!backend||(!jobs.length&&!loading);
  const visibleJobs=useMemo(()=>{
   const base=sampleMode?EXAMPLES:jobs;
   const needle=search.toLocaleLowerCase("nb-NO").trim();
