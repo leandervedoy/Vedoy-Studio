@@ -11,7 +11,7 @@ const action=z.discriminatedUnion("action",[
   z.object({action:z.literal("ban"),userId:z.string().regex(/^vnews_[a-f0-9]{24}$/),hours:z.union([z.literal(1),z.literal(24),z.literal(168),z.literal(720)]),reason:z.string().trim().min(3).max(240)}),
   z.object({action:z.literal("unban"),userId:z.string().regex(/^vnews_[a-f0-9]{24}$/)}),
   z.object({action:z.literal("phrase"),phrase:z.string().trim().min(3).max(80)}),
-  z.object({action:z.literal("phrase-toggle"),id:z.string().uuid(),active:z.boolean()}),
+  z.object({action:z.literal("phrase-toggle"),id:z.string().trim().min(3).max(120),active:z.boolean()}),
   z.object({action:z.literal("ad-create"),sponsor:z.string().trim().min(2).max(100),headline:z.string().trim().min(3).max(140),body:z.string().trim().min(5).max(400),destinationUrl:z.string().url().max(1500),placement:z.enum(["index","article","all"])}),
   z.object({action:z.literal("ad-status"),id:z.string().uuid(),status:z.enum(["active","paused"])})
 ]);
