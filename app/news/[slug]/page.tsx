@@ -3,25 +3,48 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getNewsPost } from "@/lib/repository";
 import { decodeNewsCategory } from "@/lib/news-taxonomy";
+import { NewsComments } from "@/components/news/news-comments";
+import { NewsSponsors } from "@/components/news/news-sponsor";
+import styles from "@/components/news/news-experience.module.css";
 
-export const dynamic = "force-dynamic";
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-  const post = await getNewsPost((await params).slug);
-  return post ? { title: post.title, description: post.excerpt, openGraph: { title: post.title, description: post.excerpt, type: "article", publishedTime: post.publishedAt } } : {};
+export const dynamic="force-dynamic";
+export async function generateMetadata({params}:{params:Promise<{slug:string}>}):Promise<Metadata>{
+  const post=await getNewsPost((await params).slug);
+  if(!post)return {};
+  return {title:post.title,description:post.excerpt,
+    alternates:{canonical:"https://vedoystudio.no/news/"+post.slug},
+    openGraph:{title:post.title,description:post.excerpt,type:"article",
+      publishedTime:post.publishedAt,url:"https://vedoystudio.no/news/"+post.slug}};
 }
-export default async function NewsArticle({ params }: { params: Promise<{ slug: string }> }) {
-  const post = await getNewsPost((await params).slug);
-  if (!post) notFound();
-  const category = decodeNewsCategory(post.category);
-  return <main className="news-article">
-    <Link href={`/news?project=${category.project}`}>← Til {category.projectLabel}-nyheter</Link>
-    <p className="editorial-kicker lime">{category.projectLabel} / {category.topicLabel}</p>
-    <h1>{post.title}</h1>
-    <p className="news-article__byline">
-      Skrevet av {post.authorName}{post.authorType === "vedi" ? " · KI-assistert" : ""}
-      {" · "}<time dateTime={post.publishedAt || post.createdAt}>{new Date(post.publishedAt || post.createdAt).toLocaleDateString("nb-NO")}</time>
-    </p>
-    <p className="news-article__lead">{post.excerpt}</p>
-    <div className="news-article__body">{post.content.split(/\n\n+/).map((paragraph, index) => <p key={index}>{paragraph}</p>)}</div>
+export default async function NewsArticle({params}:{params:Promise<{slug:string}>}){
+  const post=await getNewsPost((await params).slug);
+  if(!post)notFound();
+  const category=decodeNewsCategory(post.category);
+  const date=post.publishedAt||post.createdAt;
+  const words=post.content.trim().split(/\s+/).length;
+  const minutes=Math.max(1,Math.ceil(words/220));
+  const structured={
+    "@context":"https://schema.org","@type":"NewsArticle",
+    headline:post.title,description:post.excerpt,
+    datePublished:date,dateModified:post.updatedAt,
+    author:{"@type":"Organization",name:"Vedoy News"},
+    publisher:{"@type":"Organization",name:"Vedoy Studio"},
+    mainEntityOfPage:"https://vedoystudio.no/news/"+post.slug
+  };
+  return <main className={styles.articleOuter}>
+    <div className={styles.articleInner}>
+      <Link href={"/news?project="+category.project} className={styles.back}>← {category.projectLabel} / Nyheter</Link>
+      <p className={styles.articleMeta}>{category.projectLabel.toUpperCase()} / {category.topicLabel.toUpperCase()}</p>
+      <h1>{post.title}</h1>
+      <p className={styles.articleSummary}>{post.excerpt}</p>
+      <div className={styles.byline}><span>{post.authorName}{post.authorType==="vedi"?" · KI-assistert":""}</span><time dateTime={date}>{new Date(date).toLocaleDateString("nb-NO",{day:"numeric",month:"long",year:"numeric"})}</time><span>{minutes} min lesing</span></div>
+      <article className={styles.articleBody}>{post.content.split(/\n\n+/).map((paragraph,index)=><p key={index}>{paragraph}</p>)}</article>
+      <NewsSponsors placement="article"/>
+      <NewsComments slug={post.slug}/>
+      <div style={{marginTop:48,paddingTop:24,borderTop:"1px solid #34503a"}}>
+        <Link href="/news" className={styles.back}>Se alle nyheter ↗</Link>
+      </div>
+    </div>
+    <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(structured).replace(/</g,"\\u003c")}}/>
   </main>;
 }
