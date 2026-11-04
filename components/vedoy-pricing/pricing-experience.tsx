@@ -2,7 +2,16 @@
 import Script from "next/script";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { Check, ArrowRight, CheckCircle2, RotateCcw, ShieldCheck, X, Sparkles } from "lucide-react";
+// Lightweight inline symbols keep this module compatible with the Studio dependency set.
+type IconProps = { size?: number };
+const SymbolIcon = ({ size=16, glyph }: IconProps & { glyph:string }) => <span aria-hidden="true" style={{fontSize:size,lineHeight:1,display:"inline-block"}}>{glyph}</span>;
+const Check = ({size}:IconProps) => <SymbolIcon size={size} glyph="✓"/>;
+const ArrowRight = ({size}:IconProps) => <SymbolIcon size={size} glyph="→"/>;
+const CheckCircle2 = ({size}:IconProps) => <SymbolIcon size={size} glyph="✓"/>;
+const RotateCcw = ({size}:IconProps) => <SymbolIcon size={size} glyph="↻"/>;
+const ShieldCheck = ({size}:IconProps) => <SymbolIcon size={size} glyph="◆"/>;
+const X = ({size}:IconProps) => <SymbolIcon size={size} glyph="×"/>;
+const Sparkles = ({size}:IconProps) => <SymbolIcon size={size} glyph="✦"/>;
 import { money, type CatalogContent, type CatalogPrice } from "@/lib/vedoy-catalog";
 
 declare global {
