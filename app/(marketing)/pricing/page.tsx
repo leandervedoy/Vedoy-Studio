@@ -1,64 +1,101 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { getVedoyPrices, selectPrices, getPriceByCode, formatCatalogPrice, priceAmount, vatLabel } from "@/lib/vedoy-pricing";
 
-export const metadata: Metadata = { title: "Priser" };
+export const metadata: Metadata = {
+  title: "Priser på nettside, drift og Vedøy Growth",
+  description: "Se publiserte Vedøy-priser for nettside og drift, IT-hjelp og Vedøy Growth. Uforpliktende prosjektprat for løsninger med individuelt omfang.",
+};
 
-const plans = [
-  { name: "IT-hjelp", monthly: "150", description: "To timer totalt med IT-hjelp for bedriften.", features: ["2 timer inkludert", "Oppmøte etter behov", "Telefon eller Teams når mulig", "Ekstra 30 min: ca. 100 kr", "Afrunding opp til nærmeste halve time"] },
-  { name: "IT + drift", monthly: "450", description: "Seks timer IT-hjelp, nettsidedrift og to planlagte oppdateringer.", features: ["6 timer IT-hjelp inkludert", "Oppmøte, telefon eller Teams", "Ekstra 30 min: ca. 80 kr", "Hosting og nettsidedrift", "2 oppdateringer per måned", "Feil på Vedøy-laget side: gratis retting"], popular: true },
-  { name: "Vedøy Growth", monthly: "750", description: "Seks timer IT-hjelp pluss drift, oppdateringer og Growth-plattformen.", features: ["6 timer IT-hjelp inkludert", "Ekstra time: ca. 50 kr", "Nettsidehosting", "3 oppdateringer per måned", "Vedøy Growth", "Feilretting utenom kvoten ved avtalte bugs"] }
-];
+export const dynamic = "force-dynamic";
 
-export default function PricingPage() {
+function priceAction(code: string, category: string): { title: string; href: string } {
+  const match: Record<string, string> = {
+    "growth-start": "start",
+    "growth-team": "team",
+    "growth-plus": "plus",
+  };
+  if (category === "growth" && match[code]) {
+    return { title: "Velg " + code.replace("growth-", ""), href: "/start-bedrift?plan=" + match[code] + "&source=pricing" };
+  }
+  return { title: "Be om tilbud", href: "/?need=" + encodeURIComponent(category === "growth" ? "Vedøy Growth" : category === "assist" ? "IT-hjelp" : "Nettside") + "&source=pricing#kontakt" };
+}
+
+export default async function PricingPage() {
+  const prices = await getVedoyPrices();
+  const studio = selectPrices(prices, "studio");
+  const growth = selectPrices(prices, "growth");
+  const assist = selectPrices(prices, "assist");
+  const campaign = getPriceByCode(prices, "growth-pilot");
   return (
     <section className="pricing-page">
       <div className="container">
         <header className="section-heading">
-          <p className="eyebrow">KONSEPTPRISER</p>
-          <h1>En plattform som kan starte liten.</h1>
-          <p>Prisene er et gjennomtenkt utgangspunkt i demoen. Endelig pris avhenger av leverandørkostnader, omfang og behov.</p>
+          <p className="eyebrow">VEDØY PRICING · OPPDATERTE PRISER</p>
+          <h1>En tydelig pris. Et tydelig neste steg.</h1>
+          <p>Alle beløp under hentes fra Vedoy Pricing. Abonnement, prosjektutvikling og engangshjelp er forskjellige tjenester. Et spesifisert tilbud avklarer leveransen før noe blir bindende.</p>
+          <Link href="/?need=Prosjektprat&source=pricing#kontakt" className="button button--dark">Be om gratis prosjektprat ↗</Link>
         </header>
 
-        <article className="pricing-launch-offer">
-          <div>
-            <p className="eyebrow">PILOTPROGRAM · 10 PLASSER</p>
-            <h2>Startpakken for de første kundene.</h2>
-            <p>Vi tilbyr inntil 10 virksomheter en enkel start med Vedøy Growth til <strong>399 kr/mnd i 12 måneder</strong>. Andre priser kan forekomme for tillegg, oppsett og leverandørtjenester.</p>
-          </div>
-          <Link href="/pricing/startpakke" className="button button--light">Se startpakken <span>↗</span></Link>
-        </article>
+        {campaign ? (
+          <article className="pricing-launch-offer">
+            <div>
+              <p className="eyebrow">PILOTPROGRAM · ETTER GODKJENNING</p>
+              <h2>{campaign.title}</h2>
+              <p>{campaign.description}</p>
+              <p><strong>{formatCatalogPrice(campaign)}</strong> · {vatLabel(campaign.vat_mode)}. Tilgjengelighet og videre pris bekreftes individuelt.</p>
+            </div>
+            <Link href="/pricing/startpakke" className="button button--light">Se piloten <span aria-hidden="true">↗</span></Link>
+          </article>
+        ) : null}
 
-        <div className="pricing-grid">
-          {plans.map((plan) => <article className={plan.popular ? "pricing-card is-popular" : "pricing-card"} key={plan.name}>
-            {plan.popular && <span className="popular-label">ANBEFALT</span>}
-            <h2>{plan.name}</h2><p>{plan.description}</p>
-            <div className="price"><strong>{plan.monthly}</strong><span>kr/mnd</span></div>
-            <ul>{plan.features.map((feature) => <li key={feature}>{feature}</li>)}</ul>
-            <Link className={plan.popular ? "button button--dark button--wide" : "button button--ghost button--wide"} href="/login">Test {plan.name}</Link>
-          </article>)}
-        </div>
+        <section aria-labelledby="studio-priser">
+          <header className="section-heading"><h2 id="studio-priser">Nettside, drift og IT-avtaler</h2><p>Vedøy Studio-abonnementer. Egenutvikling og spesielle integrasjoner prises separat dersom de ikke er inkludert i avtalen.</p></header>
+          <div className="pricing-grid">
+            {studio.map((plan) => {
+              const action = priceAction(plan.code, plan.category);
+              return <article className={plan.featured ? "pricing-card is-popular" : "pricing-card"} key={plan.code}>
+                {plan.featured ? <span className="popular-label">ANBEFALT</span> : null}
+                <h3>{plan.title}</h3><p>{plan.description}</p>
+                <div className="price"><strong>{priceAmount(plan.amount_ore)}</strong><span>{plan.billing_period === "month" ? "kr er oppgitt per måned" : plan.billing_period === "one_time" ? "engangspris" : plan.billing_period === "year" ? "per år" : "per time"}</span></div>
+                <p>{vatLabel(plan.vat_mode)}</p>
+                {plan.setup_ore > 0 ? <p>Oppsett: {priceAmount(plan.setup_ore)}</p> : null}
+                <ul>{plan.features.map(feature => <li key={feature}>{feature}</li>)}</ul>
+                <Link className={plan.featured ? "button button--dark button--wide" : "button button--ghost button--wide"} href={action.href}>{action.title} ↗</Link>
+              </article>;
+            })}
+          </div>
+          {!studio.length ? <p role="status">Gjeldende bedriftspriser er midlertidig utilgjengelige. Be om et spesifisert tilbud.</p> : null}
+        </section>
 
         <section className="pricing-growth-access" id="vedoy-growth">
-          <header><p className="eyebrow">VEDØY GROWTH · TILGANG</p><h2>Start gratis.<br />Skaler når dere trenger mer.</h2><p>Gratis prøvetid og betalte nivåer gjelder et eget Vedøy Growth-arbeidsområde. Registrering blir gjennomgått før tilgang aktiveres, og betaling startes ikke automatisk.</p></header>
+          <header><p className="eyebrow">VEDØY GROWTH · PROGRAMVARE</p><h2>Et arbeidsområde som vokser med bedriften.</h2><p>Dette er prisene for Growth-plattformen, ikke timepakker for IT-hjelp. Registrering gjennomgås før tilgang aktiveres. Betaling starter ikke automatisk.</p><Link href="/start-bedrift?plan=trial&source=pricing">Søk om gratis prøveperiode ↗</Link></header>
           <div>
-            <article><small>GRATIS PRØVE</small><h3>Prøv Growth</h3><strong>0 kr</strong><span>7 dager · én bruker</span><Link href="/start-bedrift?plan=trial&source=pricing">Registrer gratis <b>↗</b></Link></article>
-            <article><small>START</small><h3>Growth Start</h3><strong>29 kr</strong><span>per måned · én bruker</span><Link href="/start-bedrift?plan=start&source=pricing">Velg Start <b>↗</b></Link></article>
-            <article className="is-featured"><small>FOR SMÅ TEAM</small><h3>Growth Team</h3><strong>299 kr</strong><span>per måned · inntil 10 brukere</span><Link href="/start-bedrift?plan=team&source=pricing">Velg Team <b>↗</b></Link></article>
-            <article><small>MER STØTTE</small><h3>Growth Plus</h3><strong>699 kr</strong><span>per måned · inntil 25 brukere</span><Link href="/start-bedrift?plan=plus&source=pricing">Velg Plus <b>↗</b></Link></article>
+            {growth.map(plan => {
+              const action = priceAction(plan.code, plan.category);
+              return <article key={plan.code} className={plan.featured ? "is-featured" : ""}>
+                <small>{plan.featured ? "FOR SMÅ TEAM" : "GROWTH"}</small>
+                <h3>{plan.title}</h3>
+                <strong>{formatCatalogPrice(plan)}</strong>
+                <span>{vatLabel(plan.vat_mode)}</span>
+                <p>{plan.description}</p>
+                <ul>{plan.features.map(feature => <li key={feature}>{feature}</li>)}</ul>
+                <Link href={action.href}>{action.title} ↗</Link>
+              </article>;
+            })}
           </div>
+          {!growth.length ? <p role="status">Growth-prisene kunne ikke lastes. Du kan sende en uforpliktende forespørsel.</p> : null}
         </section>
 
         <section className="pricing-examples">
-          <div><p className="eyebrow">EKSEMPLER PÅ TILLEGG</p><h2>Det som kan komme i tillegg.</h2><p>Vi avklarer alt før bestilling. Ingen domene- eller hostingkjøp skjer automatisk fra dette skjemaet.</p></div>
-          <ul>
-            <li><strong>Domene</strong><span>Fra ca. 129 kr/år, avhengig av endelse og leverandør.</span></li>
-            <li><strong>Hosting og drift</strong><span>Fra ca. 199 kr/mnd, avhengig av kapasitet, backup og support.</span></li>
-            <li><strong>Flere enn 10 ansatte</strong><span>Ekstra brukere, roller og tilgang settes opp etter behov.</span></li>
-            <li><strong>Web-app, nettbutikk eller fullstack</strong><span>Tilpasses prosjektet og prises etter omfang, rammeverk og integrasjoner.</span></li>
-          </ul>
+          <div><p className="eyebrow">ENGANGS-IT-HJELP</p><h2>Hjelp når du trenger det.</h2><p>Engangstjenester fra Vedoy Pricing. Omfang og eventuell reisetid avklares før bestilling.</p></div>
+          <ul>{assist.map(plan => <li key={plan.code}><strong>{plan.title}</strong><span>{formatCatalogPrice(plan)} · {vatLabel(plan.vat_mode)}</span></li>)}</ul>
         </section>
-
-        <div className="pricing-note"><strong>Personlig avtale</strong><p>Nettsideutvikling, migrering, kurs og større API-løsninger prises etter omfang.</p><a href="mailto:hei@vedoy.com">Snakk med Vedøy →</a></div>
+        <div className="pricing-note">
+          <strong>Nettside eller nettbutikk med eget omfang?</strong>
+          <p>Ta kontakt for prosjektpris. Vi finner først ut hva bedriften trenger, og gir deg et konkret tilbud. Vi lover ikke en pris som ikke finnes i Vedoy Pricing.</p>
+          <Link href="/?need=Prosjektprat&source=pricing#kontakt">Be om gratis prosjektprat ↗</Link>
+        </div>
       </div>
     </section>
   );
