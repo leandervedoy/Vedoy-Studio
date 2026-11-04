@@ -53,12 +53,9 @@ drop policy if exists vjobs_profiles_self_select on public.vjobs_profiles;
 create policy vjobs_profiles_self_select on public.vjobs_profiles for select to authenticated using (user_id=auth.uid());
 drop policy if exists vjobs_profiles_self_insert on public.vjobs_profiles;
 create policy vjobs_profiles_self_insert on public.vjobs_profiles for insert to authenticated with check (user_id=auth.uid());
+-- Profile role and age band are immutable in the MVP. Changes require verified admin assistance.
+revoke update on public.vjobs_profiles from authenticated;
 drop policy if exists vjobs_profiles_self_update on public.vjobs_profiles;
-create policy vjobs_profiles_self_update on public.vjobs_profiles for update to authenticated using (user_id=auth.uid())
- with check (user_id=auth.uid() and (
-   -- A business profile cannot overwrite its type after a job is created.
-   account_type='business' or not exists (select 1 from public.vjobs_jobs j where j.owner_id=auth.uid())
- ));
 drop policy if exists vjobs_jobs_read on public.vjobs_jobs;
 create policy vjobs_jobs_read on public.vjobs_jobs for select to anon, authenticated
  using (status='open' or owner_id=auth.uid());
