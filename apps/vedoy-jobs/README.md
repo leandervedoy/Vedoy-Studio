@@ -1,54 +1,35 @@
-# Vedoy Jobs — pilot
+# Vedoy Marked – Next.js marketplace MVP
 
-A dedicated Next.js 16 app in the Vedoy Studio monorepo.
+Vedoy Marked is a broader second-hand marketplace inspired by easy, low-friction listings, with Vedoy Jobs preserved under `/oppdrag`.
 
-## MVP
+## Included
+- Mobile-first responsive browse experience, categories, query, type, location, price filters, sorting, details and favorites.
+- Three-step create-listing wizard with manual moderation required before any listing is visible.
+- Passwordless Supabase email authentication, user profiles, private 1:1 threads and text messages, RLS-based permissions.
+- Listings for electronics, fashion, home, vehicles, housing, sports, services and other; existing jobs app is linked via `/oppdrag`.
+- Deliberate and reduced-motion-aware CSS animations. Placeholder illustrations explicitly marked as examples, not genuine offers.
+- No fake checkout: shipping, image uploads, payments, escrow, verification and production-scale search are not yet implemented.
 
-- Mobile-first Norwegian marketplace with explicitly labeled demo tasks.
-- Search/filter by category, estimated time, total compensation, and minimum age.
-- Passwordless Supabase authentication and worker/business profiles.
-- Businesses submit jobs for manual Vedoy approval (never publish directly).
-- Workers may express interest in published jobs and view application status.
-- Writing and digital categories can accept expressions of interest from ages 15–17; all delivery, sales and physical tasks require 18+ during pilot.
-- Wolt Drive is a proposed optional reserve. **No actual Wolt API calls or dispatch in MVP.**
-- No actual employment, contracting, payroll, invoice, or payment collection.
-
-## Run
-
-From apps/vedoy-jobs:
-
-    npm install
-    npm run dev
+## Development
+From `apps/vedoy-jobs`, run `npm install`, `npm run dev`, `npm run typecheck`, `npm run build`.
 
 ## Supabase
+1. Create separate project and set passwordless email OTP plus approved redirect URL.
+2. Run `supabase/schema.sql` first for legacy Jobs, then `supabase/market.sql` for the marketplace.
+3. Set `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` in the target Vercel project; do not expose service-role credentials.
+4. Moderate pending ads via trusted administrative workflow only; no browser self-approval.
+5. Verify RLS with two accounts and confirm unauthorized conversations and private ads remain inaccessible.
+6. Only enable photographs after setting up a suitably secured Supabase Storage bucket and access policies. Ads currently publish without uploaded images.
 
-1. Set up a separate Supabase project, enable email OTP and configure authenticated URL redirects.
-2. Apply supabase/schema.sql in the SQL editor, then verify RLS.
-3. Configure env vars from .env.example. Never expose service-role credentials.
-4. Verify employer identity and job details, then approve job through authorized admin SQL/service-role workflow. Browser accounts cannot self-approve.
-5. Start collecting real tasks only when privacy notices, worker verification and manual review are in place.
+## Pre-launch
+- Test build, mobile UI, accessible keyboard navigation, network failures and cross-account authorization.
+- Implement compliant terms, consent and GDPR processes including retention/deletion requests.
+- Anti-spam/rate limits, abuse reporting, blocking, identity verification where appropriate, moderation workflows and audit logs.
+- Add verified seller onboarding, optional trade protection, payment integration, actual image uploads and shipping only after security/legal review.
+- Vehicle/property ads need category-specific disclosures and more robust moderation.
+- Human review of age requirements for job assignments, transportation risks and employment classification is still needed in `/oppdrag`.
 
-Without valid Supabase variables, the UI is a demo and never collects personal information.
+## Vercel
+Deploy as an **independent project** sourced from `leandervedoy/Vedoy-Studio` with root directory `apps/vedoy-jobs` so the existing Vedoy Studio site remains unaffected.
 
-## Delivery backup
-
-Only after Wolt Drive partner agreement and server credentials: check local courier availability, request Wolt delivery quote, show it to the business and get explicit confirmation, then book from a server and handle authenticated status updates. Do not promise Wolt availability or price beforehand.
-
-## Legal and trust gates
-
-- The chosen age band is self-reported, **not age verification**. A 15–17-year-old's interest cannot automatically create a job.
-- Before actual work, review applicable minor employment rules, parental involvement where required, occupational risk, rest periods, working hours, insurance and school obligations.
-- Electric-scooter delivery is 18+ in this pilot pending safety and insurance review. Phone sales is 18+ and requires marketing-law and payroll compliance.
-- Explicit employment classification and taxation are required before payouts. Never treat every contributor automatically as self-employed.
-- No publication of a worker's private address or birthdate; use city-level information only.
-- Before launch: identity checks, moderation dashboard, payment reconciliation, contracts, dispute handling, retention policies, audit logs, rate limits, a privacy impact assessment for minors and cross-account tests.
-
-## Structure
-
-- app/: Next.js App Router
-- components/marketplace.tsx: browsing, profile, business and application UI
-- lib/jobs.ts: age and category eligibility
-- lib/supabase.ts: limited-privilege Supabase browser client
-- supabase/schema.sql: RLS-protected tables
-
-Recommended Vercel deployment: a separate vedoy-jobs project, root directory apps/vedoy-jobs.
+No claims about live operations until Vercel deployment and real backend setup have been verified.
