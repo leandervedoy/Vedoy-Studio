@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { sameOriginWrite } from "@/lib/vedoy-manager";
-import { updateNewsPost } from "@/lib/repository";
+import { updateNewsPost, listNewsPosts } from "@/lib/repository";
 import { encodeNewsCategory, hasNewsProject, hasNewsTopic } from "@/lib/news-taxonomy";
 
 const schema = z.object({
@@ -26,6 +26,9 @@ export async function PATCH(request: Request, context: { params: Promise<{ id: s
     return NextResponse.json({ error: "Du har ikke tilgang til å endre publiseringsstatus." }, { status: 403 });
   }
   const { id } = await context.params;
+  const current = (await listNewsPosts(false)).find((post) => post.id === id);
+  if (!current) return NextResponse.json({ error: "Innlegget finnes ikke." }, { status: 404 });
+  if (current.status === "published" && !canPublish) return NextResponse.json({ error: "Kun administrator kan redigere publiserte innlegg." }, { status: 403 });
   const post = await updateNewsPost(id, {
     title: body.title,
     excerpt: body.excerpt,
