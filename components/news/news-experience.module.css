@@ -36,3 +36,5 @@
 .comments{display:grid;gap:12px}.comment{border:1px solid #344839;border-radius:14px;padding:19px;background:#131d15}.comment>div{display:flex;justify-content:space-between;gap:12px;font-size:13px}.comment time{color:#9aad9c}.comment p{margin:12px 0 0;color:#e1e9df;white-space:pre-wrap;overflow-wrap:anywhere}
 @media(max-width:900px){.contentGrid{grid-template-columns:1fr}.side{grid-template-columns:repeat(2,minmax(0,1fr))}.articleList{grid-template-columns:1fr 1fr}}
 @media(max-width:620px){.topLinks{gap:9px;font-size:11px}.topbar{align-items:start}.articleList{grid-template-columns:1fr}.story:first-child{grid-column:span 1}.side{grid-template-columns:1fr}.story{min-height:250px}.searchForm{flex-wrap:wrap}.searchForm button{width:100%}}
+
+.opinionDisclaimer{border-left:5px solid #b7ff59;background:#15241a;border-radius:10px;padding:20px 23px;margin:28px 0 36px}.opinionDisclaimer strong{font-size:12px;letter-spacing:.14em;color:#b7ff59}.opinionDisclaimer p{color:#d2dfd2;line-height:1.65;margin:10px 0 0}.newsPortal .story:has(a[href*="mening"]){border-color:#446c49}
