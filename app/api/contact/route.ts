@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { createContactRequest, createGrowthNotification } from "@/lib/repository";
 
-const allowedNeeds = new Set(["Nettside", "Webapp", "Nettbutikk", "Shopify-app eller integrasjon", "Hosting og domene", "Design og profil", "Profilprodukter", "Trykk og print", "Musiker og artist", "Kunstner og merch"]);
+const allowedNeeds = new Set(["Nettside", "Webapp", "Nettbutikk", "Shopify-app eller integrasjon", "Hosting og domene", "Design og profil", "Profilprodukter", "Trykk og print", "Musiker og artist", "Kunstner og merch", "Vedøy Growth", "IT-hjelp", "Prosjektprat"]);
 
 function clean(value: unknown, max: number) {
   return typeof value === "string" ? value.trim().slice(0, max) : "";
@@ -17,7 +17,7 @@ export async function POST(request: Request) {
     if (name.length < 2 || !/^\S+@\S+\.\S+$/.test(email) || !allowedNeeds.has(need)) {
       return NextResponse.json({ error: "Kontroller navn, e-post og hva du trenger." }, { status: 400 });
     }
-    const attribution = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "landing_page"]
+    const attribution = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "landing_page", "source"]
       .map((key) => `${key}=${clean(body[key], 180)}`)
       .filter((value) => !value.endsWith("="))
       .join(" | ");
