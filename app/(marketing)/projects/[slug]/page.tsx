@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { studioProducts } from "@/lib/products";
+import { NewsFeed } from "@/components/news/news-feed";
+import { hasNewsProject } from "@/lib/news-taxonomy";
 
 type ProjectDetail = {
   title: string;
@@ -17,6 +19,16 @@ type ProjectDetail = {
 };
 
 const projectOverrides: Record<string, ProjectDetail> = {
+  sent: {
+    title: "Sent",
+    text: "Vedøys meldingsplattform med fokus på privatliv, sikker kommunikasjon og kontroll over egne data.",
+    points: ["Private meldinger og grupper", "Personvern som utgangspunkt", "Sikkerhetsfunksjoner i utvikling"],
+    actionHref: "/news?project=sent",
+    actionLabel: "Følg utviklingen",
+    status: "Beta",
+    category: "Kommunikasjon / sikkerhet",
+    note: "Prosjektet utvikles fortløpende. Sikkerhetsfunksjoner må dokumenteres og testes før det gis garantier om kryptering."
+  },
   assist: {
     title: "Vedøy Assist",
     text: "Personlig teknologihjelp for PC, mobil, TV, internett og digitale spørsmål — forklart steg for steg.",
@@ -100,7 +112,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 }
 
 export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
-  const project = getProject((await params).slug);
+  const { slug } = await params;
+  const project = getProject(slug);
   if (!project) notFound();
   const external = project.actionHref.startsWith("http");
 
@@ -136,6 +149,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           <Link className="editorial-outline" href="/#kontakt">Snakk med Vedøy Studio</Link>
         </div>
       </div>
+      {hasNewsProject(slug) ? <NewsFeed project={slug} title={`Nyheter om ${project.title}`} intro="Kun oppdateringer som tilhører dette prosjektet." limit={4} /> : null}
     </main>
   );
 }

@@ -1,0 +1,16 @@
+.section {padding: clamp(64px, 8vw, 112px) max(24px, calc((100vw - 1320px)/2)); background: #f3f0e7; color: #181a17; }
+.heading {display:flex; justify-content:space-between; align-items:end; gap:30px; margin-bottom:34px;}
+.kicker {font-size:11px; letter-spacing:.17em; font-weight:750; color:#347653; margin-bottom:16px;}
+.heading h2 {font-size:clamp(2rem,4.5vw,4rem); font-weight:760; line-height:1.05; letter-spacing:-.05em; margin:0 0 16px;}
+.heading p {max-width:590px; color:#5c5e56; margin:0;}
+.more,.read {font-weight:700; color:#1a6549; white-space:nowrap;}
+.grid {display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:15px;}
+.card {background:#fffdf7; border:1px solid #dddcd3; border-radius:18px; padding:26px; display:flex; flex-direction:column; min-height:270px;}
+.meta {display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; color:#62746b; font-size:11px; font-weight:700;}
+.card h3 {font-size:clamp(20px,2vw,27px); line-height:1.17; margin:24px 0 12px; letter-spacing:-.035em;}
+.card h3 a:hover {text-decoration:underline;}
+.card p {color:#64675e; line-height:1.65; margin-bottom:22px;}
+.read {margin-top:auto; font-size:13px;}
+.empty {padding:36px; border:1px dashed #b5b8ac; border-radius:16px; color:#596358;}
+@media(max-width:850px) {.grid {grid-template-columns:1fr 1fr;} .section {padding:64px 24px;}}
+@media(max-width:620px) {.grid {grid-template-columns:1fr;} .heading {align-items:start;flex-direction:column;} .card {min-height:230px;}}
