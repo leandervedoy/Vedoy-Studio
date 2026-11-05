@@ -1,4 +1,5 @@
-import { requireVedoyOwnerSession, privilegedSupabase } from "@/lib/vedoy-manager";
+import { privilegedSupabase } from "@/lib/vedoy-manager";
+import { requireVedoyOwnerSession } from "@/lib/auth";
 import { CampaignManager } from "./manager-client";
 export const dynamic="force-dynamic";
 export const metadata={title:"Vedoy Advertize | Vedoy Studio"};
