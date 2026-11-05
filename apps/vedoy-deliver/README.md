@@ -49,7 +49,7 @@ npm run dev
 
 ## Status
 
-Kildekode/MVP for testing. **Ikke produksjonssatt**, og uten bekreftet databasemigrering eller Vercel-bygg. En eventuell teknisk/visuell byggekontroll og utprøving mot ekte Supabase er fortsatt nødvendig.
+Nettsiden er publisert på https://vedoy-deliver.vercel.app som en **offentlig pilot**. Supabase-tabeller og RLS er opprettet, og miljøvariabler er lagt inn i Vercel. Oppdrag og private adresser har strenge rollerettigheter. E-postinnlogging, godkjenningsflyt og tilgangskontroll mellom flere faktiske brukerkontoer er ennå ikke ende-til-ende-verifisert. **Ingen ekte budoppdrag, betalingsflyt, BankID-verifisering eller lønnskjøring er åpnet.**
 
 ## Signicat BankID (påbegynt, ikke verifisert)
 
