@@ -1,6 +1,7 @@
 import { timingSafeEqual } from "node:crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { createSessionToken, sessionCookie } from "@/lib/auth";
+import { newCloudCookie } from "@/lib/vedoy-cloud";
 import { getTeamSessionRole, syncTeamMemberOnLogin } from "@/lib/repository";
 import { supabaseOAuthUrlFromEnv, safeStudioNext } from "@/lib/vedoy-owner-access.mjs";
 
@@ -17,6 +18,7 @@ type OAuthTokens = {
 };
 
 type UserInfo = {
+  sub?: string;
   picture?: string;
   preferred_username?: string;
   email?: string;
@@ -98,14 +100,25 @@ export async function GET(request: NextRequest) {
     .split(",")
     .map((value) => value.trim().toLowerCase())
     .filter(Boolean);
-  if (!allowedEmails.includes(email) && !(email === 'leander@vedoy.store' && user.email_verified === true)) {
+  const studioAccess = allowedEmails.includes(email) || (email === "leander@vedoy.store" && user.email_verified === true);
+  const cloudDestination = next === "/prosjekter" || next === "/projects";
+  if (!studioAccess && !cloudDestination) {
     return loginError(request, "Vedøy-kontoen er gyldig, men har ikke tilgang til Vedøy Studio ennå.");
+  }
+  if (cloudDestination && (!user.sub || user.email_verified !== true)) {
+    return loginError(request, "Vedøy Cloud krever en verifisert konto.");
   }
 
   const name = user.preferred_username?.trim() || user.name?.trim() || email.split("@")[0];
   const avatarUrl = user.picture?.startsWith("https://") ? user.picture : undefined;
   const isVerifiedVedoyOwner = email === "leander@vedoy.store" && user.email_verified === true;
   const owner = isVerifiedVedoyOwner || email === process.env.ADMIN_EMAIL?.trim().toLowerCase();
+  if (cloudDestination && !studioAccess) {
+    const response = NextResponse.redirect(new URL(next, request.url));
+    response.cookies.set(newCloudCookie({ sub: user.sub!, email, name }));
+    clearTemporaryCookies(response);
+    return response;
+  }
   await syncTeamMemberOnLogin({ email, name, avatarUrl, owner });
   const token = createSessionToken({
     email,
@@ -116,6 +129,7 @@ export async function GET(request: NextRequest) {
   });
   const response = NextResponse.redirect(new URL(next, request.url));
   response.cookies.set(sessionCookie(token));
+  if (user.sub && user.email_verified === true) response.cookies.set(newCloudCookie({ sub: user.sub, email, name }));
   clearTemporaryCookies(response);
   return response;
 }
