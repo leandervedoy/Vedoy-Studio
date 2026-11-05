@@ -7,6 +7,7 @@ import { HostingConfigurator } from "@/components/hosting-configurator";
 import { EcommercePlatformGuide } from "@/components/shopify-tool-guide";
 import { ProductCustomizer } from "@/components/product-customizer";
 import { ServicePricing } from "@/components/service-pricing";
+import { CollectiveBulkPackages } from "@/components/collective/bulk-packages";
 import { ServiceCapabilities } from "@/components/website-capabilities";
 import { getStudioService } from "@/lib/services";
 import { serviceStories } from "@/lib/service-stories";
@@ -65,9 +66,9 @@ export default async function ServicePage({ params, searchParams }: { params: Pr
       {isWebsite ? <ServicePricing type="website" /> : null}
       {isWebApp ? <ServicePricing type="webapp" /> : null}
       {isStore || isEcommerce ? <ServicePricing type="store" /> : null}
-      {isClothing ? <ServicePricing type="clothing" /> : null}
+      {isClothing ? <CollectiveBulkPackages /> : null}
       {isHosting ? <HostingConfigurator initialDomain={query.domain} initialDomainMode={query.domainMode === "new" ? "new" : "existing"} domainProviderReady={isDomainProviderConfigured()} /> : null}
-      {isClothing ? <section className="clothing-detail-section" id="bestill-profilprodukter"><div><p className="editorial-kicker lime">VEDØY COLLECTIVE · BESTILL NÅ</p><h2>Velg plagg.<br /><em>Last opp logo.</em></h2><p>Prøv logoen på plaggene under og send en uforpliktende forespørsel. Vedøy Studio kan tilby bedrifter klær via Vedøy Collective, og følger deg gjennom produktvalg, korrektur, produksjonspartner og pris før noe bestilles.</p><div className="clothing-partner-note"><strong>Slik fungerer det</strong><span>1. Velg plagg og last opp logo</span><span>2. Send antall, størrelser og detaljer</span><span>3. Vi avklarer produksjon og sender tilbud</span><small>Ingen automatisk betaling eller kjøp skjer når skjemaet sendes.</small></div></div><ProductCustomizer /></section> : null}
+      {isClothing ? <section className="clothing-detail-section" id="bestill-profilprodukter"><div><p className="editorial-kicker lime">VEDØY COLLECTIVE · BESTILL NÅ</p><h2>Velg plagg.<br /><em>Last opp logo.</em></h2><p>Bruk et eksempelplagg eller lim inn lenken til hvilket som helst produkt i Vedøy Collective-katalogen. Velg antall og last opp logo. Vi følger opp med riktig trykkmetode, korrektur og et konkret tilbud før noe bestilles.</p><div className="clothing-partner-note"><strong>Slik fungerer det</strong><span>1. Velg plagg og last opp logo</span><span>2. Send antall, størrelser og detaljer</span><span>3. Vi avklarer produksjon og sender tilbud</span><small>Ingen automatisk betaling eller kjøp skjer når skjemaet sendes.</small></div></div><ProductCustomizer /></section> : null}
       {isEcommerce ? <EcommercePlatformGuide /> : null}
       {!isUpcoming && !isWebsite && !isWebApp && !isStore && !isEcommerce && !isClothing ? <ServicePricing type="general" /> : null}
       <section className="service-detail-cta"><p className="editorial-kicker lime">{isUpcoming ? "MELD INTERESSE · IKKE TIL SALGS ENNÅ" : "NESTE STEG"}</p><h2>La oss gjøre det<br /><em>konkret.</em></h2><p>{service.nextStep}</p><Link href={serviceCta.href} className="editorial-button">{serviceCta.label} <span>↗</span></Link></section>
