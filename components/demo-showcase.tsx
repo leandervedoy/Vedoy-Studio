@@ -32,6 +32,10 @@ export function DemoShowcase() {
               <span className={styles.live}><span aria-hidden="true" /> TESTBAR DEMO</span>
               <span>FINTECH · NEXT.JS</span>
             </div>
+            <div className={styles.madeBy} aria-label="Utviklet av Vedøy Studio">
+              <img src="/brand/vedoy-logo-white.svg" alt="Vedøy" width={120} height={50} />
+              <div><strong>Utviklet av Vedøy Studio</strong><span>Vedøy Lab · Haugesund, Norge</span></div>
+            </div>
             <p className={styles.projectEyebrow}>01 / UTVALGT PROTOTYPE</p>
             <h3>Vedoy <em>Bank.</em></h3>
             <p className={styles.lead}>
@@ -43,10 +47,10 @@ export function DemoShowcase() {
             </ul>
             <div className={styles.actions}>
               <a href="https://vedoy-bank.vercel.app/" target="_blank" rel="noopener noreferrer" className={styles.primary}>
-                Åpne Vedoy Bank-demoen <span aria-hidden="true">↗</span>
+                Sjekk ut demoen <span aria-hidden="true">↗</span>
               </a>
-              <Link href="/#kontakt" className={styles.secondary}>
-                Ønsker du en lignende app?
+              <Link href="/?need=Webapp&source=bank-demo#kontakt" className={styles.secondary}>
+                Få tilbud på en lignende app
               </Link>
             </div>
             <p className={styles.disclaimer}>
@@ -56,8 +60,8 @@ export function DemoShowcase() {
           </div>
           <div className={styles.visual} aria-hidden="true">
             <div className={styles.appHeader}>
-              <span className={styles.brandSymbol}>V</span>
-              <span>VEDOY <b>BANK</b></span>
+              <img src="/brand/vedoy-logo-white.svg" alt="" className={styles.previewLogo} width={110} height={46} />
+              <span className={styles.bankWordmark}>BANK</span>
               <span className={styles.demoTag}>DEMO</span>
             </div>
             <p className={styles.balanceLabel}>TOTAL OVERSIKT</p>
@@ -73,6 +77,7 @@ export function DemoShowcase() {
               <div><span className={styles.flag}>🇺🇸</span><span><b>USD</b><small>Amerikanske dollar</small></span><strong>$ 320,00</strong></div>
             </div>
             <div className={styles.rewards}><span>✦ VEDOY COINS</span><strong>+100 / måned</strong></div>
+            <p className={styles.previewCredit}>ET KONSEPT AV VEDØY STUDIO · DEMO</p>
           </div>
         </article>
         <p className={styles.more}>Flere demoer kommer etter hvert. <Link href="/#prosjekter">Se publiserte prosjekter <span aria-hidden="true">↗</span></Link></p>
