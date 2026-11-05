@@ -6,10 +6,98 @@ export type InsightArticle = {
   publishedAt: string;
   readingMinutes: number;
   author: string;
+  journalist?: string;
+  editor?: string;
+  disclosure?: string;
+  articleCta?: { eyebrow: string; title: string; description: string; href: string; linkText: string };
   sections: ReadonlyArray<{ heading: string; paragraphs: ReadonlyArray<string> }>;
 };
 
 export const INSIGHT_ARTICLES: readonly InsightArticle[] = [
+  {
+    "slug": "rust-python-ki-automatisering-vedoy-studio",
+    "title": "Mindre rutinearbeid, mer verdiskaping: slik kan Rust, Python og KI brukes i bedriften",
+    "excerpt": "Automatisering handler ikke om å la KI gjøre alt. Det handler om å bygge bedre arbeidsflyter. Her er konkrete eksempler fra tjenestene i Vedoy Studio.",
+    "category": "Teknologi og automatisering",
+    "publishedAt": "2026-11-05T22:43:00+01:00",
+    "readingMinutes": 7,
+    "author": "Vedi — KI utviklet av Vedøy",
+    "journalist": "Vedi — KI utviklet av Vedøy",
+    "editor": "Eiolf-Leander Haugsnes Vedøy",
+    "articleCta": {
+      "eyebrow": "UTFORSK TJENESTENE",
+      "title": "Vedoy Studio",
+      "description": "Se mulighetene for nettsider, booking, nettbutikker, KI-assistenter og skreddersydde webapplikasjoner.",
+      "href": "https://vedoystudio.no",
+      "linkText": "Se Vedoy Studio"
+    },
+    "disclosure": "Artikkelen er KI-generert med Vedi, en KI utviklet av Vedøy. Løsningene som beskrives, er eksempler på mulige arbeidsflyter, ikke en påstand om at alle integrasjoner eller automatiseringer allerede er satt i produksjon.",
+    "sections": [
+      {
+        "heading": "Den lille oppgaven som stjeler mer tid enn du tror",
+        "paragraphs": [
+          "En kunde bestiller et møte gjennom nettsiden. Kalenderen oppdateres, men noen må fortsatt kopiere kontaktinformasjon til en prosjektliste, opprette en mappe og sende en bekreftelse. Hver oppgave virker beskjeden. Gjentas den ofte nok, går det likevel mye tid til arbeid som ikke trenger å være manuelt.",
+          "Det er nettopp her automatisering har størst verdi. Ikke nødvendigvis i de mest spektakulære KI-funksjonene, men i overgangene mellom systemene en bedrift bruker hver dag."
+        ]
+      },
+      {
+        "heading": "Start med rutinen, ikke med KI-verktøyet",
+        "paragraphs": [
+          "Før du skriver én linje kode, er det verdt å stille tre spørsmål: Hva setter oppgaven i gang? Hvilke data trenger den? Og når må et menneske ta en beslutning? Svarene avgjør hva som kan automatiseres trygt.",
+          "En god første kandidat er en rutine med tydelige regler og få unntak: bekreftelser, påminnelser, rapportutkast, prosjektopprettelse eller varsler ved feil. Behold manuell kontroll over betalinger, tilgangsendringer og publisering til løsningene er grundig testet."
+        ]
+      },
+      {
+        "heading": "Rust: når en SaaS-tjeneste trenger en solid motor",
+        "paragraphs": [
+          "Rust er et kompilert programmeringsspråk som legger vekt på ytelse og minnesikkerhet. Det er særlig interessant for SaaS-produkter som skal håndtere mange samtidige forespørsler, hendelser eller sanntidsoppdateringer. API-er, webhooks, købehandling og enkelte sikkerhetskomponenter er typiske bruksområder.",
+          "For en løsning som behandler tusenvis av automatiske hendelser, kan effektiv ressursbruk være viktig for både responstid og serverkostnad. Men Rust er ingen snarvei til god programvare. Det tar ofte mer tid å utvikle med enn enklere alternativer, og en treg database blir ikke rask bare fordi API-et er skrevet i Rust.",
+          "Derfor er det fornuftig å måle belastningen før teknologien velges. I en tidlig versjon av en tjeneste kan det være bedre å prioritere raske forbedringer fremfor maksimal ytelse."
+        ]
+      },
+      {
+        "heading": "Python og KI: godt egnet til analyse, utkast og beslutningsstøtte",
+        "paragraphs": [
+          "Python har et modent økosystem for integrasjoner, dataanalyse og kunstig intelligens. Det gjør språket godt egnet til å bygge KI-assistenter som leser en henvendelse, foreslår neste steg, oppsummerer et prosjekt eller lager et førsteutkast til tekst.",
+          "Se for deg en ny forespørsel om nettside. En Python-tjeneste kan trekke ut ønskene kunden beskriver og lage en ryddig prosjektbrief. Den kan foreslå oppgaver og estimater, mens en medarbeider avgjør hva som faktisk skal tilbys. KI sparer tid i forarbeidet, men erstatter ikke faglig vurdering.",
+          "Også KI trenger rammer: personopplysninger må håndteres forsvarlig, svar må kontrolleres og feil skal kunne spores. Der resultatet må være hundre prosent deterministisk, er vanlige regler ofte et bedre valg enn en språkmodell."
+        ]
+      },
+      {
+        "heading": "Fem praktiske eksempler med Vedoy Studio",
+        "paragraphs": [
+          "Nettsider og booking: En bedrift kan samle kontaktskjema, timebestilling og kalender. Etter en bestilling kan systemet sende bekreftelse, opprette en oppfølgingsoppgave og minne kunden på avtalen. Vedoy Studio kan bygge en slik arbeidsflyt som en del av en nettside eller bookingløsning.",
+          "Nettbutikker: Når en ordre kommer inn, kan ordrestatus, interne oppgaver og kundevarsler oppdateres automatisk. Et godt system tar også høyde for returer, lageravvik og forsinkede betalinger. Ikke alle hendelser skal behandles som en vellykket ordre.",
+          "CRM og prosjektstyring: Nye kundehenvendelser kan sorteres og knyttes til riktig prosjekt. Vedoy Studio kan kombinere kundesystem, oppgaveoversikt og enkel rapportering, slik at informasjon ikke blir liggende spredt i e-post, regneark og chat.",
+          "KI-assistenter: En assistent kan lage forslag til kundesvar, produktbeskrivelser eller oppsummeringer. Det bør være tydelig når innhold er KI-generert, og kunden eller medarbeideren må kunne godkjenne svaret før det sendes.",
+          "Hosting og vedlikehold: Overvåking kan fange opp nedetid, mislykkede sikkerhetskopier eller uvanlig belastning. Automatiske varsler gjør det lettere å oppdage feil tidlig, men virksomheten trenger fortsatt en ansvarlig person og en dokumentert plan for håndtering."
+        ]
+      },
+      {
+        "heading": "Slik kan en automatisert prosjektstart fungere",
+        "paragraphs": [
+          "Tenk at en kunde bestiller et møte om ny nettbutikk. Bookingløsningen registrerer hendelsen og oppretter et kundeemne. Når tilbudet er akseptert, oppretter prosjektverktøyet en sjekkliste, en prosjektmappe og et Git-repository i Gitea dersom oppdraget krever kode. Samtidig får kunden en oversikt over de neste stegene.",
+          "En KI-assistent kan deretter foreslå milepæler basert på kundens behov. Prosjektlederen gjennomgår forslaget og godkjenner planen. Når utvikleren leverer kode, kan automatiske tester rapportere resultatet tilbake til prosjektet.",
+          "Dette trenger ikke være én stor, komplisert app. En felles hendelsesmodell, tydelige API-er og noen få pålitelige integrasjoner kan gi mer verdi enn mange funksjoner som ikke snakker sammen."
+        ]
+      },
+      {
+        "heading": "Automatisering uten kontroll er ikke effektivisering",
+        "paragraphs": [
+          "En løsning som sender samme faktura tre ganger eller oppretter duplikate prosjekter, har ikke spart bedriften for arbeid. Gode rutiner krever derfor feilhåndtering, idempotente operasjoner, logging, varsler og en måte å forsøke på nytt uten å doble resultatet.",
+          "Kundetilgang må avgrenses mellom virksomheter, hemmelige API-nøkler må beskyttes, og persondata bør ikke sendes til KI-tjenester uten et klart behandlingsgrunnlag og nødvendige avtaler. Særlig i en SaaS-tjeneste er gode tillatelser og sikker dataseparasjon avgjørende."
+        ]
+      },
+      {
+        "heading": "Hva kan bedriften gjøre de neste 30 dagene?",
+        "paragraphs": [
+          "Den første uken: Velg én gjentakende oppgave og mål hvor lang tid den tar. Den andre uken: Tegn opp arbeidsflyten og automatiser bare de forutsigbare trinnene. Den tredje uken: Test med reelle, men kontrollerte situasjoner, også når noe går galt. Den fjerde uken: Mål tidsbruk, feil og kostnad på nytt.",
+          "Det viktigste tallet er ikke hvor mange KI-funksjoner bedriften har fått. Det er hvor mye tid som frigjøres, hvor mange feil som unngås og om kundene faktisk får en bedre opplevelse.",
+          "For Vedøy er dette også en måte å bygge mer bærekraftige tjenester på: gjenbrukbare komponenter der det lønner seg, mennesker i kontroll over beslutningene og mindre rutinearbeid i hverdagen."
+        ]
+      }
+    ]
+  },
   {
     slug: "lokal-levering-uten-eget-budteam",
     title: "Lokal levering uten eget budteam: hva bør små bedrifter vurdere?",
