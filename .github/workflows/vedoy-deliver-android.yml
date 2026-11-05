@@ -1,0 +1,113 @@
+name: Vedoy Deliver - Android test APK
+
+on:
+  workflow_dispatch:
+    inputs:
+      license_acceptance:
+        description: 'After reading the Google Android SDK License Agreement, type I_ACCEPT_ANDROID_SDK_LICENSES'
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vedoy-deliver-android-test
+  cancel-in-progress: false
+
+jobs:
+  android-test:
+    name: Build and publish Android test APK
+    if: ${{ inputs.license_acceptance == 'I_ACCEPT_ANDROID_SDK_LICENSES' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - name: Checkout reviewed Deliver Android source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: feature/vedoy-deliver-courier-service
+          persist-credentials: false
+
+      - name: Install Node.js 22
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22'
+
+      - name: Install Java 21
+        uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00 # v4.7.1
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Prepare Android SDK after explicit license acceptance
+        uses: android-actions/setup-android@be39fa834029ff78f1a44aa3bb0819b8fc2bd8fd # v4.0.4
+
+      - name: Install Android SDK platform and build tools
+        run: sdkmanager 'platform-tools' 'platforms;android-35' 'platforms;android-36' 'build-tools;35.0.0' 'build-tools;36.0.0'
+
+      - name: Install pinned Capacitor toolchain
+        working-directory: apps/vedoy-deliver/android-wrapper
+        run: npm install --no-audit --no-fund --ignore-scripts
+
+      - name: Prepare original Vedoy Deliver icon
+        working-directory: apps/vedoy-deliver/android-wrapper
+        run: |
+          python3 -m pip install --disable-pip-version-check Pillow==11.1.0
+          python3 - <<'PY'
+          from PIL import Image
+          from pathlib import Path
+          root=Path('.')
+          source=Image.open(root.parent/'public/vedoy-deliver-icon.png').convert('RGBA')
+          root.joinpath('assets').mkdir(exist_ok=True)
+          icon=Image.new('RGBA',(1024,1024),(0,0,0,0))
+          source.thumbnail((940,940),Image.Resampling.LANCZOS)
+          icon.alpha_composite(source,((1024-source.width)//2,(1024-source.height)//2))
+          icon.save(root/'assets/icon.png')
+          bg=Image.new('RGB',(1024,1024),'#0b2343')
+          bg.paste(icon,mask=icon.getchannel('A'))
+          bg.save(root/'assets/splash.png')
+          PY
+
+      - name: Generate native Android project and branded launcher icon
+        working-directory: apps/vedoy-deliver/android-wrapper
+        run: |
+          npx cap add android
+          npx capacitor-assets generate --android
+          npx cap sync android
+
+      - name: Build unsigned-store / debug-signed test APK
+        working-directory: apps/vedoy-deliver/android-wrapper/android
+        run: |
+          chmod +x gradlew
+          ./gradlew --no-daemon assembleDebug
+
+      - name: Verify APK structure and prepare release asset
+        working-directory: apps/vedoy-deliver/android-wrapper
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+          cp android/app/build/outputs/apk/debug/app-debug.apk dist/vedoy-deliver-test.apk
+          test "$(stat -c%s dist/vedoy-deliver-test.apk)" -gt 1048576
+          unzip -l dist/vedoy-deliver-test.apk | grep -q 'AndroidManifest.xml'
+          sha256sum dist/vedoy-deliver-test.apk
+
+      - name: Save APK build as workflow artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: vedoy-deliver-test-apk
+          path: apps/vedoy-deliver/android-wrapper/dist/vedoy-deliver-test.apk
+          retention-days: 30
+          if-no-files-found: error
+
+      - name: Publish prerelease only after APK build succeeds
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          tag='vedoy-deliver-android-test'
+          apk='apps/vedoy-deliver/android-wrapper/dist/vedoy-deliver-test.apk'
+          if gh release view "$tag" >/dev/null 2>&1; then
+            gh release upload "$tag" "$apk" --clobber
+          else
+            gh release create "$tag" "$apk" --prerelease --target "$(git rev-parse HEAD)" --title 'Vedoy Deliver - Android test APK' --notes 'Capacitor Android test wrapper. Opens the Vedoy Deliver pilot website. Not for Google Play. No real deliveries or payouts.'
+          fi
