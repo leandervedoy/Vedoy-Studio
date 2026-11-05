@@ -19,7 +19,7 @@ export default async function NewsPage({ searchParams }: { searchParams: Promise
   };
 
   return <main className="news-page">
-    <header><Link href="/">VEDØY STUDIO</Link><span>NEWS · PROJECTS · DEVELOPMENT</span></header>
+    <header><Link href="/">VEDØY STUDIO</Link><span><Link href="/insights" style={{color:"#b9ff39",fontWeight:800}}>VEDOY INSIGHTS ↗</Link> · NEWS · PROJECTS · DEVELOPMENT</span></header>
     <section className="news-hero">
       <p className="editorial-kicker lime">VEDOY NEWS</p>
       <h1>{projectLabel ? <>Nyheter fra<br /><em>{projectLabel}.</em></> : <>Det skjer hos<br /><em>Vedøy.</em></>}</h1>

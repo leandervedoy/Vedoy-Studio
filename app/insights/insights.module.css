@@ -1,0 +1,40 @@
+.page{min-height:100vh;background:#080b09;color:#f6f6ef;font-family:Arial,Helvetica,sans-serif}
+.page *{box-sizing:border-box}
+.page a{color:inherit;text-decoration:none}
+.navigation{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:22px clamp(24px,6vw,100px);border-bottom:1px solid #263329}
+.brand{font-weight:850;font-size:17px;letter-spacing:.065em}.brand span{color:#b9ff39}
+.navlinks{display:flex;align-items:center;gap:26px;color:#b9c4b5;font-size:13px}.navlinks a:hover,.footer a:hover{color:#b9ff39}
+.hero{padding:clamp(70px,9vw,135px) clamp(24px,10vw,180px) clamp(70px,7vw,110px);background:radial-gradient(circle at 82% 30%,#233528 0%,#080b09 42%)}
+.eyebrow{font:800 11px/1.3 ui-monospace,monospace;letter-spacing:.15em;color:#b9ff39}
+.hero h1{font-size:clamp(56px,10vw,140px);line-height:.93;letter-spacing:-.082em;margin:26px 0 28px;font-weight:800}
+.hero h1 em{font-weight:400;font-style:normal;color:#aebcb0}
+.lead{color:#bdc9be;font-size:clamp(17px,2vw,23px);line-height:1.6;max-width:660px}
+.feed{padding:0 clamp(24px,10vw,180px) 100px}
+.sectionTitle{display:flex;justify-content:space-between;gap:18px;padding:24px 0;border-top:1px solid #3a4b3c;color:#c3cfc1;font:800 11px ui-monospace,monospace;letter-spacing:.1em}
+.card{background:#121a14;border:1px solid #29382a;border-radius:18px;padding:clamp(24px,5vw,60px);margin:12px 0 0;transition:border-color .2s}
+.card:hover{border-color:#a2e33d}
+.cardTop{display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap;text-transform:uppercase;color:#b9ff39;font:800 11px ui-monospace,monospace;letter-spacing:.1em}
+.cardTop time{color:#9aaa9a}
+.card h2{max-width:1000px;font-size:clamp(31px,5vw,60px);line-height:1.08;letter-spacing:-.06em;margin:34px 0 20px}
+.card h2 a:hover{color:#b9ff39}
+.card>p{max-width:760px;font-size:18px;line-height:1.65;color:#afbdaf}
+.cardBottom{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-top:36px;color:#a4b2a4;font-size:13px}
+.cardBottom>a{font-weight:800;color:#b9ff39}
+.footer{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;padding:42px clamp(24px,10vw,180px);border-top:1px solid #29382a;color:#9bad9b;font:700 12px ui-monospace,monospace;letter-spacing:.06em}
+.article{max-width:1100px;margin:0 auto;padding:58px clamp(24px,6vw,75px) 105px}
+.back{display:inline-block;color:#b9ff39!important;font-size:14px;font-weight:800;margin-bottom:100px}
+.articleMeta{display:flex;align-items:center;gap:18px;flex-wrap:wrap;color:#b9ff39;font:800 11px ui-monospace,monospace;letter-spacing:.09em;text-transform:uppercase}
+.articleMeta time{color:#afbdaf}
+.article h1{font-size:clamp(43px,7vw,86px);line-height:1.04;letter-spacing:-.071em;max-width:1000px;margin:25px 0}
+.articleLead{font-size:clamp(21px,2.5vw,29px);line-height:1.5;color:#c6d1c4;max-width:870px}
+.byline{font-size:12px;color:#8fa18e;margin:26px 0 65px}
+.articleBody{border-top:1px solid #39483a}
+.articleBody section{display:grid;grid-template-columns:80px 1fr;column-gap:35px;padding:44px 0 48px;border-bottom:1px solid #28382b}
+.chapterNumber{font:800 12px ui-monospace,monospace;color:#b9ff39;grid-row:1/9;padding-top:12px}
+.articleBody h2{font-size:clamp(25px,3vw,39px);letter-spacing:-.045em;line-height:1.15;margin:0 0 20px}
+.articleBody p{font-size:17px;line-height:1.9;color:#bdcbbb;margin:0 0 15px;max-width:790px}
+.articleCta{display:flex;align-items:center;justify-content:space-between;gap:35px;padding:38px;background:#c5ff63;color:#172219;border-radius:20px;margin-top:55px}
+.articleCta .eyebrow{color:#365324}.articleCta h2{font-size:40px;letter-spacing:-.05em;margin:12px 0}.articleCta p:not(.eyebrow){line-height:1.5;max-width:500px}
+.articleCta>a{display:inline-flex;white-space:nowrap;padding:14px 20px;background:#15241a;border-radius:11px;color:white;font-weight:800}
+.disclosure{font-size:12px;line-height:1.7;color:#8fa18e;margin-top:35px}
+@media(max-width:640px){.navigation{padding:20px 22px}.brand{font-size:14px}.navlinks{gap:13px;font-size:12px}.article{padding-top:40px}.back{margin-bottom:55px}.articleBody section{grid-template-columns:1fr;padding-top:30px}.chapterNumber{grid-row:auto;padding:0 0 15px}.articleBody p{font-size:16px}.articleCta{flex-direction:column;align-items:flex-start}.articleCta h2{font-size:32px}}
