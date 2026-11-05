@@ -75,3 +75,15 @@
 @media (prefers-reduced-motion: reduce) {
   .primary, .secondary { transition: none; }
 }
+
+
+/* Vedøy ownership and logo — designed from the supplied white wordmark. */
+.madeBy { display:flex;align-items:center;gap:16px;padding:13px 16px;border:1px solid #49604b;border-radius:15px;background:#1d3022;margin-top:26px;max-width:max-content; }
+.madeBy img {display:block;width:115px;height:49px;object-fit:contain;flex:0 0 auto;}
+.madeBy div{display:flex;flex-direction:column;gap:3px;}
+.madeBy strong{font-size:13px;color:#f4f9ed;}
+.madeBy span{font-size:11px;color:#b1c5b3;}
+.previewLogo{display:block;object-fit:contain;width:110px;height:46px;flex:none;}
+.bankWordmark{font-size:12px;font-weight:750;letter-spacing:.19em;color:#e5e9e0;}
+.previewCredit{color:#99b09c;font-size:10px;text-transform:uppercase;letter-spacing:.13em;margin:19px 0 0;text-align:center;}
+@media(max-width:520px){.madeBy{gap:9px;padding:9px 11px}.madeBy img{width:85px;height:37px}.madeBy strong{font-size:11px}.madeBy span{font-size:10px}.previewLogo{width:88px;height:39px}}
