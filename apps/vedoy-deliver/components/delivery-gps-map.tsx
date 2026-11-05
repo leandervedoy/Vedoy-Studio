@@ -1,7 +1,7 @@
 "use client";
 
 import {useEffect,useRef,useState} from "react";
-import type {Mode,TaskState} from "@/lib/policy";
+import type {Mode} from "@/lib/policy";
 
 type Coordinates={latitude:number;longitude:number;accuracy:number};
 type Props={
