@@ -19,6 +19,16 @@ type ProjectDetail = {
 };
 
 const projectOverrides: Record<string, ProjectDetail> = {
+  jobs: {
+    title: "Vedoy Jobs",
+    text: "En fleksibel oppdragsplattform for unge som ønsker å tjene penger når de har tid, og for bedrifter med behov for hjelp til avgrensede oppgaver.",
+    points: ["Mobilvennlig oppdragsfeed med åpen oversikt og tydelige honorarer", "Bedrifter kan sende inn oppdrag til manuell godkjenning", "Interesse og søknader for personer i riktig aldersgruppe", "Wolt Drive vurderes som valgfri reserve ved lokal levering, etter avtale og prissjekk"],
+    actionHref: "/#kontakt",
+    actionLabel: "Meld interesse for Vedoy Jobs",
+    status: "Planlagt",
+    category: "Arbeid / fleksible oppdrag",
+    note: "Pilot under utvikling i et eget Next.js-prosjekt. Ekte oppdrag, betaling, Wolt Drive-integrasjon og kontroll av arbeidsvilkår aktiveres først etter nødvendige avtaler, tester og godkjenninger."
+  },
   sent: {
     title: "Sent",
     text: "Vedøys meldingsplattform med fokus på privatliv, sikker kommunikasjon og kontroll over egne data.",
