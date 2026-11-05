@@ -163,7 +163,7 @@ export function DeliverApp(){
   </article>;
  }
  return <div className="deliver-shell">
-  <header className="topbar"><a className="brand" href="/" aria-label="Vedoy Deliver forside"><span className="logo">v.</span><span>vedoy<strong>deliver</strong></span></a>
+  <header className="topbar"><a className="brand" href="/" aria-label="Vedoy Deliver forside"><span className="logo"><img src="/vedoy-deliver-icon.png" alt="" width={44} height={44}/></span><span>vedoy<strong>deliver</strong></span></a>
    <nav aria-label="Hovednavigasjon">{([{id:"jobs",name:"Oppdrag"},{id:"earnings",name:"Min opptjening"},{id:"business",name:"For bedrifter"},{id:"account",name:"Min konto"}] as const).map(item=>
     <button key={item.id} className={tab===item.id?"nav-item active":"nav-item"} onClick={()=>{setTab(item.id);setNotice("");}}>{item.name}</button>)}</nav>
    <button className="top-cta" onClick={()=>setTab(user?"jobs":"account")}>{user?"Finn leveringer":"Bli bud"} ↗</button></header>
@@ -206,7 +206,7 @@ export function DeliverApp(){
       <button className="primary full" disabled={working||!configured}>Send forespørsel ↗</button></form></div>}
    </section>}
   </main>
-  <footer className="footer"><div><a className="brand" href="/"><span className="logo">v.</span><span>vedoy<strong>deliver</strong></span></a><p>Lokale leveringer. Nye muligheter.</p></div><div><strong>Vedoy</strong><a href="https://vedoystudio.no" target="_blank" rel="noreferrer">Vedoy Studio ↗</a><a href="https://vedoystudio.no/projects/deliver" target="_blank" rel="noreferrer">Om konseptet ↗</a></div><p className="footer-note">Pilot under utvikling. Ingen levende oppdrag, bestillinger, lønnsutbetalinger eller Wolt-integrasjon er aktivert. <a href="/levering">Prøv GPS-kartet</a> · <a href="/bedrift">For bedrifter</a></p></footer>
+  <footer className="footer"><div><a className="brand" href="/"><span className="logo"><img src="/vedoy-deliver-icon.png" alt="" width={44} height={44}/></span><span>vedoy<strong>deliver</strong></span></a><p>Lokale leveringer. Nye muligheter.</p></div><div><strong>Vedoy</strong><a href="https://vedoystudio.no" target="_blank" rel="noreferrer">Vedoy Studio ↗</a><a href="https://vedoystudio.no/projects/deliver" target="_blank" rel="noreferrer">Om konseptet ↗</a></div><p className="footer-note">Pilot under utvikling. Ingen levende oppdrag, bestillinger, lønnsutbetalinger eller Wolt-integrasjon er aktivert. <a href="/levering">Prøv GPS-kartet</a> · <a href="/bedrift">For bedrifter</a></p></footer>
   <nav className="mobile-nav" aria-label="Mobilnavigasjon">{([{id:"jobs",text:"Oppdrag",icon:"⌂"},{id:"earnings",text:"Opptjening",icon:"◷"},{id:"business",text:"Bedrifter",icon:"▤"},{id:"account",text:"Profil",icon:"◉"}] as const).map(i=><button key={i.id} className={tab===i.id?"selected":""} onClick={()=>{setTab(i.id);setNotice("");}}><span>{i.icon}</span>{i.text}</button>)}</nav>
   {notice&&<div className="toast" role="status"><span>{notice}</span><button aria-label="Lukk melding" onClick={()=>setNotice("")}>×</button></div>}
   {selected&&<div className="overlay" role="presentation" onMouseDown={e=>{if(e.target===e.currentTarget){setSelected(null);setPrivateJob(null);}}}><section className="dialog" role="dialog" aria-modal="true" aria-labelledby="job-detail"><button className="close" aria-label="Lukk" onClick={()=>{setSelected(null);setPrivateJob(null);}}>×</button>

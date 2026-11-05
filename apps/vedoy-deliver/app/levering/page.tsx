@@ -4,7 +4,7 @@ import {DeliveryGpsMap} from "@/components/delivery-gps-map";
 export default function DeliveryMapPreview(){
  return <main style={{maxWidth:960,margin:"auto",padding:"32px clamp(16px,4vw,45px) 80px"}}>
  <nav style={{display:"flex",gap:24,justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",marginBottom:55}}>
- <Link href="/" style={{fontWeight:800,fontSize:23}}>vedoy<span style={{color:"#278252"}}>deliver</span></Link>
+ <Link href="/" style={{fontWeight:800,fontSize:23,display:"inline-flex",alignItems:"center",gap:10}}><img src="/vedoy-deliver-icon.png" width={44} height={44} alt=""/><span>vedoy<span style={{color:"#278252"}}>deliver</span></span></Link>
  <Link href="/bedrift">For bedrifter ↗</Link></nav>
  <p className="eyebrow">LEVERINGSKART – DEMO</p>
  <h1 style={{fontSize:"clamp(35px,6vw,60px)",margin:"12px 0 16px"}}>Følg din posisjon.</h1>
