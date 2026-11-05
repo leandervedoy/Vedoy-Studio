@@ -1,3 +1,4 @@
+import "./navigation-improvements.css";
 import { StudioShell } from "@/components/studio/studio-shell";
 import { getSession } from "@/lib/auth";
 import { headers } from "next/headers";

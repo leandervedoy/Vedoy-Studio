@@ -1,0 +1,76 @@
+/* Growth navigation improvements: scoped to Studio pages. */
+.studio-nav { gap: 16px; }
+.studio-nav__section > small { color: #9a9f93; font-size: 9px; letter-spacing: .13em; }
+.studio-nav__section > a { font-size: 13px; min-height: 41px; }
+.studio-nav__section > a.is-locked { opacity: .72; }
+.studio-nav__section > a em { font-style: normal; color: #b4b5ad; }
+.studio-nav-more { width: 100%; min-height: 41px; display: flex; align-items: center; justify-content: space-between; padding: 0 12px; border: 1px solid #394036; border-radius: 9px; background: #242923; color: #e3eadf; font-size: 12px; font-weight: 700; cursor: pointer; text-align: left; }
+.studio-nav-more:hover, .studio-nav-more:focus-visible { background: #313b30; }
+.studio-nav-more span:last-child { font-size: 19px; font-weight: 400; }
+.studio-location { min-width: 0; display: flex; align-items: center; gap: 8px; white-space: nowrap; color: #72746e; font-size: 12px; }
+.studio-location a { font-weight: 700; }
+.studio-location strong { min-width: 0; max-width: 200px; overflow: hidden; text-overflow: ellipsis; color: #28352c; font-weight: 700; }
+.studio-mobile-search { display: none; }
+.studio-search:focus-within { outline: 2px solid #9ab5a1; outline-offset: 2px; }
+.studio-nav__section > a:focus-visible, .studio-nav-more:focus-visible, .studio-mobile-search:focus-visible, .growth-start__list a:focus-visible, .project-navigation a:focus-visible { outline: 2px solid #b7ff26; outline-offset: 2px; }
+.studio-shell.is-sidebar-collapsed .studio-nav-more { justify-content: center; padding: 0; }
+.studio-shell.is-sidebar-collapsed .studio-nav-more span:first-child { display: none; }
+.studio-info-banner { display: flex; align-items: flex-start; gap: 12px; padding: 14px 18px; margin-bottom: 19px; color: #514c33; background: #fff9e8; border: 1px solid #e2d5a6; border-radius: 13px; font-size: 13px; line-height: 1.5; }
+.studio-info-banner strong { white-space: nowrap; color: #534516; }
+.growth-start { margin: 0 0 19px; }
+.growth-start__heading { display: flex; justify-content: space-between; align-items: end; gap: 15px; margin-bottom: 11px; }
+.growth-start__heading small { color: #777a72; letter-spacing: .14em; font-size: 10px; font-weight: 700; }
+.growth-start__heading h2 { margin: 4px 0 0; font-size: clamp(21px,2vw,26px); }
+.growth-start__heading p { margin: 0; font-size: 12px; color: #70766d; }
+.growth-start__list { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 10px; }
+.growth-start__list a { position: relative; display: grid; align-content: start; gap: 8px; min-width: 0; min-height: 140px; padding: 18px; background: #fff; border: 1px solid var(--line); border-radius: 14px; transition: border-color .2s ease, transform .2s ease; }
+.growth-start__list a:hover { border-color: #719e7b; transform: translateY(-2px); }
+.growth-start__list a > span { color: #256b48; font-size: 19px; }
+.growth-start__list a strong { font-size: 13px; letter-spacing: -.01em; }
+.growth-start__list a small { font-size: 11px; color: #72766d; line-height: 1.4; }
+.growth-start__list a b { position: absolute; right: 15px; top: 14px; color: #687b6a; font-size: 13px; }
+.growth-demo-note, .project-integration-note { font-size: 12px; line-height: 1.55; color: #77746d; margin: 14px 0 0; }
+.project-navigation { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; margin: 0 0 18px; font-size: 13px; font-weight: 700; }
+.project-navigation a { color: #356d4a; }
+.project-navigation a:hover { text-decoration: underline; }
+.project-results { display: flex; justify-content: space-between; gap: 10px; margin: -5px 0 12px; font-size: 12px; color: #76746b; }
+.project-results strong { color: #252e27; }
+.project-empty { display: flex; gap: 14px; align-items: center; justify-content: space-between; }
+.project-empty p { margin: 0; }
+.project-page-help { margin: 22px 0 0; border: 1px solid var(--line); border-radius: 14px; background: #fff; }
+.project-page-help > summary { cursor: pointer; padding: 18px; font-size: 14px; font-weight: 700; }
+.project-page-help .hosting-overview { margin: 0 14px 14px; }
+@media (max-width: 1240px) {
+  .studio-topbar { gap: 16px; }
+  .studio-location strong { max-width: 130px; }
+  .growth-start__list { grid-template-columns: repeat(2,minmax(0,1fr)); }
+}
+@media (max-width: 760px) {
+  .studio-location { flex: 1; }
+  .studio-location strong { max-width: 150px; }
+  .studio-mobile-search { width: 38px; height: 38px; display: grid; place-items: center; border: 1px solid var(--line); background: #fff; border-radius: 10px; font-size: 23px; cursor: pointer; }
+  .studio-search-wrap { display: none; position: absolute; left: 14px; right: 14px; top: calc(100% + 6px); width: auto; padding: 10px; background: #fff; border-radius: 12px; border: 1px solid var(--line); box-shadow: var(--shadow); z-index: 85; }
+  .studio-search-wrap.is-search-visible { display: block; }
+  .studio-topbar .studio-search { display: flex; }
+  .studio-search-results { top: calc(100% + 4px); }
+  .growth-start__heading { align-items: start; flex-direction: column; gap: 4px; }
+  .studio-info-banner { flex-direction: column; gap: 5px; padding: 13px; }
+  .project-toolbar { flex-direction: column; align-items: stretch; }
+  .project-toolbar__filters { width: 100%; }
+  .project-toolbar__filters input { flex: 1; width: 100%; min-width: 0; }
+  .project-toolbar__filters select { max-width: 45%; }
+  .project-results { flex-direction: column; gap: 3px; }
+  .project-entry__details { grid-template-columns: repeat(2,minmax(0,1fr)); padding: 16px; }
+}
+@media (max-width: 480px) {
+  .studio-location { gap: 4px; font-size: 11px; }
+  .studio-location strong { max-width: 100px; }
+  .growth-start__list { grid-template-columns: 1fr; }
+  .growth-start__list a { min-height: 100px; grid-template-columns: 26px 1fr; gap: 3px 10px; align-items: center; }
+  .growth-start__list a > span { grid-row: 1/3; }
+  .growth-start__list a small { grid-column: 2; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .growth-start__list a { transition: none; }
+  .growth-start__list a:hover { transform: none; }
+}
