@@ -60,7 +60,7 @@ export async function GET(request: NextRequest) {
     return loginError(request, "Innloggingen er ugyldig eller har utløpt. Prøv igjen.");
   }
 
-  const neonAuthUrl = neonAuthUrlFromEnv(process.env);
+  const neonAuthUrl = neonAuthUrlFromEnv({ VEDOY_LOGIN_NEON_AUTH_URL: process.env.VEDOY_LOGIN_NEON_AUTH_URL, VITE_NEON_AUTH_URL: process.env.VITE_NEON_AUTH_URL });
   const clientId = process.env.VEDOY_LOGIN_CLIENT_ID;
   const callbackUrl = process.env.VEDOY_LOGIN_CALLBACK_URL;
   if (!neonAuthUrl || !clientId || !callbackUrl) {
