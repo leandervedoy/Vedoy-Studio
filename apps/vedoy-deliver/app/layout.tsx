@@ -1,5 +1,6 @@
 import type {Metadata,Viewport} from "next";
 import "./globals.css";
+import {RegisterServiceWorker} from "@/components/register-service-worker";
 export const metadata:Metadata={
  title:"Vedoy Deliver – lokal levering og budportal",
  description:"Vedoy Deliver er en pilot for lokale leveringer på Haugalandet. Utforsk muligheter for bedrifter og søk om å bli bud.",
@@ -13,5 +14,5 @@ export const metadata:Metadata={
 };
 export const viewport:Viewport={width:"device-width",initialScale:1,themeColor:"#12382f"};
 export default function RootLayout({children}:{children:React.ReactNode}){
- return <html lang="nb"><body>{children}</body></html>;
+ return <html lang="nb"><body><RegisterServiceWorker/>{children}</body></html>;
 }

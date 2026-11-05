@@ -37,3 +37,42 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}button:disabled{
 .delivery-gps-status{font-weight:700;font-size:13px;margin:14px 0 10px}
 .delivery-gps .fineprint{font-size:11px;line-height:1.55}
 @media(max-width:480px){.delivery-gps{padding:14px;margin:16px 0}.delivery-gps-actions{flex-direction:column}.delivery-gps-actions>a,.delivery-gps-actions>button{width:100%}}
+
+
+/* Vedoy Deliver install and download page. */
+.install-page{min-height:100vh;background:#f5f8f3;color:#143427}
+.install-header{display:flex;align-items:center;justify-content:space-between;gap:15px;background:#fff;border-bottom:1px solid #e2eae2;padding:17px clamp(22px,6vw,110px)}
+.install-wordmark{display:inline-flex;align-items:center;gap:11px;font:850 21px Manrope,system-ui,sans-serif;letter-spacing:-.055em}
+.install-wordmark img{display:block;object-fit:contain}.install-wordmark strong{color:#2382c4}
+.install-back{font-weight:800;font-size:13px;color:#315a45}
+.install-hero{background:radial-gradient(circle at 85% 35%,#255c81,#0b2442 55%);color:#fff;padding:85px clamp(22px,8vw,130px);position:relative;overflow:hidden;min-height:400px}
+.install-hero h1{font-size:clamp(46px,8vw,94px);letter-spacing:-.075em;line-height:1.02;max-width:700px;margin:16px 0}
+.install-hero>p:not(.install-kicker){color:#c5d9e7;max-width:580px;font-size:18px;line-height:1.7}
+.install-kicker,.install-tag{font:800 11px/1.3 ui-monospace,monospace;letter-spacing:.12em}
+.install-kicker{color:#7dc0ff}
+.install-preview{position:absolute;right:9%;top:18%;width:260px;height:260px;border-radius:42px;background:#0b2449;box-shadow:0 30px 90px #0006;display:grid;place-items:center;transform:rotate(7deg)}
+.install-options{max-width:1250px;margin:auto;padding:55px clamp(20px,5vw,60px);display:grid;grid-template-columns:1.2fr 1fr;gap:22px}
+.install-card{border:1px solid #d8e4dc;background:#fff;padding:clamp(25px,4vw,46px);border-radius:22px;box-shadow:0 10px 30px #143d1910;align-self:stretch}
+.install-card-featured{border-color:#81bca4}
+.install-tag{display:block;color:#32805c}
+.install-card h2{font-size:clamp(30px,4vw,46px);letter-spacing:-.055em;margin:20px 0 13px}
+.install-card>p{color:#536e61;font-size:15px;line-height:1.75}
+.app-install-primary{display:inline-flex;align-items:center;justify-content:center;max-width:100%;background:#12382f;border:1px solid #12382f;color:#fff!important;font-size:15px;font-weight:800;border-radius:13px;padding:16px 24px;min-height:53px;margin-top:27px;cursor:pointer}
+.app-install-primary:hover{background:#26694d}
+.app-install-state{font-size:14px;line-height:1.6;margin-top:26px;padding:15px 18px;border:1px solid #d0e1d4;border-radius:13px;background:#eff7ee;color:#325542;font-weight:700}
+.app-install-widget>p{font-size:13px;color:#536e61;margin-top:12px}
+.install-howto{border-top:1px solid #dce7dc;margin-top:30px;padding-top:27px}
+.install-howto h3{font-size:17px;letter-spacing:-.02em}
+.install-howto ol{padding-left:20px;margin:14px 0 0;color:#52695b;line-height:1.8}
+.install-howto li{margin-bottom:9px}
+.install-unavailable{background:#f1f4f0;border:1px dashed #b4c5b7;border-radius:13px;padding:20px;color:#627465;font-size:14px;line-height:1.65;margin-top:28px}
+.install-card p.install-footnote{font-size:12px;margin-top:16px;color:#697c70;overflow-wrap:anywhere}
+.install-trust{max-width:1150px;margin:auto;padding:0 clamp(20px,5vw,60px) 90px}
+.install-trust h2{font-size:28px;letter-spacing:-.04em}
+.install-trust p{color:#51685a;font-size:15px;line-height:1.85;max-width:840px;margin:13px 0}
+.install-trust a{font-weight:800;text-decoration:underline}
+.topbar nav a.nav-item{display:inline-flex;align-items:center}
+.mobile-nav a.mobile-app-link{display:grid;gap:2px;justify-items:center;border:0;background:none;color:#829488;font-size:10px;font-weight:800;padding:7px}
+.mobile-nav a.mobile-app-link span{font-size:22px}
+@media(max-width:900px){.install-preview{right:-45px;opacity:.36}.install-options{grid-template-columns:1fr}.install-hero{min-height:345px}}
+@media(max-width:570px){.install-header{padding:14px 19px}.install-wordmark{font-size:17px}.install-wordmark img{height:38px;width:38px}.install-back{font-size:12px}.install-hero{padding:68px 22px;min-height:360px}.install-hero>p:not(.install-kicker){font-size:16px}.install-preview{width:165px;height:165px;top:18px;right:-95px}.install-preview img{width:120px;height:120px}}
