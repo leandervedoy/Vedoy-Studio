@@ -10,7 +10,7 @@ import type { SessionPayload } from "@/lib/types";
 
 type Profile = Pick<SessionPayload, "name" | "avatarUrl">;
 const links = [
-  ["tjenester", "services"], ["plattform", "platform"], ["prosjekter", "projects"],
+  ["tjenester", "services"], ["plattform", "platform"], ["prosjekter", "projects"], ["demoer", "demos"],
   ["profilprodukter", "clothing"], ["kontakt", "contact"],
 ] as const;
 
