@@ -50,3 +50,14 @@ npm run dev
 ## Status
 
 Kildekode/MVP for testing. **Ikke produksjonssatt**, og uten bekreftet databasemigrering eller Vercel-bygg. En eventuell teknisk/visuell byggekontroll og utprøving mot ekte Supabase er fortsatt nødvendig.
+
+## Signicat BankID (påbegynt, ikke verifisert)
+
+- Ny knapp i budprofil starter `POST /api/identity/start` med Supabase access token.
+- Start- og callback-ruter bruker server-only credentials, tilfeldig state, HttpOnly-cookie og server-side statusoppslag.
+- `supabase/identity.sql` legger til private identitetssesjoner og verifiseringsmarkør. Kjør etter `schema.sql`.
+- Konfigurer servervariablene i `.env.example` i en hemmelighetshåndterer. Ikke legg BankID-data eller service-role-nøkler i nettleseren.
+- **Kritisk:** Signicats faktiske konto-/API-kontrakt, provider-ID, attributter og statusverdier må verifiseres mot din Signicat-konfigurasjon. Ingen autentisering er testet ende til ende.
+- **Kritisk:** Koble identitetsstatus inn i admin-godkjenning og tildelingsreglene før produksjon; identitet alene gir aldri rett til oppdrag.
+- Ikke aktiver reelle verifiseringer før det finnes databehandleravtale, personvernerklæring, sletterutiner og samtykke/annet gyldig behandlingsgrunnlag.
+- Ytterligere utestående: adminpanel, oppdragsoppretting, varsler, rute/kart, utbetalingssystem, Wolt Drive, juridiske arbeidsgiverkontroller og ende-til-ende-tester.
