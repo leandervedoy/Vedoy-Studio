@@ -116,13 +116,14 @@ export function ProductCustomizer({ showRequestForm = true }: { showRequestForm?
       </div>
       <p className="customizer-simple-name">{product.name}</p>
       {showRequestForm ? <form className="clothing-request-form" onSubmit={submitRequest}>
-        <div className="clothing-request-form__heading"><span>VEDØY COLLECTIVE · BESTILLINGSFORESPØRSEL</span><h3>Bestill profilprodukter</h3><p>Velg plagget over, last opp logo og fortell hvor mange dere trenger. Forespørselen lagres i Vedøy Studio og er ikke bindende. Vi avklarer tilgjengelighet, produksjon og endelig pris før bestilling.</p></div>
+        <div className="clothing-request-form__heading"><span>VEDØY COLLECTIVE · BESTILLINGSFORESPØRSEL</span><h3>Bestill profilprodukter</h3><p>Velg et eksempelplagg eller lim inn lenken til et hvilket som helst produkt på VedoyCollective.com. Hele katalogen kan forespørres med logo. Vi bekrefter egnet tilpasningsmetode, tilgjengelighet, produksjon og endelig pris før bestilling.</p></div>
         <div className="clothing-request-form__fields">
           <label>Navn *<input name="name" required maxLength={100} /></label>
           <label>Bedrift<input name="company" maxLength={120} /></label>
           <label>E-post *<input name="email" type="email" required maxLength={254} /></label>
           <label>Telefon<input name="phone" maxLength={40} /></label>
-          <label>Antall *<input name="quantity" type="number" required min={1} max={10000} defaultValue={10} /></label>
+          <label className="full">Produkter fra hele Vedoy Collective-katalogen (valgfritt)<input name="productUrl" type="url" maxLength={450} placeholder="https://vedoycollective.com/products/produktnavn" /><small>Lim inn produktlenken. Du kan også beskrive flere produkter i merknadsfeltet.</small><a href="https://vedoycollective.com/collections/all" target="_blank" rel="noopener noreferrer">Se hele katalogen ↗</a></label>
+          <label>Antall *<input name="quantity" type="number" list="collective-quantity-options" required min={1} max={10000} defaultValue={10} /><datalist id="collective-quantity-options">{[5,10,15,20,30,40,50,75,100,200,500].map(amount=><option value={amount} key={amount} />)}</datalist></label>
           <label className="full">Størrelser, plassering eller annet<textarea name="details" rows={3} maxLength={3000} placeholder="Eksempel: 5 × M, 5 × L, broderi på venstre bryst" /></label>
           <label className="form-honeypot" aria-hidden="true">Nettside<input name="website" tabIndex={-1} autoComplete="off" /></label>
           <button type="submit" disabled={submitState === "sending"}>{submitState === "sending" ? "Lagrer …" : "Send forespørsel →"}</button>
