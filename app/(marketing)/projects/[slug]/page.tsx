@@ -19,22 +19,6 @@ type ProjectDetail = {
 };
 
 const projectOverrides: Record<string, ProjectDetail> = {
-  deliver: {
-    title: "Vedoy Deliver",
-    text: "Vedoy Deliver er et planlagt bedriftsprodukt fra Vedoy Studio. Målet er å gjøre lokal hjemlevering tilgjengelig fra butikkers og serveringssteders egne nettsider og apper, uten at bedriften trenger å drifte egen budflåte.",
-    points: [
-      "Et enkelt leveringsvalg i bedriftens egen nettbutikk eller bestillingsside",
-      "Ordreoversikt, leveringspris, statuser og sporing",
-      "Planlagte integrasjoner med Shopify, andre handelsplattformer og API-er",
-      "Mulighet for flere bedrifter med egne innstillinger og tilgangskontroll",
-      "Pilot i Haugesund med Vedoy Collective som mulig første testbutikk"
-    ],
-    actionHref: "/#kontakt",
-    actionLabel: "Meld interesse",
-    status: "Planlagt",
-    category: "Lokal levering / B2B / integrasjoner",
-    note: "Under utvikling: Vi ønsker å integrere Wolt Drive som en mulig transportpartner, men partnerskap, API-tilgang, leveringsdekning, priser og lansering er ikke bekreftet. Vedoy Deliver kan ikke bestilles eller brukes til ekte leveringer ennå."
-  },
   sent: {
     title: "Sent",
     text: "Vedøys meldingsplattform med fokus på privatliv, sikker kommunikasjon og kontroll over egne data.",
