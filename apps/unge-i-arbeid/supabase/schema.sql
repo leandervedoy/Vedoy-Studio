@@ -104,7 +104,7 @@ create policy uia_jobs_employer_create on public.uia_jobs
  for insert to authenticated with check(
   owner_id=(select auth.uid()) and status='pending_review'
   and exists(select 1 from public.uia_companies c where c.owner_id=(select auth.uid())
-   and c.status in ('pending','verified') and c.company_name=company_name)
+   and c.status in ('pending','verified') and c.company_name=uia_jobs.company_name)
  );
 drop policy if exists uia_jobs_employer_close on public.uia_jobs;
 create policy uia_jobs_employer_close on public.uia_jobs
