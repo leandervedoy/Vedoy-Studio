@@ -38,6 +38,7 @@ export function PricingExperience({ prices, hero, turnstileSiteKey }: { prices: 
   const studio = prices.filter(p=>p.category === "studio");
   const assist = prices.filter(p=>p.category === "assist");
   const growth = prices.filter(p=>p.category === "growth");
+  const collective = prices.filter(p=>p.category === "collective" && /^collective-(5|10|20|40)$/.test(p.code));
   const [step,setStep]=useState(0);
   const [answers,setAnswers]=useState<number[]>([]);
   const [result,setResult]=useState<Recommendation|null>(null);
@@ -127,6 +128,7 @@ export function PricingExperience({ prices, hero, turnstileSiteKey }: { prices: 
       <div className="vp-assist-grid">{assist.map(p=><article key={p.code}><span>{p.title}</span><strong>{money(p.amountOre)}</strong><small>{periodLabel(p.billingPeriod)} · {vatLabel(p.vatMode)}</small><p>{p.description}</p></article>)}</div>
     </section>
     {growth.length>0 ? <section className="vp-section" id="growth-priser"><header><span className="vp-label">VEDØY GROWTH</span><h2>Arbeidsområdet som vokser med deg.</h2></header><div className="vp-growth-grid">{growth.map(p=><article key={p.code}><h3>{p.title}</h3><strong>{money(p.amountOre)}</strong><span>/ mnd {vatLabel(p.vatMode)}</span><p>{p.description}</p><Link href={`/start-bedrift?plan=${encodeURIComponent(p.code.replace("growth-",""))}&source=pricing`} className="vp-secondary">Se løsning ↗</Link></article>)}</div></section> : null}
+    {collective.length>0 ? <section className="vp-section" id="collective-priser"><header><span className="vp-label">VEDOY COLLECTIVE · PROFILPRODUKTER</span><h2>Profilklær til hele teamet.</h2><p>Veiledende grunnpriser på basis-T-skjorter før logo, eventuelt MVA og frakt. Hentet fra samme Vedøy Pricing-katalog som brukes på tjenestesiden.</p></header><div className="vp-growth-grid">{collective.map(p=><article key={p.code}><h3>{p.title}</h3><strong>{money(p.amountOre)}</strong><span>fra · kun basisplagg</span><p>Velg et annet plagg fra hele Collective-katalogen, så får dere et konkret tilbud.</p><Link href="/tjenester/profilprodukter#profilpakker" className="vp-secondary">Se pakken ↗</Link></article>)}</div><p>Prisene gjelder regneeksempel, ikke alle plagg. Trykk, broderi og produksjon bekreftes separat.</p></section> : null}
     <footer className="vp-foot"><p><ShieldCheck size={17}/> En forespørsel er ikke en bindende bestilling. Alle kostnader og vilkår avklares før oppstart.</p><Link href="/#kontakt">Kontakt Vedøy Studio ↗</Link></footer>
     {selection && <div className="vp-modal-backdrop" onMouseDown={e=>{if(e.target===e.currentTarget)close();}}>
       <div className="vp-modal" role="dialog" aria-modal="true" aria-label="Send prisforespørsel"><button className="vp-modal-close" type="button" onClick={close} aria-label="Lukk"><X size={21}/></button>
