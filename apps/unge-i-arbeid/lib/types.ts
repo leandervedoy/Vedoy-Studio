@@ -39,3 +39,14 @@ export const DEMOS:Job[]=[
 {id:"demo-3",owner_id:"demo",company_name:"Eksempellevering",title:"Bud for lokale leveranser",description:"Eksempelutlysning for voksne bud. Trafikksikkerhet, forsikring, utstyr og arbeidsvilkår må kontrolleres.",category:"levering",city:"Haugesund",work_type:"part_time",work_mode:"onsite",pay_min_ore:20000,pay_max_ore:22000,pay_unit:"hour",min_age:18,application_deadline:null,status:"published",created_at:"2026-11-05T09:00:00Z",demo:true},
 {id:"demo-4",owner_id:"demo",company_name:"Eksempelarrangør",title:"Assistent på lokalt arrangement",description:"Eksempelutlysning: enkel publikumsveiledning og rydding. Oppgaver, tillatelser og arbeidstid må tilpasses alderen.",category:"arrangement",city:"Haugesund",work_type:"weekend",work_mode:"onsite",pay_min_ore:17000,pay_max_ore:18000,pay_unit:"hour",min_age:15,application_deadline:null,status:"published",created_at:"2026-11-05T08:00:00Z",demo:true}
 ];
+
+export type CV={
+ user_id:string;headline:string;summary:string;skills:string;education:string;
+ other_experience:string;updated_at:string;
+};
+export type WorkConfirmation={
+ id:string;application_id:string;job_id:string;candidate_id:string;employer_id:string;
+ company_name:string;worker_name:string;position_title:string;
+ start_date:string;end_date:string;duties:string;optional_assessment:string;
+ issued_by:string;issued_at:string;revoked_at:string|null;
+};
