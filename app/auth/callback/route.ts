@@ -98,7 +98,7 @@ export async function GET(request: NextRequest) {
 
   if (next === "/prosjekter" || next === "/projects") {
     const subject = user.sub?.trim();
-    if (!subject || !/^[a-zA-Z0-9_-]{8,180}$/.test(subject)) {
+    if (!subject || user.email_verified !== true || !/^[a-zA-Z0-9_-]{8,180}$/.test(subject)) {
       return loginError(request, "Vedøy Login oppga ikke en gyldig brukeridentitet.");
     }
     const response = NextResponse.redirect(new URL(next, request.url));
