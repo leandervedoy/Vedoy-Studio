@@ -72,6 +72,19 @@ export function DeliverApp(){
   setNotice(error?"Kunne ikke sende innloggingslenke. Prøv igjen.":"Sjekk e-posten din for innloggingslenken.");
   setWorking(false);
  }
+ async function verifyIdentity(){
+  const api=supabase();if(!api||!user)return;
+  setWorking(true);setNotice("");
+  try{
+   const {data}=await api.auth.getSession();
+   const token=data.session?.access_token;
+   if(!token)throw new Error("Not logged in");
+   const result=await fetch("/api/identity/start",{method:"POST",headers:{Authorization:"Bearer "+token}});
+   const body=await result.json();
+   if(!result.ok||!body.url)throw new Error("Verification unavailable");
+   window.location.assign(body.url);
+  }catch{setNotice("BankID-verifisering er ikke tilgjengelig før Signicat er konfigurert.");setWorking(false);}
+ }
  async function logout(){
   const api=supabase();if(!api)return;
   await api.auth.signOut();setNotice("Du er logget ut.");setSelected(null);setPrivateJob(null);
@@ -160,7 +173,7 @@ export function DeliverApp(){
    {tab==="account"&&<section className="interior"><SectionHeader eyebrow="KURIERPORTAL" title={user?"Din budprofil.":"Bli en del av Vedoy Deliver."} copy="Søknad er gratis. Du blir ikke ansatt eller lovet oppdrag ved å sende den."/>
     {!configured&&<div className="notice-bar">Demo – databasen og innlogging er ikke koblet til ennå.</div>}
     {!user?<div className="panel narrow"><h3>Logg inn med e-post</h3><p>Du får en sikker innloggingslenke. Alders- og identitetskontroll skjer før du kan jobbe.</p><form onSubmit={e=>{e.preventDefault();void login();}} className="form"><label>E-post<input type="email" required value={email} onChange={e=>setEmail(e.target.value)} placeholder="navn@eksempel.no"/></label><button className="primary" disabled={working||!configured}>Send innloggingslenke ↗</button></form></div>:
-     courier?<div className="panel"><div className="row-between"><div><h3>{courier.name}</h3><p>{AGE_LABELS[courier.age_band]} · {courier.city} · {MODE_LABELS[courier.mode]}</p></div><span className="status-tag">{({pending:"Under vurdering",approved:"Godkjent",declined:"Avslått",suspended:"Midlertidig stengt"})[courier.status]}</span></div><p className="fineprint">Medlemskap gir tilgang til å søke leveringer, ikke automatisk ansettelse eller rett til et bestemt antall oppdrag. Avtale, lønn, forsikring og opplæring må være på plass før arbeid.</p><button className="secondary" onClick={()=>void logout()}>Logg ut</button></div>:
+     courier?<div className="panel"><div className="row-between"><div><h3>{courier.name}</h3><p>{AGE_LABELS[courier.age_band]} · {courier.city} · {MODE_LABELS[courier.mode]}</p></div><span className="status-tag">{({pending:"Under vurdering",approved:"Godkjent",declined:"Avslått",suspended:"Midlertidig stengt"})[courier.status]}</span></div><p className="fineprint">Medlemskap gir tilgang til å søke leveringer, ikke automatisk ansettelse eller rett til et bestemt antall oppdrag. Avtale, lønn, forsikring og opplæring må være på plass før arbeid.</p><div className="identity-box"><strong>Identitetskontroll med BankID</strong><p>Identitet og alder må verifiseres gjennom Signicat før du kan bli godkjent som bud. Dette godkjenner ikke søknaden automatisk.</p><button className="secondary" disabled={working} onClick={()=>void verifyIdentity()}>Verifiser med BankID ↗</button></div><button className="secondary" onClick={()=>void logout()}>Logg ut</button></div>:
      <div className="panel"><h3>Søk om medlemskap</h3><form className="form two-col" onSubmit={e=>{e.preventDefault();void registerCourier();}}>
       <label>Fullt navn<input required minLength={2} maxLength={90} value={apply.name} onChange={e=>setApply(p=>({...p,name:e.target.value}))}/></label>
       <label>Aldersgruppe<select value={apply.age_band} onChange={e=>setApply(p=>({...p,age_band:e.target.value as AgeBand,mode:e.target.value==="15_17"&&p.mode==="car"?"bike":p.mode}))}>{Object.entries(AGE_LABELS).map(([v,t])=><option key={v} value={v}>{t}</option>)}</select></label>
