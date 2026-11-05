@@ -6,10 +6,10 @@ create table if not exists public.growth_portfolio_projects (
   organization_id text not null,
   name text not null check (char_length(name) between 2 and 180),
   description text not null default '',
-  source text not null default 'manual' check (source in ('manual','github','upload','git-url')),
-  github_full_name text,
-  github_url text,
-  github_default_branch text,
+  source text not null default 'manual' check (source in ('manual','github','gitea','upload','git-url')),
+  repo_full_name text,
+  repo_url text,
+  repo_default_branch text,
   parent_id uuid references public.growth_portfolio_projects(id) on delete set null,
   progress integer not null default 0 check (progress between 0 and 100),
   progress_confirmed boolean not null default false,
@@ -20,14 +20,14 @@ create table if not exists public.growth_portfolio_projects (
   manual_priority integer not null default 3 check (manual_priority between 1 and 5),
   next_action text not null default '',
   launch_url text,
-  github_health text not null default 'unknown' check (github_health in ('unknown','success','failure','pending')),
-  github_last_push timestamptz,
+  repo_health text not null default 'unknown' check (repo_health in ('unknown','success','failure','pending')),
+  repo_last_push timestamptz,
   checked_at timestamptz,
   archive_path text,
   archive_bytes integer,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
-  unique (organization_id, github_full_name)
+  unique (organization_id, source, repo_full_name)
 );
 create index if not exists growth_portfolio_org_parent_idx on public.growth_portfolio_projects(organization_id, parent_id);
 create index if not exists growth_portfolio_org_updated_idx on public.growth_portfolio_projects(organization_id, updated_at desc);
