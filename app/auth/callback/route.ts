@@ -92,7 +92,7 @@ export async function GET(request: NextRequest) {
   });
   const user = await userResponse.json() as UserInfo;
   const email = user.email?.trim().toLowerCase();
-  if (!userResponse.ok || !email || user.email_verified === false) {
+  if (!userResponse.ok || !email || user.email_verified !== true) {
     return loginError(request, "Vedøy-kontoen mangler en bekreftet e-postadresse.");
   }
 
