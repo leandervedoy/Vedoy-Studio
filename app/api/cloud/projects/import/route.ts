@@ -31,10 +31,10 @@ export async function POST(request: Request) {
     if (repoInfo.private) return NextResponse.json({ error: "Private GitHub-repositorier støttes ikke." }, { status: 422 });
     const tree = await github<Tree>(prefix + "/git/trees/" + encodeURIComponent(project.github_default_branch) + "?recursive=1");
     if (tree.truncated || !Array.isArray(tree.tree)) return NextResponse.json({ error: "GitHub-repositoriet er for stort for enkel import." }, { status: 422 });
-    const metadata = await db.from("vedoy_cloud_files").select("display_path,size_bytes").eq("owner_id", user.sub).limit(3000);
+    const metadata = await db.from("vedoy_cloud_files").select("display_path,size_bytes,project_id").eq("owner_id", user.sub).limit(3000);
     if (metadata.error) throw metadata.error;
     const usedBytes = (metadata.data || []).reduce((n, x) => n + Number(x.size_bytes), 0);
-    const existing = new Set((metadata.data || []).map(x => x.display_path));
+    const existing = new Set((metadata.data || []).filter(x => x.project_id === project.id).map(x => x.display_path));
     const countResult = await db.from("vedoy_cloud_files").select("id", { count: "exact", head: true }).eq("owner_id", user.sub).eq("project_id", project.id);
     if (countResult.error) throw countResult.error;
     const slots = Math.max(0, CLOUD_SETTINGS.maxFilesPerProject - (countResult.count || 0));
