@@ -8,11 +8,12 @@ export function CampaignManager({campaigns}:{campaigns:Campaign[]}){
  const control={padding:"10px 12px",border:"1px solid #dce5dc",borderRadius:10,width:"100%",font:"inherit"} as const;
  async function requestChange(event:FormEvent<HTMLFormElement>){
    event.preventDefault();if(busy)return;setBusy(true);setNotice("");
-   const values=Object.fromEntries(new FormData(event.currentTarget).entries());
+   const form=event.currentTarget;
+   const values=Object.fromEntries(new FormData(form).entries());
    const response=await fetch("/api/advertize/manage",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(values)});
    const data=await response.json().catch(()=>({error:"Ukjent feil"}));
    if(!response.ok)setNotice(data.error||"Kunne ikke lagre.");
-   else{setNotice("Utkast opprettet. Oppdater siden for å gjennomgå og aktivere.");event.currentTarget.reset();}
+   else{setNotice("Utkast opprettet. Oppdater siden for å gjennomgå og aktivere.");form.reset();}
    setBusy(false);
  }
  async function change(id:string,status:"draft"|"active"|"paused"){
