@@ -83,6 +83,16 @@ export function CloudWorkspace({ userName }: { userName: string }) {
       await loadFiles(active);
     }
   }
+  async function importGithubFiles() {
+    if (!active) return;
+    setBusy(true); setError(""); setNotice("");
+    try {
+      const result = await apiJson<{ imported: number; remaining: number; note: string }>("/api/cloud/projects/import", { method: "POST", headers: headers(), body: JSON.stringify({ projectId: active }) });
+      setNotice("Importert " + result.imported + " kildefiler. " + (result.remaining ? result.remaining + " filer gjenstår. " : "") + result.note);
+      await loadFiles(active);
+    } catch (reason) { setError(reason instanceof Error ? reason.message : "GitHub-import feilet."); }
+    finally { setBusy(false); }
+  }
   async function download(fileId: string) {
     setError("");
     try {
@@ -125,7 +135,7 @@ export function CloudWorkspace({ userName }: { userName: string }) {
             </div>
             <form onSubmit={createProject}>
               <label>Prosjektnavn<input value={name} onChange={e => setName(e.target.value)} minLength={2} maxLength={100} placeholder={source === "github" ? "Valgfritt · GitHub-navn" : "Mitt prosjekt"} required={source !== "github"} /></label>
-              {source === "github" && <label>Offentlig GitHub-lenke<input type="url" value={githubUrl} onChange={e => setGithubUrl(e.target.value)} required placeholder="https://github.com/bruker/repo" /><small>Kun lenken og metadata lagres. Ingen kode importeres ennå.</small></label>}
+              {source === "github" && <label>Offentlig GitHub-lenke<input type="url" value={githubUrl} onChange={e => setGithubUrl(e.target.value)} required placeholder="https://github.com/bruker/repo" /><small>Prosjektet kobles først som lenke. Deretter kan du importere kildefiler til Vedoy Cloud.</small></label>}
               {source === "folder" && <p className="vedoy-cloud__hint">Opprett prosjektet først, og last opp en hel mappe i filområdet til høyre.</p>}
               <button className="vedoy-cloud__primary" disabled={busy}>{busy ? "Oppretter …" : source === "github" ? "Koble GitHub →" : "Opprett prosjekt →"}</button>
             </form>
@@ -134,7 +144,7 @@ export function CloudWorkspace({ userName }: { userName: string }) {
         <div className="vedoy-cloud__main">
           {activeProject ? <>
             <div className="vedoy-cloud__filehead"><div><span className="vedoy-cloud__eyebrow">PROSJEKT / {activeProject.source.toUpperCase()}</span><h2>{activeProject.name}</h2><p>Opprettet {new Date(activeProject.created_at).toLocaleDateString("nb-NO")}</p></div><button className="vedoy-cloud__danger" type="button" disabled={busy} onClick={() => void deleteProject()}>Slett prosjekt</button></div>
-            {activeProject.github_url && <div className="vedoy-cloud__github"><div><strong>GitHub-repositorium</strong><p>{activeProject.github_url} · {activeProject.github_default_branch}</p><small>Lenket, ikke importert til skylagringen.</small></div><a href={activeProject.github_url} rel="noopener noreferrer" target="_blank">Åpne GitHub ↗</a></div>}
+            {activeProject.github_url && <div className="vedoy-cloud__github"><div><strong>GitHub-repositorium</strong><p>{activeProject.github_url} · {activeProject.github_default_branch}</p><small>Lenket GitHub-prosjekt. Du kan importere et utvalg kildefiler til privat lagring.</small></div><div className="vedoy-cloud__githubactions"><a href={activeProject.github_url} rel="noopener noreferrer" target="_blank">Åpne GitHub ↗</a><button type="button" disabled={busy} onClick={() => void importGithubFiles()}>{busy ? "Importerer …" : "Importer kildefiler ↓"}</button></div></div>}
             <div className="vedoy-cloud__uploads"><div><h3>Prosjektfiler</h3><p>Kun du kan åpne filene dine. Mapper beholder navn og struktur ved opplasting.</p></div><div className="vedoy-cloud__uploadbuttons"><label className="vedoy-cloud__button">↑ Last opp filer<input ref={fileRef} type="file" multiple disabled={uploading} onChange={e => void upload(e.currentTarget.files)} /></label><label className="vedoy-cloud__button vedoy-cloud__button--secondary">▤ Last opp mappe<input ref={folderRef} type="file" multiple disabled={uploading} onChange={e => void upload(e.currentTarget.files)} /></label></div></div>
             <div className="vedoy-cloud__table"><div className="vedoy-cloud__tablehead"><span>FIL / MAPPE</span><span>STØRRELSE</span><span>HANDLINGER</span></div>{files.length ? files.map(file => <article key={file.id} className="vedoy-cloud__filerow"><div><span className="vedoy-cloud__fileicon">▧</span><span className="vedoy-cloud__filename">{file.display_path}</span></div><span>{fileSize(file.size_bytes)}</span><div><button type="button" onClick={() => void download(file.id)}>Last ned</button><button type="button" onClick={() => void deleteFile(file)}>Slett</button></div></article>) : <p className="vedoy-cloud__empty">Ingen lagrede filer i dette prosjektet. Last opp en fil eller mappe for å starte.</p>}</div>
           </> : <div className="vedoy-cloud__placeholder"><span>◇</span><h2>Begynn med et prosjekt.</h2><p>Velg «Nytt prosjekt», «GitHub» eller «Mappe» til venstre. Prosjektdataene tilhører kontoen din.</p></div>}
