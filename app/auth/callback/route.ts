@@ -1,7 +1,6 @@
 import { timingSafeEqual } from "node:crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { createSessionToken, sessionCookie } from "@/lib/auth";
-import { cloudCookie } from "@/lib/vedoy-cloud-auth";
 import { newCloudCookie } from "@/lib/vedoy-cloud";
 import { getTeamSessionRole, syncTeamMemberOnLogin } from "@/lib/repository";
 import { supabaseOAuthUrlFromEnv, safeStudioNext } from "@/lib/vedoy-owner-access.mjs";
@@ -19,7 +18,6 @@ type OAuthTokens = {
 };
 
 type UserInfo = {
-  sub?: string;
   sub?: string;
   picture?: string;
   preferred_username?: string;
@@ -104,7 +102,7 @@ export async function GET(request: NextRequest) {
       return loginError(request, "Vedøy Login oppga ikke en gyldig brukeridentitet.");
     }
     const response = NextResponse.redirect(new URL(next, request.url));
-    response.cookies.set(cloudCookie({
+    response.cookies.set(newCloudCookie({
       sub: subject,
       email,
       name: user.preferred_username?.trim() || user.name?.trim() || email.split("@")[0]
@@ -118,24 +116,14 @@ export async function GET(request: NextRequest) {
     .map((value) => value.trim().toLowerCase())
     .filter(Boolean);
   const studioAccess = allowedEmails.includes(email) || (email === "leander@vedoy.store" && user.email_verified === true);
-  const cloudDestination = next === "/prosjekter" || next === "/projects";
-  if (!studioAccess && !cloudDestination) {
+  if (!studioAccess) {
     return loginError(request, "Vedøy-kontoen er gyldig, men har ikke tilgang til Vedøy Studio ennå.");
-  }
-  if (cloudDestination && (!user.sub || user.email_verified !== true)) {
-    return loginError(request, "Vedøy Cloud krever en verifisert konto.");
   }
 
   const name = user.preferred_username?.trim() || user.name?.trim() || email.split("@")[0];
   const avatarUrl = user.picture?.startsWith("https://") ? user.picture : undefined;
   const isVerifiedVedoyOwner = email === "leander@vedoy.store" && user.email_verified === true;
   const owner = isVerifiedVedoyOwner || email === process.env.ADMIN_EMAIL?.trim().toLowerCase();
-  if (cloudDestination && !studioAccess) {
-    const response = NextResponse.redirect(new URL(next, request.url));
-    response.cookies.set(newCloudCookie({ sub: user.sub!, email, name }));
-    clearTemporaryCookies(response);
-    return response;
-  }
   await syncTeamMemberOnLogin({ email, name, avatarUrl, owner });
   const token = createSessionToken({
     email,
