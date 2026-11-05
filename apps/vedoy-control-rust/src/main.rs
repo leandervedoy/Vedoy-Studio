@@ -1,3 +1,4 @@
+mod dashboard;
 use axum::{extract::{Path,State},http::{HeaderMap,StatusCode},routing::{get,post},Json,Router};
 use serde::{Deserialize,Serialize};
 use rusqlite::{params,Connection};
@@ -69,7 +70,7 @@ async fn main(){
  CREATE TABLE IF NOT EXISTS jobs(id TEXT PRIMARY KEY,tenant_id TEXT NOT NULL,resource_id TEXT NOT NULL,action TEXT NOT NULL,status TEXT NOT NULL,detail TEXT NOT NULL);
  CREATE INDEX IF NOT EXISTS jobs_tenant ON jobs(tenant_id);").expect("schema");
  let state=AppState{db:Arc::new(Mutex::new(db)),token};
- let app=Router::new().route("/health",get(health)).route("/api/v1/resources",get(resources).post(add_resource)).route("/api/v1/resources/{id}/actions",post(actions)).route("/api/v1/jobs",get(jobs)).with_state(state);
+ let app=Router::new().route("/",get(dashboard::dashboard)).route("/health",get(health)).route("/api/v1/resources",get(resources).post(add_resource)).route("/api/v1/resources/{id}/actions",post(actions)).route("/api/v1/jobs",get(jobs)).with_state(state);
  let addr=env::var("BIND_ADDRESS").unwrap_or_else(|_|"127.0.0.1:8080".into());
  let listener=tokio::net::TcpListener::bind(&addr).await.expect("bind");
  println!("Vedoy Control API listening on {addr}");
