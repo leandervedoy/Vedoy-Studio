@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { eligibleCampaign, recordDelivery, safeDestination, verifyClick } from "@/lib/advertize";
+import { activeCampaignById, recordDelivery, safeDestination, verifyClick } from "@/lib/advertize";
 export const runtime="nodejs";
 export const dynamic="force-dynamic";
 export async function GET(request:Request){
@@ -7,9 +7,9 @@ export async function GET(request:Request){
  const data=verifyClick(token);
  if(!data)return new NextResponse("Ugyldig annonsekobling",{status:400});
  try{
-  const selected=await eligibleCampaign(data.slot);
-  if(!selected||selected.campaign.id!==data.id)return new NextResponse("Annonsen er ikke lenger aktiv",{status:404});
-  const target=safeDestination(selected.campaign.destination_url);
+  const campaign=await activeCampaignById(data.id,data.slot);
+  if(!campaign)return new NextResponse("Annonsen er ikke lenger aktiv",{status:404});
+  const target=safeDestination(campaign.destination_url);
   await recordDelivery({delivery:data.delivery,campaign:data.id,slot:data.slot,kind:"click"}).catch(()=>{});
   const response=NextResponse.redirect(target,302);
   response.headers.set("Referrer-Policy","no-referrer");
