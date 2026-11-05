@@ -21,7 +21,8 @@ export const NEWS_TOPICS = [
   { slug: "utvikling", label: "Utvikling" },
   { slug: "lansering", label: "Lanseringer" },
   { slug: "guider", label: "Guider" },
-  { slug: "bak-kulissene", label: "Bak kulissene" }
+  { slug: "bak-kulissene", label: "Bak kulissene" },
+  { slug: "meninger", label: "Meninger" }
 ] as const;
 
 export type NewsProjectSlug = typeof NEWS_PROJECTS[number]["slug"];
