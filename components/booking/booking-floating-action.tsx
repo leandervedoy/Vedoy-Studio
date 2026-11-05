@@ -19,7 +19,7 @@ export function BookingFloatingAction() {
     window.requestAnimationFrame(() => triggerRef.current?.focus());
   }, []);
 
-  if (pathname === "/booking") return null;
+  if (pathname === "/booking" || pathname === "/projects/deliver") return null;
 
   return (
     <>
