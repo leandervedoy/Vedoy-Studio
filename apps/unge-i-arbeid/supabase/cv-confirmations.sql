@@ -64,14 +64,14 @@ create policy uia_confirmations_verified_employer_insert on public.uia_work_conf
  for insert to authenticated with check(
   employer_id=(select auth.uid()) and issuer_confirmed=true and revoked_at is null
   and exists(select 1 from public.uia_companies c
-    where c.owner_id=(select auth.uid()) and c.status='verified' and c.company_name=company_name)
+    where c.owner_id=(select auth.uid()) and c.status='verified' and c.company_name=uia_work_confirmations.company_name)
   and exists(select 1 from public.uia_applications a
     join public.uia_jobs j on j.id=a.job_id
     join public.uia_profiles p on p.user_id=a.applicant_id
     where a.id=application_id and j.id=job_id and a.applicant_id=candidate_id
     and j.owner_id=employer_id and a.status='completed'
-    and j.company_name=company_name and j.title=position_title
-    and p.display_name=worker_name)
+    and j.company_name=uia_work_confirmations.company_name and j.title=uia_work_confirmations.position_title
+    and p.display_name=uia_work_confirmations.worker_name)
  );
 -- Employer cannot update a published confirmation or backdate its issue time.
 -- A service administrator handles corrections/revocation; no public insert/update route.
