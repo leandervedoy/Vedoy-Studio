@@ -1,0 +1,31 @@
+name: Verify Vedoy Advertize MVP
+on:
+  pull_request:
+    paths:
+      - "app/api/advertize/**"
+      - "app/studio/advertize/**"
+      - "lib/advertize.ts"
+      - "components/advertize-placement.tsx"
+      - "components/voluntary-statistics.tsx"
+      - "app/studio/analytics/page.tsx"
+      - "app/(marketing)/page.tsx"
+      - ".github/workflows/advertize-checks.yml"
+  push:
+    branches: [feature/vedoy-advertize-privacy-mvp]
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: "24"
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npm run typecheck
+      - run: npm run build
