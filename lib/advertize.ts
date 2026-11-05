@@ -62,6 +62,20 @@ export async function eligibleCampaign(slotKey:string):Promise<{campaign:AdCampa
   const index=Math.floor(Date.now()/60000)%data.length;
   return {campaign:data[index] as AdCampaign,site:site as AdSite};
 }
+export async function activeCampaignById(id:string,slot:string):Promise<AdCampaign|null>{
+ if(!/^[0-9a-f-]{36}$/i.test(id)||!SLOT_PATTERN.test(slot))return null;
+ const selected=privilegedSupabase();
+ const {data,error}=await selected.from("advertize_campaigns").select("*")
+   .eq("id",id).eq("slot_key",slot).eq("status","active").eq("house",true).maybeSingle();
+ if(error||!data)return null;
+ const now=Date.now();
+ if(new Date(data.starts_at).getTime()>now||
+   (data.ends_at&&new Date(data.ends_at).getTime()<=now))return null;
+ const {data:slotRecord}=await selected.from("advertize_slots").select("site_slug,enabled").eq("key",slot).maybeSingle();
+ if(!slotRecord?.enabled)return null;
+ const {data:site}=await selected.from("advertize_sites").select("enabled").eq("slug",slotRecord.site_slug).maybeSingle();
+ return site?.enabled ? data as AdCampaign : null;
+}
 export async function recordDelivery(data:{delivery:string;campaign:string;slot:string;kind:"impression"|"click"}):Promise<boolean>{
   const result=await privilegedSupabase().rpc("advertize_record_delivery",{
     p_delivery_id:data.delivery,p_campaign_id:data.campaign,p_slot_key:data.slot,p_kind:data.kind
