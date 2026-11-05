@@ -1,5 +1,6 @@
 import { createHash, randomBytes } from "node:crypto";
 import { NextRequest, NextResponse } from "next/server";
+import { neonAuthUrlFromEnv, safeStudioNext } from "@/lib/vedoy-owner-access.mjs";
 
 export const runtime = "nodejs";
 
@@ -11,12 +12,8 @@ function base64Url(value: Buffer) {
   return value.toString("base64url");
 }
 
-function safeNext(value: string | null) {
-  return value?.startsWith("/studio") ? value : "/studio";
-}
-
 export async function GET(request: NextRequest) {
-  const neonAuthUrl = process.env.VEDOY_LOGIN_NEON_AUTH_URL || process.env.VITE_NEON_AUTH_URL;
+  const neonAuthUrl = neonAuthUrlFromEnv({ VEDOY_LOGIN_NEON_AUTH_URL: process.env.VEDOY_LOGIN_NEON_AUTH_URL, VITE_NEON_AUTH_URL: process.env.VITE_NEON_AUTH_URL });
   const clientId = process.env.VEDOY_LOGIN_CLIENT_ID;
   const callbackUrl = process.env.VEDOY_LOGIN_CALLBACK_URL;
 
@@ -48,6 +45,6 @@ export async function GET(request: NextRequest) {
   };
   response.cookies.set(VERIFIER_COOKIE, verifier, cookie);
   response.cookies.set(STATE_COOKIE, state, cookie);
-  response.cookies.set(NEXT_COOKIE, safeNext(request.nextUrl.searchParams.get("next")), cookie);
+  response.cookies.set(NEXT_COOKIE, safeStudioNext(request.nextUrl.searchParams.get("next")), cookie);
   return response;
 }

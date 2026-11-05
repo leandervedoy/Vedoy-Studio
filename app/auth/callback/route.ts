@@ -2,6 +2,7 @@ import { timingSafeEqual } from "node:crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { createSessionToken, sessionCookie } from "@/lib/auth";
 import { getTeamSessionRole, syncTeamMemberOnLogin } from "@/lib/repository";
+import { neonAuthUrlFromEnv, safeStudioNext } from "@/lib/vedoy-owner-access.mjs";
 
 export const runtime = "nodejs";
 
@@ -39,6 +40,7 @@ function clearTemporaryCookies(response: NextResponse) {
 function loginError(request: NextRequest, message: string) {
   const url = new URL("/login", request.url);
   url.searchParams.set("authError", message);
+  url.searchParams.set("next", safeStudioNext(request.cookies.get(NEXT_COOKIE)?.value));
   const response = NextResponse.redirect(url);
   clearTemporaryCookies(response);
   return response;
@@ -52,15 +54,13 @@ export async function GET(request: NextRequest) {
   const state = request.nextUrl.searchParams.get("state");
   const verifier = request.cookies.get(VERIFIER_COOKIE)?.value;
   const expectedState = request.cookies.get(STATE_COOKIE)?.value;
-  const next = request.cookies.get(NEXT_COOKIE)?.value?.startsWith("/studio")
-    ? request.cookies.get(NEXT_COOKIE)!.value
-    : "/studio";
+  const next = safeStudioNext(request.cookies.get(NEXT_COOKIE)?.value);
 
   if (!code || !verifier || !sameValue(expectedState, state)) {
     return loginError(request, "Innloggingen er ugyldig eller har utløpt. Prøv igjen.");
   }
 
-  const neonAuthUrl = process.env.VEDOY_LOGIN_NEON_AUTH_URL;
+  const neonAuthUrl = neonAuthUrlFromEnv({ VEDOY_LOGIN_NEON_AUTH_URL: process.env.VEDOY_LOGIN_NEON_AUTH_URL, VITE_NEON_AUTH_URL: process.env.VITE_NEON_AUTH_URL });
   const clientId = process.env.VEDOY_LOGIN_CLIENT_ID;
   const callbackUrl = process.env.VEDOY_LOGIN_CALLBACK_URL;
   if (!neonAuthUrl || !clientId || !callbackUrl) {

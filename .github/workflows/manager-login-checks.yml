@@ -1,0 +1,26 @@
+name: Verify manager login regression
+on:
+  push:
+    branches: [fix/manager-login-and-reauthorization]
+  pull_request:
+    paths:
+      - "app/auth/callback/route.ts"
+      - "app/api/auth/login/route.ts"
+      - "app/studio/**"
+      - "app/login/page.tsx"
+      - "lib/vedoy-owner-access.*"
+      - "tests/vedoy-owner-access.test.mjs"
+      - ".github/workflows/manager-login-checks.yml"
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: "22"
+      - run: node --test tests/*.test.mjs
