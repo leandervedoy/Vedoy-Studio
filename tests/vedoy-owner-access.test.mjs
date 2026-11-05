@@ -1,15 +1,17 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { neonAuthUrlFromEnv, managerDecision, safeStudioNext, managerLoginPath } from "../lib/vedoy-owner-access.mjs";
+import { supabaseOAuthUrlFromEnv, managerDecision, safeStudioNext, managerLoginPath } from "../lib/vedoy-owner-access.mjs";
 
-test("OAuth callback uses existing VITE_NEON_AUTH_URL when new env is absent", () => {
-  assert.equal(neonAuthUrlFromEnv({ VITE_NEON_AUTH_URL: "https://identity.example.net" }), "https://identity.example.net");
+test("Studio OAuth uses the registered Vedoy Supabase issuer, not Neon", () => {
+  assert.equal(supabaseOAuthUrlFromEnv({ VEDOY_LOGIN_SUPABASE_URL: "https://niedmgyyougvgiiuwcvw.supabase.co", VEDOY_LOGIN_NEON_AUTH_URL: "https://old.neon.tech" }), "https://niedmgyyougvgiiuwcvw.supabase.co");
 });
-test("explicit OAuth provider env wins over fallback", () => {
-  assert.equal(neonAuthUrlFromEnv({ VEDOY_LOGIN_NEON_AUTH_URL: "https://specific.example.net", VITE_NEON_AUTH_URL: "https://fallback.example.net" }), "https://specific.example.net");
+test("OAuth fails closed if only Neon is available", () => {
+  assert.equal(supabaseOAuthUrlFromEnv({ VEDOY_LOGIN_NEON_AUTH_URL: "https://old.neon.tech" }), null);
 });
-test("missing OAuth URL stays unconfigured", () => {
-  assert.equal(neonAuthUrlFromEnv({}), null);
+test("Only the intended HTTPS Supabase project is accepted", () => {
+  for (const url of ["http://example.com","https://old.neon.tech","https://niedmgyyougvgiiuwcvw.supabase.co.evil.com","https://niedmgyyougvgiiuwcvw.supabase.co/other"]) {
+    assert.equal(supabaseOAuthUrlFromEnv({ VEDOY_LOGIN_SUPABASE_URL: url }), null);
+  }
 });
 test("unauthenticated manager user must log in without losing destination", () => {
   assert.equal(managerDecision(null), "login");

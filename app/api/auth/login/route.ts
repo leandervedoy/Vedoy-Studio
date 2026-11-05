@@ -1,6 +1,6 @@
 import { createHash, randomBytes } from "node:crypto";
 import { NextRequest, NextResponse } from "next/server";
-import { neonAuthUrlFromEnv, safeStudioNext } from "@/lib/vedoy-owner-access.mjs";
+import { supabaseOAuthUrlFromEnv, safeStudioNext } from "@/lib/vedoy-owner-access.mjs";
 
 export const runtime = "nodejs";
 
@@ -13,18 +13,18 @@ function base64Url(value: Buffer) {
 }
 
 export async function GET(request: NextRequest) {
-  const neonAuthUrl = neonAuthUrlFromEnv({ VEDOY_LOGIN_NEON_AUTH_URL: process.env.VEDOY_LOGIN_NEON_AUTH_URL, VITE_NEON_AUTH_URL: process.env.VITE_NEON_AUTH_URL });
+  const supabaseAuthUrl = supabaseOAuthUrlFromEnv({ VEDOY_LOGIN_SUPABASE_URL: process.env.VEDOY_LOGIN_SUPABASE_URL });
   const clientId = process.env.VEDOY_LOGIN_CLIENT_ID;
   const callbackUrl = process.env.VEDOY_LOGIN_CALLBACK_URL;
 
-  if (!neonAuthUrl || !clientId || !callbackUrl) {
+  if (!supabaseAuthUrl || !clientId || !callbackUrl) {
     return NextResponse.redirect(new URL("/login?authError=Vedøy%20Login%20er%20ikke%20konfigurert.", request.url));
   }
 
   const verifier = base64Url(randomBytes(32));
   const challenge = createHash("sha256").update(verifier).digest("base64url");
   const state = base64Url(randomBytes(24));
-  const authorizeUrl = new URL("/auth/v1/oauth/authorize", neonAuthUrl);
+  const authorizeUrl = new URL("/auth/v1/oauth/authorize", supabaseAuthUrl);
   authorizeUrl.search = new URLSearchParams({
     response_type: "code",
     client_id: clientId,

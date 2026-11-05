@@ -2,7 +2,7 @@ import { timingSafeEqual } from "node:crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { createSessionToken, sessionCookie } from "@/lib/auth";
 import { getTeamSessionRole, syncTeamMemberOnLogin } from "@/lib/repository";
-import { neonAuthUrlFromEnv, safeStudioNext } from "@/lib/vedoy-owner-access.mjs";
+import { supabaseOAuthUrlFromEnv, safeStudioNext } from "@/lib/vedoy-owner-access.mjs";
 
 export const runtime = "nodejs";
 
@@ -60,14 +60,14 @@ export async function GET(request: NextRequest) {
     return loginError(request, "Innloggingen er ugyldig eller har utløpt. Prøv igjen.");
   }
 
-  const neonAuthUrl = neonAuthUrlFromEnv({ VEDOY_LOGIN_NEON_AUTH_URL: process.env.VEDOY_LOGIN_NEON_AUTH_URL, VITE_NEON_AUTH_URL: process.env.VITE_NEON_AUTH_URL });
+  const supabaseAuthUrl = supabaseOAuthUrlFromEnv({ VEDOY_LOGIN_SUPABASE_URL: process.env.VEDOY_LOGIN_SUPABASE_URL });
   const clientId = process.env.VEDOY_LOGIN_CLIENT_ID;
   const callbackUrl = process.env.VEDOY_LOGIN_CALLBACK_URL;
-  if (!neonAuthUrl || !clientId || !callbackUrl) {
+  if (!supabaseAuthUrl || !clientId || !callbackUrl) {
     return loginError(request, "Vedøy Login er ikke konfigurert.");
   }
 
-  const tokenResponse = await fetch(new URL("/auth/v1/oauth/token", neonAuthUrl), {
+  const tokenResponse = await fetch(new URL("/auth/v1/oauth/token", supabaseAuthUrl), {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body: new URLSearchParams({
@@ -84,7 +84,7 @@ export async function GET(request: NextRequest) {
     return loginError(request, tokens.error_description || "Vedøy Login kunne ikke fullføre innloggingen.");
   }
 
-  const userResponse = await fetch(new URL("/auth/v1/oauth/userinfo", neonAuthUrl), {
+  const userResponse = await fetch(new URL("/auth/v1/oauth/userinfo", supabaseAuthUrl), {
     headers: { Authorization: `Bearer ${tokens.access_token}` },
     cache: "no-store",
   });
