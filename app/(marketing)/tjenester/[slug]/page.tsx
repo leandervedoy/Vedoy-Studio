@@ -66,7 +66,7 @@ export default async function ServicePage({ params, searchParams }: { params: Pr
       {isWebsite ? <ServicePricing type="website" /> : null}
       {isWebApp ? <ServicePricing type="webapp" /> : null}
       {isStore || isEcommerce ? <ServicePricing type="store" /> : null}
-      {isClothing ? <><CollectiveBulkPackages /><ServicePricing type="clothing" /></> : null}
+      {isClothing ? <CollectiveBulkPackages /> : null}
       {isHosting ? <HostingConfigurator initialDomain={query.domain} initialDomainMode={query.domainMode === "new" ? "new" : "existing"} domainProviderReady={isDomainProviderConfigured()} /> : null}
       {isClothing ? <section className="clothing-detail-section" id="bestill-profilprodukter"><div><p className="editorial-kicker lime">VEDØY COLLECTIVE · BESTILL NÅ</p><h2>Velg plagg.<br /><em>Last opp logo.</em></h2><p>Bruk et eksempelplagg eller lim inn lenken til hvilket som helst produkt i Vedøy Collective-katalogen. Velg antall og last opp logo. Vi følger opp med riktig trykkmetode, korrektur og et konkret tilbud før noe bestilles.</p><div className="clothing-partner-note"><strong>Slik fungerer det</strong><span>1. Velg plagg og last opp logo</span><span>2. Send antall, størrelser og detaljer</span><span>3. Vi avklarer produksjon og sender tilbud</span><small>Ingen automatisk betaling eller kjøp skjer når skjemaet sendes.</small></div></div><ProductCustomizer /></section> : null}
       {isEcommerce ? <EcommercePlatformGuide /> : null}
