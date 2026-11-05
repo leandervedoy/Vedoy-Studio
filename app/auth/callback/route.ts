@@ -1,6 +1,7 @@
 import { timingSafeEqual } from "node:crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { createSessionToken, sessionCookie } from "@/lib/auth";
+import { cloudCookie } from "@/lib/vedoy-cloud-auth";
 import { newCloudCookie } from "@/lib/vedoy-cloud";
 import { getTeamSessionRole, syncTeamMemberOnLogin } from "@/lib/repository";
 import { supabaseOAuthUrlFromEnv, safeStudioNext } from "@/lib/vedoy-owner-access.mjs";
@@ -18,6 +19,7 @@ type OAuthTokens = {
 };
 
 type UserInfo = {
+  sub?: string;
   sub?: string;
   picture?: string;
   preferred_username?: string;
@@ -94,6 +96,21 @@ export async function GET(request: NextRequest) {
   const email = user.email?.trim().toLowerCase();
   if (!userResponse.ok || !email || user.email_verified === false) {
     return loginError(request, "Vedøy-kontoen mangler en bekreftet e-postadresse.");
+  }
+
+  if (next === "/prosjekter" || next === "/projects") {
+    const subject = user.sub?.trim();
+    if (!subject || !/^[a-zA-Z0-9_-]{8,180}$/.test(subject)) {
+      return loginError(request, "Vedøy Login oppga ikke en gyldig brukeridentitet.");
+    }
+    const response = NextResponse.redirect(new URL(next, request.url));
+    response.cookies.set(cloudCookie({
+      sub: subject,
+      email,
+      name: user.preferred_username?.trim() || user.name?.trim() || email.split("@")[0]
+    }));
+    clearTemporaryCookies(response);
+    return response;
   }
 
   const allowedEmails = (process.env.STUDIO_ALLOWED_EMAILS || process.env.ADMIN_EMAIL || "")
