@@ -1,3 +1,5 @@
+// NEXT_PUBLIC_* values are bundled at build time by Next.js.
+// Redeploy Vedoy Deliver after changing its Supabase environment variables.
 import {createClient,type SupabaseClient} from "@supabase/supabase-js";
 let instance:SupabaseClient|null=null;
 export function backendConfigured(){return Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL&&process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);}
