@@ -108,7 +108,7 @@ export function CloudWorkspace({ userName }: { userName: string }) {
 
   return <main className="vedoy-cloud">
     <div className="vedoy-cloud__shell">
-      <header className="vedoy-cloud__top"><Link href="/" className="vedoy-cloud__mark">VEDØY <span>STUDIO</span></Link><div className="vedoy-cloud__toplinks"><Link href="/studio">Studio</Link><Link href="/projects">EN / Projects</Link><span className="vedoy-cloud__avatar" title={userName}>{userName.slice(0, 1).toUpperCase()}</span></div></header>
+      <header className="vedoy-cloud__top"><Link href="/" className="vedoy-cloud__mark">VEDØY <span>STUDIO</span></Link><div className="vedoy-cloud__toplinks"><Link href="/studio">Studio</Link><Link href="/projects">EN / Projects</Link><button type="button" onClick={async () => { await fetch("/api/auth/logout", { method: "POST" }); window.location.assign("/prosjekter"); }} className="vedoy-cloud__signout">Logg ut</button><span className="vedoy-cloud__avatar" title={userName}>{userName.slice(0, 1).toUpperCase()}</span></div></header>
       <section className="vedoy-cloud__hero"><div><span className="vedoy-cloud__eyebrow">VEDOY CLOUD / PERSONLIG ARBEIDSOMRÅDE</span><h1>Prosjektene dine.<br /><em>På ett sted.</em></h1><p>Opprett et prosjekt, koble et offentlig GitHub-repositorium eller lagre prosjektfiler i en privat sky.</p></div><div className="vedoy-cloud__capacity"><span>PRØVEVERSJON</span><strong>100 MB</strong><small>Privat lagring per konto · maks 10 MB per fil</small></div></section>
       {error && <p className="vedoy-cloud__alert" role="alert">{error}</p>}
       {notice && <p className="vedoy-cloud__success" role="status">{notice}</p>}
