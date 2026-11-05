@@ -13,7 +13,7 @@ function base64Url(value: Buffer) {
 }
 
 export async function GET(request: NextRequest) {
-  const neonAuthUrl = neonAuthUrlFromEnv(process.env);
+  const neonAuthUrl = neonAuthUrlFromEnv({ VEDOY_LOGIN_NEON_AUTH_URL: process.env.VEDOY_LOGIN_NEON_AUTH_URL, VITE_NEON_AUTH_URL: process.env.VITE_NEON_AUTH_URL });
   const clientId = process.env.VEDOY_LOGIN_CLIENT_ID;
   const callbackUrl = process.env.VEDOY_LOGIN_CALLBACK_URL;
 
