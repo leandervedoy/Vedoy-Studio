@@ -1,34 +1,28 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { MarketingHeader } from "@/components/marketing-header";
 import { cloudSession } from "@/lib/vedoy-cloud";
-import { VedoyCloudWorkspace } from "@/components/cloud/vedoy-cloud-workspace";
-import styles from "@/components/cloud/vedoy-cloud.module.css";
+import { CloudWorkspace } from "@/components/cloud/cloud-workspace";
+import "@/app/vedoy-cloud.css";
 
 export const dynamic = "force-dynamic";
-export const metadata: Metadata = {
-  title: "Prosjekter og Vedoy Cloud",
-  description: "Samle prosjekter, koble offentlige GitHub-repositorier og lagre filer privat i Vedoy Cloud."
-};
+export const metadata: Metadata = { title: "Vedoy Cloud – Prosjekter", description: "Opprett prosjekter, koble offentlige GitHub-repositorier og lagre private filer i Vedoy Cloud." };
 
 export default async function ProsjekterPage() {
-  const user = await cloudSession();
-  return <main className={styles.page}>
-    <MarketingHeader variant="public" />
-    <div className={styles.wrap}>
-      <div className={styles.breadcrumb}><Link href="/">Vedøy Studio</Link><span>/</span><span>Prosjekter</span></div>
-      <div className={styles.hero}>
-        <div><p className={styles.kicker}>VEDOY STUDIO / PROSJEKTER</p><h1>Samle arbeidet.<br/><em>Bygg videre.</em></h1>
-          <p className={styles.lead}>Opprett et prosjekt, koble til et offentlig GitHub-repositorium eller last opp filer til din private Vedoy Cloud.</p>
-          <div className={styles.heroTags}><span>◈ Prosjektbibliotek</span><span>⌁ GitHub</span><span>◫ Privat skylagring</span></div>
-        </div>
-        <div className={styles.heroPanel}><span className={styles.heroPanelTop}>VEDOY CLOUD · BETA</span><strong>Din arbeidsplass.<br/>Dine filer.</strong><p>Filer holdes adskilt per Vedøy-konto. Lagring er foreløpig i Supabases Stockholm-region, ikke på norsk server.</p><span className={styles.limit}>10 MB per fil · 100 MB per konto</span></div>
-      </div>
-      {user ? <VedoyCloudWorkspace name={user.name} /> :
-        <section className={styles.gate}><div><p className={styles.kicker}>KOM I GANG</p><h2>Alt samlet i én prosjektoversikt.</h2><p>Logg inn med Vedøy Login for å opprette prosjekter, se dine filer og ta vare på arbeid du vil videreutvikle.</p></div>
-          <Link className={styles.primary} href="/login?next=/prosjekter">Fortsett med Vedøy Login ↗</Link></section>}
-      <section className={styles.explain}><article><span>01</span><h3>Opprett et prosjekt</h3><p>Start med et navn. Du kan samle design, kode og dokumenter etter hvert.</p></article><article><span>02</span><h3>Koble til GitHub</h3><p>Registrer et offentlig repository på prosjektet. Privat repo-import kommer senere med samtykke.</p></article><article><span>03</span><h3>Last opp en mappe</h3><p>Behold mappestrukturen. Opplastinger er private og må være innenfor beta-grensene.</p></article></section>
-      <p className={styles.finePrint}>Beta: Dette er fil- og prosjektlagring, ikke automatisk hosting eller Git-synkronisering. Sikkerhetskopi, databehandleravtale og betalte planer må ferdigstilles før bred kommersiell lansering.</p>
-    </div>
-  </main>;
+  const session = await cloudSession();
+  if (session) return <CloudWorkspace userName={session.name} />;
+  return <div className="vedoy-cloud__landing">
+    <nav><Link href="/">VEDØY STUDIO</Link><Link href="/studio">Growth ↗</Link></nav>
+    <main>
+      <span className="vedoy-cloud__eyebrow">VEDOY CLOUD / BETA</span>
+      <h1>Dine ideer.<br /><em>Samlet i skyen.</em></h1>
+      <p>Gi prosjektene dine et hjem. Koble et offentlig GitHub-repositorium, opprett et nytt prosjekt eller last opp en mappe. Private filer, enkel organisering og innlogging med Vedøy Login.</p>
+      <Link className="start" href="/api/auth/login?next=%2Fprosjekter">Fortsett med Vedøy Login ↗</Link>
+      <section className="cloud-info" aria-label="Funksjoner">
+        <span><strong>01 · PROSJEKTER</strong><br />Opprett og organiser egne prosjekter.</span>
+        <span><strong>02 · GITHUB</strong><br />Koble offentlige repoer. Ingen kode kopieres automatisk.</span>
+        <span><strong>03 · PRIVAT SKY</strong><br />Last opp filer og mapper. 100 MB testkvote.</span>
+      </section>
+      <footer>Beta · Filer lagres i Supabase eu-north-1 (Sverige), ikke garantert i Norge. <Link href="/privacy">Personvern</Link></footer>
+    </main>
+  </div>;
 }
