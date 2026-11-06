@@ -123,7 +123,7 @@ fn sealed_payload_authenticates_context_key_ciphertext_and_version() {
     let key = [42u8; 32];
     let data = b"research data: no real keys";
     let envelope = seal_payload(&key, b"example/account-a", data).unwrap();
-    assert_eq!(open_payload(&key, b"example/account-a", &envelope).unwrap(), data);
+    assert_eq!(open_payload(&key, b"example/account-a", &envelope).unwrap().as_slice(), data);
     assert!(open_payload(&key, b"example/account-b", &envelope).is_err());
     assert!(open_payload(&[2u8; 32], b"example/account-a", &envelope).is_err());
     let mut modified = envelope.clone();
@@ -145,7 +145,7 @@ fn sealed_payload_nonce_is_fresh_and_json_roundtrips() {
     assert_ne!(first.nonce, second.nonce);
     let serialized = encode_bounded(&first).unwrap();
     let restored: SealedPayload = parse_bounded(&serialized).unwrap();
-    assert_eq!(open_payload(&key, b"example/file", &restored).unwrap(), b"hello");
+    assert_eq!(open_payload(&key, b"example/file", &restored).unwrap().as_slice(), b"hello");
 }
 
 #[test]
