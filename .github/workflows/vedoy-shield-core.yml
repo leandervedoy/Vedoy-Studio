@@ -27,11 +27,18 @@ jobs:
       - uses: Swatinem/rust-cache@v2
         with:
           workspaces: rust/vedoy-shield-core
-      - name: Format sources for test compilation
-        run: cargo fmt --all
+      # Formatting is checked, never silently changed in CI.
+      - name: Check formatting
+        run: cargo fmt --all -- --check
+      - name: Validate dependency graph and generate temporary lockfile
+        run: cargo metadata --format-version 1 --no-deps > /dev/null
       - name: Static Rust checks
         run: cargo clippy --all-targets -- -D warnings
-      - name: Default (no SPQR: fail closed)
+      - name: Unit and integration tests (no SPQR: fail closed)
         run: cargo test --all-targets
-      - name: Optional Signal SPQR (AGPLv3 only; test, not deployment)
+      - name: Optional Signal SPQR (AGPL-3.0-only; evaluation, not redistribution)
         run: cargo test --all-targets --features signal-spqr
+      - name: Dependency vulnerability scan
+        run: |
+          cargo install cargo-audit --locked
+          cargo audit
