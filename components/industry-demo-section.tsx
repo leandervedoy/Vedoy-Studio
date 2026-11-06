@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
+import { VedoyStudioCredit } from "@/components/vedoy-studio-credit";
 
 const options = [
   ["🛍️","Nettbutikk","commerce","Produktkatalog, SEO, betaling og drift"],
@@ -28,19 +29,19 @@ export function IndustryDemoSection() {
       <div role="tablist" aria-label="Velg yrke" style={{display:"flex",gap:9,overflowX:"auto",padding:"6px 0 18px",scrollSnapType:"x proximity"}}>
         {options.map((opt,i)=><button key={opt[2]} role="tab" aria-selected={active===i} onClick={()=>setActive(i)} style={{scrollSnapAlign:"center",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:4,minWidth:92,padding:"13px 12px",borderRadius:17,border:active===i?"1px solid #206744":"1px solid #cadccc",background:active===i?"#206744":"#fff",color:active===i?"white":"#21452e",fontWeight:750,cursor:"pointer"}}><span style={{fontSize:26}} aria-hidden>{opt[0]}</span><span style={{fontSize:12}}>{opt[1]}</span></button>)}
       </div>
-      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(100%,310px),1fr))",gap:24,alignItems:"center",padding:"clamp(22px,4vw,38px)",background:"#fff",borderRadius:28,boxShadow:"0 18px 45px #17412815"}}>
-        <div aria-live="polite">
+      <div className="ms-home-feature" style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(100%,310px),1fr))",gap:24,alignItems:"center",padding:"clamp(22px,4vw,38px)",background:"#fff",borderRadius:28,boxShadow:"0 18px 45px #17412815"}}>
+        <div className="ms-home-choice" key={choice[2]} aria-live="polite">
           <p style={{fontSize:13,fontWeight:850,color:"#407754"}}>{choice[0]} SKREDDERSYDD FOR {choice[1].toUpperCase()}</p>
           <h3 style={{fontSize:"clamp(28px,3.7vw,43px)",letterSpacing:"-.045em",margin:"8px 0"}}>{choice[3]}</h3>
           <p style={{fontSize:17,color:"#5d7063",lineHeight:1.55}}>Vedøy Studio hjelper med en nettside og de funksjonene som faktisk gir verdi for virksomheten din.</p>
           {expanded&&<div style={{padding:15,background:"#edf7ee",borderRadius:16,marginBottom:12,color:"#365e42"}}>Vi kan hjelpe med oppsett, design, mobiltilpasning, hosting, innhold og videreutvikling. Omfanget avklares før du bestiller.</div>}
           <button onClick={()=>setExpanded(!expanded)} aria-expanded={expanded} style={{display:"block",background:"transparent",border:0,color:"#206744",padding:"8px 0",fontWeight:750,cursor:"pointer"}}>{expanded?"Vis mindre −":"Hva kan Vedøy gjøre? +"}</button>
           <div style={{display:"flex",flexWrap:"wrap",gap:10,marginTop:15}}>
-            <Link href="/yrker" style={{display:"inline-flex",padding:"13px 19px",background:"#206744",color:"#fff",borderRadius:14,fontWeight:800}}>Se eksempler →</Link>
-            <Link href="/#kontakt" style={{display:"inline-flex",padding:"13px 19px",border:"1px solid #b8d1bf",borderRadius:14,fontWeight:800}}>Be om tilbud ↗</Link>
+            <Link href={"/multisite?tema="+encodeURIComponent(choice[2])} style={{display:"inline-flex",padding:"13px 19px",background:"#206744",color:"#fff",borderRadius:14,fontWeight:800}}>Lag din demo og få pris →</Link>
+            <Link href="/yrker" style={{display:"inline-flex",padding:"13px 19px",border:"1px solid #b8d1bf",borderRadius:14,fontWeight:800}}>Se alle bransjer ↗</Link>
           </div>
         </div>
-        <div style={{background:"linear-gradient(140deg,#d8ecdc,#f3f6ec)",borderRadius:24,padding:24}}>
+        <div className="ms-home-example" key={choice[2]} style={{background:"linear-gradient(140deg,#d8ecdc,#f3f6ec)",borderRadius:24,padding:24}}>
           <div style={{borderRadius:20,background:"#fff",padding:24,boxShadow:"0 15px 32px #153c271c"}}>
             <span style={{fontSize:12,color:"#627a67",fontWeight:800}}>NETTSIDEEKSEMPEL · DEMO</span>
             <div style={{fontSize:53,margin:"22px 0 10px"}}>{choice[0]}</div>
@@ -50,6 +51,8 @@ export function IndustryDemoSection() {
           </div>
         </div>
       </div>
+      <div style={{display:"flex",justifyContent:"center",marginTop:24}}><VedoyStudioCredit compact /></div>
     </div>
+    <style>{`@keyframes ms-home-in{from{opacity:.35;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}.ms-home-choice,.ms-home-example{animation:ms-home-in .35s ease both}.ms-home-feature{transition:box-shadow .2s ease}.ms-home-feature:hover{box-shadow:0 20px 50px #17412825!important}@media(prefers-reduced-motion:reduce){.ms-home-choice,.ms-home-example{animation:none!important}.ms-home-feature{transition:none!important}}`}</style>
   </section>;
 }
