@@ -24,6 +24,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Install pinned repository dependencies
+        run: npm ci --ignore-scripts
+      - name: Typecheck full Studio integration
+        run: npm run typecheck
       - name: Test validation and fail-closed flags
         run: node --test tests/vedoy-pay-foundation.test.mjs
       - name: Check migration syntax
