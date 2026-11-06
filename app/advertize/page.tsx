@@ -1,0 +1,19 @@
+import Link from "next/link";
+export const metadata={title:"Vedoy Advertize | Personvernvennlig annonsering",description:"Tjen penger på annonseplasser og frivillige undersøkelser med Vedoy Advertize. For nettsideeiere og utviklere."};
+const features=[
+ {title:"Tjen penger på annonseplass",body:"Gjør ledige annonseflater tilgjengelige for direkte kampanjer. Ekstern annonseutfylling kan brukes der leverandør og nettsted er godkjent."},
+ {title:"Frivillige undersøkelser",body:"La besøkende velge å bidra til undersøkelser. Deltakelse er valgfri, og kommersiell bruk må beskrives tydelig."},
+ {title:"Utviklervennlig integrasjon",body:"Start med en enkel annonseplass i nettstedet. API og bredere publisiststøtte er planlagte funksjoner, ikke lansert."},
+ {title:"Personvern som utgangspunkt",body:"Skill aggregert driftsstatistikk fra frivillige data. Ingen oppgavetekster, private meldinger eller individuelle profiler skal brukes til annonsemålretting."}
+];
+export default function AdvertizeLanding(){return <main style={{background:"#f5f8f4",color:"#143526",fontFamily:"system-ui,sans-serif",minHeight:"100vh"}}>
+<section style={{maxWidth:1080,margin:"auto",padding:"85px 24px 58px"}}>
+<p style={{fontSize:12,fontWeight:800,letterSpacing:".14em",color:"#217c50"}}>VEDOY STUDIO / ADVERTIZE</p>
+<h1 style={{fontSize:"clamp(42px,7vw,78px)",lineHeight:1.04,letterSpacing:"-.065em",maxWidth:850,margin:"20px 0"}}>La nettstedet ditt skape mer verdi.</h1>
+<p style={{fontSize:20,lineHeight:1.65,maxWidth:680,color:"#4b6556"}}>Vedoy Advertize utvikles for nettsideeiere og utviklere som vil tjene penger på annonser og frivillige undersøkelser – uten å gjøre personlig sporing til forretningsmodellen.</p>
+<div style={{display:"flex",gap:12,flexWrap:"wrap",marginTop:28}}><a href="mailto:kontakt@vedoy.store?subject=Vedoy%20Advertize%20-%20interesse" style={{padding:"15px 23px",borderRadius:12,background:"#175e3c",color:"white",textDecoration:"none",fontWeight:750}}>Meld interesse</a><a href="#slik-fungerer-det" style={{padding:"15px 23px",borderRadius:12,border:"1px solid #b8cbbd",color:"#175e3c",textDecoration:"none",fontWeight:750}}>Se hvordan det fungerer</a></div>
+<p style={{fontSize:13,color:"#62756a",marginTop:18}}>Tidlig versjon. Ingen garantert annonseinntekt, selvbetjent registrering eller utbetaling er lansert.</p>
+</section>
+<section id="slik-fungerer-det" style={{background:"white",padding:"68px 24px"}}><div style={{maxWidth:1080,margin:"auto"}}><h2 style={{fontSize:36,letterSpacing:"-.04em"}}>Bygget for dem som publiserer.</h2><div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(230px,1fr))",gap:16}}>{features.map(f=><article key={f.title} style={{padding:25,border:"1px solid #dce8df",borderRadius:18}}><h3 style={{fontSize:21}}>{f.title}</h3><p style={{lineHeight:1.65,color:"#4d6656"}}>{f.body}</p></article>)}</div></div></section>
+<section style={{maxWidth:1080,margin:"auto",padding:"70px 24px"}}><h2 style={{fontSize:36,letterSpacing:"-.04em"}}>Tre nivåer av data. Klare grenser.</h2><ol style={{lineHeight:2,maxWidth:790,fontSize:17}}><li><strong>Drift:</strong> aggregerte forespørsler og leverte annonser, uten individuelle annonseprofiler.</li><li><strong>Frivillig statistikk:</strong> særskilt valg for å bidra med ekstra innsikt.</li><li><strong>Undersøkelser:</strong> frivillige svar, tydelig formål og informasjon om hvordan resultatene brukes.</li></ol><p style={{color:"#4d6656",maxWidth:780,lineHeight:1.7}}>En annonseforespørsel er ikke nødvendigvis en synlig annonse, og et sidevisningstall er ikke det samme som antall unike personer. Eksterne annonsenettverk kan behandle tekniske data etter sine egne vilkår.</p><Link href="/" style={{color:"#176b43",fontWeight:750}}>Til Vedoy Studio</Link></section>
+</main>}
