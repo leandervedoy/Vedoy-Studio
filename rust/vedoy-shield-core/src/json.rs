@@ -18,7 +18,7 @@ pub fn capabilities() -> Capabilities {
         core_version: PACKAGE_VERSION.to_owned(),
         wire_version: PROTOCOL_VERSION,
         authenticated_hybrid_kem: "experimental-ed25519-x25519-mlkem1024".to_owned(),
-        post_quantum_ratchet_available: cfg!(feature = "signal-spqr"),
+        post_quantum_ratchet_available: false,
         storage: "unix-atomic-aes256gcmsiv-argon2id-password2-and-pin".to_owned(),
         production_ready: false,
     }
