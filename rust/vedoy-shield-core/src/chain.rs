@@ -12,7 +12,9 @@ pub struct MessageStep {
     next_chain: [u8; 32],
 }
 impl Drop for MessageStep {
-    fn drop(&mut self) { self.next_chain.zeroize(); }
+    fn drop(&mut self) {
+        self.next_chain.zeroize();
+    }
 }
 #[derive(Zeroize, ZeroizeOnDrop)]
 pub struct SymmetricChain {
@@ -20,23 +22,40 @@ pub struct SymmetricChain {
     counter: u64,
 }
 impl SymmetricChain {
-    pub fn from_seed(seed: [u8; 32]) -> Self { Self { key: seed, counter: 0 } }
-    pub fn sequence(&self) -> u64 { self.counter }
+    pub fn from_seed(seed: [u8; 32]) -> Self {
+        Self {
+            key: seed,
+            counter: 0,
+        }
+    }
+    pub fn sequence(&self) -> u64 {
+        self.counter
+    }
     pub fn prepare(&self) -> ShieldResult<MessageStep> {
-        if self.counter == u64::MAX { return Err(ShieldError::LimitExceeded); }
+        if self.counter == u64::MAX {
+            return Err(ShieldError::LimitExceeded);
+        }
         let hkdf = Hkdf::<Sha256>::new(None, &self.key);
         let mut msg = [0u8; 32];
         let mut next = [0u8; 32];
         let mut ctx = b"vedoy/shield/0.3/msg".to_vec();
         ctx.extend_from_slice(&self.counter.to_be_bytes());
-        hkdf.expand(&ctx, &mut msg).map_err(|_| ShieldError::InvalidFormat)?;
+        hkdf.expand(&ctx, &mut msg)
+            .map_err(|_| ShieldError::InvalidFormat)?;
         let mut ctx = b"vedoy/shield/0.3/next".to_vec();
         ctx.extend_from_slice(&self.counter.to_be_bytes());
-        hkdf.expand(&ctx, &mut next).map_err(|_| ShieldError::InvalidFormat)?;
-        Ok(MessageStep { sequence: self.counter, key: MessageKey(msg), next_chain: next })
+        hkdf.expand(&ctx, &mut next)
+            .map_err(|_| ShieldError::InvalidFormat)?;
+        Ok(MessageStep {
+            sequence: self.counter,
+            key: MessageKey(msg),
+            next_chain: next,
+        })
     }
     pub fn commit(&mut self, step: MessageStep) -> ShieldResult<()> {
-        if self.counter != step.sequence { return Err(ShieldError::SequenceMismatch); }
+        if self.counter != step.sequence {
+            return Err(ShieldError::SequenceMismatch);
+        }
         self.key.zeroize();
         self.key.copy_from_slice(&step.next_chain);
         self.counter += 1;

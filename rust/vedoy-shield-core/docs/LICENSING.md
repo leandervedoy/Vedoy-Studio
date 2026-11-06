@@ -1,19 +1,22 @@
-# Licensing and redistribution review — 2026-11-06
+# Vedoy Shield Core - licensing and distribution review
 
-## Vedoy Shield Core v0.3.0
+This source is not a declaration that the product is approved for proprietary
+or commercial distribution, or independently certified.
 
-This repository branch publishes experimental source for technical review. It is **not** a declaration that the code is approved for commercial distribution, safe for production messaging, or open-sourced under any particular license. Do not add a license statement on Vedoy's behalf without an explicit decision by the owner.
+The previous optional third-party messaging ratchet dependency has been
+removed from `Cargo.toml`. No equivalent messenger is bundled. Release
+owners must review the licenses of **all** remaining and future dependencies,
+including transitive dependencies and platform implementations.
 
-### Important upstream dependency
+## Required before a public or commercial release
 
-The optional `signal-spqr` Cargo feature depends on `signalapp/SparsePostQuantumRatchet` v1.6.0, which identifies its license as **AGPL-3.0-only**. The project has its own copyright and license; it is not Vedoy-owned. Distributing a combined app can impose source-code disclosure and other AGPL obligations. Consult qualified licensing counsel about the precise architecture and distribution model before enabling it in proprietary Vedoy applications.
+1. Decide the project's own copyright and license grant.
+2. Inventory dependency licenses and provenance, including transitive crates.
+3. Generate and retain a reproducible `Cargo.lock`, SBOM and third-party notices.
+4. Obtain review of the complete product distribution model, including native
+   apps, hosted services, SDKs and any future message protocol.
+5. Keep research disclaimers until the shipped integrated system has passed
+   independent review.
 
-The core builds without the optional SPQR feature, but the session functions fail closed rather than silently falling back to a weaker ratchet. Do not remove this safeguard as a licensing workaround.
-
-### Release checklist
-
-1. Decide whether Vedoy Shield will be open-source, dual-licensed, separately licensed, or internal research.
-2. Get written legal review for the AGPL dependency and related transitive licenses.
-3. Include a complete third-party dependency and copyright notice after locking versions.
-4. Publish `LICENSE` / SPDX identifiers only after an explicit business licensing decision.
-5. Keep the experimental security disclaimer and independent-review requirements regardless of license selection.
+Do not interpret a permissively licensed cipher implementation as validation
+of an entire messaging system.
