@@ -141,3 +141,59 @@ fn pq_ratchet_persists_before_exposure() {
     assert!(receive_message(&recv, PASSWORD2, PIN, "bob/chat-a", "chat-a", &pkt).is_err());
     std::fs::remove_dir_all(dir).unwrap();
 }
+
+#[test]
+#[cfg(unix)]
+fn encrypted_invite_replay_ledger_rejects_duplicates_and_invalid_auth() {
+    use vedoy_shield_core::replay::{
+        initialize_local_ledger, LocalEncryptedReplayLedger,
+    };
+    let (store, dir) = test_store();
+    let (bob, bundle) = RecipientPrivate::generate();
+    let sender = SenderIdentity::generate();
+    let (invite, _) = initiate(&bundle, &bob.identity_public(), &sender, "chat-a").unwrap();
+
+    // A missing ledger must block guarded acceptance.
+    let mut guard = LocalEncryptedReplayLedger::new(&store, PASSWORD2, PIN, "account-a");
+    assert!(bob.accept_guarded(&invite, &bundle, &sender.identity_public(), &mut guard).is_err());
+
+    initialize_local_ledger(&store, PASSWORD2, PIN, "account-a").unwrap();
+    let mut guard = LocalEncryptedReplayLedger::new(&store, PASSWORD2, PIN, "account-a");
+
+    // Tampered or impersonated invites MUST NOT reach the consume operation.
+    let mut tampered = invite.clone();
+    tampered.sender_signature[0] ^= 1;
+    assert!(bob.accept_guarded(&tampered, &bundle, &sender.identity_public(), &mut guard).is_err());
+    assert!(bob.accept_guarded(&invite, &bundle, &[7u8; 32], &mut guard).is_err());
+
+    // First valid authenticated acceptance consumes the invite atomically.
+    assert!(bob.accept_guarded(&invite, &bundle, &sender.identity_public(), &mut guard).is_ok());
+    assert!(bob.accept_guarded(&invite, &bundle, &sender.identity_public(), &mut guard).is_err());
+
+    // New guard after restart must see the same encrypted replay state.
+    let mut reopened = LocalEncryptedReplayLedger::new(&store, PASSWORD2, PIN, "account-a");
+    assert!(bob.accept_guarded(&invite, &bundle, &sender.identity_public(), &mut reopened).is_err());
+
+    // Wrong credentials and scope must fail closed.
+    let mut wrong_pin = LocalEncryptedReplayLedger::new(&store, PASSWORD2, "000000", "account-a");
+    assert!(bob.accept_guarded(&invite, &bundle, &sender.identity_public(), &mut wrong_pin).is_err());
+    let mut wrong_scope = LocalEncryptedReplayLedger::new(&store, PASSWORD2, PIN, "account-b");
+    assert!(bob.accept_guarded(&invite, &bundle, &sender.identity_public(), &mut wrong_scope).is_err());
+    std::fs::remove_dir_all(dir).unwrap();
+}
+
+#[test]
+#[cfg(unix)]
+fn local_invite_ledger_rejects_reinitialization_and_storage_failure() {
+    use vedoy_shield_core::replay::{initialize_local_ledger, LocalEncryptedReplayLedger};
+    let (store, dir) = test_store();
+    let (bob, bundle) = RecipientPrivate::generate();
+    let sender = SenderIdentity::generate();
+    let (invite, _) = initiate(&bundle, &bob.identity_public(), &sender, "chat-a").unwrap();
+    initialize_local_ledger(&store, PASSWORD2, PIN, "account-a").unwrap();
+    assert!(initialize_local_ledger(&store, PASSWORD2, PIN, "account-a").is_err());
+    // Storage unavailable: no root key should be returned.
+    std::fs::remove_dir_all(&dir).unwrap();
+    let mut guard = LocalEncryptedReplayLedger::new(&store, PASSWORD2, PIN, "account-a");
+    assert!(bob.accept_guarded(&invite, &bundle, &sender.identity_public(), &mut guard).is_err());
+}
