@@ -45,3 +45,20 @@ The presence of WALLESTER_API_TOKEN or AERA_API_TOKEN alone is **not** proof of 
 Vedoy Shield here consists of field allowlisting, authentication boundaries, idempotency design requirements, RLS/grant isolation, no-store responses, and safe deployment controls; it is not proof of security certification or a complete post-quantum payment stack.
 
 A further review is necessary before launch: provider contracts, authorized payment flow, refunds/chargebacks, ledger invariants, per-transaction idempotency, fraud/rate limits, penetration test, accessibility, privacy, DPIA if warranted and regulatory opinion on e-money/loyalty.
+
+## Isolated Vedoy Pay Sandbox (no provider credentials required)
+
+Path: `/studio/pay/sandbox`, linked from the Studio Pay dashboard.
+
+This is a local deterministic **mock**, not Wallester's or Aera's certified provider sandbox:
+- Open a simulated demo account and top up with fake NOK amounts.
+- Create virtual demo cards (without PAN/CVC) and simulate physical card orders.
+- Run approved, declined or local 3D Secure challenge scenarios. **This is not real 3DS or BankID.**
+- Grant and transfer fictional demo-Coins to a fixed mock recipient called "Testmottaker".
+- View an in-memory audit-style event history, reset the simulation, and test duplicate idempotency keys.
+- Zero network calls to banking/financial providers, no issuer or processor involvement.
+- Does not touch database, Rewards, Sent, partner accounts, or payment webhooks.
+- State lives in browser memory only and resets on page reload.
+
+Run `node --test tests/vedoy-pay-sandbox.test.mjs` for deterministic engine checks.
+The real provider sandboxes can be integrated only after the respective partner agreements and credentials.
