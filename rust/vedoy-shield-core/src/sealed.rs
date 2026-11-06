@@ -11,7 +11,8 @@ use rand_core::{OsRng, RngCore};
 use serde::{Deserialize, Serialize};
 
 const DOMAIN: &[u8] = b"vedoy/shield/sealed-payload/v1";
-const MAX_PLAINTEXT: usize = 1024 * 1024;
+// Keep the JSON-serialized byte array below the 2 MiB parser limit.
+const MAX_PLAINTEXT: usize = 256 * 1024;
 const TAG_BYTES: usize = 16;
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
