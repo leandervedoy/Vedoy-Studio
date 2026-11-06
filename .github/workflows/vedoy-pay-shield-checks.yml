@@ -1,0 +1,29 @@
+name: Vedoy Shield Pay validation tests
+on:
+  pull_request:
+    paths:
+      - 'lib/vedoy-shield-pay.mjs'
+      - 'lib/vedoy-shield-segments.mjs'
+      - 'tests/vedoy-shield-pay.test.mjs'
+      - 'tests/vedoy-shield-segments.test.mjs'
+      - '.github/workflows/vedoy-pay-shield-checks.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'lib/vedoy-shield-pay.mjs'
+      - 'lib/vedoy-shield-segments.mjs'
+      - 'tests/vedoy-shield-pay.test.mjs'
+      - 'tests/vedoy-shield-segments.test.mjs'
+      - '.github/workflows/vedoy-pay-shield-checks.yml'
+permissions:
+  contents: read
+jobs:
+  node-guard-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run regression guards
+        run: node --test tests/vedoy-shield-pay.test.mjs tests/vedoy-shield-segments.test.mjs
