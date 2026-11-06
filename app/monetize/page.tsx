@@ -1,0 +1,18 @@
+import Link from "next/link";
+export const metadata={title:"Vedoy Monetize | Annonser, statistikk og belønninger",description:"Vedoy Monetize samler Advertize, Statistics og Rewards for nettsideeiere og utviklere."};
+const products=[
+{title:"Vedoy Advertize",tag:"ANNONSER",body:"Vis egne kampanjer og kontekstuelle annonser. Ekstern utfylling kan brukes der annonsenettverk og nettsted er godkjent.",status:"Tidlig versjon"},
+{title:"Vedoy Statistics",tag:"INNSIKT",body:"Forstå trafikk og annonselevering gjennom aggregert driftsstatistikk. Ekstra datadeling og undersøkelser er frivillige.",status:"Under utvikling"},
+{title:"Vedoy Rewards",tag:"BELØNNINGER",body:"Belønn frivillig deltakelse med Vedoy Coins. Belønninger og utbetalinger krever egne regler og ferdig integrasjon.",status:"Planlagt integrasjon"}
+];
+export default function MonetizeLanding(){return <main style={{background:"#f5f8f4",color:"#143526",fontFamily:"system-ui,sans-serif",minHeight:"100vh"}}>
+<section style={{maxWidth:1100,margin:"auto",padding:"84px 24px 65px"}}>
+<p style={{fontSize:12,fontWeight:800,letterSpacing:".15em",color:"#217c50"}}>VEDOY STUDIO / MONETIZE</p>
+<h1 style={{fontSize:"clamp(43px,7vw,82px)",lineHeight:1.03,letterSpacing:"-.065em",maxWidth:900,margin:"22px 0"}}>Gjør trafikk til verdi. Med respekt for brukerne.</h1>
+<p style={{fontSize:20,lineHeight:1.65,maxWidth:740,color:"#4b6556"}}>Vedoy Monetize samler annonser, statistikk og frivillige belønninger i én plattform for nettsideeiere og utviklere. Du velger hvilke tjenester du vil bruke.</p>
+<div style={{display:"flex",gap:12,flexWrap:"wrap",marginTop:28}}><a href="mailto:kontakt@vedoy.store?subject=Vedoy%20Monetize%20-%20interesse" style={{padding:"15px 23px",borderRadius:12,background:"#175e3c",color:"white",textDecoration:"none",fontWeight:750}}>Meld interesse</a><a href="#produkter" style={{padding:"15px 23px",borderRadius:12,border:"1px solid #b8cbbd",color:"#175e3c",textDecoration:"none",fontWeight:750}}>Utforsk produktene</a></div>
+<p style={{fontSize:13,color:"#62756a",marginTop:18}}>Tidlig produktversjon. Selvbetjent registrering, garanterte inntekter og automatiske utbetalinger er ikke lansert.</p>
+</section>
+<section id="produkter" style={{background:"white",padding:"70px 24px"}}><div style={{maxWidth:1100,margin:"auto"}}><h2 style={{fontSize:37,letterSpacing:"-.045em"}}>Tre produkter. Én plattform.</h2><div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(240px,1fr))",gap:16}}>{products.map(p=><article key={p.title} style={{padding:27,border:"1px solid #dce8df",borderRadius:18}}><p style={{fontSize:11,fontWeight:800,letterSpacing:".12em",color:"#217c50"}}>{p.tag}</p><h3 style={{fontSize:25,letterSpacing:"-.04em"}}>{p.title}</h3><p style={{lineHeight:1.7,color:"#4d6656"}}>{p.body}</p><p style={{fontSize:12,color:"#64776a"}}>{p.status}</p></article>)}</div></div></section>
+<section style={{maxWidth:1100,margin:"auto",padding:"68px 24px"}}><h2 style={{fontSize:36,letterSpacing:"-.04em"}}>Personvern er ikke en tilleggspakke.</h2><p style={{fontSize:17,lineHeight:1.8,maxWidth:800}}>Grunnleggende, aggregert driftsstatistikk kan brukes uten individuell profilering når lovens vilkår er oppfylt. Frivillige undersøkelser og ekstra datadeling skal ha tydelige, separate valg. Ingen private meldinger, kalenderoppgaver eller Vedi-minner brukes til annonsemålretting.</p><p style={{color:"#4d6656",lineHeight:1.7,maxWidth:800}}>Antall annonseforespørsler er ikke det samme som verifiserte visninger eller unike besøkende. Eksterne annonsenettverk kan behandle tekniske opplysninger etter egne vilkår.</p><Link href="/" style={{color:"#176b43",fontWeight:750}}>Til Vedoy Studio</Link></section>
+</main>}
