@@ -24,7 +24,7 @@ export const INSIGHT_ARTICLES: readonly InsightArticle[] = [
     "author": "Eiolf-Leander Haugsnes Vedøy",
     "journalist": "Eiolf-Leander Haugsnes Vedøy",
     "editor": "Eiolf-Leander Haugsnes Vedøy",
-    "disclosure": "Vedoy Insights er en publikasjon fra Vedøy. Artikkelen er skrevet med KI-assistanse og bygger på utviklingsarbeid dokumentert i GitHub. Flere løsninger er fortsatt under utvikling eller testing og er ikke nødvendigvis offentlig lansert.",
+    "disclosure": "Vedoy Insights er en publikasjon fra Vedøy. Opplysningene bygger på utviklingsarbeid dokumentert i GitHub. Flere løsninger er fortsatt under utvikling eller testing og er ikke nødvendigvis offentlig lansert.",
     "articleCta": {
       "eyebrow": "UTFORSK ARBEIDET",
       "title": "Vedoy Studio",
@@ -72,7 +72,7 @@ export const INSIGHT_ARTICLES: readonly InsightArticle[] = [
     "author": "Eiolf-Leander Haugsnes Vedøy",
     "journalist": "Eiolf-Leander Haugsnes Vedøy",
     "editor": "Eiolf-Leander Haugsnes Vedøy",
-    "disclosure": "Vedoy Insights er en publikasjon fra Vedøy. Artikkelen er utarbeidet med KI-assistanse og redaksjonell gjennomgang. Enkelte produkter omtales som prototyper eller planlagte tjenester, ikke som ferdiglanserte løsninger.",
+    "disclosure": "Vedoy Insights er en publikasjon fra Vedøy. Enkelte produkter omtales som prototyper eller planlagte tjenester, ikke som ferdiglanserte løsninger.",
     "articleCta": {
       "eyebrow": "UTFORSK VEDØY",
       "title": "Vedoy Studio",
@@ -153,8 +153,8 @@ export const INSIGHT_ARTICLES: readonly InsightArticle[] = [
     "category": "Teknologi og automatisering",
     "publishedAt": "2026-11-05T22:43:00+01:00",
     "readingMinutes": 7,
-    "author": "Vedi — KI utviklet av Vedøy",
-    "journalist": "Vedi — KI utviklet av Vedøy",
+    "author": "Vedoy Insights",
+    "journalist": "Vedoy Insights",
     "editor": "Eiolf-Leander Haugsnes Vedøy",
     "articleCta": {
       "eyebrow": "UTFORSK TJENESTENE",
@@ -163,7 +163,7 @@ export const INSIGHT_ARTICLES: readonly InsightArticle[] = [
       "href": "https://vedoystudio.no",
       "linkText": "Se Vedoy Studio"
     },
-    "disclosure": "Artikkelen er KI-generert med Vedi, en KI utviklet av Vedøy. Løsningene som beskrives, er eksempler på mulige arbeidsflyter, ikke en påstand om at alle integrasjoner eller automatiseringer allerede er satt i produksjon.",
+    "disclosure": "Løsningene som beskrives, er eksempler på mulige arbeidsflyter, ikke en påstand om at alle integrasjoner eller automatiseringer allerede er satt i produksjon.",
     "sections": [
       {
         "heading": "Den lille oppgaven som stjeler mer tid enn du tror",
@@ -237,7 +237,7 @@ export const INSIGHT_ARTICLES: readonly InsightArticle[] = [
     category: "Logistikk og digitalisering",
     publishedAt: "2026-11-05T17:00:00+01:00",
     readingMinutes: 5,
-    author: "Vedoy Insights · KI-assistert",
+    author: "Vedoy Insights",
     sections: [
       {
         heading: "Fra bestilling til dør – hvem har ansvaret?",
