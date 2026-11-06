@@ -15,3 +15,43 @@
 .ms-quote{border:1px solid #d5e6d9;border-radius:15px;padding:16px;background:#f7fbf8}.ms-quote-row{display:flex;justify-content:space-between;gap:16px;padding:12px 2px;border-bottom:1px solid #e0ebe3;font-size:13px}.ms-quote-row strong{text-align:right}.ms-quote-row div strong{text-align:left}.ms-quote-row small{display:block;color:#7c8d81;font-size:11px;margin-top:5px}.ms-total{padding:14px 2px}.ms-total div{display:flex;justify-content:space-between;margin:8px 0;gap:15px;font-size:14px}.ms-quote>p{color:#687c6d;font-size:11px;line-height:1.6}.ms-contact{margin-top:23px;border-top:1px solid #e5ebe5}.ms-contact h3{font-size:20px;margin:23px 0 5px}.ms-check{display:flex;align-items:flex-start;gap:10px;margin:16px 0;color:#3f5848;font-size:12px;line-height:1.6}.ms-check input{margin-top:4px;accent-color:#197e4d}.ms-check a{text-decoration:underline}.ms-contact .ms-primary{width:100%}.ms-error{font-size:13px;color:#aa3535;line-height:1.5}.ms-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}.ms-done{padding:20px;background:#e8f7ea;border:1px solid #b7d5bb;border-radius:12px}.ms-done p{line-height:1.5}.ms-done a{text-decoration:underline}.ms-footer{max-width:1200px;margin:35px auto;padding:0 23px;color:#6d8272;font-size:12px}.ms-footer a{text-decoration:underline}
 @media(max-width:950px){.ms-layout{grid-template-columns:1fr}.ms-preview{position:static}.ms-site-hero h2{font-size:32px}}@media(max-width:550px){.ms-header{padding:18px 13px}.ms-brand{font-size:19px}.ms-intro{padding:0 15px}.ms-layout{padding:0 10px}.ms-panel{padding:19px 15px}.ms-sectors{grid-template-columns:repeat(2,1fr)}.ms-features{grid-template-columns:1fr}.ms-site-hero h2{font-size:28px}.ms-preview{padding:15px}.ms-site nav>span{display:none}.ms-quote-row{flex-wrap:wrap}.ms-progress{font-size:12px}}
 @media(prefers-reduced-motion:reduce){.ms-page *, .ms-page *:before,.ms-page *:after{animation:none!important;transition:none!important}}
+
+/* Multisite microinteractions: GPU-friendly opacity/transforms only. */
+.ms-intro>span{display:inline-block;animation:ms-rise .65s ease both}
+.ms-intro h1{animation:ms-rise .68s .08s ease both}
+.ms-intro p{animation:ms-rise .68s .16s ease both}
+.ms-panel{scroll-margin-top:22px}
+.ms-step-animate{animation:ms-step-in .32s cubic-bezier(.2,.7,.2,1) both;min-width:0}
+.ms-track span{transform-origin:left center;transition:background-color .3s ease,transform .3s ease}
+.ms-track span.active{animation:ms-progress-pop .35s ease both}
+.ms-sectors button,.ms-features label{transition:transform .2s ease,background .2s ease,border-color .2s ease,box-shadow .2s ease}
+.ms-sectors button:hover,.ms-features label:hover{transform:translateY(-2px);border-color:#80b493;box-shadow:0 6px 17px #17452d12}
+.ms-sectors button:active,.ms-steps button:active,.ms-primary:active{transform:scale(.98)}
+.ms-sectors button.selected>span{animation:ms-icon-bounce .42s ease}
+.ms-steps button,.ms-primary,.ms-demo-link{transition:transform .2s ease,filter .2s ease}
+.ms-steps button:not(:disabled):hover,.ms-primary:not(:disabled):hover,.ms-demo-link:hover{transform:translateY(-2px);filter:brightness(1.05)}
+.ms-browser{transition:max-width .4s cubic-bezier(.2,.7,.2,1),transform .4s ease;transform-origin:top center;width:100%;margin-inline:auto}
+.ms-browser--mobile{max-width:350px}
+.ms-browser--mobile .ms-site nav>span{display:none}
+.ms-browser--mobile .ms-site-hero{padding:35px 21px}
+.ms-browser--mobile .ms-site-hero h2{font-size:29px}
+.ms-browser--mobile .ms-site-cards{grid-template-columns:1fr}
+.ms-browser--mobile .ms-site-cards>div{flex-direction:row;align-items:center}
+.ms-browser--mobile .ms-site-cards>div small{margin-left:auto}
+.ms-site-hero{animation:ms-step-in .38s ease both}
+.ms-site-cards{animation:ms-step-in .4s .07s ease both}
+.ms-preview-controls{display:flex;gap:4px;background:#dce9df;padding:4px;border-radius:10px;letter-spacing:normal}
+.ms-preview-controls button{padding:6px 11px;border:0;background:transparent;color:#365747;border-radius:7px;cursor:pointer;font-weight:800;font-size:11px}
+.ms-preview-controls button[aria-pressed=true]{background:white;color:#1d653f;box-shadow:0 1px 6px #1d51331b}
+.ms-mobile-preview-link{display:none;font-size:12px;font-weight:800;color:#23754b!important;text-decoration:underline!important;margin:-6px 0 18px}
+.ms-footer{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;border-top:1px solid #d8e3da;padding-top:22px}
+.ms-footer>div{display:flex;flex-direction:column;gap:4px}
+.ms-footer>div strong{color:#2b5438;font-size:15px}
+.ms-footer>div span{font-size:12px}
+@keyframes ms-rise{from{opacity:0;transform:translateY(17px)}to{opacity:1;transform:translateY(0)}}
+@keyframes ms-step-in{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:translateY(0)}}
+@keyframes ms-progress-pop{from{transform:scaleX(.78)}to{transform:scaleX(1)}}
+@keyframes ms-icon-bounce{0%,100%{transform:scale(1)}45%{transform:scale(1.17)}}
+@media(max-width:950px){.ms-mobile-preview-link{display:inline-block}}
+@media(max-width:550px){.ms-preview-top{align-items:center}.ms-footer{justify-content:center;text-align:center}.ms-footer>div{align-items:center}}
+@media(prefers-reduced-motion:reduce){.ms-intro>span,.ms-intro h1,.ms-intro p,.ms-step-animate,.ms-track span.active,.ms-sectors button.selected>span,.ms-site-hero,.ms-site-cards{animation:none!important}.ms-browser,.ms-track span,.ms-sectors button,.ms-features label,.ms-steps button,.ms-primary,.ms-demo-link{transition:none!important}.ms-sectors button:hover,.ms-features label:hover,.ms-steps button:not(:disabled):hover,.ms-primary:not(:disabled):hover,.ms-demo-link:hover{transform:none!important}}
