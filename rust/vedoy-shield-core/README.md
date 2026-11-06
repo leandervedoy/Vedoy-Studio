@@ -1,6 +1,6 @@
 # Vedoy Shield Core v0.3.0 — experimental Rust / JSON
 
-**Status:** research-only, **NOT audited**, **NOT production-ready**. No production integration or VPN is included. A compile/test run was not possible in the source-authoring environment (no Rust toolchain or network). GitHub Actions should build and test after publication; consult CI status before relying on any result.
+**Status:** research-only, **NOT audited**, **NOT production-ready**. The third-party messaging ratchet integration has been removed; secure messaging remains disabled until a reviewed, independently licensed ratchet backend is integrated. No production messaging integration or VPN is included. Standalone AEAD may be evaluated with test data only. A compile/test run was not possible in the source-authoring environment (no Rust toolchain or network). GitHub Actions should build and test after publication; consult CI status before relying on any result.
 
 Vedoy Shield aims to provide reusable cryptographic building blocks to **Sent** and future Vedoy applications. The critical cryptographic code is in **Rust**; JSON is a wire/data format, never an excuse to export private keys. `legacy-python/` contains only the earlier historical v0.1 proof of concept, not used by this crate.
 
@@ -9,14 +9,13 @@ Vedoy Shield aims to provide reusable cryptographic building blocks to **Sent** 
 | Area | Source | What is implemented | Key limitation |
 |---|---|---|---|
 | Hybrid authenticated startup | `src/hybrid.rs` | Recipient-signed public bundle; sender Ed25519 signature on transcript; both identities must be externally pinned; X25519 + ML-KEM-1024 combined via HKDF-SHA512. | **Not PQXDH**: lacks asynchronously rotated signed + one-time prekeys and durable global replay ledger. Ed25519 authentication is not postquantum. Research protocol not independently reviewed. |
-| Reviewed upstream PQ ratchet | `src/ratchet.rs` | **Opt-in** bridge to Signal's upstream SPQR v1.6.0, setting minimum V1, no silent fallback. | SPQR is **AGPL-3.0-only** and normally runs alongside a classical DH ratchet; this bridge **does not implement Triple Ratchet**. Conditional integration is untested. |
-| WordForge experimental layer | `src/wordforge.rs` | v3 JSON envelope; per-word HKDF + AEAD; authenticated SPQR chunk; padded outer authenticated encryption. | No proof per-word layers improve security; may increase attack surface/size. |
+| Messaging ratchet | `src/ratchet.rs` | Fail-closed interface only. | No active ratchet backend; end-to-end messaging is unavailable. |\n| WordForge experimental layer | `src/wordforge.rs` | v3 JSON envelope; per-word HKDF + AEAD; authenticated SPQR chunk; padded outer authenticated encryption. | No proof per-word layers improve security; may increase attack surface/size. |
 | Crash-atomic encrypted snapshots | `src/storage.rs` | Argon2id from secondary password **and** 6–12 digit PIN; AES-256-GCM-SIV; 0600 files/0700 dir, advisory locking, fsync file + atomic rename + fsync directory on Unix, revision CAS. | PIN lacks hardware attempts/rate limiting. No rollback resistance against privileged attacker or whole-device compromise. Only local single-filesystem Unix-like storage. |
 | Persist-before-network | `src/session.rs` | Snapshot updates SPQR state and encrypted local outbox *before* packet is returned to caller; inbound packet and decrypted inbox stored before UI reveal. | No network transport/ack verification. Replay ledger only for retained inbox; no complete multi-device and prekey replay protection. |
 | Identity proofing | `src/identity.rs` | Provider-neutral interface, explicit fail-closed behavior; no passport data in core. | No live provider credentials or verification API integration. |
 | JSON | `src/json.rs` | Versioned capabilities and bounded serde JSON encode/decode. | Private session snapshots must remain encrypted and local. |
 
-## Components
+| Standalone authenticated encryption | `src/sealed.rs` | XChaCha20-Poly1305 with random nonce, domain/context AAD, versioning and bounded payloads. | Does not perform key exchange, ratcheting, key storage, or post-quantum authentication. |\n\n## Components
 
 ```text
 React Native / Next.js interface (external)
@@ -26,8 +25,8 @@ React Native / Next.js interface (external)
   +-----------v--------------------------+
   | Vedoy Shield Core v0.3.0 (Rust)       |
   | hybrid authenticated startup         |
-  | SPQR adapter (optional / AGPL)       |
-  | WordForge authenticated envelope     |
+  | Messaging ratchet disabled (fail closed)       |
+  | XChaCha20-Poly1305 sealed data API     |
   | encrypted local outbox + inbox       |
   | Argon2id password2+PIN atomic vault  |
   +-----------+--------------------------+
@@ -52,7 +51,7 @@ Public capabilities:
 }
 ```
 
-`post_quantum_ratchet_available` becomes `true` when compiling with the explicitly opted-in `signal-spqr` feature. This reports an enabled adapter, NOT a safety certification.
+`post_quantum_ratchet_available` remains `false` until a separately evaluated and licensed ratchet implementation is integrated.
 
 A sender's public `HybridInvite` JSON includes `version`, `chat_id`, `recipient_bundle_sha256`, `ephemeral_x25519_public`, `mlkem1024_ciphertext`, `invite_id`, `sender_identity_public`, `sender_signature`. No private identities or passwords are part of the wire protocol.
 
@@ -64,11 +63,9 @@ Requires Rust >= 1.88, Unix-like environment, access to crates.io and (for SPQR)
 cargo fmt --all -- --check
 cargo clippy --all-targets -- -D warnings
 cargo test --all-targets
-# Only after accepting AGPL obligations:
-cargo test --all-targets --features signal-spqr
 ```
 
-The upstream SPQR code is pinned to tag `v1.6.0`. A reproducible release should also commit Cargo.lock and source commit hashes, run `cargo audit`, supply-chain review, differential interoperability tests, and fuzzing. No lockfile was generated here because this environment has no Cargo.
+Pin reviewed dependency hashes and generate a reproducible Cargo.lock before any release. Audit dependencies and run interoperability and fuzz testing.
 
 ## PIN and password #2
 
@@ -94,7 +91,7 @@ An interrupted commit can leave a stray `.tmp` but the previous committed snapsh
 
 This design has **not** undergone formal verification or independent code audit. It is **not** endorsed by Signal, it is not Signal or PQXDH, and is not more secure than Signal based on available evidence. Word-per-cipher research is opt-in and may be removed if it does not demonstrate an advantage.
 
-Signal SPQR v1.6.0 and libsignal use the **AGPL-3.0-only** license. Do not enable this feature in a proprietary commercial app without consulting counsel and complying with the license. The absence of `signal-spqr` means sending sessions fail closed; there is **no** insecure fallback in `src/session.rs`.
+No third-party messaging ratchet is shipped. Sending sessions fail closed; there is **no** insecure fallback in `src/session.rs`. Review dependency licenses before distribution.
 
 See [SECURITY.md](docs/SECURITY.md), [ID-VERIFY.md](docs/ID-VERIFY.md), [INTEGRATION.md](docs/INTEGRATION.md) and [CHANGELOG.md](CHANGELOG.md).
 
