@@ -56,6 +56,13 @@ impl RecipientBundle {
         Ok(())
     }
 }
+/// Fail-closed replay gate. Implementations MUST durably record an invite ID
+/// in an account-wide ledger before returning the root to the application.
+/// A local per-device implementation does not solve global multi-device replay.
+pub trait InviteReplayGuard {
+    fn consume_authenticated_invite(&mut self, invite_id: &[u8; 16]) -> ShieldResult<()>;
+}
+
 pub struct RecipientPrivate {
     mlkem: DecapsulationKey,
     x25519: StaticSecret,
@@ -79,6 +86,22 @@ impl RecipientPrivate {
         };
         bundle.signature = signing.sign(&bundle.signed_material()).to_bytes().to_vec();
         (Self { mlkem, x25519, signing }, bundle)
+    }
+    /// Research-only helper that requires a durable replay guard.
+    /// Authentication is verified first; the invite is consumed atomically
+    /// before key material is returned to the caller. If persistence fails,
+    /// this function fails closed. This does NOT supply PQ authentication,
+    /// PQXDH, or cross-device replay protection.
+    pub fn accept_guarded<G: InviteReplayGuard>(
+        &self,
+        invite: &HybridInvite,
+        bundle: &RecipientBundle,
+        pinned_sender_identity: &[u8; 32],
+        replay: &mut G,
+    ) -> ShieldResult<HybridRoot> {
+        let root = self.accept(invite, bundle, pinned_sender_identity)?;
+        replay.consume_authenticated_invite(&invite.invite_id)?;
+        Ok(root)
     }
     pub fn identity_public(&self) -> [u8; 32] { self.signing.verifying_key().to_bytes() }
 
