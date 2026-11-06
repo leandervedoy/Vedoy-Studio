@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { DeliverSavingsCalculator, DeliverChannelPicker } from "@/components/projects/vedoy-deliver-tools";
 import styles from "@/components/projects/vedoy-deliver.module.css";
+import { ProjectScreenshotGallery } from "@/components/project-screenshot-gallery";
+import { DELIVER_SCREENSHOTS } from "@/lib/project-screenshots";
 
 export const metadata: Metadata = {
   title: "Vedoy Deliver – én ordreoversikt, flere salgskanaler",
@@ -88,6 +90,13 @@ export default function VedoyDeliverPage() {
         </section>
 
         <aside className={styles.notice}><h2>Om Wolt Drive og Foodora-integrasjoner</h2><p>Vedoy Studio ønsker å bygge en leverings- og ordrehub for bedrifter. Wolt Drive vurderes som mulig leveringspartner for bestillinger fra bedriftens egne kanaler. Godkjent avtale, API-tilgang, dekning og priser er ikke bekreftet. Integrasjoner mot markedsplassordrer fra Wolt og Foodora må godkjennes separat og kan kreve POS-/aggregatorpartner. Vedoy Deliver er et utviklingsprosjekt, ikke en aktiv leveringstjeneste. Eksisterende markedsplassavtaler gjelder fortsatt.</p></aside>
+        <ProjectScreenshotGallery
+          title="Et blikk inn i mobilpiloten."
+          intro="Se eksempler på hvordan bud kan søke, finne fiktive oppdrag og beregne mulig godtgjørelse. Piloten kan ikke ta imot ekte leveranser."
+          items={DELIVER_SCREENSHOTS}
+          eyebrow="VEDOY DELIVER · MOBILPILOT"
+          compact
+        />
         <div className={styles.cta}>
           <div><p className={styles.eyebrow}>VEDOY STUDIO · HAUGESUND</p><h2>Vil du teste konseptet?</h2><p>Fortell oss hvilken bransje du driver i og hvordan du håndterer bestillingene i dag.</p></div>
           <a className={styles.primary} href="/?need=Vedoy%20Deliver&source=deliver#kontakt">Meld interesse ↗</a>
