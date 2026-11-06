@@ -1,0 +1,28 @@
+{
+  "name": "@vedoy/motion",
+  "version": "1.1.0-beta.1",
+  "private": true,
+  "type": "module",
+  "description": "Lightweight web animation engine with screen coordinates, presets, timelines and VedoyScript",
+  "main": "./index.mjs",
+  "types": "./index.d.mts",
+  "exports": {
+    ".": {
+      "types": "./index.d.mts",
+      "import": "./index.mjs"
+    }
+  },
+  "files": [
+    "index.mjs",
+    "index.d.mts",
+    "README.md"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "test": "node --test tests/*.test.mjs"
+  },
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=20"
+  }
+}
