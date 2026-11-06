@@ -1,0 +1,40 @@
+name: Forma UI checks
+
+on:
+  pull_request:
+    paths:
+      - 'packages/forma/**'
+      - 'components/forma/**'
+      - 'app/(marketing)/developers/**'
+      - 'lib/forma-components.ts'
+      - 'package-lock.json'
+      - '.github/workflows/forma-checks.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'packages/forma/**'
+      - 'components/forma/**'
+      - 'app/(marketing)/developers/**'
+      - 'lib/forma-components.ts'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Install pinned dependencies without postinstall writes
+        run: npm ci --ignore-scripts
+      - name: Validate Forma registry and CSS
+        run: npm test --workspace=@vedoy/forma
+      - name: Build local booking and notes packages
+        run: npm run build:booking && npm run build:notes
+      - name: Type check Studio and Forma UI
+        run: npx tsc --noEmit
