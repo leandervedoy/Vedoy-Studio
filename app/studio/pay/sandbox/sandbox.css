@@ -1,0 +1,22 @@
+.pay-sandbox .sandbox-warning{padding:12px 17px;border-radius:12px;background:#fff4dc;border:1px solid #e8d098;display:flex;gap:12px;justify-content:space-between;flex-wrap:wrap;margin-bottom:26px;font-size:12px;color:#80591f}
+.pay-sandbox .sandbox-warning strong{letter-spacing:.08em}
+.pay-sandbox .sandbox-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:24px}
+.pay-sandbox .sandbox-stats>div{border:1px solid #dce8de;background:#fff;padding:19px;border-radius:15px;display:grid;gap:10px}
+.pay-sandbox .sandbox-stats small{font-size:11px;color:#75887a}
+.pay-sandbox .sandbox-stats strong{font-size:20px;overflow-wrap:anywhere}
+.pay-sandbox .sandbox-card{aspect-ratio:1.59;max-width:360px;color:#fff;border-radius:19px;box-shadow:0 10px 25px #0a17142b;padding:23px;margin:20px 0;display:grid;grid-template-columns:1fr auto;align-content:space-between}
+.pay-sandbox .sandbox-card strong{font-size:18px;grid-column:1/-1;overflow-wrap:anywhere}
+.pay-sandbox .sandbox-card b{font-size:19px}
+.pay-sandbox .sandbox-card span,.pay-sandbox .sandbox-card small{font-size:10px;letter-spacing:.08em}
+.pay-sandbox .sandbox-card small{grid-column:1/-1}
+.pay-sandbox .sandbox-cards{margin-top:18px;border-top:1px solid #e1e8e2}
+.pay-sandbox .sandbox-cards p{font-size:12px;overflow-wrap:anywhere}
+.pay-sandbox .sandbox-challenge{margin:16px 0;border:2px dashed #bb9775;border-radius:15px;background:#fff9ef;padding:15px}
+.pay-sandbox .sandbox-history{margin-top:18px}
+.pay-sandbox .sandbox-history-head{display:flex;align-items:center;justify-content:space-between;gap:18px}
+.pay-sandbox .sandbox-history-head button{padding:10px 14px;border:1px solid #c9d9ce;border-radius:9px;cursor:pointer}
+.pay-sandbox .sandbox-history ol{padding-left:24px}
+.pay-sandbox .sandbox-history li{padding:10px;border-bottom:1px solid #e8eee8}
+.pay-sandbox .sandbox-history li strong{display:block}
+.pay-sandbox .sandbox-history li span{display:block;color:#728277;font-size:12px;padding-top:3px}
+@media(max-width:680px){.pay-sandbox .sandbox-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.pay-sandbox .sandbox-history-head{align-items:start}}
