@@ -2,6 +2,19 @@
 
 All dates in ISO 8601. Semantic versioning reflects *experimental implementation changes*, NOT cryptographic security certification.
 
+## [Unreleased] - security migration (research only)
+
+- Removed the optional third-party messaging ratchet source dependency and
+  its compile feature. Messaging sessions now fail closed by design.
+- Added standalone RustCrypto XChaCha20-Poly1305 authenticated sealing,
+  with random 192-bit nonce, context binding, versioning and bounded inputs.
+- Added local encrypted invite replay ledger (per device; not global).
+- Added negative tests and CI controls for research/developer evaluation.
+- Updated documentation to prohibit production messaging until an audited,
+  independently licensed full session protocol is integrated.
+- This is NOT a new certified release, and no successful build or audit is
+  claimed.
+
 ## [0.3.0] — 2026-11-06
 
 ### Added
