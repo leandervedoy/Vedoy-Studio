@@ -19,3 +19,25 @@
 .popup .previous{font-size:11px;line-height:1.4;color:#6f8675;margin:13px 0 0}
 .notice{background:#f7faf7;border:1px solid #e1a4a4;color:#7f2626;padding:11px;border-radius:10px;max-width:390px;font-size:12px}
 @media(max-width:480px){.root{left:10px;bottom:max(12px,env(safe-area-inset-bottom))}.popup{width:calc(100vw - 20px);max-height:min(70svh,570px);padding:19px}.trigger{font-size:11px;min-height:37px;padding:8px 12px}}
+
+/* Explicit visual decision states and the second-step consent explanation. */
+.choiceGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0 14px}
+.choice,.choiceSelected{display:flex;flex-direction:column;align-items:flex-start;gap:7px;padding:13px 12px;text-align:left;border-radius:13px;border:2px solid #d3e0d5;background:#fff;color:#234630;cursor:pointer;min-width:0}
+.choiceSelected{border-color:#1a6945;background:#e9f6eb;box-shadow:inset 0 0 0 1px #1a6945}
+.choice strong,.choiceSelected strong{font-size:14px}
+.choice small,.choiceSelected small{font-size:10px;color:#57715f;line-height:1.4}
+.selectionIcon{display:grid;place-items:center;width:21px;height:21px;border:1px solid #7fa58a;border-radius:50%;font-size:13px;color:#1a6945}
+.choiceSelected .selectionIcon{background:#1a6945;color:#fff}
+.details{background:#f0f6ef;border:1px solid #dce7dc;border-radius:13px;padding:14px;margin:13px 0}
+.details>strong{display:block;color:#234c34;font-size:12px;margin:8px 0 4px}
+.details>strong:first-child{margin-top:0}
+.details p{font-size:12px;line-height:1.6;margin:0 0 12px;color:#496652}
+.details p:last-child{margin-bottom:0}
+.reportChoice{display:flex;gap:11px;align-items:start;border-top:1px solid #ceded0;margin-top:12px;padding-top:14px;cursor:pointer}
+.reportChoice input{height:18px;width:18px;accent-color:#1a6945;flex:none;margin:3px 0 0}
+.reportChoice span{display:flex;flex-direction:column;gap:5px}
+.reportChoice strong{font-size:12px;line-height:1.4;margin:0;color:#214630}
+.reportChoice small{font-size:11px;line-height:1.6;color:#54705a}
+.popup{max-height:min(83svh,710px)}
+.actions button:disabled{opacity:.65;cursor:wait}
+@media(max-width:380px){.choiceGrid{gap:7px}.choice,.choiceSelected{padding:11px 9px}.popup{max-height:78svh}}
