@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Vedoy Unity Bridge — Web 3D Preview</title>
+  <meta name="description" content="Inspect Unity scene and script bindings in a safe Three.js Web 3D preview." />
+  <link rel="stylesheet" href="./style.css" />
+  <script type="importmap">
+    {"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"}}
+  </script>
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <div class="brand"><span class="mark">V</span><div><strong>VEDOY</strong><span>UNITY BRIDGE <small>BETA</small></span></div></div>
+      <a href="https://vedoystudio.no" target="_blank" rel="noreferrer">Developed by Vedoy Studio ↗</a>
+    </header>
+    <section class="intro">
+      <div><p class="eyebrow">WEB 3D ENGINE / UNITY IMPORT</p><h1>Your Unity scenes.<br><em>On the web.</em></h1><p>Import your Unity scene manifest, inspect GameObject-to-script references, and preview supported behaviors in Three.js. Full C# compatibility requires a separate Unity Web build.</p></div>
+      <div class="upload-panel">
+        <label class="upload"><span>01 / Import scene.vedoy.json</span><input id="manifest" type="file" accept=".json,application/json" /><b>Select manifest <span>↗</span></b></label>
+        <label class="upload secondary"><span>02 / Add exported 3D model (optional)</span><input id="glb" type="file" accept=".glb,model/gltf-binary" /><b>Select .glb <span>↗</span></b></label>
+      <button id="demo" type="button" class="demo-button">Open sample Unity scene ↗</button></div>
+    </section>
+    <section class="workspace" aria-label="Unity scene preview">
+      <aside class="sidebar">
+        <div class="panel-head"><strong>Hierarchy</strong><span id="count">0 objects</span></div>
+        <label class="scene-label" for="scene">Scene</label><select id="scene" aria-label="Select imported scene" disabled><option>Import a scene</option></select>
+        <div id="tree" class="tree"><p class="muted">Import a Unity scene to inspect its objects and bindings.</p></div>
+      </aside>
+      <main class="canvas-wrap"><canvas id="viewport" aria-label="Three-dimensional viewport"></canvas><div class="canvas-badge">THREE.JS / NATIVE PREVIEW</div><div class="canvas-hint">Drag to rotate · Scroll to zoom</div></main>
+      <aside class="inspector"><div class="panel-head"><strong>Inspector</strong><span>Unity links</span></div><div id="inspector"><p class="muted">Select an object to inspect its scripts, GUIDs and serialized fields.</p></div></aside>
+    </section>
+    <section class="diagnostics"><div class="panel-head"><strong>Import diagnostics</strong><span id="status" role="status" aria-live="polite">No project loaded</span></div><ul id="diagnostics"><li>Import a Unity project with the Vedoy CLI, then open its generated manifest here.</li></ul></section>
+    <footer><span>Designed for clear compatibility reporting — unsupported Unity scripts are never silently executed.</span><span>Vedoy Framework · Experimental beta</span></footer>
+  </div>
+  <script type="module" src="./preview.js"></script>
+</body>
+</html>

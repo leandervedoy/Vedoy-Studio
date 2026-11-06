@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &101
+GameObject:
+  m_Name: Spinner
+  m_IsActive: 1
+  m_Component:
+  - component: {fileID: 201}
+  - component: {fileID: 301}
+  - component: {fileID: 401}
+--- !u!4 &201
+Transform:
+  m_GameObject: {fileID: 101}
+  m_Father: {fileID: 0}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+--- !u!33 &301
+MeshFilter:
+  m_GameObject: {fileID: 101}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &401
+MonoBehaviour:
+  m_GameObject: {fileID: 101}
+  m_Enabled: 1
+  m_Script: {fileID: 11500000, guid: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa, type: 3}
+  speed: 3
+--- !u!1 &102
+GameObject:
+  m_Name: NotConverted
+  m_IsActive: 1
+--- !u!4 &202
+Transform:
+  m_GameObject: {fileID: 102}
+  m_Father: {fileID: 0}
+  m_LocalPosition: {x: 3, y: 0, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+--- !u!114 &402
+MonoBehaviour:
+  m_GameObject: {fileID: 102}
+  m_Enabled: 1
+  m_Script: {fileID: 11500000, guid: bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb, type: 3}
+--- !u!1001 &10011
+PrefabInstance:
+  m_SourcePrefab: {fileID: 100100000, guid: cccccccccccccccccccccccccccccccc, type: 3}
+  m_Modification:
+    m_Modifications: []
