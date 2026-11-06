@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import Link from "next/link";
 import type { PayDesign,PayOverview } from "@/lib/vedoy-pay/server";
 
 const COLORS:Record<string,[string,string]>={
@@ -47,6 +48,7 @@ export function PayConsole({initial}:{initial:PayOverview}) {
       <div className="pay-intro">
         <p>Design kort, se tilkoblingsstatus og følg lojalitetspoengene dine i én oversikt.</p>
         <strong>FORHÅNDSVISNING · INGEN REELLE BETALINGER</strong>
+        <Link className="pay-primary" style={{textDecoration:"none",borderRadius:12,padding:"11px 15px",fontSize:13}} href="/studio/pay/sandbox">Åpne Vedoy Pay Sandbox</Link>
       </div>
     </header>
     {!initial.configured&&<aside className="pay-notice" role="status">
