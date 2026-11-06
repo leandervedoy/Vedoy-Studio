@@ -17,10 +17,10 @@ export const INSIGHT_ARTICLES: readonly InsightArticle[] = [
   {
     "slug": "nattens-utvikling-tryggere-sky-enklere-verktoy",
     "title": "Nattens utvikling hos Vedøy: tryggere sky og enklere verktøy",
-    "excerpt": "Natt til 6. november ble Vedoy Cloud sikret videre, Developer Portal ryddet opp og nye løsninger for bedrifter og kreative skapere forbedret.",
+    "excerpt": "Natt til 6. november fortsatte arbeidet med Vedoy Cloud, Developer Portal og Collective. Vedoy Shield inngår i sikkerhetsplanene for økosystemet.",
     "category": "Utvikling hos Vedøy",
     "publishedAt": "2026-11-06T05:10:00+01:00",
-    "readingMinutes": 2,
+    "readingMinutes": 3,
     "author": "Eiolf-Leander Haugsnes Vedøy",
     "journalist": "Eiolf-Leander Haugsnes Vedøy",
     "editor": "Eiolf-Leander Haugsnes Vedøy",
@@ -52,6 +52,13 @@ export const INSIGHT_ARTICLES: readonly InsightArticle[] = [
         "paragraphs": [
           "Vedoy Studio fikk videreutviklet Multisite med en mer interaktiv veiviser for nettsidebehov, pristilbud og tydelig Vedoy-branding. Parallelt ble det arbeidet med Vedoy Stock Media i Collective-appen, blant annet forhåndsvisninger av bilder under lisensvurdering.",
           "Vedoy Collective fikk også forbedringer i interne vurderingsresultater og analyse knyttet til lanseringsarbeidet. Utvikling og testing pågår fortsatt."
+        ]
+      },
+      {
+        "heading": "Vedoy Shield: en felles sikkerhetsretning",
+        "paragraphs": [
+          "Vedoy Shield er konseptet for et felles sikkerhetslag på tvers av Vedøys digitale tjenester. Ambisjonen er å samle prinsipper for kryptering, trygg nøkkelhåndtering, tilgangskontroll og beskyttelse av API-er, slik at sikkerhet bygges inn fra starten.",
+          "For meldinger og andre sensitive data vurderes blant annet ende-til-ende-kryptering og nøkkelrotasjon. Dette er foreløpig planlagte egenskaper, ikke en ferdig implementert eller uavhengig sikkerhetsrevidert løsning. Dokumentasjon, testing og gjennomgang av kryptografiske valg må komme før konkrete sikkerhetsgarantier kan gis."
         ]
       },
       {
