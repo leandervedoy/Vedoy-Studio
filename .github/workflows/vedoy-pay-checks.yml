@@ -8,6 +8,7 @@ on:
       - 'data/vedoy-pay-schema.sql'
       - 'scripts/migrate-vedoy-pay.mjs'
       - 'tests/vedoy-pay-foundation.test.mjs'
+      - 'tests/vedoy-pay-sandbox.test.mjs'
       - '.github/workflows/vedoy-pay-checks.yml'
   push:
     branches: [main]
@@ -29,7 +30,7 @@ jobs:
       - name: Typecheck full Studio integration
         run: npm run typecheck
       - name: Test validation and fail-closed flags
-        run: node --test tests/vedoy-pay-foundation.test.mjs
+        run: node --test tests/vedoy-pay-foundation.test.mjs tests/vedoy-pay-sandbox.test.mjs
       - name: Check migration syntax
         run: node --check scripts/migrate-vedoy-pay.mjs
       - name: Ensure no payment credentials are present in portal files
