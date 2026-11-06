@@ -111,35 +111,41 @@ fn encrypted_snapshot_roundtrip_wrong_pin_and_revision_conflict() {
     assert_eq!(&*store.load(PASSWORD2, PIN, "chat-a").unwrap().plaintext, b"next state");
     std::fs::remove_dir_all(dir).unwrap();
 }
-#[cfg(not(feature = "signal-spqr"))]
 #[test]
-fn no_insecure_ratchet_fallback() {
+fn secure_messaging_ratchet_fails_closed_until_reviewed_backend_is_available() {
     use vedoy_shield_core::ratchet::PostQuantumRatchet;
-    assert!(PostQuantumRatchet::from_encrypted_snapshot(vec![1,2,3]).is_err());
+    assert!(PostQuantumRatchet::from_encrypted_snapshot(vec![1, 2, 3]).is_err());
 }
-#[cfg(all(unix, feature = "signal-spqr"))]
+
 #[test]
-fn pq_ratchet_persists_before_exposure() {
-    use vedoy_shield_core::session::{create_session, queue_message, receive_message, PrivateSession};
-    use rand_core::{OsRng, RngCore};
-    let (bob, bundle) = RecipientPrivate::generate();
-    let alice_id = SenderIdentity::generate();
-    let (invite, alice_root) = initiate(&bundle, &bob.identity_public(), &alice_id, "chat-a").unwrap();
-    let bob_root = bob.accept(&invite, &bundle, &alice_id.identity_public()).unwrap();
-    let mut n = [0u8; 8];
-    OsRng.fill_bytes(&mut n);
-    let dir = std::env::temp_dir().join(format!("vedoy-pq-test-{}", u64::from_be_bytes(n)));
-    let send = EncryptedAtomicStore::new(&dir.join("sender"), "state.json").unwrap();
-    let recv = EncryptedAtomicStore::new(&dir.join("receiver"), "state.json").unwrap();
-    create_session(&send, PASSWORD2, PIN, "alice/chat-a", "chat-a", &alice_root, true).unwrap();
-    create_session(&recv, PASSWORD2, PIN, "bob/chat-a", "chat-a", &bob_root, false).unwrap();
-    let pkt = queue_message(&send, PASSWORD2, PIN, "alice/chat-a", "chat-a", "Hei! 🔐").unwrap();
-    let (_, snapshot): (u64, PrivateSession) =
-        send.load_json(PASSWORD2, PIN, "alice/chat-a").unwrap();
-    assert_eq!(snapshot.outbox.len(), 1);
-    assert_eq!(receive_message(&recv, PASSWORD2, PIN, "bob/chat-a", "chat-a", &pkt).unwrap(), "Hei! 🔐");
-    assert!(receive_message(&recv, PASSWORD2, PIN, "bob/chat-a", "chat-a", &pkt).is_err());
-    std::fs::remove_dir_all(dir).unwrap();
+fn sealed_payload_authenticates_context_key_ciphertext_and_version() {
+    use vedoy_shield_core::sealed::{open_payload, seal_payload};
+    let key = [42u8; 32];
+    let data = b"research data: no real keys";
+    let envelope = seal_payload(&key, b"example/account-a", data).unwrap();
+    assert_eq!(open_payload(&key, b"example/account-a", &envelope).unwrap(), data);
+    assert!(open_payload(&key, b"example/account-b", &envelope).is_err());
+    assert!(open_payload(&[2u8; 32], b"example/account-a", &envelope).is_err());
+    let mut modified = envelope.clone();
+    modified.ciphertext[0] ^= 1;
+    assert!(open_payload(&key, b"example/account-a", &modified).is_err());
+    let mut wrong_version = envelope.clone();
+    wrong_version.version = 2;
+    assert!(open_payload(&key, b"example/account-a", &wrong_version).is_err());
+    assert!(seal_payload(&key, b"", data).is_err());
+    assert!(seal_payload(&key, b"example/account-a", &vec![0; 1024 * 1024 + 1]).is_err());
+}
+
+#[test]
+fn sealed_payload_nonce_is_fresh_and_json_roundtrips() {
+    use vedoy_shield_core::sealed::{open_payload, seal_payload, SealedPayload};
+    let key = [91u8; 32];
+    let first = seal_payload(&key, b"example/file", b"hello").unwrap();
+    let second = seal_payload(&key, b"example/file", b"hello").unwrap();
+    assert_ne!(first.nonce, second.nonce);
+    let serialized = encode_bounded(&first).unwrap();
+    let restored: SealedPayload = parse_bounded(&serialized).unwrap();
+    assert_eq!(open_payload(&key, b"example/file", &restored).unwrap(), b"hello");
 }
 
 #[test]
