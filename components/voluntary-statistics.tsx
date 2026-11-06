@@ -20,6 +20,7 @@ export function VoluntaryStatistics({
   const [open, setOpen] = useState(false);
   const [ready, setReady] = useState(false);
   const [notice, setNotice] = useState("");
+  const [confirming, setConfirming] = useState(false);
 
   useEffect(() => {
     try {
@@ -45,6 +46,7 @@ export function VoluntaryStatistics({
     // Closing without consent is equivalent to declining.
     if (!preference) savePreference("declined");
     setOpen(false);
+    setConfirming(false);
     setNotice("");
   }
 
@@ -55,6 +57,7 @@ export function VoluntaryStatistics({
   }
 
   async function accept() {
+    setConfirming(false);
     // Only this explicit click sends a single aggregate page-view event.
     savePreference("accepted");
     setOpen(false);
@@ -80,7 +83,7 @@ export function VoluntaryStatistics({
       {!open ? (
         <button type="button" className={styles.trigger} onClick={() => { setNotice(""); setOpen(true); }}
           aria-label="Åpne valg for frivillig besøksstatistikk" aria-haspopup="dialog">
-          Personvernvalg
+          Personvernvalg · {preference === "accepted" ? "Ja valgt ✓" : "Nei valgt ✓"}
         </button>
       ) : (
         <div className={styles.popup} role="dialog" aria-modal="false"
