@@ -15,6 +15,90 @@ export type InsightArticle = {
 
 export const INSIGHT_ARTICLES: readonly InsightArticle[] = [
   {
+    "slug": "fra-ide-til-fungerende-teknologi-utviklingsdag-vedoy",
+    "title": "Fra idé til fungerende teknologi: En innholdsrik utviklingsdag hos Vedøy",
+    "excerpt": "En dag med utvikling av finansapper, skyløsninger, nettbutikker og automatisering. Hos Vedøy handler arbeidet stadig mer om å gjøre ideer til teknologi som faktisk kan brukes.",
+    "category": "Utvikling hos Vedøy",
+    "publishedAt": "2026-11-06T01:12:00+01:00",
+    "readingMinutes": 5,
+    "author": "Eiolf-Leander Haugsnes Vedøy",
+    "journalist": "Eiolf-Leander Haugsnes Vedøy",
+    "editor": "Eiolf-Leander Haugsnes Vedøy",
+    "disclosure": "Vedoy Insights er en publikasjon fra Vedøy. Artikkelen er utarbeidet med KI-assistanse og redaksjonell gjennomgang. Enkelte produkter omtales som prototyper eller planlagte tjenester, ikke som ferdiglanserte løsninger.",
+    "articleCta": {
+      "eyebrow": "UTFORSK VEDØY",
+      "title": "Vedoy Studio",
+      "description": "Oppdag nettsider, apper, booking og andre digitale tjenester fra Vedøy.",
+      "href": "https://vedoystudio.no",
+      "linkText": "Se Vedoy Studio"
+    },
+    "sections": [
+      {
+        "heading": "Flere prosjekter, én felles retning",
+        "paragraphs": [
+          "Det er lett å få ideer til nye teknologiprodukter. Den virkelige utfordringen er å bygge dem, teste dem og gjøre dem nyttige for andre.",
+          "Den 5. november jobbet Vedøy videre med flere tjenester som på sikt skal inngå i et større teknologisk økosystem. Noen løsninger fikk fungerende prototyper, andre ble forbedret, og flere kom nærmere lansering."
+        ]
+      },
+      {
+        "heading": "Vedoy Bank – et nytt konsept tar form",
+        "paragraphs": [
+          "En av dagens større utviklingsoppgaver var Vedoy Bank, en prototype som utforsker hvordan digitale kontoer, betalingskort, valuta og lojalitetspoeng kan samles i én applikasjon.",
+          "En første versjon ble distribuert gjennom Vercel, og en valutakalkulator basert på Frankfurter API ble implementert og testet.",
+          "Vedoy Bank er foreløpig en teknologiprototype, ikke en operativ bank eller godkjent finanstjeneste."
+        ]
+      },
+      {
+        "heading": "Vedoy Studio blir enklere å presentere",
+        "paragraphs": [
+          "På vedoystudio.no ble en ny demoseksjon publisert. Her skal potensielle kunder lettere kunne se hvordan nettsider, bookingløsninger og andre digitale tjenester kan fungere i praksis.",
+          "Det ble også utarbeidet en firesiders brosjyre som presenterer Vedøys tjenester.",
+          "Målet er å gjøre det enklere for små bedrifter å forstå hvilke problemer teknologien kan løse, uten at de trenger omfattende teknisk kunnskap."
+        ]
+      },
+      {
+        "heading": "Vedoy Cloud og fremtidens utviklerverktøy",
+        "paragraphs": [
+          "Arbeidet med Vedoy Cloud fortsatte med en prosjektportal for opprettelse av prosjekter, import fra GitHub og håndtering av filer.",
+          "En forhåndsvisning ble tilgjengelig, men produksjonspublisering avventet videre sikkerhetstesting.",
+          "Samtidig ble Vedoy Control videreutviklet som én samlet plattform for versjonskontroll. Målet er å gjøre Git enklere, blant annet gjennom KI-assistert konflikthåndtering, tydeligere kommandoer og muligheten til å gjenopprette tidligere versjoner."
+        ]
+      },
+      {
+        "heading": "Rust, Python og kunstig intelligens",
+        "paragraphs": [
+          "Et strategidokument om effektivisering og automatisering ble også ferdigstilt.",
+          "Her ble det sett nærmere på hvordan Rust kan brukes til ytelseskritiske tjenester, Python til automatisering og kunstig intelligens til oppgaver som ellers krever mye manuelt arbeid.",
+          "For Vedøy handler automatisering først og fremst om å bruke mindre tid på gjentakende oppgaver og mer tid på å utvikle tjenester kundene faktisk trenger."
+        ]
+      },
+      {
+        "heading": "Vedoy Collective nærmere lansering",
+        "paragraphs": [
+          "Natt til 6. november ble oppdateringer i Vedoy Collective-appen slått sammen, og nettappen ble publisert.",
+          "Arbeidet omfattet blant annet ny logoimplementering, appikon, en «Om oss»-side og tydelig informasjon om Vedøy som utvikler.",
+          "De rapporterte testene ble bestått. Android-versjonen var bygget, mens publisering i Google Play fortsatt gjensto."
+        ]
+      },
+      {
+        "heading": "Bedre prosjektstyring",
+        "paragraphs": [
+          "Et annet fokusområde var Vedøy Project Manager, en planlagt løsning for å samle prosjekter, oppgaver, tidsbruk og prioriteringer.",
+          "Når flere tjenester utvikles parallelt, blir god prosjektstyring avgjørende. Det er ikke nødvendigvis prosjektet med flest funksjoner som bør få mest oppmerksomhet, men prosjektet som kan gi størst verdi med ressursene som er tilgjengelige."
+        ]
+      },
+      {
+        "heading": "Veien videre",
+        "paragraphs": [
+          "Arbeidet fremover handler om å gjøre flere av løsningene klare for faktisk bruk.",
+          "Det betyr grundigere testing, sikkerhetsforbedringer, enklere brukeropplevelser og større oppmerksomhet rundt tjenester som kan skape inntekter.",
+          "Vedøy bygger ikke bare for å utvikle teknologi. Ambisjonen er å skape løsninger som er robuste, sikre og som løser reelle problemer.",
+          "Og selv om ikke alle prosjektene er ferdige, er hver fungerende prototype et steg nærmere det målet."
+        ]
+      }
+    ]
+  },
+  {
     "slug": "rust-python-ki-automatisering-vedoy-studio",
     "title": "Mindre rutinearbeid, mer verdiskaping: slik kan Rust, Python og KI brukes i bedriften",
     "excerpt": "Automatisering handler ikke om å la KI gjøre alt. Det handler om å bygge bedre arbeidsflyter. Her er konkrete eksempler fra tjenestene i Vedoy Studio.",
