@@ -3,6 +3,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getInsightArticle, INSIGHT_ARTICLES } from "@/lib/insights-articles";
 import styles from "../insights.module.css";
+import { ProjectScreenshotGallery } from "@/components/project-screenshot-gallery";
+import { STUDIO_SCREENSHOTS } from "@/lib/project-screenshots";
 
 type PageProps = { params: Promise<{ slug: string }> };
 
@@ -42,6 +44,13 @@ export default async function InsightArticlePage({params}: PageProps) {
           {section.paragraphs.map((paragraph,i) => <p key={i}>{paragraph}</p>)}
         </section>)}
       </div>
+      {found.slug === "fra-ide-til-fungerende-teknologi-utviklingsdag-vedoy" ? <ProjectScreenshotGallery
+        title="Se prosjektene fra utviklingsdagen."
+        intro="Skjermbilder fra Bank, Collective og Hosting. Flere funksjoner er prototyper eller demoer, ikke ferdiglanserte produkter."
+        items={[STUDIO_SCREENSHOTS.bank, STUDIO_SCREENSHOTS.collective, STUDIO_SCREENSHOTS.hosting]}
+        eyebrow="VEDØY INSIGHTS · VISUELT"
+        compact
+      /> : null}
       <div className={styles.articleCta}><div><p className={styles.eyebrow}>{found.articleCta?.eyebrow ?? "UTFORSK PROSJEKTET"}</p><h2>{found.articleCta?.title ?? "Vedoy Deliver"}</h2><p>{found.articleCta?.description ?? "Se konseptet for lokal levering, demonstrasjon av GPS-kart og informasjon for bedrifter."}</p></div><a href={found.articleCta?.href ?? "https://vedoy-deliver.vercel.app"} target="_blank" rel="noreferrer">{found.articleCta?.linkText ?? "Se piloten"} ↗</a></div>
       <div className={styles.disclosure}>{found.disclosure ?? "Artikkelen er KI-assistert. Vedoy Deliver omtales som en pilot; teksten er ikke en bekreftelse på at ekte leveringstjenester eller utbetalinger er aktive."}</div>
     </article>
