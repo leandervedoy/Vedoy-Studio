@@ -4,13 +4,13 @@ Last reviewed: 2026-11-06
 ## Product status
 **Research/developer preview only. NOT approved for production messaging, real customer secrets, VPN, payments, or claims of end-to-end post-quantum security.**
 
-The `0.3.0` number describes experimental source compatibility, not a security grade. There is no confirmed successful Rust compile, test, SPQR-enabled build, or independent audit for this branch.
+The `0.3.0` number describes experimental source compatibility, not a security grade. There is no confirmed successful Rust compile, test, replacement messenger ratchet build, or independent audit for this branch.
 
 ## Code implemented in this preparation branch
 - Removed third-party ratchet dependency and disabled messaging sessions until a reviewed, license-compatible ratchet is integrated.\n- Added standard XChaCha20-Poly1305 standalone AEAD for bounded data (not a messaging protocol).\n- Added `hybrid::InviteReplayGuard` and `RecipientPrivate::accept_guarded`: verify the pinned sender identity and authenticated handshake before consuming the invite ID. The derived root is returned only after the replay guard reports successful persistence.
 - Added `replay::LocalEncryptedReplayLedger` with encrypted, revision-checked local snapshots, per-account scope, non-evicting bounded history, and failure on missing ledger, duplicates, storage errors, wrong credentials or race conflicts.
 - New negative regression tests for duplicate invites, tampered signatures, unavailable storage, incorrect credentials/scope, process restart, and reinitialization.
-- Updated GitHub Actions checks to require clean formatting, Clippy, default tests, opt-in SPQR tests and dependency audit.
+- Updated GitHub Actions checks to require clean formatting, Clippy, default tests, fail-closed ratchet tests and dependency audit.
 
 ## Review blockers for a production release (all MUST be completed)
 - [ ] **Replace custom handshake** with an independently reviewed, supported PQXDH-or-equivalent implementation; lifecycle for signed, rotated and one-time prekeys.
