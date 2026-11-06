@@ -35,8 +35,8 @@ export async function getPayOverview(session:SessionPayload):Promise<PayOverview
     db.unsafe("select provider,status,verified_at::text from public.vedoy_pay_partner_links where organization_id=$1 and user_id=$2::uuid",[session.organizationId,id]),
     db.unsafe("select coalesce(sum(delta_points),0)::text as total,count(*)::int as events from public.vedoy_pay_loyalty_entries where organization_id=$1 and user_id=$2::uuid",[session.organizationId,id])
   ]);
-  const rows=links as PartnerRow[];
-  return {configured:true,design:(draft[0] as PayDesign|undefined)??null,
+  const rows=links as unknown as PartnerRow[];
+  return {configured:true,design:draft[0] ? {color:String(draft[0].color),pattern:String(draft[0].pattern),label:String(draft[0].label)} : null,
     partners:providers.map(provider=>{
       const link=rows.find(x=>x.provider===provider);
       const status=link?.status==="verified"&&!allowLinkedPartner(link.status,link.verified_at)
