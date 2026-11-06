@@ -12,6 +12,20 @@ on:
 permissions:
   contents: read
 jobs:
+  format:
+    name: Rust formatting gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: rust/vedoy-shield-core
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt
+      - name: Check formatting (required)
+        run: cargo fmt --all -- --check
   core:
     name: Rust crypto research checks (NOT a security audit)
     runs-on: ubuntu-latest
@@ -27,9 +41,6 @@ jobs:
       - uses: Swatinem/rust-cache@v2
         with:
           workspaces: rust/vedoy-shield-core
-      # Formatting is checked, never silently changed in CI.
-      - name: Check formatting
-        run: cargo fmt --all -- --check
       - name: Validate dependency graph
         run: cargo metadata --format-version 1 --no-deps > /dev/null
       - name: Static Rust checks
