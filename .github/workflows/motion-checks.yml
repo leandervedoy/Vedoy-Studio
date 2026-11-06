@@ -1,0 +1,29 @@
+name: Vedoy Motion tests
+on:
+  pull_request:
+    paths:
+      - 'packages/vedoy-motion/**'
+      - 'components/motion/**'
+      - 'app/(marketing)/developers/motion/**'
+      - 'package-lock.json'
+      - '.github/workflows/motion-checks.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'packages/vedoy-motion/**'
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npm test --workspace=@vedoy/motion
+      - run: npm run build:booking && npm run build:notes
+      - run: npx tsc --noEmit
