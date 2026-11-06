@@ -1,6 +1,7 @@
 import { timingSafeEqual } from "node:crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { createSessionToken, sessionCookie } from "@/lib/auth";
+import { newCloudCookie } from "@/lib/vedoy-cloud";
 import { getTeamSessionRole, syncTeamMemberOnLogin } from "@/lib/repository";
 import { supabaseOAuthUrlFromEnv, safeStudioNext } from "@/lib/vedoy-owner-access.mjs";
 
@@ -91,15 +92,31 @@ export async function GET(request: NextRequest) {
   });
   const user = await userResponse.json() as UserInfo;
   const email = user.email?.trim().toLowerCase();
-  if (!userResponse.ok || !email || user.email_verified === false) {
+  if (!userResponse.ok || !email || user.email_verified !== true) {
     return loginError(request, "Vedøy-kontoen mangler en bekreftet e-postadresse.");
+  }
+
+  if (next === "/prosjekter" || next === "/projects") {
+    const subject = user.sub?.trim();
+    if (!subject || user.email_verified !== true || !/^[a-zA-Z0-9_-]{8,180}$/.test(subject)) {
+      return loginError(request, "Vedøy Login oppga ikke en gyldig brukeridentitet.");
+    }
+    const response = NextResponse.redirect(new URL(next, request.url));
+    response.cookies.set(newCloudCookie({
+      sub: subject,
+      email,
+      name: user.preferred_username?.trim() || user.name?.trim() || email.split("@")[0]
+    }));
+    clearTemporaryCookies(response);
+    return response;
   }
 
   const allowedEmails = (process.env.STUDIO_ALLOWED_EMAILS || process.env.ADMIN_EMAIL || "")
     .split(",")
     .map((value) => value.trim().toLowerCase())
     .filter(Boolean);
-  if (!allowedEmails.includes(email) && !(email === 'leander@vedoy.store' && user.email_verified === true)) {
+  const studioAccess = allowedEmails.includes(email) || (email === "leander@vedoy.store" && user.email_verified === true);
+  if (!studioAccess) {
     return loginError(request, "Vedøy-kontoen er gyldig, men har ikke tilgang til Vedøy Studio ennå.");
   }
 
@@ -119,6 +136,7 @@ export async function GET(request: NextRequest) {
   });
   const response = NextResponse.redirect(new URL(next, request.url));
   response.cookies.set(sessionCookie(token));
+  if (user.sub && user.email_verified === true) response.cookies.set(newCloudCookie({ sub: user.sub, email, name }));
   clearTemporaryCookies(response);
   return response;
 }

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Brand } from "@/components/brand";
 import { getSession } from "@/lib/auth";
+import { cloudSession } from "@/lib/vedoy-cloud";
 import { safeStudioNext } from "@/lib/vedoy-owner-access.mjs";
 
 export const metadata: Metadata = { title: "Logg inn" };
@@ -14,7 +15,9 @@ export default async function LoginPage({
 }) {
   const params = await searchParams;
   const next = safeStudioNext(params.next);
-  if (await getSession()) redirect(next);
+  if (next === "/prosjekter" || next === "/projects") {
+    if (await cloudSession()) redirect(next);
+  } else if (await getSession()) redirect(next);
   const loginHref = `/api/auth/login?next=${encodeURIComponent(next)}`;
 
   return (
