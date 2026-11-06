@@ -333,6 +333,8 @@ export interface DomainSearchResult {
 }
 
 export interface SessionPayload {
+  /** Verified OIDC subject (Supabase auth.users.id), when available. */
+  userId?: string;
   avatarUrl?: string;
   email: string;
   name: string;

@@ -1,7 +1,7 @@
 import { createHash, randomUUID } from "node:crypto";
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { CLOUD_BUCKET, CLOUD_OWNER_LIMIT, CLOUD_SETTINGS, cleanCloudPath, cloudAdmin, cloudSameOrigin, cloudSession } from "@/lib/vedoy-cloud";
+import { CLOUD_BUCKET, CLOUD_OWNER_LIMIT, CLOUD_SETTINGS, cleanCloudPath, cloudAdmin, cloudSameOrigin, cloudSession, cloudWriteError } from "@/lib/vedoy-cloud";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -59,6 +59,8 @@ export async function POST(request: Request) {
     }
     return NextResponse.json({ imported, remaining: Math.max(0, candidates.length - imported), note: imported ? "Et begrenset utvalg av kildefiler er kopiert til privat lagring. Importen er ikke en Git-klone med commit-historikk." : "Ingen nye små kildefiler ble importert." });
   } catch (error) {
+    const quota = cloudWriteError(error);
+    if (quota) return NextResponse.json({ error: quota, imported: 0 }, { status: 409 });
     console.error("cloud public GitHub import failed", error instanceof Error ? error.message : "error");
     return NextResponse.json({ error: "GitHub-import kunne ikke fullføres. Prosjektet er fortsatt tilgjengelig." }, { status: 503 });
   }

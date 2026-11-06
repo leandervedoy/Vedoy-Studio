@@ -40,9 +40,16 @@ export async function cloudSession() {
   return parseCloudCookie((await cookies()).get(COOKIE)?.value);
 }
 export function cloudAdmin() {
-  const url = process.env.VEDOY_SUPABASE_URL || "https://niedmgyyougvgiiuwcvw.supabase.co";
+  const url = process.env.VEDOY_SUPABASE_URL;
   const key = process.env.VEDOY_SUPABASE_SECRET_KEY;
+  if (!url || !/^https:\/\/[a-z0-9-]+\.supabase\.co\/?$/.test(url)) {
+    throw new Error("VEDOY_SUPABASE_URL must be explicitly configured for Cloud.");
+  }
   if (!key) throw new Error("VEDOY_SUPABASE_SECRET_KEY missing. Cloud needs server-only access.");
+  // Preview must never use the known production Cloud database, even with a key.
+  if (process.env.VERCEL_ENV === "preview" && new URL(url).hostname === "niedmgyyougvgiiuwcvw.supabase.co") {
+    throw new Error("Cloud preview requires its own Supabase project.");
+  }
   return createClient(url, key, { auth: { autoRefreshToken: false, persistSession: false } });
 }
 export function cloudSameOrigin(request: Request) {
@@ -58,3 +65,13 @@ export function cleanCloudPath(value: unknown) {
   return path;
 }
 export const CLOUD_SETTINGS = { maxFileBytes: CLOUD_FILE_LIMIT, maxOwnerBytes: CLOUD_OWNER_LIMIT, maxFilesPerProject: 200 } as const;
+
+/** Keep database invariants actionable in the UI even if two requests race. */
+export function cloudWriteError(error: unknown) {
+  const message = error && typeof error === "object" && "message" in error
+    ? String(error.message) : "";
+  if (message.includes("CLOUD_PROJECT_LIMIT")) return "Du har nådd grensen på 30 prosjekter.";
+  if (message.includes("CLOUD_STORAGE_LIMIT")) return "Lagringsgrensen på 100 MiB er nådd.";
+  if (message.includes("CLOUD_FILE_COUNT_LIMIT")) return "Prosjektet har nådd grensen på 200 filer.";
+  return null;
+}

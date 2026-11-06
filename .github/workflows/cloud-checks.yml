@@ -10,12 +10,17 @@ on:
       - 'components/cloud/**'
       - 'lib/vedoy-cloud.ts'
       - 'supabase/migrations/*vedoy_cloud*'
+      - 'tests/cloud-tenant-isolation.test.mjs'
+      - 'scripts/vedoy-cloud-existing-db-hardening.sql'
   push:
     branches: [main]
     paths:
       - 'app/api/cloud/**'
       - 'app/(marketing)/prosjekter/**'
       - 'components/cloud/**'
+      - 'lib/vedoy-cloud.ts'
+      - 'tests/cloud-tenant-isolation.test.mjs'
+      - 'supabase/migrations/*vedoy_cloud*'
 permissions:
   contents: read
 jobs:
@@ -34,3 +39,5 @@ jobs:
         run: npm ci --no-audit --no-fund
       - name: Type check
         run: npm run typecheck
+      - name: Cloud tenant isolation regression (offline)
+        run: node --test tests/cloud-tenant-isolation.test.mjs

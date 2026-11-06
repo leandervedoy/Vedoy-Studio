@@ -12,6 +12,8 @@ import { ServiceCapabilities } from "@/components/website-capabilities";
 import { getStudioService } from "@/lib/services";
 import { serviceStories } from "@/lib/service-stories";
 import { ServiceShowcase } from "@/components/service-showcase";
+import { ProjectScreenshotGallery } from "@/components/project-screenshot-gallery";
+import { STUDIO_SCREENSHOTS } from "@/lib/project-screenshots";
 import { isDomainProviderConfigured } from "@/lib/vercel-domains";
 
 const serviceCtas: Record<string, { label: string; href: string }> = {
@@ -59,6 +61,24 @@ export default async function ServicePage({ params, searchParams }: { params: Pr
       </section>
       {story ? <ServiceShowcase story={story} upcoming={isUpcoming} /> : null}
       <ServiceCapabilities title={service.title} slug={service.slug} simple={service.deliverables} detailed={service.focus} />
+      {isHosting ? <section style={{background:"#101813"}}>
+        <ProjectScreenshotGallery
+          title="Se kontrollpanelet."
+          intro="Vedoy Hosting demonstrerer bestilling og administrasjon av tjenester. Automatisert serveropprettelse er ikke aktivert."
+          items={[STUDIO_SCREENSHOTS.hosting]}
+          eyebrow="VEDOY HOSTING · DEMO"
+          compact
+        />
+      </section> : null}
+      {service.slug === "musiker-og-artist" ? <section style={{background:"#101813"}}>
+        <ProjectScreenshotGallery
+          title="En nettside bygget for musikken."
+          intro="Bransjeeksempel med valgfrie funksjoner. Tillegg, priser og integrasjoner avklares med kunden."
+          items={[STUDIO_SCREENSHOTS.artist]}
+          eyebrow="ARTIST · BRANSJEDEMO"
+          compact
+        />
+      </section> : null}
       <section className="service-detail-grid service-detail-grid--combined">
         <article><div className="service-detail-combined__intro"><small>DETTE KAN INNGÅ · TEKNOLOGI OG FOKUS</small><h2>Fra behov til<br /><em>ferdig løsning.</em></h2></div><div className="service-detail-combined__body"><div><ul>{service.deliverables.map((item) => <li key={item}>{item}</li>)}</ul></div><div><div className="service-focus-list">{service.focus.map((item) => <span key={item}>{item}</span>)}</div><p>{service.nextStep}</p></div></div></article>
       </section>

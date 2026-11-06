@@ -3,6 +3,8 @@ import { VoluntaryStatistics } from "@/components/voluntary-statistics";
 import { IndustryDemoSection } from "@/components/industry-demo-section";
 import { InProgressProjects } from "@/components/in-progress-projects";
 import { DemoShowcase } from "@/components/demo-showcase";
+import { ProjectScreenshotGallery } from "@/components/project-screenshot-gallery";
+import { FEATURED_STUDIO_SCREENSHOTS } from "@/lib/project-screenshots";
 import { getCopy } from "@/i18n/server";
 import { MarketingHeader } from "@/components/marketing-header";
 import { AnimatedStats } from "@/components/animated-stats";
@@ -18,6 +20,7 @@ import { getSession, isAdminSession } from "@/lib/auth";
 import { listStudioServices } from "@/lib/services";
 import { listPublishedContent } from "@/lib/vedoy-catalog";
 import { NewsFeed } from "@/components/news/news-feed";
+import { InsightsPreview } from "@/components/insights/insights-preview";
 
 const upcomingServices = [
   {
@@ -47,6 +50,7 @@ export default async function HomePage() {
  const [studioServices, session, siteContent] = await Promise.all([listStudioServices(), getSession(), listPublishedContent().catch(() => ({} as Awaited<ReturnType<typeof listPublishedContent>>))]); const isAdministrator = isAdminSession(session); return <>
   <section className="editorial-hero"><MarketingHeader initialProfile={session ? { name: session.name, avatarUrl: session.avatarUrl } : null} /><div className="hero-orbit" /><div className="hero-copy"><p className="editorial-kicker">{siteContent["home.hero"]?.eyebrow || c("VEDØY STUDIO · HAUGESUND · DIGITALT")}</p><h1>{siteContent["home.hero"]?.heading || <>{c("Vi bygger det")}<br />{c("bedriften din")}<br /><em>{c("trenger.")}</em></>}</h1><p className="hero-intro">{siteContent["home.hero"]?.body || c("Nettsider som hjelper småbedrifter å bli funnet og få henvendelser. Design, utvikling og drift fra Haugesund – med tydelige avtaler.")}</p><div className="hero-actions"><Link href="/?need=Nettside&source=hero#kontakt" className="editorial-button">{c("Få tilbud på nettside")} <span>↗</span></Link><a href="#prosjekter" className="editorial-outline">{c("Se prosjekter")}</a></div></div><div className="hero-status"><i /> {c("Tilgjengelig for nye prosjekter")}</div><EditorialFloatIcons variant="hero" /><div className="ticker"><div className="ticker-track"><span>{c("SHOPIFY · HOSTING · DOMENE · DESIGN · TRYKK · ARTIST · KUNST · PROFILPRODUKTER · NETTSIDER · WEBAPPER ·")}</span><span aria-hidden="true">{c("SHOPIFY · HOSTING · DOMENE · DESIGN · TRYKK · ARTIST · KUNST · PROFILPRODUKTER · NETTSIDER · WEBAPPER ·")}</span></div></div></section>
   <AnimatedStats projects={projects.filter(project => project.published).length} services={studioServices.filter(service => service.slug !== "ecommerce" && service.published !== false).length} />
+  <InsightsPreview />
   <AdvertizePlacement slot="studio-home" title="Vedoy Advertize – Studio-annonse" />
   <VoluntaryStatistics site="studio" group="home" />
   <section className="intro-section"><div className="section-number">01</div><div><p className="editorial-kicker lime">{siteContent["home.intro"]?.eyebrow || c("ET STUDIO SOM KAN BYGGE, PROFILERE OG DRIFTE")}</p><h2>{siteContent["home.intro"]?.heading || <>{c("Fra første idé")}<br />{c("til bedriften er")} <em>{c("synlig.")}</em></>}</h2></div><div className="intro-section__copy"><p>{siteContent["home.intro"]?.body || c("Vedøy Studio samler nettsider, nettbutikker, web-apper, hosting og drift, design og profilering — også klær med logo, trykksaker og produkter for artister og kunstnere. Du får én partner fra idé og visuell retning til lansering, produksjon og videre vekst.")}</p><div className="intro-section__services" aria-label={c("Dette tilbyr Vedøy Studio")}><span>{c("Nettsider")}</span><span>{c("Web-apper")}</span><span>{c("Nettbutikk")}</span><span>{c("Hosting")}</span><span>{c("Klær med logo")}</span><span>{c("Trykk")}</span><span>{c("Artist & merch")}</span><span>{c("Kunstprodukter")}</span></div></div><a href="#tjenester" className="section-next-link" aria-label={c("Gå til neste seksjon: tjenester")}><span>{c("NESTE · TJENESTER")}</span><b aria-hidden="true">↓</b></a></section>
@@ -59,6 +63,14 @@ export default async function HomePage() {
   <GrowthShowcase />
     <section className="projects-section" id="prosjekter"><div className="section-heading-dark"><p className="editorial-kicker lime">{c("04 · PROSJEKTER")}</p><h2>{c("Det beste beviset er")}<br /><em>{c("det vi bygger.")}</em></h2></div><p>{c("Egne Vedøy-prosjekter og produktdemoer – ikke kundeanmeldelser. Klikk for å se løsninger og hva som er i beta.")}</p><div className="projects-grid">{projects.map((project) => <Link href={project.href} className={`project-card ${project.className}`} key={project.name}><div className="project-card__visual"><img src={project.image} alt={project.imageAlt} /><div className="project-card__visual-content"><small>{project.label}</small><strong>{project.name.replace("Vedøy ", "")}</strong><span className="project-card__button">{c("LES OM PROSJEKTET ↗")}</span></div></div><div className="project-card__copy"><small>{project.number}</small><h3>{project.name}</h3><p>{c(project.text)}</p><span>{project.tag}</span></div></Link>)}</div><InProgressProjects /></section>
   <DemoShowcase />
+  <section style={{background:"#101813"}} aria-label="Skjermbilder fra Vedøys tjenester">
+    <ProjectScreenshotGallery
+      title="Se det vi faktisk bygger."
+      intro="Ekte skjermbilder fra våre egne apper og prototyper. Utforsk Bank, Collective, Booking, Hosting, Deliver og bransjedemoer."
+      items={FEATURED_STUDIO_SCREENSHOTS}
+      eyebrow="05 / ARBEID FRA VEDØY LAB"
+    />
+  </section>
   <NewsFeed title="Nytt fra Vedøy." intro="Prosjektoppdateringer, lanseringer og innblikk i det vi bygger." limit={3} />
   <ScrollIconField variant="orbit" />
   <section className="hosting-section" id="hosting"><div><p className="editorial-kicker lime">{c("05 · HOSTING + FULLSTACK · BESTILL NÅ")}</p><h2>{c("Vi bygger.")}<br />{c("Vi kan også")}<br /><em>{c("holde det på.")}</em></h2><p>{c("Bestill hosting, web-apper, nettbutikker og andre fullstack-apper med rammeverk som passer prosjektet — for eksempel Next.js, React, Vue, Node eller Shopify.")}</p><p className="hosting-section__note"><strong>{c("Trygg bestilling:")}</strong> {c("Du sender en forespørsel, ikke en automatisk betaling. Vi avklarer løsning, leverandør, pris og levering før noe kjøpes eller registreres.")}</p><div className="hosting-section__actions"><Link href="/tjenester/hosting-og-domene#konfigurer-hosting" className="editorial-button">{c("Bestill hosting")} <span>↗</span></Link><Link href="/bestill-domene-og-epost" className="editorial-outline">{c("Bestill domene og e-post")}</Link></div></div><div className="infra-panel"><header><span><i /> {c("VEDØY INFRA / KONFIGURER")}</span><b>{c("BESTILL NÅ")}</b></header><div className="infra-map"><span className="infra-node node-ssl">{c("SSL")}<small>{c("KLART")}</small></span><span className="infra-node node-backup">{c("BACKUP")}<small>{c("VALGBART")}</small></span><span className="infra-node node-dns">{c("DNS")}<small>{c("AVKLARES")}</small></span><span className="infra-node node-client">{c("KUNDE")}<small>{c("nettleser")}</small></span><span className="infra-node node-edge">{c("EDGE")}<small>{c("Vercel")}</small></span><span className="infra-node node-app">{c("APP")}<small>{c("Next.js")}</small></span><span className="infra-node node-data">{c("DATA")}<small>{c("sikker")}</small></span></div></div><EditorialFloatIcons variant="hosting" /></section>

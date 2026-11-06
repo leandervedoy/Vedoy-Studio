@@ -1,7 +1,7 @@
 import { createHash, randomUUID } from "node:crypto";
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { CLOUD_BUCKET, CLOUD_FILE_LIMIT, CLOUD_OWNER_LIMIT, CLOUD_SETTINGS, cleanCloudPath, cloudAdmin, cloudSameOrigin, cloudSession } from "@/lib/vedoy-cloud";
+import { CLOUD_BUCKET, CLOUD_FILE_LIMIT, CLOUD_OWNER_LIMIT, CLOUD_SETTINGS, cleanCloudPath, cloudAdmin, cloudSameOrigin, cloudSession, cloudWriteError } from "@/lib/vedoy-cloud";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -45,7 +45,7 @@ export async function POST(request: Request) {
   if (!user) return NextResponse.json({ error: "Ikke innlogget." }, { status: 401 });
   if (!cloudSameOrigin(request)) return NextResponse.json({ error: "Ugyldig opprinnelse." }, { status: 403 });
   const parsed = uploadInput.safeParse(await request.json().catch(() => null));
-  if (!parsed.success) return NextResponse.json({ error: "Ugyldig fil eller filen overstiger 10 MB." }, { status: 422 });
+  if (!parsed.success) return NextResponse.json({ error: "Ugyldig fil eller filen overstiger 10 MiB." }, { status: 422 });
   const input = parsed.data;
   const path = cleanCloudPath(input.path);
   if (!path) return NextResponse.json({ error: "Ugyldig filsti." }, { status: 422 });
@@ -54,7 +54,7 @@ export async function POST(request: Request) {
     if (!await projectForOwner(db, user.sub, input.projectId)) return NextResponse.json({ error: "Prosjektet finnes ikke." }, { status: 404 });
     const { data: files, error: listError } = await db.from("vedoy_cloud_files").select("size_bytes").eq("owner_id", user.sub).limit(3000);
     if (listError) throw listError;
-    if ((files || []).reduce((n, x) => n + Number(x.size_bytes), 0) + input.size > CLOUD_OWNER_LIMIT) return NextResponse.json({ error: "Lagringsgrensen på 100 MB er nådd." }, { status: 409 });
+    if ((files || []).reduce((n, x) => n + Number(x.size_bytes), 0) + input.size > CLOUD_OWNER_LIMIT) return NextResponse.json({ error: "Lagringsgrensen på 100 MiB er nådd." }, { status: 409 });
     const { count, error: countError } = await db.from("vedoy_cloud_files").select("id", { count: "exact", head: true }).eq("project_id", input.projectId).eq("owner_id", user.sub);
     if (countError) throw countError;
     if ((count || 0) >= CLOUD_SETTINGS.maxFilesPerProject) return NextResponse.json({ error: "Prosjektet har nådd grensen på 200 filer." }, { status: 409 });
@@ -69,6 +69,8 @@ export async function POST(request: Request) {
     }
     return NextResponse.json({ fileId: file.id, signedUrl: signed.data.signedUrl }, { status: 201, headers: { "Cache-Control": "no-store" } });
   } catch (error) {
+    const quota = cloudWriteError(error);
+    if (quota) return NextResponse.json({ error: quota }, { status: 409 });
     console.error("cloud upload authorization failed", error instanceof Error ? error.message : "error");
     return NextResponse.json(unavailable, { status: 503 });
   }

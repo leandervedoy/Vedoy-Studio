@@ -20,9 +20,9 @@ export default async function ProsjekterPage() {
       <section className="cloud-info" aria-label="Funksjoner">
         <span><strong>01 · PROSJEKTER</strong><br />Opprett og organiser egne prosjekter.</span>
         <span><strong>02 · GITHUB</strong><br />Koble offentlige repoer. Ingen kode kopieres automatisk.</span>
-        <span><strong>03 · PRIVAT SKY</strong><br />Last opp filer og mapper. 100 MB testkvote.</span>
+        <span><strong>03 · PRIVAT SKY</strong><br />Last opp filer og mapper. 100 MiB per konto, maks 10 MiB per fil.</span>
       </section>
-      <footer>Beta · Filer lagres i Supabase eu-north-1 (Sverige), ikke garantert i Norge. <Link href="/privacy">Personvern</Link></footer>
+      <footer>Beta · Maks 30 prosjekter og 200 filer per prosjekt. GitHub-importen henter inntil 12 små filer per runde, uten commit-historikk eller automatisk synk. Filer lagres hos Supabase i Sverige (eu-north-1), ikke i Norge. <Link href="/privacy">Personvern</Link></footer>
     </main>
   </div>;
 }

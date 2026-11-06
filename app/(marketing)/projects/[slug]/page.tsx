@@ -4,6 +4,8 @@ import { notFound } from "next/navigation";
 import { studioProducts } from "@/lib/products";
 import { NewsFeed } from "@/components/news/news-feed";
 import { hasNewsProject } from "@/lib/news-taxonomy";
+import { ProjectScreenshotGallery } from "@/components/project-screenshot-gallery";
+import { STUDIO_SCREENSHOTS } from "@/lib/project-screenshots";
 
 type ProjectDetail = {
   title: string;
@@ -130,6 +132,13 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         <p>{project.text}</p>
         {project.note ? <aside className="project-detail-editorial__notice"><strong>{project.status}</strong><p>{project.note}</p></aside> : null}
         {project.image ? <img className="project-detail-editorial__media" src={project.image.src} alt={project.image.alt} /> : null}
+        {slug === "collective" ? <ProjectScreenshotGallery
+          title="Collective-appen på mobil."
+          intro="Et eksempel fra spillbiblioteket. Opplevelsen er under utvikling."
+          items={[STUDIO_SCREENSHOTS.collective]}
+          eyebrow="VEDOY COLLECTIVE · APP"
+          compact
+        /> : null}
         <section>
           <small>DETTE INNEHOLDER PROSJEKTET</small>
           <h2>Bygget for et<br /><em>tydelig behov.</em></h2>

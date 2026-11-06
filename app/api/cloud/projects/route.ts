@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { cloudAdmin, cloudSameOrigin, cloudSession } from "@/lib/vedoy-cloud";
+import { cloudAdmin, cloudSameOrigin, cloudSession, cloudWriteError } from "@/lib/vedoy-cloud";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -65,6 +65,8 @@ export async function POST(request: Request) {
     if (error) throw error;
     return NextResponse.json({ project: data, note: input.source === "github" ? "GitHub-prosjektet er tilkoblet som lenke. Kildekoden er foreløpig ikke kopiert til Vedoy Cloud." : null }, { status: 201 });
   } catch (error) {
+    const quota = cloudWriteError(error);
+    if (quota) return NextResponse.json({ error: quota }, { status: 409 });
     console.error("cloud projects create failed", error instanceof Error ? error.message : "error");
     return NextResponse.json(errorMessage, { status: 503 });
   }
@@ -77,6 +79,10 @@ export async function DELETE(request: Request) {
   if (!idSchema.safeParse(id).success) return NextResponse.json({ error: "Ugyldig prosjekt." }, { status: 422 });
   try {
     const db = cloudAdmin();
+    // Verify project ownership before looking up or removing any storage objects.
+    const owned = await db.from("vedoy_cloud_projects").select("id").eq("owner_id", user.sub).eq("id", id!).maybeSingle();
+    if (owned.error) throw owned.error;
+    if (!owned.data) return NextResponse.json({ error: "Prosjektet finnes ikke." }, { status: 404 });
     const files = await db.from("vedoy_cloud_files").select("storage_key").eq("owner_id", user.sub).eq("project_id", id!);
     if (files.error) throw files.error;
     if (files.data?.length) {
