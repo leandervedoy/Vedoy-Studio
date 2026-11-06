@@ -7,6 +7,7 @@ pub mod hybrid;
 pub mod identity;
 pub mod json;
 pub mod ratchet;
+pub mod replay;
 pub mod session;
 pub mod storage;
 pub mod vault;
