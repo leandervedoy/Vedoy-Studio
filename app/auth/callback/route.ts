@@ -17,6 +17,7 @@ type OAuthTokens = {
 };
 
 type UserInfo = {
+  sub?: string;
   picture?: string;
   preferred_username?: string;
   email?: string;
@@ -107,8 +108,10 @@ export async function GET(request: NextRequest) {
   const isVerifiedVedoyOwner = email === "leander@vedoy.store" && user.email_verified === true;
   const owner = isVerifiedVedoyOwner || email === process.env.ADMIN_EMAIL?.trim().toLowerCase();
   await syncTeamMemberOnLogin({ email, name, avatarUrl, owner });
+  const verifiedSubject = user.email_verified === true && /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(user.sub || "") ? user.sub : undefined;
   const token = createSessionToken({
     email,
+    userId: verifiedSubject,
     name,
     avatarUrl,
     organizationId: "org_vedoy",
