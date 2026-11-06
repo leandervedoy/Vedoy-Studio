@@ -122,7 +122,8 @@ impl RecipientPrivate {
         if invite.version != 3 || invite.chat_id.is_empty() || invite.chat_id.len() > 256 {
             return Err(ShieldError::InvalidFormat);
         }
-        if invite.recipient_bundle_sha256 != Sha256::digest(bundle.signed_material()).into() {
+        let expected_bundle_hash: [u8; 32] = Sha256::digest(bundle.signed_material()).into();
+        if invite.recipient_bundle_sha256 != expected_bundle_hash {
             return Err(ShieldError::AuthenticationFailed);
         }
         let ct: Ciphertext<MlKem1024> = invite.mlkem1024_ciphertext
