@@ -1,0 +1,12 @@
+.credit{display:inline-flex;align-items:center;justify-content:center;gap:15px;background:#0b120f;color:#fff!important;border:1px solid #304239;border-radius:16px;padding:11px 19px;max-width:100%;min-height:78px;box-shadow:0 8px 24px rgba(12,27,17,.12);text-decoration:none!important;transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease}
+.credit:hover{transform:translateY(-2px);border-color:#88c8a3;box-shadow:0 12px 28px rgba(12,27,17,.2)}
+.credit:focus-visible{outline:3px solid #60a5fa;outline-offset:4px}
+.logo{width:110px;height:auto;max-height:54px;object-fit:contain;flex-shrink:0}
+.caption{color:#f7faf8;line-height:1.35;font-size:13px;letter-spacing:.005em;text-align:left}
+.caption strong{font-size:15px;font-weight:800;color:#fff}
+.compact{padding:8px 12px;min-height:57px;gap:10px}
+.compact .logo{width:81px;max-height:44px}
+.compact .caption{font-size:11px}
+.compact .caption strong{font-size:12px}
+@media(max-width:430px){.credit{gap:9px;padding:9px 12px}.logo{width:83px}.caption{font-size:11px}.caption strong{font-size:12px}}
+@media(prefers-reduced-motion:reduce){.credit{transition:none}.credit:hover{transform:none}}
