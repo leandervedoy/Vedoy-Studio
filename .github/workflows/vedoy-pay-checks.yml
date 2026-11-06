@@ -1,0 +1,41 @@
+name: Vedoy Pay foundation checks
+on:
+  pull_request:
+    paths:
+      - 'app/studio/pay/**'
+      - 'app/api/vedoy-pay/**'
+      - 'lib/vedoy-pay/**'
+      - 'data/vedoy-pay-schema.sql'
+      - 'scripts/migrate-vedoy-pay.mjs'
+      - 'tests/vedoy-pay-foundation.test.mjs'
+      - 'tests/vedoy-pay-sandbox.test.mjs'
+      - '.github/workflows/vedoy-pay-checks.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'lib/vedoy-pay/**'
+      - 'tests/vedoy-pay-foundation.test.mjs'
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned repository dependencies
+        run: npm ci --ignore-scripts
+      - name: Typecheck full Studio integration
+        run: npm run typecheck
+      - name: Test validation and fail-closed flags
+        run: node --test tests/vedoy-pay-foundation.test.mjs tests/vedoy-pay-sandbox.test.mjs
+      - name: Check migration syntax
+        run: node --check scripts/migrate-vedoy-pay.mjs
+      - name: Ensure no payment credentials are present in portal files
+        run: |
+          if grep -R -Ei '(sk_live_[[:alnum:]]{15}|whsec_[[:alnum:]]{15}|[0-9]{16})' app/studio/pay app/api/vedoy-pay lib/vedoy-pay; then
+            echo "Possible payment secret or raw PAN in portal source"
+            exit 1
+          fi

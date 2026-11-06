@@ -33,7 +33,9 @@
     "verify:notes": "node scripts/verify-notes-api.mjs",
     "verify:services": "node --env-file-if-exists=.env.local scripts/verify-services.mjs",
     "verify:services-api": "node --env-file-if-exists=.env.local scripts/verify-services-api.mjs",
-    "postinstall": "npm run build:booking && npm run build:notes"
+    "postinstall": "npm run build:booking && npm run build:notes",
+    "db:migrate:vedoy-pay": "node --env-file-if-exists=.env.local scripts/migrate-vedoy-pay.mjs",
+    "test:vedoy-pay": "node --test tests/vedoy-pay-foundation.test.mjs"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^4.0.53",

@@ -1,0 +1,45 @@
+.pay{max-width:1280px;margin:0 auto 70px;color:#16271e;padding:8px 0 60px}
+.pay-eyebrow,.pay-panel>small{color:#3c7a59;font:800 11px/1.5 ui-monospace,monospace;letter-spacing:.15em}
+.pay-heading h1,.pay>h1{font-size:clamp(46px,7vw,82px);line-height:1.04;letter-spacing:-.075em;margin:9px 0 12px}
+.pay-heading h1 span{color:#367957}
+.pay-intro{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;margin:16px 0 30px}
+.pay-intro p{max-width:540px;color:#6f8074;margin:0}
+.pay-intro strong{font-size:10px;letter-spacing:.05em;border:1px solid #e6d8b7;border-radius:20px;background:#fff9ec;padding:8px 12px;color:#745a25}
+.pay-notice{padding:15px;border-radius:13px;background:#fff8ec;border:1px solid #edddba;margin-bottom:20px}
+.pay-tabs{display:flex;gap:9px;margin:20px 0 25px;overflow:auto;padding-bottom:5px}
+.pay-tabs button{white-space:nowrap;border:1px solid #d5dfd5;background:#fff;border-radius:99px;padding:11px 16px;font-size:13px;font-weight:750;cursor:pointer}
+.pay-tabs button.active{color:#fff;background:#173d2c;border-color:#173d2c}
+.pay-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.pay-panel{background:#fff;border:1px solid #dfe7e0;border-radius:24px;padding:clamp(20px,3vw,32px);min-width:0}
+.pay-panel h2{font-size:clamp(24px,3vw,34px);letter-spacing:-.05em;margin:15px 0 10px}
+.pay-panel p{color:#65736a;font-size:14px;line-height:1.65}
+.pay-card{aspect-ratio:1.59;max-width:470px;margin:28px auto 12px;padding:clamp(18px,3vw,27px);border-radius:20px;color:white;box-shadow:0 25px 50px rgba(17,40,33,.24);position:relative;isolation:isolate;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between}
+.pay-card:before{content:"";inset:-45%;position:absolute;z-index:-1;opacity:.23}
+.pay-pattern-waves:before{background:repeating-radial-gradient(ellipse at 85% 35%,transparent 0 19px,#fff 20px 22px,transparent 23px 42px)}
+.pay-pattern-grid:before{background-image:linear-gradient(#fff 1px,transparent 1px),linear-gradient(90deg,#fff 1px,transparent 1px);background-size:32px 32px}
+.pay-pattern-diagonal:before{background:repeating-linear-gradient(135deg,transparent 0 24px,#fff 25px 27px,transparent 28px 54px)}
+.pay-pattern-orbit:before{background:radial-gradient(circle at 110% 90%,transparent 0 82px,#fff 83px 85px,transparent 86px 126px,#fff 127px 129px,transparent 130px)}
+.pay-card-top,.pay-card-bottom{display:flex;justify-content:space-between;gap:10px;align-items:end}
+.pay-card-top strong{font-size:21px;letter-spacing:-.04em}
+.pay-card-top span,.pay-card-bottom span{font:700 10px ui-monospace,monospace;letter-spacing:.12em}
+.pay-card-bottom strong{overflow-wrap:anywhere;max-width:65%}
+.pay-chip{font-size:52px;opacity:.8}
+.pay-panel label{display:block;margin:20px 0 7px;font-size:13px;font-weight:750}
+.pay-swatches{display:flex;flex-wrap:wrap;gap:12px}
+.pay-swatches button{height:36px;width:36px;border:3px solid white;border-radius:50%;cursor:pointer;box-shadow:0 0 0 1px #cad5cc}
+.pay-swatches button.active{box-shadow:0 0 0 3px #3d8060}
+.pay-panel select,.pay-panel input{width:100%;padding:13px 14px;border:1px solid #cedacf;background:#fff;border-radius:11px;font-size:14px}
+.pay-actions{display:flex;flex-wrap:wrap;gap:10px;margin:26px 0 15px}
+.pay-actions button{font-size:13px;padding:13px 18px;border-radius:11px;font-weight:750;cursor:pointer}
+.pay-actions button:disabled{opacity:.5;cursor:not-allowed}
+.pay-primary{background:#194a34;border:1px solid #194a34;color:#fff}
+.pay-secondary{background:#fff;border:1px solid #cbd9cf}
+.pay-footnote{font-size:12px!important;color:#829186!important}
+.pay-success{color:#26744e!important}.pay-error{color:#b34141!important}
+.pay-empty{font-size:clamp(60px,8vw,95px);font-weight:800;letter-spacing:-.05em;margin:28px 0;color:#2a4935}
+.pay-note{margin-top:25px;padding:15px;background:#f1f7ef;border-radius:12px;font-size:12px!important}
+.pay-status{display:flex;justify-content:space-between;align-items:start;gap:15px;padding:14px 0;border-bottom:1px solid #ebf0e9;font-size:13px}
+.pay-status span{color:#7a877e}.pay-status strong{text-align:right}
+.pay-footer{margin-top:30px;font-size:12px;color:#8c978c}
+@media(max-width:740px){.pay-grid{grid-template-columns:1fr}.pay-panel{border-radius:18px}}
+@media(prefers-reduced-motion:no-preference){.pay-card{transition:transform .2s}.pay-card:hover{transform:translateY(-2px)}}
