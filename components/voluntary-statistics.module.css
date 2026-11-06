@@ -1,0 +1,21 @@
+.root{position:fixed;left:max(14px,env(safe-area-inset-left));bottom:max(14px,env(safe-area-inset-bottom));z-index:2000;font-family:inherit;pointer-events:none}
+.root>*{pointer-events:auto}
+.trigger{border:1px solid #bfd4c4;border-radius:999px;padding:10px 15px;min-height:42px;color:#1a5839;background:#f6faf6;font-size:12px;font-weight:800;box-shadow:0 7px 28px #102b211a;cursor:pointer}
+.trigger:hover{background:#e4f1e7}
+.trigger:focus-visible,.popup button:focus-visible{outline:3px solid #3d965d;outline-offset:3px}
+.popup{width:min(390px,calc(100vw - 28px));max-height:min(75svh,560px);overflow-y:auto;overscroll-behavior:contain;background:#f8faf5;border:1px solid #bdd4bf;border-radius:20px;padding:24px;box-shadow:0 14px 55px #001f1952;color:#183b29;box-sizing:border-box}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.kicker{font:800 10px/1.4 ui-monospace,monospace;letter-spacing:.12em;color:#317754}
+.close{border:1px solid #cadbce;border-radius:50%;background:#fff;color:#395841;font-size:24px;line-height:1;width:34px;height:34px;cursor:pointer}
+.popup h2{font-size:clamp(22px,3vw,29px);letter-spacing:-.04em;line-height:1.12;margin:15px 0 12px;font-weight:800;color:#143c27}
+.popup p{font-size:13px;line-height:1.65;color:#4b6655;margin:0 0 11px}
+.popup .detail{font-size:12px;color:#5a7864}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px}
+.actions button{min-height:45px;padding:11px 14px;border-radius:12px;font-size:13px;font-weight:800;cursor:pointer}
+.accept{background:#1a6945;color:#fff;border:1px solid #1a6945}
+.accept:hover{background:#15563a}
+.decline{background:#fff;color:#20583b;border:1px solid #a9c5b0}
+.decline:hover{background:#ebf4ed}
+.popup .previous{font-size:11px;line-height:1.4;color:#6f8675;margin:13px 0 0}
+.notice{background:#f7faf7;border:1px solid #e1a4a4;color:#7f2626;padding:11px;border-radius:10px;max-width:390px;font-size:12px}
+@media(max-width:480px){.root{left:10px;bottom:max(12px,env(safe-area-inset-bottom))}.popup{width:calc(100vw - 20px);max-height:min(70svh,570px);padding:19px}.trigger{font-size:11px;min-height:37px;padding:8px 12px}}
