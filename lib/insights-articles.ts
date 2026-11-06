@@ -15,6 +15,54 @@ export type InsightArticle = {
 
 export const INSIGHT_ARTICLES: readonly InsightArticle[] = [
   {
+    "slug": "nattens-utvikling-tryggere-sky-enklere-verktoy",
+    "title": "Nattens utvikling hos Vedøy: tryggere sky og enklere verktøy",
+    "excerpt": "Natt til 6. november ble Vedoy Cloud sikret videre, Developer Portal ryddet opp og nye løsninger for bedrifter og kreative skapere forbedret.",
+    "category": "Utvikling hos Vedøy",
+    "publishedAt": "2026-11-06T05:10:00+01:00",
+    "readingMinutes": 2,
+    "author": "Eiolf-Leander Haugsnes Vedøy",
+    "journalist": "Eiolf-Leander Haugsnes Vedøy",
+    "editor": "Eiolf-Leander Haugsnes Vedøy",
+    "disclosure": "Vedoy Insights er en publikasjon fra Vedøy. Artikkelen er skrevet med KI-assistanse og bygger på utviklingsarbeid dokumentert i GitHub. Flere løsninger er fortsatt under utvikling eller testing og er ikke nødvendigvis offentlig lansert.",
+    "articleCta": {
+      "eyebrow": "UTFORSK ARBEIDET",
+      "title": "Vedoy Studio",
+      "description": "Se hvordan Vedøy utvikler digitale verktøy og tjenester for bedrifter.",
+      "href": "https://vedoystudio.no",
+      "linkText": "Besøk Vedoy Studio"
+    },
+    "sections": [
+      {
+        "heading": "Sikkerhet før lansering",
+        "paragraphs": [
+          "Natt til 6. november fortsatte arbeidet med Vedoy Cloud. Sikkerhetsforbedringer for prosjektportalen ble slått sammen i hovedgrenen, med strengere kontroll av tilgang mellom kunder og tester av løsningens avgrensninger.",
+          "Cloud-funksjonene er likevel ikke åpnet for produksjonsdata. Videre kontroll i testmiljø og verifisering av databaseendringer gjenstår før offentlig lansering."
+        ]
+      },
+      {
+        "heading": "En enklere Developer Portal",
+        "paragraphs": [
+          "Vedoy Developer Portal fikk en tydeligere oppdeling mellom dokumentasjon og arbeidsområdet der utviklere håndterer prosjekter, moduler og API-nøkler. Også spillkatalogen og tidligere lenker ble tatt hensyn til.",
+          "Målet er å gjøre det enklere å finne riktig API og forstå hvordan det brukes, uten å måtte navigere i én overfylt side."
+        ]
+      },
+      {
+        "heading": "Bedriftsverktøy og kreative tjenester",
+        "paragraphs": [
+          "Vedoy Studio fikk videreutviklet Multisite med en mer interaktiv veiviser for nettsidebehov, pristilbud og tydelig Vedoy-branding. Parallelt ble det arbeidet med Vedoy Stock Media i Collective-appen, blant annet forhåndsvisninger av bilder under lisensvurdering.",
+          "Vedoy Collective fikk også forbedringer i interne vurderingsresultater og analyse knyttet til lanseringsarbeidet. Utvikling og testing pågår fortsatt."
+        ]
+      },
+      {
+        "heading": "Veien videre",
+        "paragraphs": [
+          "Nattens arbeid viser en tydelig prioritering: bedre sikkerhet, enklere brukeropplevelse og verktøy som kan løse konkrete problemer. Neste steg er å teste helheten, lukke gjenværende feil og gjøre de mest nyttige løsningene klare for kunder."
+        ]
+      }
+    ]
+  },
+  {
     "slug": "fra-ide-til-fungerende-teknologi-utviklingsdag-vedoy",
     "title": "Fra idé til fungerende teknologi: En innholdsrik utviklingsdag hos Vedøy",
     "excerpt": "En dag med utvikling av finansapper, skyløsninger, nettbutikker og automatisering. Hos Vedøy handler arbeidet stadig mer om å gjøre ideer til teknologi som faktisk kan brukes.",
