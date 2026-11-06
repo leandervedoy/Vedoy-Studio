@@ -3,6 +3,8 @@ import { VoluntaryStatistics } from "@/components/voluntary-statistics";
 import { IndustryDemoSection } from "@/components/industry-demo-section";
 import { InProgressProjects } from "@/components/in-progress-projects";
 import { DemoShowcase } from "@/components/demo-showcase";
+import { ProjectScreenshotGallery } from "@/components/project-screenshot-gallery";
+import { FEATURED_STUDIO_SCREENSHOTS } from "@/lib/project-screenshots";
 import { getCopy } from "@/i18n/server";
 import { MarketingHeader } from "@/components/marketing-header";
 import { AnimatedStats } from "@/components/animated-stats";
@@ -59,6 +61,14 @@ export default async function HomePage() {
   <GrowthShowcase />
     <section className="projects-section" id="prosjekter"><div className="section-heading-dark"><p className="editorial-kicker lime">{c("04 · PROSJEKTER")}</p><h2>{c("Det beste beviset er")}<br /><em>{c("det vi bygger.")}</em></h2></div><p>{c("Egne Vedøy-prosjekter og produktdemoer – ikke kundeanmeldelser. Klikk for å se løsninger og hva som er i beta.")}</p><div className="projects-grid">{projects.map((project) => <Link href={project.href} className={`project-card ${project.className}`} key={project.name}><div className="project-card__visual"><img src={project.image} alt={project.imageAlt} /><div className="project-card__visual-content"><small>{project.label}</small><strong>{project.name.replace("Vedøy ", "")}</strong><span className="project-card__button">{c("LES OM PROSJEKTET ↗")}</span></div></div><div className="project-card__copy"><small>{project.number}</small><h3>{project.name}</h3><p>{c(project.text)}</p><span>{project.tag}</span></div></Link>)}</div><InProgressProjects /></section>
   <DemoShowcase />
+  <section style={{background:"#101813"}} aria-label="Skjermbilder fra Vedøys tjenester">
+    <ProjectScreenshotGallery
+      title="Se det vi faktisk bygger."
+      intro="Ekte skjermbilder fra våre egne apper og prototyper. Utforsk Bank, Collective, Booking, Hosting, Deliver og bransjedemoer."
+      items={FEATURED_STUDIO_SCREENSHOTS}
+      eyebrow="05 / ARBEID FRA VEDØY LAB"
+    />
+  </section>
   <NewsFeed title="Nytt fra Vedøy." intro="Prosjektoppdateringer, lanseringer og innblikk i det vi bygger." limit={3} />
   <ScrollIconField variant="orbit" />
   <section className="hosting-section" id="hosting"><div><p className="editorial-kicker lime">{c("05 · HOSTING + FULLSTACK · BESTILL NÅ")}</p><h2>{c("Vi bygger.")}<br />{c("Vi kan også")}<br /><em>{c("holde det på.")}</em></h2><p>{c("Bestill hosting, web-apper, nettbutikker og andre fullstack-apper med rammeverk som passer prosjektet — for eksempel Next.js, React, Vue, Node eller Shopify.")}</p><p className="hosting-section__note"><strong>{c("Trygg bestilling:")}</strong> {c("Du sender en forespørsel, ikke en automatisk betaling. Vi avklarer løsning, leverandør, pris og levering før noe kjøpes eller registreres.")}</p><div className="hosting-section__actions"><Link href="/tjenester/hosting-og-domene#konfigurer-hosting" className="editorial-button">{c("Bestill hosting")} <span>↗</span></Link><Link href="/bestill-domene-og-epost" className="editorial-outline">{c("Bestill domene og e-post")}</Link></div></div><div className="infra-panel"><header><span><i /> {c("VEDØY INFRA / KONFIGURER")}</span><b>{c("BESTILL NÅ")}</b></header><div className="infra-map"><span className="infra-node node-ssl">{c("SSL")}<small>{c("KLART")}</small></span><span className="infra-node node-backup">{c("BACKUP")}<small>{c("VALGBART")}</small></span><span className="infra-node node-dns">{c("DNS")}<small>{c("AVKLARES")}</small></span><span className="infra-node node-client">{c("KUNDE")}<small>{c("nettleser")}</small></span><span className="infra-node node-edge">{c("EDGE")}<small>{c("Vercel")}</small></span><span className="infra-node node-app">{c("APP")}<small>{c("Next.js")}</small></span><span className="infra-node node-data">{c("DATA")}<small>{c("sikker")}</small></span></div></div><EditorialFloatIcons variant="hosting" /></section>
