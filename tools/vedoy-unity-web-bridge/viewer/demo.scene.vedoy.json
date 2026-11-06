@@ -1,0 +1,210 @@
+{
+  "schema": "vedoy.unity.scene.v1",
+  "generator": "vedoy-unity-web-bridge/0.1.0",
+  "project": "SampleUnityProject",
+  "scenes": [
+    {
+      "path": "Assets/Scenes/Demo.unity",
+      "nodes": [
+        {
+          "id": "Assets/Scenes/Demo.unity#101",
+          "unityFileId": "101",
+          "scene": "Assets/Scenes/Demo.unity",
+          "name": "Spinner",
+          "active": true,
+          "parentId": null,
+          "position": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "rotation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "components": [
+            {
+              "kind": "MeshFilter",
+              "unityFileId": "301",
+              "enabled": true,
+              "mesh": {
+                "fileID": 10202,
+                "guid": "0000000000000000e000000000000000",
+                "type": 0,
+                "assetPath": null
+              }
+            },
+            {
+              "kind": "MonoBehaviour",
+              "unityFileId": "401",
+              "enabled": true,
+              "script": {
+                "fileID": 11500000,
+                "guid": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "type": 3,
+                "assetPath": "Assets/Scripts/Spin.cs"
+              },
+              "scriptName": "Spin",
+              "serializedFields": {
+                "speed": 3
+              },
+              "runtime": "vedoyscript",
+              "program": {
+                "scriptName": "Spin",
+                "onStart": [
+                  {
+                    "op": "color",
+                    "value": "#44ffaa"
+                  }
+                ],
+                "onUpdate": [
+                  {
+                    "op": "rotate",
+                    "axis": "y",
+                    "rate": 60.0
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "Assets/Scenes/Demo.unity#102",
+          "unityFileId": "102",
+          "scene": "Assets/Scenes/Demo.unity",
+          "name": "NotConverted",
+          "active": true,
+          "parentId": null,
+          "position": [
+            3.0,
+            0.0,
+            0.0
+          ],
+          "rotation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "components": [
+            {
+              "kind": "MonoBehaviour",
+              "unityFileId": "402",
+              "enabled": true,
+              "script": {
+                "fileID": 11500000,
+                "guid": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "type": 3,
+                "assetPath": "Assets/Scripts/NotConverted.cs"
+              },
+              "scriptName": "NotConverted",
+              "serializedFields": {},
+              "runtime": "unity-only"
+            }
+          ]
+        }
+      ],
+      "prefabInstances": [
+        {
+          "fileId": "10011",
+          "source": {
+            "fileID": 100100000,
+            "guid": "cccccccccccccccccccccccccccccccc",
+            "type": 3,
+            "assetPath": "Assets/Prefabs/Light.prefab"
+          },
+          "overridesPreserved": true,
+          "expanded": false
+        }
+      ]
+    }
+  ],
+  "prefabs": [
+    {
+      "path": "Assets/Prefabs/Light.prefab",
+      "nodes": [
+        {
+          "id": "Assets/Prefabs/Light.prefab#901",
+          "unityFileId": "901",
+          "scene": "Assets/Prefabs/Light.prefab",
+          "name": "PrefabLight",
+          "active": true,
+          "parentId": null,
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "components": []
+        }
+      ],
+      "prefabInstances": []
+    }
+  ],
+  "scripts": {
+    "Spin": {
+      "scriptName": "Spin",
+      "onStart": [
+        {
+          "op": "color",
+          "value": "#44ffaa"
+        }
+      ],
+      "onUpdate": [
+        {
+          "op": "rotate",
+          "axis": "y",
+          "rate": 60.0
+        }
+      ]
+    }
+  },
+  "assetGuids": {
+    "cccccccccccccccccccccccccccccccc": "Assets/Prefabs/Light.prefab",
+    "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb": "Assets/Scripts/NotConverted.cs",
+    "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa": "Assets/Scripts/Spin.cs"
+  },
+  "glbAssets": {},
+  "diagnostics": [
+    {
+      "severity": "warning",
+      "scene": "Assets/Scenes/Demo.unity",
+      "object": "NotConverted",
+      "message": "C# MonoBehaviour NotConverted retained but cannot run natively in Three.js; use Unity Web or author matching .vedoy adapter."
+    },
+    {
+      "severity": "warning",
+      "scene": "Assets/Scenes/Demo.unity",
+      "message": "PrefabInstance 10011 preserved as reference; native Three.js hierarchy needs Unity Editor export. Unity Web build remains supported."
+    }
+  ],
+  "capabilities": {
+    "unityWebBuild": "requires Unity Editor and Web build support",
+    "nativeThreeJs": "partial, declarative .vedoy adapters only",
+    "arbitraryCSharpExecution": false,
+    "nativePrefabExpansion": false
+  }
+}
