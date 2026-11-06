@@ -277,4 +277,8 @@ test("cookie integrity and fail-closed preview database selection", async () => 
   assert.throws(() => cloud.cloudAdmin(), /explicitly configured/);
   env.VEDOY_SUPABASE_URL = "https://isolated-staging.supabase.co";
   assert.equal(cloud.cloudAdmin().connectedTo, env.VEDOY_SUPABASE_URL);
+  env.VERCEL_ENV = "production";
+  assert.throws(() => cloud.cloudAdmin(), /disabled pending launch approval/);
+  env.VEDOY_CLOUD_ENABLED = "true";
+  assert.equal(cloud.cloudAdmin().connectedTo, env.VEDOY_SUPABASE_URL);
 });
