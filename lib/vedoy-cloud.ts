@@ -40,6 +40,11 @@ export async function cloudSession() {
   return parseCloudCookie((await cookies()).get(COOKIE)?.value);
 }
 export function cloudAdmin() {
+  // A GitHub merge auto-deploys to production; Cloud data operations must remain
+  // explicitly disabled until isolated staging and production migrations pass.
+  if (process.env.VERCEL_ENV === "production" && process.env.VEDOY_CLOUD_ENABLED !== "true") {
+    throw new Error("Vedoy Cloud production data access is disabled pending launch approval.");
+  }
   const url = process.env.VEDOY_SUPABASE_URL;
   const key = process.env.VEDOY_SUPABASE_SECRET_KEY;
   if (!url || !/^https:\/\/[a-z0-9-]+\.supabase\.co\/?$/.test(url)) {
