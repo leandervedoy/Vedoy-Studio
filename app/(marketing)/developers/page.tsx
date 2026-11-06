@@ -22,7 +22,7 @@ export default function DevelopersPage() {
         <p>Her samles dokumentasjon, GitHub, API-er og gjenbrukbare biblioteker etter hvert som Vedøy-plattformen blir mer moden. Siden er laget for utviklere, samarbeidspartnere og kunder som vil forstå hva som kan kobles sammen.</p>
         <div className="hero-actions"><a className="editorial-button" href="https://discord.gg/uAt7v6ksuC" target="_blank" rel="noreferrer">Join our Discord <span>↗</span></a><Link className="editorial-outline" href="/#plattform">Se økosystemet</Link></div>
       </section>
-      <section className="developers-resources">
+      <section className="developers-resources" aria-label="Motion engine"><article><small>ANIMASJONSMOTOR · BETA</small><h2>Vedoy Motion</h2><p>Lag animerte nettsider med bevegelse fra punkt til punkt, fade, slide, roll og shrink. Prøv VedoyScript og en visuell editor.</p><Link href="/developers/motion" className="editorial-outline">Prøv Motion ↗</Link></article></section><section className="developers-resources">
         {resources.map((resource) => <article key={resource.label}><small>{resource.label}</small><h2>{resource.label}</h2><p>{resource.text}</p></article>)}
       </section>
     </main>
