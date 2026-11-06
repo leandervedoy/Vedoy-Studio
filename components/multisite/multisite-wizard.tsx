@@ -8,6 +8,7 @@ import {
   MULTISITE_ADDON_CODES, MULTISITE_FEATURES, MULTISITE_SECTORS,
   calculateMultisiteQuote, multisiteMoney, type MultisiteSectorId, type MultisiteAddonCode
 } from "@/lib/multisite";
+import { VedoyStudioCredit } from "@/components/vedoy-studio-credit";
 import "./multisite-wizard.css";
 
 const palette = ["#247856","#203a64","#8241a7","#bb633d","#151515","#c63572"];
@@ -25,6 +26,7 @@ export default function MultisiteWizard({ turnstileSiteKey }: { turnstileSiteKey
   const [tagline, setTagline] = useState("");
   const [brandColor, setBrandColor] = useState("#247856");
   const [logoUrl, setLogoUrl] = useState("");
+  const [previewMode, setPreviewMode] = useState<"desktop"|"mobile">("desktop");
   const [websiteStatus, setWebsiteStatus] = useState<"new"|"replace"|"improve">("new");
   const [budget, setBudget] = useState<"unsure"|"low"|"mid"|"high">("unsure");
   const [featureIds, setFeatureIds] = useState<string[]>([]);
@@ -40,6 +42,8 @@ export default function MultisiteWizard({ turnstileSiteKey }: { turnstileSiteKey
   const [token, setToken] = useState("");
   const [status, setStatus] = useState<"idle"|"submitting"|"success"|"error">("idle");
   const [message, setMessage] = useState("");
+  const wizardPanel = useRef<HTMLElement|null>(null);
+  const hasNavigated = useRef(false);
   const challenge = useRef<HTMLDivElement>(null);
   const widget = useRef<string|null>(null);
   const logoRef = useRef<string|null>(null);
@@ -85,6 +89,13 @@ export default function MultisiteWizard({ turnstileSiteKey }: { turnstileSiteKey
   }, [step, turnstileSiteKey, status]);
 
   useEffect(() => () => { if (logoRef.current) URL.revokeObjectURL(logoRef.current); }, []);
+
+  // Keep the next question visible and keyboard navigation predictable on mobile.
+  useEffect(() => {
+    if (!hasNavigated.current) { hasNavigated.current = true; return; }
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    wizardPanel.current?.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+  }, [step]);
 
   const industry = MULTISITE_SECTORS.find(s => s.id === sector) || MULTISITE_SECTORS[0];
   const quote = useMemo(() => {
@@ -150,9 +161,11 @@ export default function MultisiteWizard({ turnstileSiteKey }: { turnstileSiteKey
       <p>Fortell oss litt om virksomheten din. Velg funksjonene du faktisk trenger, se en tilpasset forhåndsvisning og få et uforpliktende prisforslag.</p>
     </section>
     <div className="ms-layout">
-      <section className="ms-panel" aria-label="Nettsideveiviser">
-        <div className="ms-progress"><b>Steg {step+1} av 4</b><span>{["Bransje","Din merkevare","Funksjoner","Tilbud"][step]}</span></div>
-        <div className="ms-track">{[0,1,2,3].map(i => <span key={i} className={i<=step?"active":""}/>)}</div>
+      <section className="ms-panel" ref={wizardPanel} aria-label="Nettsideveiviser">
+        <div className="ms-progress" aria-live="polite"><b>Steg {step+1} av 4</b><span>{["Bransje","Din merkevare","Funksjoner","Tilbud"][step]}</span></div>
+        <div className="ms-track" role="progressbar" aria-valuenow={step+1} aria-valuemin={1} aria-valuemax={4} aria-label="Fremdrift i nettsideveiviseren">{[0,1,2,3].map(i => <span key={i} className={i<=step?"active":""}/>)}</div>
+        {step<3 ? <a className="ms-mobile-preview-link" href="#multisite-preview">Se forhåndsvisningen ↓</a> : null}
+        <div className="ms-step-animate" key={step}>
 
         {step===0 ? <>
           <h2>Hva slags virksomhet har du?</h2><p>Vi velger en relevant Multisite-demo ut fra bransjen.</p>
@@ -231,30 +244,31 @@ export default function MultisiteWizard({ turnstileSiteKey }: { turnstileSiteKey
               <label className="ms-check"><input type="checkbox" required checked={consent} onChange={e=>setConsent(e.target.checked)}/><span>Jeg ønsker at Vedøy Studio kontakter meg om denne forespørselen, og har lest <Link href="/privacy" target="_blank">personvernerklæringen</Link>.</span></label>
               <label className="ms-check"><input type="checkbox" checked={marketingConsent} onChange={e=>setMarketingConsent(e.target.checked)}/><span>Jeg ønsker også frivillig å motta relevante tilbud og nyheter. (Ikke påkrevd.)</span></label>
               <div className="ms-hidden" aria-hidden="true"><label>La dette stå tomt<input tabIndex={-1} autoComplete="off" name="honeypot"/></label></div>
-              {turnstileSiteKey ? <div ref={challenge} aria-label="Botkontroll"/> : <p role="alert" className="ms-error">Innsending er midlertidig deaktivert. Botkontrollen må konfigureres av Vedøy Studio.</p>}
+              {turnstileSiteKey ? <div ref={challenge} aria-label="Botkontroll"/> : <p role="alert" className="ms-error">Direkte innsending er midlertidig deaktivert. Du kan fortsatt <Link href="/contact">kontakte Vedøy Studio her</Link> for et tilbud.</p>}
               <button className="ms-primary" type="submit" disabled={!quote || !consent || !token || !turnstileSiteKey || status==="submitting"}>{status==="submitting"?"Sender…":"Send uforpliktende forespørsel →"}</button>
               {message && status==="error" ? <p role="alert" className="ms-error">{message}</p> : null}
             </form>}
         </> : null}
 
         {message && step===1 ? <p role="alert" className="ms-error">{message}</p> : null}
+        </div>
         <nav className="ms-steps" aria-label="Navigasjon i veiviseren">
           <button type="button" disabled={step===0 || status==="submitting"} onClick={()=>setStep(v=>v-1)}>← Tilbake</button>
           {step<3 ? <button className="ms-primary" type="button" disabled={!canContinue} onClick={()=>setStep(v=>v+1)}>Neste steg →</button> : null}
         </nav>
       </section>
-      <aside className="ms-preview" aria-label="Forhåndsvisning av din nettside">
-        <div className="ms-preview-top"><span>LIVE FORHÅNDSVISNING</span><span>Eksempel · ikke publisert</span></div>
-        <div className="ms-browser">
+      <aside className="ms-preview" id="multisite-preview" aria-label="Forhåndsvisning av din nettside">
+        <div className="ms-preview-top"><span>LIVE FORHÅNDSVISNING</span><div className="ms-preview-controls" role="group" aria-label="Vis forhåndsvisningen som"><button type="button" aria-pressed={previewMode==="desktop"} onClick={()=>setPreviewMode("desktop")}>PC</button><button type="button" aria-pressed={previewMode==="mobile"} onClick={()=>setPreviewMode("mobile")}>Mobil</button></div></div>
+        <div className={previewMode==="mobile"?"ms-browser ms-browser--mobile":"ms-browser"}>
           <div className="ms-browser-top"><i>● ● ●</i><span>{businessName.trim() || "dinbedrift"}.no · DEMO</span></div>
           <div className="ms-site">
             <nav><div className="ms-site-logo">{logoUrl?<img src={logoUrl} alt="Valgt lokal logo"/>:<span>{businessName.slice(0,1).toUpperCase() || industry.icon}</span>}
               <strong>{businessName.trim() || "Din bedrift"}</strong></div><span>Om oss　 Tjenester　 Kontakt</span></nav>
-            <div className="ms-site-hero"><span>{industry.icon} {industry.name}</span>
+            <div className="ms-site-hero" key={sector}><span>{industry.icon} {industry.name}</span>
               <h2>{tagline.trim() || industry.heading}</h2>
               <p>{industry.description}</p><span className="ms-site-button">Kontakt oss →</span>
             </div>
-            <div className="ms-site-cards">{(featureIds.length ? featureIds.slice(0,3).map(id=>MULTISITE_FEATURES.find(f=>f.id===id)).filter(Boolean) : MULTISITE_FEATURES.slice(0,3)).map(f=>
+            <div className="ms-site-cards" key={featureIds.join("|")}>{(featureIds.length ? featureIds.slice(0,3).map(id=>MULTISITE_FEATURES.find(f=>f.id===id)).filter(Boolean) : MULTISITE_FEATURES.slice(0,3)).map(f=>
               <div key={f!.id}><span>{f!.icon}</span><strong>{f!.title}</strong><small>Eksempel på tjeneste</small></div>)}</div>
             <footer>Din idé · Utviklet av Vedøy Studio</footer>
           </div>
@@ -263,6 +277,6 @@ export default function MultisiteWizard({ turnstileSiteKey }: { turnstileSiteKey
         <p className="ms-small">Forhåndsvisningen viser valgte farger, navn og funksjoner. Den separate bransjedemoen illustrerer funksjonalitet og tar ikke automatisk med dine lokale endringer.</p>
       </aside>
     </div>
-    <footer className="ms-footer">Vedøy Studio · En tryggere vei fra idé til nettside · <Link href="/privacy">Personvern</Link></footer>
+    <footer className="ms-footer"><div><strong>Vedøy Multisite</strong><span>En tryggere vei fra idé til nettside · <Link href="/privacy">Personvern</Link></span></div><VedoyStudioCredit compact /></footer>
   </main>;
 }
