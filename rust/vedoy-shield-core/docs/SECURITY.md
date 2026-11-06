@@ -2,7 +2,7 @@
 
 ## Absolutely not ready for production
 
-No independent crypto audit, formal model or working native integration exists for this specific composite protocol. v0.3.0 is source for research, not an endorsement of any algorithm or claim that it is stronger than Signal. The previously optional messaging ratchet integration has been removed; secure messaging is deliberately disabled until a reviewed replacement is available.
+No independent crypto audit, formal model or working native integration exists for this specific composite protocol. v0.3.0 is source for research, not an endorsement of any algorithm or a certification of a complete secure messaging protocol. The previously optional messaging ratchet integration has been removed; secure messaging is deliberately disabled until a reviewed replacement is available.
 
 ## Threats and controls
 
