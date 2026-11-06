@@ -1,11 +1,7 @@
 //! Local, encrypted, fail-closed invite replay ledger for research builds.
 //! This is per-account/per-device only; multi-device global replay prevention
 //! remains a hard production blocker. Never store a ledger in a shared folder.
-use crate::{
-    hybrid::InviteReplayGuard,
-    storage::EncryptedAtomicStore,
-    ShieldError, ShieldResult,
-};
+use crate::{hybrid::InviteReplayGuard, storage::EncryptedAtomicStore, ShieldError, ShieldResult};
 use serde::{Deserialize, Serialize};
 
 const LEDGER_VERSION: u8 = 1;
@@ -50,17 +46,27 @@ impl<'a> LocalEncryptedReplayLedger<'a> {
         pin: &'a str,
         account_scope: &'a str,
     ) -> Self {
-        Self { store, password2, pin, account_scope }
+        Self {
+            store,
+            password2,
+            pin,
+            account_scope,
+        }
     }
 }
 impl InviteReplayGuard for LocalEncryptedReplayLedger<'_> {
     fn consume_authenticated_invite(&mut self, invite_id: &[u8; 16]) -> ShieldResult<()> {
         let (revision, mut state): (u64, LedgerSnapshot) =
-            self.store.load_json(self.password2, self.pin, self.account_scope)?;
+            self.store
+                .load_json(self.password2, self.pin, self.account_scope)?;
         if state.version != LEDGER_VERSION || state.consumed_ids.len() > MAX_CONSUMED_INVITES {
             return Err(ShieldError::InvalidFormat);
         }
-        if state.consumed_ids.iter().any(|existing| existing == invite_id) {
+        if state
+            .consumed_ids
+            .iter()
+            .any(|existing| existing == invite_id)
+        {
             return Err(ShieldError::AuthenticationFailed);
         }
         if state.consumed_ids.len() == MAX_CONSUMED_INVITES {
@@ -72,7 +78,11 @@ impl InviteReplayGuard for LocalEncryptedReplayLedger<'_> {
         // closed rather than accepting a replay. No usable root is returned
         // until this write has been durably committed.
         self.store.save_json(
-            self.password2, self.pin, self.account_scope, revision, &state
+            self.password2,
+            self.pin,
+            self.account_scope,
+            revision,
+            &state,
         )?;
         Ok(())
     }

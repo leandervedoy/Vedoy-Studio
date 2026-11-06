@@ -42,11 +42,12 @@ impl RecipientBundle {
         if self.version != 3 || &self.identity_public != pinned_identity {
             return Err(ShieldError::UntrustedIdentity);
         }
-        let verify = VerifyingKey::from_bytes(pinned_identity)
-            .map_err(|_| ShieldError::InvalidFormat)?;
-        let signature = Signature::from_slice(&self.signature)
-            .map_err(|_| ShieldError::InvalidFormat)?;
-        verify.verify(&self.signed_material(), &signature)
+        let verify =
+            VerifyingKey::from_bytes(pinned_identity).map_err(|_| ShieldError::InvalidFormat)?;
+        let signature =
+            Signature::from_slice(&self.signature).map_err(|_| ShieldError::InvalidFormat)?;
+        verify
+            .verify(&self.signed_material(), &signature)
             .map_err(|_| ShieldError::InvalidSignature)?;
         EncapsulationKey::new_from_slice(&self.mlkem1024_public)
             .map_err(|_| ShieldError::InvalidFormat)?;
@@ -85,7 +86,14 @@ impl RecipientPrivate {
             signature: Vec::new(),
         };
         bundle.signature = signing.sign(&bundle.signed_material()).to_bytes().to_vec();
-        (Self { mlkem, x25519, signing }, bundle)
+        (
+            Self {
+                mlkem,
+                x25519,
+                signing,
+            },
+            bundle,
+        )
     }
     /// Research-only helper that requires a durable replay guard.
     /// Authentication is verified first; the invite is consumed atomically
@@ -103,12 +111,18 @@ impl RecipientPrivate {
         replay.consume_authenticated_invite(&invite.invite_id)?;
         Ok(root)
     }
-    pub fn identity_public(&self) -> [u8; 32] { self.signing.verifying_key().to_bytes() }
+    pub fn identity_public(&self) -> [u8; 32] {
+        self.signing.verifying_key().to_bytes()
+    }
 
     /// Caller must verify the public sender key through a trusted channel and
     /// *durably consume* the invite_id to prevent replay (not included here).
-    pub fn accept(&self, invite: &HybridInvite, bundle: &RecipientBundle,
-                  pinned_sender_identity: &[u8; 32]) -> ShieldResult<HybridRoot> {
+    pub fn accept(
+        &self,
+        invite: &HybridInvite,
+        bundle: &RecipientBundle,
+        pinned_sender_identity: &[u8; 32],
+    ) -> ShieldResult<HybridRoot> {
         bundle.verify_pinned(&self.identity_public())?;
         if &invite.sender_identity_public != pinned_sender_identity {
             return Err(ShieldError::UntrustedIdentity);
@@ -117,7 +131,8 @@ impl RecipientPrivate {
             .map_err(|_| ShieldError::InvalidFormat)?;
         let signature = Signature::from_slice(&invite.sender_signature)
             .map_err(|_| ShieldError::InvalidSignature)?;
-        verify.verify(&invite.transcript(bundle), &signature)
+        verify
+            .verify(&invite.transcript(bundle), &signature)
             .map_err(|_| ShieldError::InvalidSignature)?;
         if invite.version != 3 || invite.chat_id.is_empty() || invite.chat_id.len() > 256 {
             return Err(ShieldError::InvalidFormat);
@@ -126,15 +141,22 @@ impl RecipientPrivate {
         if invite.recipient_bundle_sha256 != expected_bundle_hash {
             return Err(ShieldError::AuthenticationFailed);
         }
-        let ct: Ciphertext<MlKem1024> = invite.mlkem1024_ciphertext
-            .as_slice().try_into().map_err(|_| ShieldError::InvalidFormat)?;
+        let ct: Ciphertext<MlKem1024> = invite
+            .mlkem1024_ciphertext
+            .as_slice()
+            .try_into()
+            .map_err(|_| ShieldError::InvalidFormat)?;
         let pq_shared = self.mlkem.decapsulate(&ct);
         let peer = PublicKey::from(invite.ephemeral_x25519_public);
         let x_shared = self.x25519.diffie_hellman(&peer);
         if x_shared.as_bytes() == &[0u8; 32] {
             return Err(ShieldError::AuthenticationFailed);
         }
-        derive_root(pq_shared.as_slice(), x_shared.as_bytes(), &invite.transcript(bundle))
+        derive_root(
+            pq_shared.as_slice(),
+            x_shared.as_bytes(),
+            &invite.transcript(bundle),
+        )
     }
 }
 
@@ -171,24 +193,36 @@ pub struct HybridRoot(pub(crate) [u8; 32]);
 impl HybridRoot {
     pub fn derive_chain_seed(&self, purpose: &[u8]) -> ShieldResult<[u8; 32]> {
         let mut next = [0u8; 32];
-        Hkdf::<Sha512>::new(None, &self.0).expand(purpose, &mut next)
+        Hkdf::<Sha512>::new(None, &self.0)
+            .expand(purpose, &mut next)
             .map_err(|_| ShieldError::InvalidFormat)?;
         Ok(next)
     }
 }
-fn derive_root(pq_shared: &[u8], x_shared: &[u8; 32], transcript: &[u8]) -> ShieldResult<HybridRoot> {
+fn derive_root(
+    pq_shared: &[u8],
+    x_shared: &[u8; 32],
+    transcript: &[u8],
+) -> ShieldResult<HybridRoot> {
     let mut combined = Zeroizing::new([0u8; 64]);
-    if pq_shared.len() != 32 { return Err(ShieldError::InvalidFormat); }
+    if pq_shared.len() != 32 {
+        return Err(ShieldError::InvalidFormat);
+    }
     combined[..32].copy_from_slice(pq_shared);
     combined[32..].copy_from_slice(x_shared);
     let salt = Sha256::digest(transcript);
     let hkdf = Hkdf::<Sha512>::new(Some(&salt), combined.as_ref());
     let mut root = [0u8; 32];
-    hkdf.expand(DOMAIN, &mut root).map_err(|_| ShieldError::InvalidFormat)?;
+    hkdf.expand(DOMAIN, &mut root)
+        .map_err(|_| ShieldError::InvalidFormat)?;
     Ok(HybridRoot(root))
 }
-pub fn initiate(bundle: &RecipientBundle, pinned_identity: &[u8; 32],
-                sender: &SenderIdentity, chat_id: &str) -> ShieldResult<(HybridInvite, HybridRoot)> {
+pub fn initiate(
+    bundle: &RecipientBundle,
+    pinned_identity: &[u8; 32],
+    sender: &SenderIdentity,
+    chat_id: &str,
+) -> ShieldResult<(HybridInvite, HybridRoot)> {
     if chat_id.is_empty() || chat_id.len() > 256 {
         return Err(ShieldError::InvalidFormat);
     }
@@ -216,10 +250,16 @@ pub fn initiate(bundle: &RecipientBundle, pinned_identity: &[u8; 32],
         sender_signature: Vec::new(),
     };
     invite.sender_signature = sender.sign(&invite.transcript(bundle));
-    let root = derive_root(pq_shared.as_slice(), x_shared.as_bytes(), &invite.transcript(bundle))?;
+    let root = derive_root(
+        pq_shared.as_slice(),
+        x_shared.as_bytes(),
+        &invite.transcript(bundle),
+    )?;
     Ok((invite, root))
 }
-pub struct SenderIdentity { signing: SigningKey }
+pub struct SenderIdentity {
+    signing: SigningKey,
+}
 impl SenderIdentity {
     pub fn generate() -> Self {
         let mut seed = [0u8; 32];
@@ -228,7 +268,9 @@ impl SenderIdentity {
         seed.zeroize();
         Self { signing }
     }
-    pub fn identity_public(&self) -> [u8; 32] { self.signing.verifying_key().to_bytes() }
+    pub fn identity_public(&self) -> [u8; 32] {
+        self.signing.verifying_key().to_bytes()
+    }
     fn sign(&self, transcript: &[u8]) -> Vec<u8> {
         self.signing.sign(transcript).to_bytes().to_vec()
     }

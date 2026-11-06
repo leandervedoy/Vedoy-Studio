@@ -1,6 +1,6 @@
 //! JSON wire schema. Public data only; NEVER encode private keys or PIN.
-use serde::{de::DeserializeOwned, Deserialize, Serialize};
 use crate::{ShieldError, ShieldResult};
+use serde::{de::DeserializeOwned, Deserialize, Serialize};
 pub const PROTOCOL_VERSION: u8 = 3;
 pub const PACKAGE_VERSION: &str = env!("CARGO_PKG_VERSION");
 #[derive(Clone, Serialize, Deserialize)]
@@ -24,11 +24,15 @@ pub fn capabilities() -> Capabilities {
     }
 }
 pub fn parse_bounded<T: DeserializeOwned>(input: &[u8]) -> ShieldResult<T> {
-    if input.len() > 2 * 1024 * 1024 { return Err(ShieldError::LimitExceeded); }
+    if input.len() > 2 * 1024 * 1024 {
+        return Err(ShieldError::LimitExceeded);
+    }
     serde_json::from_slice(input).map_err(|_| ShieldError::InvalidFormat)
 }
 pub fn encode_bounded<T: Serialize>(value: &T) -> ShieldResult<Vec<u8>> {
     let output = serde_json::to_vec(value).map_err(|_| ShieldError::InvalidFormat)?;
-    if output.len() > 2 * 1024 * 1024 { return Err(ShieldError::LimitExceeded); }
+    if output.len() > 2 * 1024 * 1024 {
+        return Err(ShieldError::LimitExceeded);
+    }
     Ok(output)
 }

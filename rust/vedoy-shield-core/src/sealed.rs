@@ -45,14 +45,23 @@ pub fn seal_payload(
         return Err(ShieldError::LimitExceeded);
     }
     let aad = associated_data(context)?;
-    let cipher = XChaCha20Poly1305::new_from_slice(key)
-        .map_err(|_| ShieldError::InvalidFormat)?;
+    let cipher = XChaCha20Poly1305::new_from_slice(key).map_err(|_| ShieldError::InvalidFormat)?;
     let mut nonce = [0u8; 24];
     OsRng.fill_bytes(&mut nonce);
     let ciphertext = cipher
-        .encrypt(XNonce::from_slice(&nonce), Payload { msg: plaintext, aad: &aad })
+        .encrypt(
+            XNonce::from_slice(&nonce),
+            Payload {
+                msg: plaintext,
+                aad: &aad,
+            },
+        )
         .map_err(|_| ShieldError::AuthenticationFailed)?;
-    Ok(SealedPayload { version: 1, nonce, ciphertext })
+    Ok(SealedPayload {
+        version: 1,
+        nonce,
+        ciphertext,
+    })
 }
 
 /// Authentication failures never expose partial plaintext.
@@ -70,12 +79,14 @@ pub fn open_payload(
         return Err(ShieldError::LimitExceeded);
     }
     let aad = associated_data(context)?;
-    let cipher = XChaCha20Poly1305::new_from_slice(key)
-        .map_err(|_| ShieldError::InvalidFormat)?;
+    let cipher = XChaCha20Poly1305::new_from_slice(key).map_err(|_| ShieldError::InvalidFormat)?;
     cipher
-        .decrypt(XNonce::from_slice(&envelope.nonce), Payload {
-            msg: &envelope.ciphertext,
-            aad: &aad,
-        })
+        .decrypt(
+            XNonce::from_slice(&envelope.nonce),
+            Payload {
+                msg: &envelope.ciphertext,
+                aad: &aad,
+            },
+        )
         .map_err(|_| ShieldError::AuthenticationFailed)
 }
