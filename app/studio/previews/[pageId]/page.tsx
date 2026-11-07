@@ -15,7 +15,7 @@ export default async function PrivateDraftPage({ params }: { params: Promise<{ p
   return <div>
     <header style={{ padding: "14px 20px", background: "#ffedb0", color: "#252016", display: "flex", flexWrap: "wrap", gap: 16, alignItems: "center", justifyContent: "space-between" }}>
       <strong>Privat forhåndsvisning · IKKE PUBLISERT</strong>
-      <Link href="/studio/previews" style={{ textDecoration: "underline" }}>← Alle utkast</Link>
+      <Link href="/studio/projects" style={{ textDecoration: "underline" }}>← Alle utkast</Link>
     </header>
     <PageRenderer page={page} preview />
   </div>;

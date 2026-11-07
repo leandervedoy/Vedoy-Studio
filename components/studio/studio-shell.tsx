@@ -23,7 +23,6 @@ const sections: NavSection[] = [
       { href: "/studio/domains", icon: "◎", label: "Domener" },
       { href: "/studio/projects", icon: "△", label: "Hosting og prosjekter" },
       { href: "/prosjekter", icon: "◇", label: "Vedoy Cloud / Mine prosjekter" },
-      { href: "/studio/previews", icon: "◧", label: "Private utkast" },
       { href: "/studio/builder", icon: "▦", label: "Nettsidebygger", locked: true }
     ]
   },
