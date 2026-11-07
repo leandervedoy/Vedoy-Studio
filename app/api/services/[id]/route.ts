@@ -1,3 +1,4 @@
+import { enforceInternalApi } from "@/lib/studio-api-guard";
 import { NextResponse } from "next/server";
 import { getSession, isAdminSession } from "@/lib/auth";
 import { sameOrigin } from "@/lib/customer-input";
@@ -7,6 +8,8 @@ import { deleteStudioService, updateStudioService } from "@/lib/services";
 type Context = { params: Promise<{ id: string }> };
 
 export async function PATCH(request: Request, context: Context) {
+  const access = await enforceInternalApi(request);
+  if (access) return access;
   if (!isAdminSession(await getSession())) return NextResponse.json({ error: "Krever administratortilgang." }, { status: 403 });
   if (!sameOrigin(request)) return NextResponse.json({ error: "Ugyldig forespørsel." }, { status: 403 });
   const input = serviceInput(await request.json().catch(() => null) as Record<string, unknown> | null);
@@ -22,6 +25,8 @@ export async function PATCH(request: Request, context: Context) {
 }
 
 export async function DELETE(request: Request, context: Context) {
+  const access = await enforceInternalApi(request);
+  if (access) return access;
   if (!isAdminSession(await getSession())) return NextResponse.json({ error: "Krever administratortilgang." }, { status: 403 });
   if (!sameOrigin(request)) return NextResponse.json({ error: "Ugyldig forespørsel." }, { status: 403 });
   try {
