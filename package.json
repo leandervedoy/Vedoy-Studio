@@ -26,6 +26,7 @@
     "db:migrate:notifications": "node scripts/migrate-notifications.mjs",
     "db:migrate:services": "node --env-file-if-exists=.env.local scripts/migrate-services.mjs",
     "db:migrate:page-builder": "node --env-file-if-exists=.env.local scripts/migrate-page-builder.mjs",
+    "db:migrate:page-preview-access": "node --env-file-if-exists=.env.local scripts/migrate-page-preview-access.mjs",
     "db:migrate:news": "node --env-file-if-exists=.env.local scripts/migrate-news.mjs",
     "db:migrate:team": "node --env-file-if-exists=.env.local scripts/migrate-team.mjs",
     "db:migrate:company-onboarding": "node --env-file-if-exists=.env.local scripts/migrate-company-onboarding.mjs",

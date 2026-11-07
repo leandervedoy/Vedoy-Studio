@@ -14,7 +14,7 @@ type NavSection = { label: string; items: NavItem[] };
 const sections: NavSection[] = [
   {
     label: "Oversikt",
-    items: [{ href: "/studio", icon: "⌂", label: "Dashboard", exact: true }, { href: "/studio/team", icon: "◌", label: "Team" }, { href: "/studio/companies", icon: "✦", label: "Bedriftsoppsett", adminOnly: true }]
+    items: [{ href: "/studio", icon: "⌂", label: "Dashboard", exact: true }, { href: "/studio/team", icon: "◌", label: "Team" }, { href: "/studio/staff", icon: "▣", label: "Ansattportal", adminOnly: true }, { href: "/studio/companies", icon: "✦", label: "Bedriftsoppsett", adminOnly: true }]
   },
   {
     label: "Bygg",
