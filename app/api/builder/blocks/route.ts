@@ -1,9 +1,12 @@
+import { enforceInternalApi } from "@/lib/studio-api-guard";
 import { NextResponse } from "next/server";
 import { getSession, isAdminSession } from "@/lib/auth";
 import { sameOrigin } from "@/lib/customer-input";
 import { createPageBlock, pageBlockTypes, type PageBlockType } from "@/lib/page-builder";
 
 export async function POST(request: Request) {
+  const access = await enforceInternalApi(request);
+  if (access) return access;
   if (!isAdminSession(await getSession())) return NextResponse.json({ error: "Krever administratortilgang." }, { status: 403 });
   if (!sameOrigin(request)) return NextResponse.json({ error: "Ugyldig forespørsel." }, { status: 403 });
   const body = await request.json().catch(() => null) as { pageId?: unknown; type?: unknown } | null;
