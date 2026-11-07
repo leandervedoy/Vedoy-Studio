@@ -128,7 +128,8 @@ test.describe("Vedoy Studio — ekte kundereiser i preview", () => {
   test("8: Mobilvisning er lesbar uten vannrett overflyt", async ({ browser }, testInfo) => {
     const context = await withIdentity(browser, credentials.a);
     try {
-      const page = await context.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 1 });
+      const page = await context.newPage();
+      await page.setViewportSize({ width: 390, height: 844 });
       await page.goto("/studio/projects");
       await expect(page.getByRole("heading", { name: /mine prosjekter/i })).toBeVisible();
       const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
