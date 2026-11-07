@@ -205,7 +205,7 @@ export function StudioShell({
             {searchOpen && <div className="studio-search-results" role="listbox">{searchResults.length ? searchResults.map((item) => <button key={item.href} type="button" onClick={() => goToResult(item.href)}><i>{item.icon}</i><span><strong>{item.label}</strong><small>{item.section}</small></span><b>↵</b></button>) : <p>Ingen treff i Studio.</p>}</div>}
           </div>
           <div className="studio-topbar__actions">
-            <NotificationCenter />
+            {isInternalStaff && <NotificationCenter />}
             <div className="account-menu">
               <button type="button" onClick={() => setAccountOpen((value) => !value)} aria-expanded={accountOpen}>
                 <span>EL</span><div><strong>{userName}</strong><small>{!isInternalStaff ? "Kunde" : userRole === "vedoy_owner" ? "Vedøy Owner" : userRole === "owner" ? "Eier" : userRole === "admin" ? "Administrator" : "Ansatt"}</small></div><i>⌄</i>
