@@ -64,15 +64,28 @@ const sections: NavSection[] = [
   }
 ];
 
+const customerSections: NavSection[] = [
+  {
+    label: "Min konto",
+    items: [
+      { href: "/studio", icon: "⌂", label: "Oversikt", exact: true },
+      { href: "/studio/projects", icon: "△", label: "Mine prosjekter" },
+      { href: "/studio/account", icon: "◎", label: "Konto og profil" }
+    ]
+  }
+];
+
 export function StudioShell({
   children,
   userName,
   userRole,
+  isInternalStaff,
   organizationName
 }: {
   children: React.ReactNode;
   userName: string;
   userRole: SessionPayload["role"];
+  isInternalStaff: boolean;
   organizationName: string;
 }) {
   const pathname = usePathname();
@@ -83,7 +96,8 @@ export function StudioShell({
   const [accountOpen, setAccountOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
-  const searchItems = sections.flatMap((section) => section.items.filter((item) => (!item.vedoyOwnerOnly || userRole === "vedoy_owner") && (!item.adminOnly || userRole === "owner" || userRole === "admin" || userRole === "vedoy_owner")).map((item) => ({ ...item, section: section.label })));
+  const displayedSections = isInternalStaff ? sections : customerSections;
+  const searchItems = displayedSections.flatMap((section) => section.items.filter((item) => (!item.vedoyOwnerOnly || userRole === "vedoy_owner") && (!item.adminOnly || userRole === "owner" || userRole === "admin" || userRole === "vedoy_owner")).map((item) => ({ ...item, section: section.label })));
   const searchResults = searchItems.filter((item) => item.label.toLowerCase().includes(search.trim().toLowerCase())).slice(0, 6);
 
   useEffect(() => {
@@ -152,11 +166,11 @@ export function StudioShell({
         </div>
         <div className="organization-switcher">
           <span className="organization-switcher__mark">VØ</span>
-          <div><strong>{organizationName}</strong><small>Vedøy Growth</small></div>
+          <div><strong>{organizationName}</strong><small>{isInternalStaff ? "Vedøy Growth" : "Kundeportal"}</small></div>
           <span aria-hidden>⌄</span>
         </div>
         <nav className="studio-nav" aria-label="Studio-meny">
-          {sections.map((section) => (
+          {displayedSections.map((section) => (
             <div className="studio-nav__section" key={section.label}>
               <small>{section.label}</small>
               {section.items.filter((item) => (!item.vedoyOwnerOnly || userRole === "vedoy_owner") && (!item.adminOnly || userRole === "owner" || userRole === "admin" || userRole === "vedoy_owner")).map((item) => {
@@ -172,12 +186,13 @@ export function StudioShell({
           ))}
         </nav>
         <div className="studio-sidebar__footer">
-          <Link href="/studio/settings"><i>⚙</i><span>Innstillinger</span></Link>
-          <div className="usage-meter">
+          <Link href={isInternalStaff ? "/studio/settings" : "/studio/account"}><i>⚙</i><span>Innstillinger</span></Link>
+          {isInternalStaff && <div className="usage-meter">
             <div><span>Studio-kapasitet</span><strong>34%</strong></div>
             <i><b style={{ width: "34%" }} /></i>
             <small>34 210 av 100 000 API-kall</small>
           </div>
+          }{/* internal capacity meter */}
           <small className="studio-version">Vedøy Growth · v0.1.0 beta</small>
         </div>
       </aside>
@@ -193,7 +208,7 @@ export function StudioShell({
             <NotificationCenter />
             <div className="account-menu">
               <button type="button" onClick={() => setAccountOpen((value) => !value)} aria-expanded={accountOpen}>
-                <span>EL</span><div><strong>{userName}</strong><small>{userRole === "vedoy_owner" ? "Vedøy Owner" : userRole === "owner" ? "Eier" : userRole === "admin" ? "Administrator" : "Ansatt"}</small></div><i>⌄</i>
+                <span>EL</span><div><strong>{userName}</strong><small>{!isInternalStaff ? "Kunde" : userRole === "vedoy_owner" ? "Vedøy Owner" : userRole === "owner" ? "Eier" : userRole === "admin" ? "Administrator" : "Ansatt"}</small></div><i>⌄</i>
               </button>
               {accountOpen && (
                 <div className="account-popover">
