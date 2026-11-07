@@ -14,6 +14,7 @@ import { ScrollIconField } from "@/components/scroll-icon-field";
 import { ProductCustomizer } from "@/components/product-customizer";
 import { ProductGrid } from "@/components/product-grid";
 import { ContactForm } from "@/components/contact-form";
+import { PilotWebsiteOffer } from "@/components/pilot-website-offer";
 import { ClothingRequestModal } from "@/components/clothing-request-modal";
 import { GrowthShowcase } from "@/components/growth-showcase";
 import { getSession, isAdminSession } from "@/lib/auth";
@@ -50,6 +51,7 @@ export default async function HomePage() {
  const [studioServices, session, siteContent] = await Promise.all([listStudioServices(), getSession(), listPublishedContent().catch(() => ({} as Awaited<ReturnType<typeof listPublishedContent>>))]); const isAdministrator = isAdminSession(session); return <>
   <section className="editorial-hero"><MarketingHeader initialProfile={session ? { name: session.name, avatarUrl: session.avatarUrl } : null} /><div className="hero-orbit" /><div className="hero-copy"><p className="editorial-kicker">{siteContent["home.hero"]?.eyebrow || c("VEDØY STUDIO · HAUGESUND · DIGITALT")}</p><h1>{siteContent["home.hero"]?.heading || <>{c("Vi bygger det")}<br />{c("bedriften din")}<br /><em>{c("trenger.")}</em></>}</h1><p className="hero-intro">{siteContent["home.hero"]?.body || c("Nettsider som hjelper småbedrifter å bli funnet og få henvendelser. Design, utvikling og drift fra Haugesund – med tydelige avtaler.")}</p><div className="hero-actions"><Link href="/?need=Nettside&source=hero#kontakt" className="editorial-button">{c("Få tilbud på nettside")} <span>↗</span></Link><a href="#prosjekter" className="editorial-outline">{c("Se prosjekter")}</a></div></div><div className="hero-status"><i /> {c("Tilgjengelig for nye prosjekter")}</div><EditorialFloatIcons variant="hero" /><div className="ticker"><div className="ticker-track"><span>{c("SHOPIFY · HOSTING · DOMENE · DESIGN · TRYKK · ARTIST · KUNST · PROFILPRODUKTER · NETTSIDER · WEBAPPER ·")}</span><span aria-hidden="true">{c("SHOPIFY · HOSTING · DOMENE · DESIGN · TRYKK · ARTIST · KUNST · PROFILPRODUKTER · NETTSIDER · WEBAPPER ·")}</span></div></div></section>
   <AnimatedStats projects={projects.filter(project => project.published).length} services={studioServices.filter(service => service.slug !== "ecommerce" && service.published !== false).length} />
+  <PilotWebsiteOffer />
   <InsightsPreview />
   <AdvertizePlacement slot="studio-home" title="Vedoy Advertize – Studio-annonse" />
   <VoluntaryStatistics site="studio" group="home" />
