@@ -1,3 +1,4 @@
+import { enforceInternalApi } from "@/lib/studio-api-guard";
 import { NextResponse } from "next/server";
 import { getSession } from "@/lib/auth";
 import { deleteBooking, updateBooking } from "@/lib/repository";
@@ -6,6 +7,8 @@ import type { StudioBooking } from "@/lib/types";
 type RouteContext = { params: Promise<{ id: string }> };
 
 export async function PATCH(request: Request, context: RouteContext) {
+  const access = await enforceInternalApi(request);
+  if (access) return access;
   if (!(await getSession())) return NextResponse.json({ error: "Ikke innlogget." }, { status: 401 });
   const { id } = await context.params;
   let body: Partial<Pick<StudioBooking, "status" | "startsAt" | "endsAt" | "notes">>;
@@ -39,7 +42,9 @@ export async function PATCH(request: Request, context: RouteContext) {
   }
 }
 
-export async function DELETE(_request: Request, context: RouteContext) {
+export async function DELETE(request: Request, context: RouteContext) {
+  const access = await enforceInternalApi(request);
+  if (access) return access;
   if (!(await getSession())) return NextResponse.json({ error: "Ikke innlogget." }, { status: 401 });
   const { id } = await context.params;
   await deleteBooking(id);

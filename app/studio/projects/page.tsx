@@ -1,11 +1,53 @@
+import Link from "next/link";
 import { ModuleHeader } from "@/components/studio/module-header";
 import { ProjectManager } from "@/components/studio/project-manager";
 import { HostingOverview } from "@/components/studio/hosting-overview";
+import { requireSession } from "@/lib/auth";
 import { listProjects } from "@/lib/repository";
+import { listAuthorizedDrafts, requirePreviewAdmin } from "@/lib/studio-preview-access";
 
 export const dynamic = "force-dynamic";
 
 export default async function ProjectsPage() {
-  const projects = await listProjects();
-  return <><ModuleHeader eyebrow="BYGG" title="Hosting og prosjekter" description="Nettsider og API-er samlet med deploystatus, region og trafikk." badge="BETA" /><HostingOverview projects={projects} /><ProjectManager initialProjects={projects} /></>;
+  const session = await requireSession();
+  const [drafts, internalAdmin] = await Promise.all([
+    listAuthorizedDrafts(session),
+    requirePreviewAdmin(session)
+  ]);
+  // This legacy table is not tenant-scoped; never expose its contents to customers.
+  const projects = internalAdmin ? await listProjects() : [];
+
+  return <>
+    <ModuleHeader eyebrow="VEDØY STUDIO"
+      title={internalAdmin ? "Prosjekter og forhåndsvisninger" : "Mine prosjekter"}
+      description="Se prosjekter du har tilgang til, og test upubliserte sider før lansering."
+      badge="BETA" />
+    <section className="studio-panel" aria-label="Private forhåndsvisninger" style={{ padding: 24, marginBottom: 22 }}>
+      <div className="panel-heading">
+        <div><small>PRIVATE PROSJEKTUTKAST</small><h2>Til testing</h2></div>
+        <span>{drafts.length} utkast</span>
+      </div>
+      <p>Kun sider som er delt med din konto vises her. Utkastene er ikke publisert.</p>
+      {drafts.length ? (
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(240px,1fr))", gap: 14 }}>
+          {drafts.map(page => (
+            <article key={page.id} style={{ padding: 18, border: "1px solid var(--line)", borderRadius: 14, background: "var(--white)" }}>
+              <small>IKKE PUBLISERT</small>
+              <h3 style={{ margin: "10px 0 6px" }}>{page.title}</h3>
+              <p style={{ color: "var(--muted)" }}>/{page.slug}</p>
+              <Link className="button button--dark button--small"
+                href={`/studio/previews/${encodeURIComponent(page.id)}`}>Åpne forhåndsvisning</Link>
+            </article>
+          ))}
+        </div>
+      ) : <p role="status">Ingen private utkast er delt med denne kontoen ennå.</p>}
+    </section>
+    {internalAdmin ? <>
+      <HostingOverview projects={projects} />
+      <ProjectManager initialProjects={projects} />
+    </> : <section className="studio-panel" style={{ padding: 24 }}>
+      <h2>Prosjektoppfølging</h2>
+      <p>Vedøy legger til prosjektet ditt når det er klart for kundetesting.</p>
+    </section>}
+  </>;
 }

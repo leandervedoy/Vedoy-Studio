@@ -3,12 +3,26 @@ import { TrafficChart } from "@/components/studio/traffic-chart";
 import { WorkHoursModule } from "@/components/studio/work-hours-module";
 import { getOverview, isUsingDatabase, listWorkTimeEntries } from "@/lib/repository";
 import { requireSession } from "@/lib/auth";
+import { hasVerifiedStaffSession } from "@/lib/staff-access";
+import { listAuthorizedDrafts } from "@/lib/studio-preview-access";
 import { formatDateTime } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
 
 export default async function StudioDashboardPage() {
   const session = await requireSession();
+  // Customer sessions must never read org_vedoy overview, bookings or projects.
+  if (!(await hasVerifiedStaffSession(session))) {
+    const drafts = await listAuthorizedDrafts(session);
+    return <div className="growth-dashboard">
+      <header className="dashboard-heading"><div><p className="eyebrow">VEDØY STUDIO / KUNDEPORTAL</p><h1>Velkommen til Vedoy Studio</h1><p>Følg egne prosjekter og test sidene som er delt med deg.</p></div><Link className="button button--dark" href="/studio/projects">Mine prosjekter →</Link></header>
+      <section className="studio-panel" style={{ padding: 24 }}>
+        <div className="panel-heading"><div><small>PRIVATE FORHÅNDSVISNINGER</small><h2>Klare til testing</h2></div><span>{drafts.length} utkast</span></div>
+        {drafts.length ? <div className="compact-projects">{drafts.map(page => <article key={page.id}><span>◧</span><div><strong>{page.title}</strong><small>Ikke publisert</small></div><Link href={`/studio/previews/${encodeURIComponent(page.id)}`}>Åpne →</Link></article>)}</div> : <p>Ingen sider er delt med deg ennå. Du får tilgang når Vedøy inviterer deg til å teste.</p>}
+      </section>
+      <section className="studio-panel" style={{ padding: 24 }}><h2>Trenger du hjelp?</h2><p>Kontakt Vedøy direkte for spørsmål eller endringsønsker til prosjektet ditt.</p><Link href="/studio/account">Kontoinformasjon →</Link></section>
+    </div>;
+  }
   const [overview, timeEntries] = await Promise.all([getOverview(), listWorkTimeEntries(session.email)]);
   return <div className="growth-dashboard">
     <header className="dashboard-heading"><div><p className="eyebrow">VEDØY GROWTH / BEDRIFTSPLATTFORM</p><h1>Growth-oversikt</h1><p>Drift, kunder, timer og neste steg samlet for virksomheten.</p></div><div className="dashboard-heading__actions"><span className={isUsingDatabase() ? "data-mode is-live" : "data-mode"}><i />{isUsingDatabase() ? "PostgreSQL tilkoblet" : "Demodata i minnet"}</span><Link className="button button--dark" href="/studio/projects">+ Nytt prosjekt</Link></div></header>

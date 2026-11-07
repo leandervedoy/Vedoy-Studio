@@ -1,3 +1,4 @@
+import { requireVedoyStaff } from "@/lib/staff-access";
 import { CompanySettings } from "@/components/studio/company-settings";
 import { GrowthSettings } from "@/components/studio/growth-settings";
 import { StudioAppearance } from "@/components/studio/studio-appearance";
@@ -11,6 +12,7 @@ import { TeamHierarchy } from "@/components/studio/team-hierarchy";
 export const dynamic = "force-dynamic";
 
 export default async function SettingsPage() {
+  await requireVedoyStaff();
   const session = await requireSession();
   const [integrations, preferences, profile, teamMembers] = await Promise.all([
     getIntegrationStatuses(), getGrowthPreferences(session.email), getGrowthCompanyProfile(), listTeamMembers()

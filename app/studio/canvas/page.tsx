@@ -1,9 +1,11 @@
+import { requireVedoyStaff } from "@/lib/staff-access";
 import { ModuleHeader } from "@/components/studio/module-header";
 import Image from "next/image";
 
 export const dynamic = "force-dynamic";
 
-export default function CanvasPage() {
+export default async function CanvasPage() {
+  await requireVedoyStaff();
   return (
     <section className="studio-canvas-page">
       <ModuleHeader

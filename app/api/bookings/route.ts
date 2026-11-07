@@ -1,3 +1,4 @@
+import { hasVerifiedStaffSession } from "@/lib/staff-access";
 import { NextResponse } from "next/server";
 import { getSession } from "@/lib/auth";
 import { attachBookingCheckoutSession, createBooking, createGrowthNotification, listBookings } from "@/lib/repository";
@@ -23,14 +24,23 @@ export async function GET(request: Request) {
   });
 
   const session = await getSession();
-  if (session) return NextResponse.json({ bookings });
+  if (session && await hasVerifiedStaffSession(session)) {
+    return NextResponse.json({ bookings }, { headers: { "Cache-Control": "no-store" } });
+  }
 
   // Offentlig kundevisning trenger bare opptatte tidsrom, aldri kontaktinformasjon.
   return NextResponse.json({
     bookings: bookings
       .filter((booking) => booking.status !== "cancelled")
       .map((booking) => ({
-        ...booking,
+        id: booking.id,
+        organizationId: booking.organizationId,
+        serviceId: booking.serviceId,
+        serviceName: booking.serviceName,
+        startsAt: booking.startsAt,
+        endsAt: booking.endsAt,
+        status: booking.status,
+        staffId: booking.staffId,
         customerName: "Opptatt",
         customerEmail: "private@vedoy.local",
         customerPhone: undefined,

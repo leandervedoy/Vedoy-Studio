@@ -1,14 +1,19 @@
+import { enforceInternalApi } from "@/lib/studio-api-guard";
 import { NextResponse } from "next/server";
 import { getSession } from "@/lib/auth";
 import { customerInput, sameOrigin } from "@/lib/customer-input";
 import { createCustomer, listCustomers } from "@/lib/repository";
 
 export async function GET() {
+  const access = await enforceInternalApi();
+  if (access) return access;
   if (!(await getSession())) return NextResponse.json({ error: "Ikke innlogget." }, { status: 401 });
   return NextResponse.json({ customers: await listCustomers() });
 }
 
 export async function POST(request: Request) {
+  const access = await enforceInternalApi(request);
+  if (access) return access;
   if (!(await getSession())) return NextResponse.json({ error: "Ikke innlogget." }, { status: 401 });
   if (!sameOrigin(request)) return NextResponse.json({ error: "Ugyldig forespørsel." }, { status: 403 });
   const input = customerInput(await request.json().catch(() => null) as Record<string, unknown> | null);

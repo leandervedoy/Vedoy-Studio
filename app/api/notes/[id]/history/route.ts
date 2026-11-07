@@ -1,14 +1,19 @@
+import { enforceInternalApi } from "@/lib/studio-api-guard";
 import { NextResponse } from "next/server";
 import { getSession } from "@/lib/auth";
 import { listStudioNoteVersions, restoreStudioNoteVersion } from "@/lib/repository";
 
 export async function GET(_: Request, { params }: { params: Promise<{ id: string }> }) {
+  const access = await enforceInternalApi();
+  if (access) return access;
   if (!(await getSession())) return NextResponse.json({ error: "Ikke innlogget." }, { status: 401 });
   const { id } = await params;
   return NextResponse.json({ versions: await listStudioNoteVersions(id) });
 }
 
 export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
+  const access = await enforceInternalApi(request);
+  if (access) return access;
   if (!(await getSession())) return NextResponse.json({ error: "Ikke innlogget." }, { status: 401 });
   try {
     const { id } = await params;

@@ -1,3 +1,4 @@
+import { enforceInternalApi } from "@/lib/studio-api-guard";
 import { NextResponse } from "next/server";
 import { getSession } from "@/lib/auth";
 import { createStudioNote, listStudioNotes } from "@/lib/repository";
@@ -14,11 +15,15 @@ function cleanTags(value: unknown) {
 }
 
 export async function GET() {
+  const access = await enforceInternalApi();
+  if (access) return access;
   if (!(await getSession())) return NextResponse.json({ error: "Ikke innlogget." }, { status: 401 });
   return NextResponse.json({ notes: await listStudioNotes() });
 }
 
 export async function POST(request: Request) {
+  const access = await enforceInternalApi(request);
+  if (access) return access;
   if (!(await getSession())) return NextResponse.json({ error: "Ikke innlogget." }, { status: 401 });
   try {
     const body = await request.json() as Record<string, unknown>;

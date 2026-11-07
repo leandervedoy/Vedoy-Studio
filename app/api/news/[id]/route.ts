@@ -1,3 +1,4 @@
+import { enforceInternalApi } from "@/lib/studio-api-guard";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
@@ -16,6 +17,8 @@ const schema = z.object({
   message: "Velg både prosjekt og kategori."
 });
 export async function PATCH(request: Request, context: { params: Promise<{ id: string }> }) {
+  const access = await enforceInternalApi(request);
+  if (access) return access;
   if (!sameOriginWrite(request)) return NextResponse.json({ error: "Ugyldig opphav." }, { status: 403 });
   const session = await requireSession();
   const parsed = schema.safeParse(await request.json().catch(() => null));

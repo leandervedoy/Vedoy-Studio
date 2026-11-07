@@ -1,3 +1,4 @@
+import { enforceInternalApi } from "@/lib/studio-api-guard";
 import { convertToModelMessages, stepCountIs, streamText, type UIMessage } from "ai";
 import { createAnthropic } from "@ai-sdk/anthropic";
 import { createOpenAI } from "@ai-sdk/openai";
@@ -27,6 +28,8 @@ function getModel() {
 }
 
 export async function POST(request: Request) {
+  const access = await enforceInternalApi(request);
+  if (access) return access;
   if (!isAdminSession(await getSession())) return NextResponse.json({ error: "Krever administratortilgang." }, { status: 403 });
   if (!sameOrigin(request)) return NextResponse.json({ error: "Ugyldig forespørsel." }, { status: 403 });
   const parsed = requestSchema.safeParse(await request.json().catch(() => null));

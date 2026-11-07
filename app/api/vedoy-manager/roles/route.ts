@@ -1,3 +1,4 @@
+import { enforceInternalApi } from "@/lib/studio-api-guard";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { listTeamMembers } from "@/lib/repository";
@@ -11,6 +12,8 @@ const roleSchema = z.object({
   permissions: permissionSchema
 });
 export async function GET() {
+  const access = await enforceInternalApi();
+  if (access) return access;
   const session = await getSession();
   if (!isOrganizationOwner(session)) return NextResponse.json({ error: "Forbudt." }, { status: 403 });
   try {
@@ -25,6 +28,8 @@ export async function GET() {
   } catch (error) { return NextResponse.json(publicError(error), { status: 503 }); }
 }
 export async function POST(request: Request) {
+  const access = await enforceInternalApi(request);
+  if (access) return access;
   const session = await getSession();
   if (!isOrganizationOwner(session)) return NextResponse.json({ error: "Forbudt." }, { status: 403 });
   if (!sameOriginWrite(request)) return NextResponse.json({ error: "Ugyldig opphav." }, { status: 403 });
@@ -42,6 +47,8 @@ export async function POST(request: Request) {
   } catch(error) { return NextResponse.json(publicError(error), { status: 503 }); }
 }
 export async function PATCH(request: Request) {
+  const access = await enforceInternalApi(request);
+  if (access) return access;
   const session = await getSession();
   if (!isOrganizationOwner(session)) return NextResponse.json({ error: "Forbudt." }, { status: 403 });
   if (!sameOriginWrite(request)) return NextResponse.json({ error: "Ugyldig opphav." }, { status: 403 });

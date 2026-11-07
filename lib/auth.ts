@@ -70,6 +70,10 @@ export function isAdminSession(session: SessionPayload | null): session is Sessi
 export async function requireAdminSession(): Promise<SessionPayload> {
   const session = await requireSession();
   if (!isAdminSession(session)) redirect("/studio");
+  // A signed admin claim is not enough to access the fixed Vedoy data tables:
+  // verify current internal team membership on every privileged page request.
+  const { hasVerifiedStaffSession } = await import("@/lib/staff-access");
+  if (!(await hasVerifiedStaffSession(session))) notFound();
   return session;
 }
 

@@ -1,13 +1,18 @@
+import { enforceInternalApi } from "@/lib/studio-api-guard";
 import { NextResponse } from "next/server";
 import { getSession } from "@/lib/auth";
 import { createApiKey, listApiKeys } from "@/lib/repository";
 
 export async function GET() {
+  const access = await enforceInternalApi();
+  if (access) return access;
   if (!(await getSession())) return NextResponse.json({ error: "Ikke innlogget." }, { status: 401 });
   return NextResponse.json({ keys: await listApiKeys() });
 }
 
 export async function POST(request: Request) {
+  const access = await enforceInternalApi(request);
+  if (access) return access;
   if (!(await getSession())) return NextResponse.json({ error: "Ikke innlogget." }, { status: 401 });
   const body = await request.json() as { name?: string; scopes?: string[] };
   if (!body.name || body.name.trim().length < 2) {

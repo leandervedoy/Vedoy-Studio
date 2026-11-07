@@ -1,3 +1,4 @@
+import { enforceInternalApi } from "@/lib/studio-api-guard";
 import { NextResponse } from "next/server";
 import { getSession } from "@/lib/auth";
 import { getGrowthPreferences, saveGrowthPreferences } from "@/lib/repository";
@@ -5,12 +6,16 @@ import { getGrowthPreferences, saveGrowthPreferences } from "@/lib/repository";
 export const dynamic = "force-dynamic";
 
 export async function GET() {
+  const access = await enforceInternalApi();
+  if (access) return access;
   const session = await getSession();
   if (!session) return NextResponse.json({ error: "Ikke innlogget." }, { status: 401 });
   return NextResponse.json({ preferences: await getGrowthPreferences(session.email), emailConfigured: Boolean(process.env.RESEND_API_KEY) });
 }
 
 export async function PUT(request: Request) {
+  const access = await enforceInternalApi(request);
+  if (access) return access;
   const session = await getSession();
   if (!session) return NextResponse.json({ error: "Ikke innlogget." }, { status: 401 });
   const body = await request.json().catch(() => null) as Record<string, unknown> | null;
