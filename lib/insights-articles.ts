@@ -15,6 +15,107 @@ export type InsightArticle = {
 
 export const INSIGHT_ARTICLES: readonly InsightArticle[] = [
   {
+    "slug": "hva-er-kvanteteknologi-forklart-uten-mysterier",
+    "title": "Hva er kvanteteknologi? En enkel forklaring på fysikken som kan endre fremtiden",
+    "excerpt": "Kvantedatamaskiner, superposisjon og kvantesikkerhet høres ut som science fiction. Her er hva teknologien faktisk er, hva vi bruker den til i dag, og hva som fortsatt ligger foran oss.",
+    "category": "Teknologi og forskning",
+    "publishedAt": "2026-11-07",
+    "readingMinutes": 9,
+    "author": "Vedoy Insights",
+    "journalist": "Vedoy Insights",
+    "editor": "Eiolf-Leander Haugsnes Vedøy",
+    "disclosure": "Vedoy Insights er en publikasjon fra Vedøy. Artikkelen er en allmennfaglig forklaring basert på åpne fagkilder. Eksempler på fremtidig bruk er muligheter, ikke garantier eller lanserte Vedøy-tjenester.",
+    "articleCta": {
+      "eyebrow": "UTFORSK TEKNOLOGIEN",
+      "title": "Vedoy Studio",
+      "description": "Vedøy utforsker hvordan programvare, sikkerhetsanalyse og nye teknologier kan bli nyttige verktøy for utviklere og bedrifter.",
+      "href": "https://vedoystudio.no",
+      "linkText": "Utforsk Vedoy Studio"
+    },
+    "sections": [
+      {
+        "heading": "Kvanteteknologi begynner med naturens minste byggesteiner",
+        "paragraphs": [
+          "Se for deg at du kan undersøke et atom, et elektron eller et enkelt lyskvant – et foton. På disse skalaene oppfører naturen seg annerledes enn det vi er vant til fra biler, fotballer og datamaskiner. Reglene beskrives av kvantemekanikken, en teori som har blitt utviklet og testet gjennom mer enn hundre år.",
+          "Kvanteteknologi betyr å utnytte slike kvantefenomener målrettet. Det er ikke én bestemt maskin, men en familie av teknologier: kvantedatamaskiner som utfører spesielle beregninger, kvantesensorer som måler svært små endringer, og kvantekommunikasjon som bruker egenskaper ved blant annet lys.",
+          "Det finnes allerede kvantefysikk i hverdagen vår. Transistorer, lasere og mye moderne elektronikk er mulige fordi forskere forstår den. Det nye er at vi i større grad kan kontrollere individuelle kvantesystemer og bruke dem direkte til informasjon og måling."
+        ]
+      },
+      {
+        "heading": "Vanlige bits og kvantebits: hva er forskjellen?",
+        "paragraphs": [
+          "En vanlig datamaskin lagrer informasjon i bits, som representerer enten 0 eller 1. En kvantedatamaskin bruker kvantebits, ofte kalt qubits. En qubit kan være i en superposisjon: en kvantetilstand som beskrives ved en kombinasjon av mulige måleresultater.",
+          "Det betyr ikke at du kan lese ut både 0 og 1 samtidig. Når en qubit måles, får du et vanlig resultat, 0 eller 1. Det spesielle er hvordan sannsynlighetene og bølgeegenskapene kan påvirkes før målingen. Kvantealgoritmer forsøker å forsterke de nyttige svarene og svekke de uønskede.",
+          "Tenk på dette som en ny måte å regne på, ikke som en super-PC som automatisk gjør alt raskere. En vanlig laptop vil fortsatt være bedre egnet til tekstbehandling, nettlesing og de fleste vanlige programmer."
+        ]
+      },
+      {
+        "heading": "Tre ord som forklarer mye: superposisjon, sammenfiltring og interferens",
+        "paragraphs": [
+          "Superposisjon beskriver hvordan kvantetilstanden kan være en kombinasjon av mulige utfall. Sammenfiltring, eller entanglement, betyr at flere kvantesystemer kan ha så sterke kvantekorrelasjoner at tilstanden ikke kan beskrives som uavhengige deler. Men sammenfiltring lar oss ikke sende beskjeder raskere enn lyset.",
+          "Interferens oppstår når kvantetilstandenes sannsynlighetsamplituder virker sammen. Enkelte utfall kan forsterkes, mens andre svekkes. Dette er avgjørende for hvordan kvantealgoritmer forsøker å gi nyttige resultater.",
+          "Kvantefenomenene er samtidig sårbare for støy. Varme, elektromagnetiske forstyrrelser og uønsket påvirkning kan ødelegge tilstander og skape feil. Derfor krever mange kvantedatamaskiner omfattende kontrollsystemer og i noen tilfeller ekstrem nedkjøling."
+        ]
+      },
+      {
+        "heading": "Hva kan en kvantedatamaskin egentlig brukes til?",
+        "paragraphs": [
+          "Et av de mest lovende forskningsområdene er simulering av kjemi og materialer. Molekyler følger kvantemekaniske lover, og nøyaktig simulering av store kvantesystemer er krevende for vanlige datamaskiner. Mer robuste kvantedatamaskiner kan på sikt hjelpe forskere med å forstå nye batterier, katalysatorer og materialer.",
+          "Et annet område er spesielle matematiske problemer. Shors algoritme viser at en tilstrekkelig kraftig, feilkorrigert kvantedatamaskin i prinsippet kan faktorisere store tall effektivt. Dette er en trussel mot kryptosystemer som RSA. Grovers algoritme gir en teoretisk kvadratisk forbedring i visse typer søk.",
+          "Det forskes også på optimalisering, for eksempel logistikk og komplekse planleggingsoppgaver. Men det er ikke bevist at kvantedatamaskiner vil slå de beste klassiske metodene i alle slike problemer. Mange lovende bruksområder er fortsatt forskning."
+        ]
+      },
+      {
+        "heading": "Kvantesensorer kan bli nyttige før kvantedatamaskinene blir kraftige",
+        "paragraphs": [
+          "Kvanteteknologi handler ikke bare om beregninger. Kvantesensorer kan bruke atomer, lys eller andre kvantesystemer til å måle tid, magnetfelt, tyngdekraft og bevegelse svært presist. Noen slike teknologier finnes allerede i laboratorier og spesialiserte systemer.",
+          "Et mulig bruksområde er kartlegging. Små variasjoner i tyngdefeltet kan gi informasjon om masser under bakken, for eksempel geologiske strukturer. Målingene må likevel tolkes sammen med andre data: En kvantesensor er ikke et kamera som kan se gjennom jord og fjell.",
+          "For digitale kart og tredimensjonale modeller kan kombinasjonen av sensorer, geografiske data og visualisering på sikt åpne nye muligheter. Selve 3D-modellen kan bygges på vanlige datamaskiner; det er måleinstrumentet som eventuelt benytter kvanteteknologi."
+        ]
+      },
+      {
+        "heading": "Vil kvantedatamaskiner kunne lese hemmelighetene våre?",
+        "paragraphs": [
+          "En stor bekymring er at fremtidige kvantedatamaskiner kan bryte enkelte mye brukte metoder for offentlig-nøkkel-kryptografi. Det gjelder særlig algoritmer basert på faktorisering og diskrete logaritmer, som RSA og mange elliptisk-kurve-systemer. En liten kvantedatamaskin som finnes i dag, kan ikke praktisk knekke RSA-2048.",
+          "Derfor utvikles postkvantekryptografi: matematiske algoritmer som er laget for å motstå både vanlige datamaskiner og kjente kvanteangrep. NIST publiserte i 2024 standardene ML-KEM for nøkkelutveksling og ML-DSA og SLH-DSA for digitale signaturer. Disse algoritmene kan kjøres på helt vanlige datamaskiner.",
+          "Dette må ikke forveksles med Quantum Key Distribution, eller QKD. QKD utnytter fysiske kvantesystemer til nøkkeldistribusjon og krever spesialisert kommunikasjonsutstyr. Postkvantekryptografi krever normalt ikke kvantedatamaskin eller kvantelink."
+        ]
+      },
+      {
+        "heading": "Er kvanteteknologi i bruk allerede?",
+        "paragraphs": [
+          "Ja. Forskere og utviklere kan kjøre eksperimenter på ekte kvanteprosessorer gjennom skytjenester. Kvantesensorer, svært presise klokker og enkelte former for kvantekommunikasjon er også under utvikling eller i spesialisert bruk. Samtidig er dagens universelle kvantedatamaskiner fortsatt preget av støy, begrenset størrelse og betydelige feilrater.",
+          "Det er derfor misvisende å si at kvantedatamaskiner allerede har erstattet superdatamaskiner. Foreløpig er de i hovedsak forsknings- og utviklingsverktøy for utvalgte oppgaver. Den store utfordringen er å bygge flere stabile, feilkorrigerte qubits som faktisk kan gjennomføre lange og nyttige beregninger."
+        ]
+      },
+      {
+        "heading": "Hva betyr dette for norske bedrifter og utviklere?",
+        "paragraphs": [
+          "For en vanlig bedrift er det sjelden riktig å kjøpe kvantemaskinvare. Det mer praktiske spørsmålet er hvilke data som bør forbli konfidensielle lenge, hvilken kryptografi systemene bruker, og om leverandører har en plan for overgangen til postkvantesikre løsninger.",
+          "Utviklere kan også lære ved å bruke simulatorer og offentlige læringsressurser. Det gir innsikt i hvordan kvantekretser fungerer uten at man trenger et laboratorium. Den viktigste første investeringen er ofte kompetanse – ikke kostbart utstyr.",
+          "Vedøy utforsker mulighetene innen sikkerhetsverktøy, kvanteberedskap og visualisering. Slike ideer er utviklingsretninger, ikke bevis for at et prosjekt allerede er kvantesikkert eller at en kvantedatamaskin har validert sikkerheten."
+        ]
+      },
+      {
+        "heading": "Hva bør vi huske om fremtiden?",
+        "paragraphs": [
+          "Kvanteteknologi er verken magi eller en garanti for at alle vanskelige oppgaver snart blir enkle. Men når vi lærer å kontrollere naturens minste systemer, får vi nye metoder for beregning, kommunikasjon og måling.",
+          "For samfunnet kan dette bety bedre vitenskapelige instrumenter, nye muligheter i materialforskning og behov for å oppdatere sikkerhetssystemer. For den enkelte er den viktigste lærdommen enkel: Fremtidens teknologi utvikles allerede, men løftene må vurderes opp mot hva som faktisk er demonstrert."
+        ]
+      },
+      {
+        "heading": "Kilder og videre lesning",
+        "paragraphs": [
+          "NIST – Quantum Computing Explained: https://www.nist.gov/quantum-information-science/quantum-computing-explained",
+          "NIST – Post-Quantum Cryptography: https://csrc.nist.gov/Projects/Post-Quantum-Cryptography",
+          "IBM – What Is Quantum Computing?: https://www.ibm.com/think/topics/quantum-computing",
+          "EU-kommisjonen – Quantum technologies: https://digital-strategy.ec.europa.eu/en/policies/quantum",
+          "EuroHPC – Quantum Technologies: https://www.eurohpc-ju.europa.eu/quantum-technologies_en"
+        ]
+      }
+    ]
+  },
+  {
     "slug": "nattens-utvikling-tryggere-sky-enklere-verktoy",
     "title": "Nattens utvikling hos Vedøy: tryggere sky og enklere verktøy",
     "excerpt": "Natt til 6. november fortsatte arbeidet med Vedoy Cloud, Developer Portal og Collective. Vedoy Shield inngår i sikkerhetsplanene for økosystemet.",
