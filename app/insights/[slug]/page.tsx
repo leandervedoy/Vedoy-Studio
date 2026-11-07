@@ -5,6 +5,7 @@ import { getInsightArticle, INSIGHT_ARTICLES } from "@/lib/insights-articles";
 import styles from "../insights.module.css";
 import { ProjectScreenshotGallery } from "@/components/project-screenshot-gallery";
 import { STUDIO_SCREENSHOTS } from "@/lib/project-screenshots";
+import { InsightsArticleReader } from "@/components/insights/insights-article-reader";
 
 type PageProps = { params: Promise<{ slug: string }> };
 
@@ -37,13 +38,7 @@ export default async function InsightArticlePage({params}: PageProps) {
       <h1>{found.title}</h1>
       <p className={styles.articleLead}>{found.excerpt}</p>
       <p className={styles.byline}>{found.editor && found.editor === (found.journalist ?? found.author) ? <>Journalist og ansvarlig redaktør: {found.editor}<br /></> : <>{(found.journalist ?? found.author) === "Vedoy Insights" ? "Redaksjon: " : "Journalist: "}{found.journalist ?? found.author}<br />{found.editor ? <>Ansvarlig redaktør: {found.editor}<br /></> : null}</>}Publisert: <time dateTime={found.publishedAt}>{new Date(found.publishedAt).toLocaleDateString("nb-NO",{day:"numeric",month:"long",year:"numeric",timeZone:"Europe/Oslo"})}</time></p>
-      <div className={styles.articleBody}>
-        {found.sections.map((section,index) => <section key={section.heading}>
-          <div className={styles.chapterNumber}>{String(index+1).padStart(2,"0")}</div>
-          <h2>{section.heading}</h2>
-          {section.paragraphs.map((paragraph,i) => <p key={i}>{paragraph}</p>)}
-        </section>)}
-      </div>
+      <InsightsArticleReader slug={found.slug} sections={found.sections}/>
       {found.slug === "fra-ide-til-fungerende-teknologi-utviklingsdag-vedoy" ? <ProjectScreenshotGallery
         title="Se prosjektene fra utviklingsdagen."
         intro="Skjermbilder fra Bank, Collective og Hosting. Flere funksjoner er prototyper eller demoer, ikke ferdiglanserte produkter."
