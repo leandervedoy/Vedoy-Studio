@@ -14,8 +14,7 @@ const matches:Record<Topic,RegExp>={
 export function InsightsPersonalizedFeed({articles,limit}:{articles:Article[];limit?:number}){
  const [topic,setTopic]=useState<Topic|null>(null);
  const [save,setSave]=useState(false);
- const [ready,setReady]=useState(false);
- useEffect(()=>{try{const raw=localStorage.getItem(KEY);if(raw){const v=JSON.parse(raw);if(v.save===true&&TOPICS.some(t=>t[0]===v.topic)){setTopic(v.topic);setSave(true);}}}catch{}setReady(true);},[]);
+ useEffect(()=>{try{const raw=localStorage.getItem(KEY);if(raw){const v=JSON.parse(raw);if(v.save===true&&TOPICS.some(t=>t[0]===v.topic)){setTopic(v.topic);setSave(true);}}}catch{}},[]);
  const update=(next:Topic|null,persist:boolean)=>{
   setTopic(next);setSave(persist);
   try{if(persist&&next)localStorage.setItem(KEY,JSON.stringify({topic:next,save:true}));else localStorage.removeItem(KEY);}catch{}
