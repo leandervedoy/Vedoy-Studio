@@ -1,3 +1,4 @@
+import { enforceInternalApi } from "@/lib/studio-api-guard";
 import { NextResponse } from "next/server";
 import { getSession } from "@/lib/auth";
 import { saveGrowthCompanyProfile } from "@/lib/repository";
@@ -5,6 +6,8 @@ import { saveGrowthCompanyProfile } from "@/lib/repository";
 const clean = (value: unknown, max: number) => typeof value === "string" ? value.trim().slice(0, max) : "";
 
 export async function PUT(request: Request) {
+  const access = await enforceInternalApi(request);
+  if (access) return access;
   if (!(await getSession())) return NextResponse.json({ error: "Ikke innlogget." }, { status: 401 });
   const body = await request.json().catch(() => null) as Record<string, unknown> | null;
   const name = clean(body?.name, 120);
