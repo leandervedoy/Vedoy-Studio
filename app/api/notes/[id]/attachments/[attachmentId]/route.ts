@@ -1,3 +1,4 @@
+import { enforceInternalApi } from "@/lib/studio-api-guard";
 import { NextResponse } from "next/server";
 import { getSession } from "@/lib/auth";
 import { deleteStudioNoteAttachment, getStudioNoteAttachment } from "@/lib/repository";
@@ -5,6 +6,8 @@ import { deleteStudioNoteAttachment, getStudioNoteAttachment } from "@/lib/repos
 type Params = { params: Promise<{ id: string; attachmentId: string }> };
 
 export async function GET(_: Request, { params }: Params) {
+  const access = await enforceInternalApi();
+  if (access) return access;
   if (!(await getSession())) return NextResponse.json({ error: "Ikke innlogget." }, { status: 401 });
   const { id, attachmentId } = await params;
   const attachment = await getStudioNoteAttachment(id, attachmentId);
@@ -13,6 +16,8 @@ export async function GET(_: Request, { params }: Params) {
 }
 
 export async function DELETE(_: Request, { params }: Params) {
+  const access = await enforceInternalApi(_);
+  if (access) return access;
   if (!(await getSession())) return NextResponse.json({ error: "Ikke innlogget." }, { status: 401 });
   const { id, attachmentId } = await params;
   await deleteStudioNoteAttachment(id, attachmentId);
