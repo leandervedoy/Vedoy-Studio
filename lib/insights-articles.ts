@@ -16,11 +16,11 @@ export type InsightArticle = {
 export const INSIGHT_ARTICLES: readonly InsightArticle[] = [
   {
     "slug": "hva-er-kvanteteknologi-forklart-uten-mysterier",
-    "title": "Hva er kvanteteknologi? En enkel forklaring på fysikken som kan endre fremtiden",
-    "excerpt": "Kvantedatamaskiner, superposisjon og kvantesikkerhet høres ut som science fiction. Her er hva teknologien faktisk er, hva vi bruker den til i dag, og hva som fortsatt ligger foran oss.",
+    "title": "Hva er kvantefysikk? Kvantemekanikk og kvanteteknologi forklart",
+    "excerpt": "Hva er kvantefysikk og kvantemekanikk? Lær hvordan kvanteteknologi, kvantedatamaskiner og kvantesikkerhet fungerer – enkelt forklart med eksempler.",
     "category": "Teknologi og forskning",
     "publishedAt": "2026-11-07",
-    "readingMinutes": 9,
+    "readingMinutes": 10,
     "author": "Vedoy Insights",
     "journalist": "Vedoy Insights",
     "editor": "Eiolf-Leander Haugsnes Vedøy",
@@ -33,6 +33,14 @@ export const INSIGHT_ARTICLES: readonly InsightArticle[] = [
       "linkText": "Utforsk Vedoy Studio"
     },
     "sections": [
+      {
+        "heading": "Er kvantefysikk, kvantemekanikk og kvanteteknologi det samme?",
+        "paragraphs": [
+          "Begrepene ligner, men har ulike betydninger. Kvantefysikk er et bredt fagområde som beskriver hvordan atomer, lys og andre svært små systemer oppfører seg. Kvantemekanikk er det sentrale matematiske rammeverket som brukes til å beskrive slike systemer. I dagligtale brukes de to ordene ofte om hverandre.",
+          "Kvanteteknologi er derimot de praktiske løsningene som utnytter disse fysiske lovene. Kvantedatamaskiner er ett eksempel, mens kvantesensorer og kvantekommunikasjon er andre. Du trenger altså ikke en kvantedatamaskin for å bruke kvanteteknologi.",
+          "Kort sagt: Kvantefysikk er fagområdet, kvantemekanikk forklarer reglene matematisk, og kvanteteknologi bruker kunnskapen til å bygge nyttige verktøy."
+        ]
+      },
       {
         "heading": "Kvanteteknologi begynner med naturens minste byggesteiner",
         "paragraphs": [
