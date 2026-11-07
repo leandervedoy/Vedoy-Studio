@@ -1,3 +1,4 @@
+import { requireVedoyStaff } from "@/lib/staff-access";
 import { ModuleHeader } from "@/components/studio/module-header";
 import { listBookings, listClothingRequests, listContactRequests, listHostingRequests } from "@/lib/repository";
 
@@ -8,6 +9,7 @@ function formatDate(value: string) {
 }
 
 export default async function RequestsPage() {
+  await requireVedoyStaff();
   let databaseError = false;
   const [contacts, clothing, hosting, bookings] = await Promise.all([
     listContactRequests().catch(() => { databaseError = true; return []; }),
