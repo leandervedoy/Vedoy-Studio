@@ -1,3 +1,4 @@
+import { enforceInternalApi } from "@/lib/studio-api-guard";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
@@ -15,10 +16,14 @@ const newsSchema = z.object({
   authorType: z.enum(["user", "vedi"]).default("user"),
 });
 export async function GET() {
+  const access = await enforceInternalApi();
+  if (access) return access;
   await requireSession();
   return NextResponse.json({ posts: await listNewsPosts(false) }, { headers: { "Cache-Control": "no-store" } });
 }
 export async function POST(request: Request) {
+  const access = await enforceInternalApi(request);
+  if (access) return access;
   if (!sameOriginWrite(request)) return NextResponse.json({ error: "Ugyldig opphav." }, { status: 403 });
   const session = await requireSession();
   const parsed = newsSchema.safeParse(await request.json().catch(() => null));
