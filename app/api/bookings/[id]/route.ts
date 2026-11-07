@@ -42,7 +42,7 @@ export async function PATCH(request: Request, context: RouteContext) {
   }
 }
 
-export async function DELETE(_request: Request, context: RouteContext) {
+export async function DELETE(request: Request, context: RouteContext) {
   const access = await enforceInternalApi(request);
   if (access) return access;
   if (!(await getSession())) return NextResponse.json({ error: "Ikke innlogget." }, { status: 401 });
