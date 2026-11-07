@@ -1,3 +1,4 @@
+import { enforceInternalApi } from "@/lib/studio-api-guard";
 import { NextResponse } from "next/server";
 import { getSession } from "@/lib/auth";
 import { customerInput, sameOrigin } from "@/lib/customer-input";
@@ -6,6 +7,8 @@ import { updateCustomer } from "@/lib/repository";
 type RouteContext = { params: Promise<{ id: string }> };
 
 export async function PATCH(request: Request, context: RouteContext) {
+  const access = await enforceInternalApi(request);
+  if (access) return access;
   if (!(await getSession())) return NextResponse.json({ error: "Ikke innlogget." }, { status: 401 });
   if (!sameOrigin(request)) return NextResponse.json({ error: "Ugyldig forespørsel." }, { status: 403 });
   const input = customerInput(await request.json().catch(() => null) as Record<string, unknown> | null);
