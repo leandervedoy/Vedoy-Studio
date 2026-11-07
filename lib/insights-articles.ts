@@ -15,6 +15,150 @@ export type InsightArticle = {
 
 export const INSIGHT_ARTICLES: readonly InsightArticle[] = [
   {
+    "slug": "hvordan-selge-kunst-pa-klaer",
+    "title": "Hvordan selge kunst på klær? Rettigheter, pris og samarbeid",
+    "excerpt": "Praktisk guide for kunstnere og nettbutikker: opphavsrett, produktgodkjenning, prøveplagg, fortjeneste og lansering.",
+    "category": "Kunst og netthandel",
+    "publishedAt": "2026-11-07T16:00:00+01:00",
+    "readingMinutes": 5,
+    "author": "Vedoy Insights",
+    "editor": "Eiolf-Leander Haugsnes Vedøy",
+    "disclosure": "Vedoy Insights er utgitt av Vedøy, som utvikler Vedoy Collective. Artikkelen gir generell veiledning, ikke juridisk rådgivning. Samarbeid og produkttillatelser må avklares konkret.",
+    "articleCta": {
+      "eyebrow": "KUNST OG KREATIVE SAMARBEID",
+      "title": "Vedoy Collective",
+      "description": "Vi utvikler løsninger for kunstnere og produktkolleksjoner.",
+      "href": "https://vedoycollective.com",
+      "linkText": "Se Vedoy Collective"
+    },
+    "sections": [
+      {
+        "heading": "Kort svar: slik kommer du i gang",
+        "paragraphs": [
+          "Velg noen få motiver, avklar skriftlig hvilke produkter og kanaler kunsten kan brukes i, bestill prøveplagg, beregn en bærekraftig salgspris og innhent godkjenning før publisering.",
+          "Hos Vedoy Collective arbeider vi med forhåndsvisning av kunstnerprodukter og en tydelig godkjenningsprosess. Produktforslag er ikke det samme som godkjente produkter."
+        ]
+      },
+      {
+        "heading": "Hvem eier kunsten når den trykkes på klær?",
+        "paragraphs": [
+          "Som utgangspunkt beholder kunstneren opphavsretten med mindre annet er avtalt. En avtale om bruk på klær gir ikke automatisk rett til å bruke motivet i spill, premier eller andre markedsføringsflater.",
+          "Avklar motiv, trykkplassering, varighet, geografisk marked, eksklusivitet, kreditering og retten til å endre designet."
+        ]
+      },
+      {
+        "heading": "Hva bør kunstneren tjene per salg?",
+        "paragraphs": [
+          "Det finnes ingen universell riktig prosentsats. En avtale bør presisere om andelen beregnes av omsetning, bruttofortjeneste eller nettofortjeneste, og hvilke kostnader som trekkes fra.",
+          "Eksempel: Hvis salgsprisen er 500 kr og avtalte kostnader er 300 kr, blir beregningsgrunnlaget 200 kr. Ved 50 % av dette grunnlaget blir kunstnerandelen 100 kr. Tallene er kun et regneeksempel og forutsetter at avtalen definerer kostnadene slik."
+        ]
+      },
+      {
+        "heading": "Sjekkliste før lansering",
+        "paragraphs": [
+          "Kontroller produktbilder, materialer, størrelser, pris, kvalitet på prøveplagg, godkjenning av kunstner, leveringsvilkår og returhåndtering. La gjerne kunstneren kommentere hvert enkelt produkt.",
+          "Et godt samarbeid handler ikke bare om salg. Kunstneren bør kunne si nei til enkeltprodukter og til nye bruksområder uten å måtte avvise hele kolleksjonen."
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "kan-lojalitetspoeng-brukes-pa-alle-produkter",
+    "title": "Kan lojalitetspoeng brukes på alle produkter? Slik fungerer unntak",
+    "excerpt": "Hva betyr det når et produkt er unntatt bonuspoeng, rabatter eller spillpremier? En enkel forklaring for kunder, skapere og nettbutikker.",
+    "category": "Lojalitet og netthandel",
+    "publishedAt": "2026-11-07T15:59:00+01:00",
+    "readingMinutes": 4,
+    "author": "Vedoy Insights",
+    "editor": "Eiolf-Leander Haugsnes Vedøy",
+    "disclosure": "Vedoy Coins og tilknyttede appfunksjoner omtales som planlagte løsninger. Reglene for faktiske kjøp og fordeler må fremgå av gjeldende vilkår ved lansering.",
+    "articleCta": {
+      "eyebrow": "LOJALITET OG KREATIV HANDEL",
+      "title": "Vedoy Collective",
+      "description": "Les om plattformen vi bygger for klær, kunst og digitale opplevelser.",
+      "href": "https://vedoycollective.com",
+      "linkText": "Utforsk Collective"
+    },
+    "sections": [
+      {
+        "heading": "Kort svar: nei, ikke nødvendigvis",
+        "paragraphs": [
+          "En nettbutikk kan ha ulike regler for forskjellige produkter, men vilkårene må være tydelige. Et produkt kan være unntatt opptjening av poeng, bruk av poeng eller rabattkampanjer.",
+          "Det bør stå på produktsiden før betaling hva som gjelder, slik at kunden ikke oppdager begrensningen først i kassen."
+        ]
+      },
+      {
+        "heading": "Hvorfor blir enkelte produkter unntatt?",
+        "paragraphs": [
+          "Vanlige grunner kan være særskilte kunstneravtaler, små marginer, begrensede opplag eller andre kampanjevilkår. «Eksklusiv» betyr likevel ikke automatisk «ingen bonuspoeng».",
+          "Et forståelig merke kan være: «Dette produktet er unntatt Vedoy Coins i henhold til egne samarbeidsvilkår.» Konfidensielle avtaledetaljer trenger ikke publiseres."
+        ]
+      },
+      {
+        "heading": "Hva med spill og premier?",
+        "paragraphs": [
+          "Det er forskjell på å vise et produkt i en app og å bruke kunstverket som spillpremie eller del av spillets grafikk. Sistnevnte kan kreve en egen tillatelse fra rettighetshaveren.",
+          "Vedoy Collective ønsker å gjøre det mulig for samarbeidspartnere å velge deltakelse i app, poengordninger og kampanjer hver for seg. Dette er en planlagt arbeidsflyt, ikke en bekreftelse på at alle valgene er ferdig utviklet."
+        ]
+      },
+      {
+        "heading": "Slik kan en butikk gjøre det ryddig",
+        "paragraphs": [
+          "Bruk separate innstillinger for poengopptjening, poenginnløsning, rabatt, appvisning og spillbruk. Dokumenter hvem som godkjente hva, og når.",
+          "Kunder bør se en kort forklaring. Samarbeidspartnere bør ha en privat oversikt med mer detaljerte rettigheter."
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "black-friday-nettbutikk-forpris-og-rabatt",
+    "title": "Black Friday for nettbutikker: førpris, rabatt og lønnsomhet",
+    "excerpt": "Hvordan planlegge Black Friday og Black Weekend i Norge? Lær om 30-dagersregelen, prismerking, marginer og en praktisk sjekkliste.",
+    "category": "Markedsføring og handel",
+    "publishedAt": "2026-11-07T15:58:00+01:00",
+    "readingMinutes": 5,
+    "author": "Vedoy Insights",
+    "editor": "Eiolf-Leander Haugsnes Vedøy",
+    "disclosure": "Generell informasjon, ikke juridisk rådgivning. Kontroller oppdaterte regler hos Forbrukertilsynet og faktisk prishistorikk før kampanjer publiseres.",
+    "articleCta": {
+      "eyebrow": "DIGITAL HANDEL",
+      "title": "Vedoy Studio",
+      "description": "Utforsk nettsider og digitale verktøy for bedrifter.",
+      "href": "https://vedoystudio.no",
+      "linkText": "Se Vedoy Studio"
+    },
+    "sections": [
+      {
+        "heading": "Når er Black Friday i 2026?",
+        "paragraphs": [
+          "Black Friday er fredag 27. november 2026, og Cyber Monday er mandag 30. november. Black Weekend brukes ofte om kampanjeperioden mellom disse dagene.",
+          "En nettbutikk som lanseres 15. november, har 12 dager frem til Black Friday. Det gir tid til å teste bestillinger og produktpresentasjon, men ikke til å bygge opp en kunstig førpris."
+        ]
+      },
+      {
+        "heading": "Hva er 30-dagersregelen for førpris?",
+        "paragraphs": [
+          "Ved markedsføring av prisnedsettelser er hovedregelen i Norge at førprisen skal være den laveste prisen virksomheten har brukt i minst de 30 dagene før salget startet, jf. prisopplysningsforskriften § 9a.",
+          "Ikke vis en rabattprosent basert på en vilkårlig veiledende pris. Nye varer med kort prishistorikk krever særskilt vurdering før de markedsføres med avslag. Se Forbrukertilsynets veiledning på forbrukertilsynet.no."
+        ]
+      },
+      {
+        "heading": "Hvordan beregne om en rabatt lønner seg?",
+        "paragraphs": [
+          "Eksempel: Et produkt selges for 500 kr og har 300 kr i relevante kostnader. Bidraget før rabatt er 200 kr. Ved 20 % rabatt blir salgsprisen 400 kr og bidraget 100 kr, hvis kostnadene ellers er uendret.",
+          "Regn også inn betalingsgebyrer, frakt, retur, markedsføring og eventuelle kunstnerandeler. Høy omsetning betyr ikke automatisk høy fortjeneste."
+        ]
+      },
+      {
+        "heading": "Hva bør nettbutikken gjøre før kampanjen?",
+        "paragraphs": [
+          "Sjekk produktdata, prislogg, lager eller leverandørkapasitet, betalingsflyt, leveringstid, returvilkår og kundeservice. Velg heller få tydelige tilbud enn rabatter som ikke tåler kostnadene.",
+          "Vedoy Collective vurderer lanserings- og kampanjeplanlegging for kreative kolleksjoner. Produkter med kunstneravtaler bør ikke settes på tilbud uten at pris og rettigheter er avklart."
+        ]
+      }
+    ]
+  },
+  {
     "slug": "nattens-utvikling-tryggere-sky-enklere-verktoy",
     "title": "Nattens utvikling hos Vedøy: tryggere sky og enklere verktøy",
     "excerpt": "Natt til 6. november fortsatte arbeidet med Vedoy Cloud, Developer Portal og Collective. Vedoy Shield inngår i sikkerhetsplanene for økosystemet.",

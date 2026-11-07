@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { INSIGHT_ARTICLES } from "@/lib/insights-articles";
 import styles from "./insights.module.css";
+import { InsightsPersonalizedFeed } from "@/components/insights/insights-personalized-feed";
 
 export const metadata: Metadata = {
   title: "Vedoy Insights – teknologi, handel og utvikling",
@@ -23,12 +24,7 @@ export default function InsightsIndex() {
     </section>
     <section className={styles.feed} aria-label="Publiserte artikler">
       <div className={styles.sectionTitle}><span>01 / NYESTE ARTIKLER</span><span>{INSIGHT_ARTICLES.length} ARTIKKEL</span></div>
-      {INSIGHT_ARTICLES.map((article) => <article key={article.slug} className={styles.card}>
-        <div className={styles.cardTop}><span>{article.category}</span><time dateTime={article.publishedAt}>{new Date(article.publishedAt).toLocaleDateString("nb-NO",{day:"numeric",month:"long",year:"numeric",timeZone:"Europe/Oslo"})}</time></div>
-        <h2><Link href={"/insights/"+article.slug}>{article.title}</Link></h2>
-        <p>{article.excerpt}</p>
-        <div className={styles.cardBottom}><span>{article.readingMinutes} min lesing</span><Link href={"/insights/"+article.slug}>Les innsikten ↗</Link></div>
-      </article>)}
+      <InsightsPersonalizedFeed articles={[...INSIGHT_ARTICLES]}/>
     </section>
     <footer className={styles.footer}><span>VEDOY INSIGHTS / EN DEL AV VEDØY</span><Link href="https://vedoy-deliver.vercel.app">Oppdag Vedoy Deliver ↗</Link></footer>
   </main>;
