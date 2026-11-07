@@ -1,3 +1,4 @@
+import { requireVedoyStaff } from "@/lib/staff-access";
 import { privilegedSupabase } from "@/lib/vedoy-manager";
 import { ModuleHeader } from "@/components/studio/module-header";
 import { TrafficChart } from "@/components/studio/traffic-chart";
@@ -31,6 +32,7 @@ const sources = [
 ];
 
 export default async function AnalyticsPage() {
+  await requireVedoyStaff();
   const [bookings, contacts, customers, projects, consent] = await Promise.all([listBookings(), listContactRequests(), listCustomers(), listProjects(), voluntaryData()]);
   return <><ModuleHeader eyebrow="VOKS" title="Vedøy Statistics" description="Live tall fra Vedøy-databasen, med tydelig skille mellom ekte data og demo." badge="LIVE DATA" /><section className="analytics-kpis"><article><small>Henvendelser</small><strong>{contacts.length}</strong><span>fra databasen</span></article><article><small>Kunder</small><strong>{customers.length}</strong><span>i registeret</span></article><article><small>Bookinger</small><strong>{bookings.length}</strong><span>lagret totalt</span></article><article><small>Prosjekter</small><strong>{projects.length}</strong><span>i Vedøy Growth</span></article></section><section className="studio-panel" aria-label="Frivillig data og annonser">
  <div className="panel-heading"><div><small>VEDOY STATISTICS · FRIVILLIG</small><h2>Besøksbidrag og annonser</h2></div></div>
