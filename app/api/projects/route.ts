@@ -4,12 +4,11 @@ import { sameOriginWrite } from "@/lib/vedoy-manager";
 import { requirePreviewAdmin } from "@/lib/studio-preview-access";
 import { createProject, listProjects } from "@/lib/repository";
 
-// Legacy projects are not yet tenant-scoped; never expose them to customers.
+// Legacy projects are org_vedoy-wide and do not yet implement per-customer ownership.
 async function canManageLegacyProjects() {
   const session = await getSession();
   return Boolean(session && await requirePreviewAdmin(session));
 }
-
 const denied = () => NextResponse.json({ error: "Ingen tilgang." }, {
   status: 403, headers: { "Cache-Control": "no-store" }
 });
