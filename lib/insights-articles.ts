@@ -15,6 +15,488 @@ export type InsightArticle = {
 
 export const INSIGHT_ARTICLES: readonly InsightArticle[] = [
   {
+    "category": "Kryptografi og sikkerhet",
+    "publishedAt": "2026-11-08",
+    "author": "Eiolf-Leander Haugsnes Vedøy",
+    "journalist": "Eiolf-Leander Haugsnes Vedøy",
+    "editor": "Eiolf-Leander Haugsnes Vedøy",
+    "disclosure": "Vedoy Insights utgis av Vedøy. Artikkelen er fagjournalistisk informasjon, ikke dokumentasjon på at Vedoy Shield er uavhengig sikkerhetsrevidert. Sikkerhet avhenger av implementasjon, nøkkelhåndtering og trusselmodell.",
+    "articleCta": {
+      "eyebrow": "UTFORSK TEKNOLOGIEN",
+      "title": "Vedoy Studio",
+      "description": "Utvikling, sikkerhet og digitale tjenester fra Vedøy.",
+      "href": "https://vedoystudio.no",
+      "linkText": "Besøk Vedoy Studio"
+    },
+    "slug": "hvorfor-sterk-kryptering-er-vanskelig-a-bryte",
+    "title": "Hvorfor kan ikke uvedkommende lese sterkt krypterte meldinger?",
+    "excerpt": "Hva AES-256, Signal og Proton faktisk beskytter – og hvorfor ingen seriøs kryptograf lover absolutt sikkerhet.",
+    "readingMinutes": 8,
+    "sections": [
+      {
+        "heading": "Hva betyr det å kryptere en melding?",
+        "paragraphs": [
+          "Kryptering gjør lesbar klartekst om til chiffertekst ved hjelp av en algoritme og en nøkkel. Med korrekt implementasjon skal en angriper som bare kjenner chifferteksten, ikke kunne gjenfinne meldingen innenfor realistiske ressursgrenser. Algoritmen kan gjerne være offentlig kjent: sikkerheten skal avhenge av nøkkelen, ikke hemmelighold av metoden.",
+          "For innhold på vei mellom to personer kan ende-til-ende-kryptering sørge for at mellomliggende servere ikke har tilgang til klarteksten. Det er en bestemt arkitektur, ikke et synonym for alle former for kryptering."
+        ]
+      },
+      {
+        "heading": "Hvorfor er AES-256 vanskelig å angripe?",
+        "paragraphs": [
+          "AES-256 bruker en nøkkel på 256 bit. Det gir 2 opphøyd i 256 mulige nøkler. Et uttømmende søk etter en tilfeldig nøkkel er derfor praktisk urealistisk selv under svært optimistiske antakelser om maskinvare. AES er standardisert i NIST FIPS 197: https://csrc.nist.gov/pubs/fips/197/final",
+          "Denne beregningen sier imidlertid ingenting om svakheter i passord, feil i programvaren, tapte nøkler eller skadevare på en opplåst telefon. Å beskytte krypteringsnøkkelen er like viktig som å velge algoritmen."
+        ]
+      },
+      {
+        "heading": "Hvordan beskytter Signal samtaler?",
+        "paragraphs": [
+          "Signal kombinerer ende-til-ende-kryptering, nøkkelutveksling og Double Ratchet. Meldingsnøkler utvikles fortløpende slik at en senere nøkkellekkasje ikke automatisk avslører hele samtalehistorikken. Signal dokumenterer også hybrid postkvantenøkkelutveksling gjennom PQXDH. Teknisk spesifikasjon: https://signal.org/docs/specifications/doubleratchet/"
+        ]
+      },
+      {
+        "heading": "Hvorfor kan Proton beskytte innhold mot sin egen server?",
+        "paragraphs": [
+          "Proton Mail bruker blant annet OpenPGP og nulltilgangskryptering for lagret meldingsinnhold. Meldinger fra Proton til en vanlig ekstern e-postadresse uten PGP eller særskilt passordbeskyttelse er normalt ikke ende-til-ende-kryptert. Det er derfor feil å si at absolutt all e-post hos Proton alltid er ende-til-ende-kryptert. Proton forklarer forskjellen: https://proton.me/support/proton-mail-encryption-explained"
+        ]
+      },
+      {
+        "heading": "Hva sier de faktiske testene?",
+        "paragraphs": [
+          "Signal-protokollen er gjenstand for fagfellevurdert formell analyse. Sikkerhetsbevis dokumenterer egenskaper innenfor en definert modell – de garanterer ikke at alle implementasjoner er feilfrie. En klassisk studie er Cohn-Gordon mfl., A Formal Security Analysis of the Signal Messaging Protocol: https://eprint.iacr.org/2016/1013",
+          "Protons OpenPGP.js har gjennomgått ekstern revisjon. En revisjon er en vurdering av bestemt kode på et bestemt tidspunkt, ikke et løfte om at produktet aldri kan hackes: https://proton.me/blog/openpgpjs-protonmail-security-audit"
+        ]
+      },
+      {
+        "heading": "Kan myndigheter eller kvantedatamaskiner lese innholdet?",
+        "paragraphs": [
+          "Sterk kryptering gir ingen generell bakdør til dem som har mye ressurser. Men en myndighet eller angriper kan i enkelte situasjoner få tilgang til innhold gjennom en kompromittert enhet, sikkerhetskopi, mottakerens skjerm eller stjålne nøkler. Metadata kan dessuten være tilgjengelige uten at meldingsinnhold dekrypteres.",
+          "En fremtidig stor, feilrettet kvantedatamaskin truer klassisk RSA og elliptisk kurvekryptografi. Derfor standardiserer NIST postkvantealgoritmer som ML-KEM. AES-256 vurderes ikke som tilsvarende direkte brutt av Shors algoritme. https://csrc.nist.gov/projects/post-quantum-cryptography"
+        ]
+      },
+      {
+        "heading": "Les de fordypende artiklene i serien",
+        "paragraphs": [
+          "Signal: /insights/signal-kryptering-double-ratchet-pqxdh",
+          "Proton Mail: /insights/proton-mail-openpgp-nulltilgangskryptering",
+          "Ende-til-ende-kryptering: /insights/ende-til-ende-kryptering-forklart",
+          "Kvantekryptografi: /insights/kvantekryptografi-qkd-og-kvantedatamaskiner",
+          "Postkvante-ratchet: /insights/postkvante-ratchet-og-triple-ratchet",
+          "AES-256: /insights/aes-256-matematikken-og-testene",
+          "Quantum Key Distribution: /insights/qkd-kvantenokkeldistribusjon",
+          "Vedoy Shield: /insights/vedoy-shield-sikkerhet-og-dokumentasjon"
+        ]
+      }
+    ]
+  },
+  {
+    "category": "Kryptografi og sikkerhet",
+    "publishedAt": "2026-11-08",
+    "author": "Eiolf-Leander Haugsnes Vedøy",
+    "journalist": "Eiolf-Leander Haugsnes Vedøy",
+    "editor": "Eiolf-Leander Haugsnes Vedøy",
+    "disclosure": "Vedoy Insights utgis av Vedøy. Artikkelen er fagjournalistisk informasjon, ikke dokumentasjon på at Vedoy Shield er uavhengig sikkerhetsrevidert. Sikkerhet avhenger av implementasjon, nøkkelhåndtering og trusselmodell.",
+    "articleCta": {
+      "eyebrow": "UTFORSK TEKNOLOGIEN",
+      "title": "Vedoy Studio",
+      "description": "Utvikling, sikkerhet og digitale tjenester fra Vedøy.",
+      "href": "https://vedoystudio.no",
+      "linkText": "Besøk Vedoy Studio"
+    },
+    "slug": "signal-kryptering-double-ratchet-pqxdh",
+    "title": "Slik sikrer Signal meldingene: Double Ratchet og PQXDH",
+    "excerpt": "En teknisk gjennomgang av Signals nøkkelutveksling, meldingsnøkler, sikkerhetsbevis og begrensninger.",
+    "readingMinutes": 5,
+    "sections": [
+      {
+        "heading": "Sikkerheten starter på enheten",
+        "paragraphs": [
+          "Signal beskytter private samtaler med ende-til-ende-kryptering. Nødvendige hemmeligheter håndteres på partenes enheter, slik at serveren ikke trenger klartekst for å levere en melding. Dette hindrer ikke at skadevare på en enhet kan lese innhold før kryptering eller etter dekryptering."
+        ]
+      },
+      {
+        "heading": "PQXDH ved oppstart av en samtale",
+        "paragraphs": [
+          "PQXDH kombinerer klassiske Diffie–Hellman-komponenter med postkvantebasert nøkkelinnkapsling. Dette er en hybrid tilnærming: Målet er å redusere risikoen dersom en av de kryptografiske antakelsene brytes. Spesifikasjon: https://signal.org/docs/specifications/pqxdh/"
+        ]
+      },
+      {
+        "heading": "Double Ratchet under samtalen",
+        "paragraphs": [
+          "Double Ratchet avleder nye meldingsnøkler fra kjedenøkler. Ved mottatte ratchet-nøkler kan protokollen blande inn nye hemmeligheter. Dette støtter fremoverhemmelighold og, under bestemte betingelser, gjenoppretting etter kompromittering. Spesifikasjon: https://signal.org/docs/specifications/doubleratchet/"
+        ]
+      },
+      {
+        "heading": "Hva er Triple Ratchet?",
+        "paragraphs": [
+          "Signal har dokumentert en Triple Ratchet-konstruksjon med kombinerte klassiske og postkvantebaserte ratchets. Den er ment å styrke sikkerheten ved skiftende nøkkelmateriale. Dokumentasjonen må leses for å forstå hvilke garantier som faktisk gjelder: https://signal.org/docs/specifications/sparsepostquantumratchet/"
+        ]
+      },
+      {
+        "heading": "Hva er kontrollert av forskere?",
+        "paragraphs": [
+          "Cohn-Gordon og medforfattere analyserte Signal-protokollens sikkerhet formelt. Slike analyser er sterkere enn ren markedsføring, men gjelder modeller med eksplisitte antakelser. Forskningen viser hvorfor protokollspesifikasjon, implementasjon og oppdateringer må vurderes separat: https://eprint.iacr.org/2016/1013"
+        ]
+      }
+    ]
+  },
+  {
+    "category": "Kryptografi og sikkerhet",
+    "publishedAt": "2026-11-08",
+    "author": "Eiolf-Leander Haugsnes Vedøy",
+    "journalist": "Eiolf-Leander Haugsnes Vedøy",
+    "editor": "Eiolf-Leander Haugsnes Vedøy",
+    "disclosure": "Vedoy Insights utgis av Vedøy. Artikkelen er fagjournalistisk informasjon, ikke dokumentasjon på at Vedoy Shield er uavhengig sikkerhetsrevidert. Sikkerhet avhenger av implementasjon, nøkkelhåndtering og trusselmodell.",
+    "articleCta": {
+      "eyebrow": "UTFORSK TEKNOLOGIEN",
+      "title": "Vedoy Studio",
+      "description": "Utvikling, sikkerhet og digitale tjenester fra Vedøy.",
+      "href": "https://vedoystudio.no",
+      "linkText": "Besøk Vedoy Studio"
+    },
+    "slug": "proton-mail-openpgp-nulltilgangskryptering",
+    "title": "Proton Mail: Hva betyr OpenPGP og nulltilgangskryptering?",
+    "excerpt": "Proton bruker flere beskyttelseslag, men ikke alle e-poster er automatisk ende-til-ende-kryptert.",
+    "readingMinutes": 5,
+    "sections": [
+      {
+        "heading": "Forskjellen mellom lagring og overføring",
+        "paragraphs": [
+          "Proton Mail bruker nulltilgangskryptering for å begrense leverandørens mulighet til å dekryptere lagret meldingsinnhold. Ende-til-ende-kryptering handler derimot om hvem som kan lese meldingen under kommunikasjonen mellom avsender og mottaker. Det er to ulike sikkerhetsegenskaper."
+        ]
+      },
+      {
+        "heading": "OpenPGP og nøkkelpar",
+        "paragraphs": [
+          "OpenPGP bruker blant annet offentlige og private nøkler for kryptering og signering. Proton støtter automatisk kryptering mellom Proton-brukere. For mottakere hos eksterne leverandører kreves kompatibel PGP eller en separat passordbeskyttet løsning dersom mottakerens e-postleverandør ikke skal kunne lese klarteksten. https://proton.me/support/proton-mail-encryption-explained"
+        ]
+      },
+      {
+        "heading": "Hva Proton ikke skjuler",
+        "paragraphs": [
+          "E-postens emnefelt og mange metadata beskyttes ikke på samme måte som meldingsinnhold og vedlegg. Enheten som viser meldingen, og dens sikkerhet, er fortsatt en kritisk del av beskyttelsen."
+        ]
+      },
+      {
+        "heading": "Uavhengig kodegjennomgang",
+        "paragraphs": [
+          "Protons OpenPGP.js har vært undersøkt av Cure53. Sikkerhetsgjennomganger kan avdekke sårbarheter og dokumentere testomfang, men er ikke et bevis på absolutt sikkerhet i alle versjoner. https://proton.me/blog/openpgpjs-protonmail-security-audit"
+        ]
+      },
+      {
+        "heading": "Når bør man bruke Proton?",
+        "paragraphs": [
+          "Proton kan være nyttig for brukere som ønsker kryptert e-postlagring og enkel kryptert kommunikasjon med andre Proton-brukere. Trusselmodell, mottaker og enhetssikkerhet bør avgjøre om e-post er egnet for spesielt sensitive samtaler."
+        ]
+      }
+    ]
+  },
+  {
+    "category": "Kryptografi og sikkerhet",
+    "publishedAt": "2026-11-08",
+    "author": "Eiolf-Leander Haugsnes Vedøy",
+    "journalist": "Eiolf-Leander Haugsnes Vedøy",
+    "editor": "Eiolf-Leander Haugsnes Vedøy",
+    "disclosure": "Vedoy Insights utgis av Vedøy. Artikkelen er fagjournalistisk informasjon, ikke dokumentasjon på at Vedoy Shield er uavhengig sikkerhetsrevidert. Sikkerhet avhenger av implementasjon, nøkkelhåndtering og trusselmodell.",
+    "articleCta": {
+      "eyebrow": "UTFORSK TEKNOLOGIEN",
+      "title": "Vedoy Studio",
+      "description": "Utvikling, sikkerhet og digitale tjenester fra Vedøy.",
+      "href": "https://vedoystudio.no",
+      "linkText": "Besøk Vedoy Studio"
+    },
+    "slug": "ende-til-ende-kryptering-forklart",
+    "title": "Ende-til-ende-kryptering forklart: Hvem kan lese meldingene?",
+    "excerpt": "E2EE beskytter innhold mellom avsender og mottaker, men ikke automatisk enhetene, metadataene eller sikkerhetskopiene.",
+    "readingMinutes": 5,
+    "sections": [
+      {
+        "heading": "Hva betyr ende til ende?",
+        "paragraphs": [
+          "Med ende-til-ende-kryptering, ofte forkortet E2EE, blir data kryptert slik at de tiltenkte endepunktene har de nødvendige nøklene til å lese dem. En transportserver kan formidle data uten å kunne dekryptere innholdet."
+        ]
+      },
+      {
+        "heading": "E2EE er ikke det samme som HTTPS",
+        "paragraphs": [
+          "HTTPS med TLS beskytter trafikken mellom nettleseren og serveren. Serveren kan normalt lese innholdet den mottar. Med E2EE skal serveren ikke ha nøklene til brukerens private melding. Forskjellen er avgjørende når tjenester markedsføres som krypterte."
+        ]
+      },
+      {
+        "heading": "Autentisering og nøkkelverifisering",
+        "paragraphs": [
+          "Kryptering alene hindrer ikke alltid at noen utgir seg for å være mottaker. Derfor trenger sikre protokoller autentisering, kontroll av identitetsnøkler og god håndtering av endringer i nøklene."
+        ]
+      },
+      {
+        "heading": "Hva med sikkerhetskopier?",
+        "paragraphs": [
+          "En ende-til-ende-kryptert samtale kan likevel eksponeres dersom meldinger kopieres til en svakere beskyttet sikkerhetskopi, fanges på skjermen eller leses fra en kompromittert telefon. Hvilke sikkerhetskopifunksjoner som er aktivert, har betydning."
+        ]
+      },
+      {
+        "heading": "Et godt kontrollspørsmål",
+        "paragraphs": [
+          "Spør leverandøren hvem som eier dekrypteringsnøklene, hvordan identiteten til mottakeren kontrolleres, hvordan nye enheter legges til og hvordan sikkerhetskopier håndteres. Signal beskriver sine løsninger her: https://signal.org/docs/"
+        ]
+      }
+    ]
+  },
+  {
+    "category": "Kryptografi og sikkerhet",
+    "publishedAt": "2026-11-08",
+    "author": "Eiolf-Leander Haugsnes Vedøy",
+    "journalist": "Eiolf-Leander Haugsnes Vedøy",
+    "editor": "Eiolf-Leander Haugsnes Vedøy",
+    "disclosure": "Vedoy Insights utgis av Vedøy. Artikkelen er fagjournalistisk informasjon, ikke dokumentasjon på at Vedoy Shield er uavhengig sikkerhetsrevidert. Sikkerhet avhenger av implementasjon, nøkkelhåndtering og trusselmodell.",
+    "articleCta": {
+      "eyebrow": "UTFORSK TEKNOLOGIEN",
+      "title": "Vedoy Studio",
+      "description": "Utvikling, sikkerhet og digitale tjenester fra Vedøy.",
+      "href": "https://vedoystudio.no",
+      "linkText": "Besøk Vedoy Studio"
+    },
+    "slug": "kvantekryptografi-qkd-og-kvantedatamaskiner",
+    "title": "Kvantekryptografi: Hva er fysikk, og hva er matematikk?",
+    "excerpt": "Kvantekryptografi og postkvantekryptografi er ulike teknologier, selv om navnene ligner.",
+    "readingMinutes": 5,
+    "sections": [
+      {
+        "heading": "Tre begreper som ofte blandes",
+        "paragraphs": [
+          "Kvantekryptografi beskriver metoder som utnytter kvantefysiske egenskaper til kryptografiske formål. QKD er et kjent eksempel. Postkvantekryptografi er derimot vanlige programvarealgoritmer som antas å motstå kjente kvanteangrep."
+        ]
+      },
+      {
+        "heading": "Slik påvirker kvantedatamaskiner dagens sikkerhet",
+        "paragraphs": [
+          "Shors algoritme kan i prinsippet angripe RSA og elliptisk kurvekryptografi med en stor nok feilrettet kvantedatamaskin. Grovers algoritme gir en mer begrenset teoretisk fordel ved generisk søk mot symmetriske nøkler."
+        ]
+      },
+      {
+        "heading": "Postkvantekryptografi uten kvantemaskin",
+        "paragraphs": [
+          "NIST har standardisert ML-KEM i FIPS 203 for nøkkelinnkapsling, ML-DSA i FIPS 204 og SLH-DSA i FIPS 205 for signaturer. Disse kan kjøres på klassiske datamaskiner. https://csrc.nist.gov/projects/post-quantum-cryptography"
+        ]
+      },
+      {
+        "heading": "QKD krever fysisk infrastruktur",
+        "paragraphs": [
+          "QKD sender kvantetilstander, ofte i optiske systemer, for å muliggjøre nøkkeldistribusjon med deteksjon av visse typer avlytting. Det krever spesialisert utstyr og et autentisert klassisk kommunikasjonsspor. QKD er ikke et vanlig programvarebibliotek som kan installeres på enhver mobil."
+        ]
+      },
+      {
+        "heading": "Vær skeptisk til absolutte løfter",
+        "paragraphs": [
+          "En kvantedatamaskin kan ikke i dag brukes som generell sertifisering av at en meldingstjeneste er ubrytelig. Kvaliteten må vurderes med trusselmodell, spesifikasjon, implementasjon og uavhengig testing."
+        ]
+      }
+    ]
+  },
+  {
+    "category": "Kryptografi og sikkerhet",
+    "publishedAt": "2026-11-08",
+    "author": "Eiolf-Leander Haugsnes Vedøy",
+    "journalist": "Eiolf-Leander Haugsnes Vedøy",
+    "editor": "Eiolf-Leander Haugsnes Vedøy",
+    "disclosure": "Vedoy Insights utgis av Vedøy. Artikkelen er fagjournalistisk informasjon, ikke dokumentasjon på at Vedoy Shield er uavhengig sikkerhetsrevidert. Sikkerhet avhenger av implementasjon, nøkkelhåndtering og trusselmodell.",
+    "articleCta": {
+      "eyebrow": "UTFORSK TEKNOLOGIEN",
+      "title": "Vedoy Studio",
+      "description": "Utvikling, sikkerhet og digitale tjenester fra Vedøy.",
+      "href": "https://vedoystudio.no",
+      "linkText": "Besøk Vedoy Studio"
+    },
+    "slug": "postkvante-ratchet-og-triple-ratchet",
+    "title": "Postkvante-ratchet: Hva skjer når samtalen får nye nøkler?",
+    "excerpt": "En ratchet utvikler meldingsnøkler fortløpende. Postkvantevarianter forsøker å bevare dette prinsippet også mot fremtidige kvantetrusler.",
+    "readingMinutes": 5,
+    "sections": [
+      {
+        "heading": "Hvorfor ikke én nøkkel for hele samtalen?",
+        "paragraphs": [
+          "Hvis samme hemmelighet brukes for lenge, kan en senere lekkasje eksponere mye informasjon. En ratchet avleder nye nøkler over tid og sletter foreldet nøkkelmateriale når det er forsvarlig."
+        ]
+      },
+      {
+        "heading": "Double Ratchet og gjenoppretting",
+        "paragraphs": [
+          "Signals Double Ratchet kombinerer nøkkelkjeder med nye Diffie–Hellman-verdier. Det gir bestemte former for fremoverhemmelighold og mulighet til å forbedre sikkerheten etter kompromittering. Men ved vedvarende kontroll over enheten har angriperen fortsatt et alvorlig overtak. https://signal.org/docs/specifications/doubleratchet/"
+        ]
+      },
+      {
+        "heading": "Hvorfor trenger vi postkvante-ratcheting?",
+        "paragraphs": [
+          "En innledende postkvantebeskyttet håndtrykkprotokoll er ikke nødvendigvis nok til å gi alle ønskede postkvantegarantier gjennom en lang samtale. Postkvante-ratcheting forsøker å tilføre nye kvantesikre hemmeligheter etter hvert som samtalen utvikler seg."
+        ]
+      },
+      {
+        "heading": "Signals Triple Ratchet",
+        "paragraphs": [
+          "Signal beskriver Triple Ratchet som en kombinasjon av klassisk Double Ratchet og Sparse Post-Quantum Ratchet. Presise sikkerhetsegenskaper avhenger av algoritmene, implementasjonen og hvordan ratchets synkroniseres. https://signal.org/docs/specifications/sparsepostquantumratchet/"
+        ]
+      },
+      {
+        "heading": "Hva må testes?",
+        "paragraphs": [
+          "Relevante tester omfatter tapte meldinger, uventet meldingsrekkefølge, dupliserte pakker, nøkkelrotasjon, kompromitterte sesjonsnøkler og tilbakeføring til en tidligere tilstand. Formell analyse bør suppleres med implementasjonstester og ekstern revisjon."
+        ]
+      }
+    ]
+  },
+  {
+    "category": "Kryptografi og sikkerhet",
+    "publishedAt": "2026-11-08",
+    "author": "Eiolf-Leander Haugsnes Vedøy",
+    "journalist": "Eiolf-Leander Haugsnes Vedøy",
+    "editor": "Eiolf-Leander Haugsnes Vedøy",
+    "disclosure": "Vedoy Insights utgis av Vedøy. Artikkelen er fagjournalistisk informasjon, ikke dokumentasjon på at Vedoy Shield er uavhengig sikkerhetsrevidert. Sikkerhet avhenger av implementasjon, nøkkelhåndtering og trusselmodell.",
+    "articleCta": {
+      "eyebrow": "UTFORSK TEKNOLOGIEN",
+      "title": "Vedoy Studio",
+      "description": "Utvikling, sikkerhet og digitale tjenester fra Vedøy.",
+      "href": "https://vedoystudio.no",
+      "linkText": "Besøk Vedoy Studio"
+    },
+    "slug": "aes-256-matematikken-og-testene",
+    "title": "AES-256: Matematikken bak en 256-biters krypteringsnøkkel",
+    "excerpt": "Hvorfor nøkkelrommet er enormt, hva standarden dokumenterer, og hvilke typer feil AES ikke kan forhindre.",
+    "readingMinutes": 5,
+    "sections": [
+      {
+        "heading": "Hva betyr 256 bit?",
+        "paragraphs": [
+          "En 256-biters nøkkel har 2^256 mulige verdier. En tilfeldig valgt nøkkel gir derfor et enormt nøkkelrom. AES-256 er en variant av Advanced Encryption Standard, beskrevet i NIST FIPS 197. https://csrc.nist.gov/pubs/fips/197/final"
+        ]
+      },
+      {
+        "heading": "Hvor lang tid tar brute force?",
+        "paragraphs": [
+          "Gjennomsnittlig må en angriper som tester uavhengige nøkler prøve omtrent halvparten av nøkkelrommet. Selv absurde testhastigheter gir astronomiske tidsanslag. Regnestykket beskriver uttømmende søk, ikke alle andre mulige angrep."
+        ]
+      },
+      {
+        "heading": "Krypteringsmodus betyr noe",
+        "paragraphs": [
+          "AES er en blokkchifferalgoritme, ikke en fullstendig meldingstjeneste. En modus som GCM kan gi både konfidensialitet og integritetsbeskyttelse, men krever blant annet korrekt bruk av nonce. Feil bruk kan ødelegge sikkerheten selv når AES-kjernen er sterk."
+        ]
+      },
+      {
+        "heading": "Sterk nøkkel kan ikke redde svak programvare",
+        "paragraphs": [
+          "Et kompromittert endepunkt, dårlig tilfeldig nøkkelgenerering, eksponerte nøkler eller en feil implementasjon kan avsløre data. Derfor må uavhengig gjennomgang omfatte hele løsningen, ikke bare algoritmen."
+        ]
+      },
+      {
+        "heading": "Postkvanteperspektivet",
+        "paragraphs": [
+          "Grovers algoritme kan i teorien gi en kvadratisk forbedring for nøkkelsøk. En tilstrekkelig lang symmetrisk nøkkel som AES-256 brukes derfor fortsatt i strategier for langsiktig konfidensialitet. Se også NISTs overgangsarbeid: https://csrc.nist.gov/projects/post-quantum-cryptography"
+        ]
+      }
+    ]
+  },
+  {
+    "category": "Kryptografi og sikkerhet",
+    "publishedAt": "2026-11-08",
+    "author": "Eiolf-Leander Haugsnes Vedøy",
+    "journalist": "Eiolf-Leander Haugsnes Vedøy",
+    "editor": "Eiolf-Leander Haugsnes Vedøy",
+    "disclosure": "Vedoy Insights utgis av Vedøy. Artikkelen er fagjournalistisk informasjon, ikke dokumentasjon på at Vedoy Shield er uavhengig sikkerhetsrevidert. Sikkerhet avhenger av implementasjon, nøkkelhåndtering og trusselmodell.",
+    "articleCta": {
+      "eyebrow": "UTFORSK TEKNOLOGIEN",
+      "title": "Vedoy Studio",
+      "description": "Utvikling, sikkerhet og digitale tjenester fra Vedøy.",
+      "href": "https://vedoystudio.no",
+      "linkText": "Besøk Vedoy Studio"
+    },
+    "slug": "qkd-kvantenokkeldistribusjon",
+    "title": "Quantum Key Distribution (QKD): Kan fysikk avsløre avlytting?",
+    "excerpt": "QKD bruker kvantetilstander ved nøkkeldistribusjon, men krever spesialutstyr og erstatter ikke vanlig sikkerhetsarbeid.",
+    "readingMinutes": 5,
+    "sections": [
+      {
+        "heading": "Hva er QKD?",
+        "paragraphs": [
+          "Quantum Key Distribution, på norsk kvantenøkkeldistribusjon, bruker kvantetilstander for å la to parter etablere felles nøkkelmateriale. I ideelle modeller kan forsøk på å måle overførte kvantetilstander oppdages gjennom endrede måleresultater."
+        ]
+      },
+      {
+        "heading": "Et klassisk eksempel: BB84",
+        "paragraphs": [
+          "BB84-protokollen ble foreslått av Bennett og Brassard i 1984. Den bruker blant annet tilfeldig valgte målebaser. Etter overføringen sammenligner partene offentlig hvilke baser de brukte, og gjennomfører feilestimering og nøkkelbehandling."
+        ]
+      },
+      {
+        "heading": "Hva trenger man fysisk?",
+        "paragraphs": [
+          "Et praktisk QKD-system krever normalt optiske sendere og mottakere, en egnet kommunikasjonskanal og en autentisert klassisk forbindelse. Rekkevidde, støy, detektorer og mulige sidekanaler påvirker sikkerheten."
+        ]
+      },
+      {
+        "heading": "Hva QKD ikke gjør",
+        "paragraphs": [
+          "QKD krypterer ikke automatisk meldinger og gir ikke alene identitetsbeskyttelse. Løsningen må kombineres med autentisering og en sikker krypteringsmekanisme. Den fungerer heller ikke ved å koble en vanlig mobil til en skybasert kvantedatamaskin."
+        ]
+      },
+      {
+        "heading": "Når er postkvantekryptografi enklere?",
+        "paragraphs": [
+          "For de fleste apper og nettsteder er standardiserte postkvantealgoritmer mer praktiske enn QKD, fordi de kjøres som vanlig programvare. NIST beskriver standardiseringsarbeidet her: https://csrc.nist.gov/projects/post-quantum-cryptography"
+        ]
+      }
+    ]
+  },
+  {
+    "category": "Kryptografi og sikkerhet",
+    "publishedAt": "2026-11-08",
+    "author": "Eiolf-Leander Haugsnes Vedøy",
+    "journalist": "Eiolf-Leander Haugsnes Vedøy",
+    "editor": "Eiolf-Leander Haugsnes Vedøy",
+    "disclosure": "Vedoy Insights utgis av Vedøy. Artikkelen er fagjournalistisk informasjon, ikke dokumentasjon på at Vedoy Shield er uavhengig sikkerhetsrevidert. Sikkerhet avhenger av implementasjon, nøkkelhåndtering og trusselmodell.",
+    "articleCta": {
+      "eyebrow": "UTFORSK TEKNOLOGIEN",
+      "title": "Vedoy Studio",
+      "description": "Utvikling, sikkerhet og digitale tjenester fra Vedøy.",
+      "href": "https://vedoystudio.no",
+      "linkText": "Besøk Vedoy Studio"
+    },
+    "slug": "vedoy-shield-sikkerhet-og-dokumentasjon",
+    "title": "Vedoy Shield: Slik bør en ny kryptografiløsning dokumenteres",
+    "excerpt": "Vedoy Shields mål om bedre sikkerhet må skilles tydelig fra egenskaper som faktisk er implementert og testet.",
+    "readingMinutes": 5,
+    "sections": [
+      {
+        "heading": "Hva er Vedoy Shield?",
+        "paragraphs": [
+          "Vedoy Shield er Vedøys konsept for et felles sikkerhetslag rundt digitale tjenester. Planene omfatter blant annet kryptering, nøkkelhåndtering og beskyttelse av API-er. Konseptets eksistens er ikke i seg selv dokumentasjon på at en komplett ende-til-ende-kryptert eller postkvantesikker løsning er i produksjon."
+        ]
+      },
+      {
+        "heading": "Bruk etablerte byggeklosser",
+        "paragraphs": [
+          "Det tryggeste utviklingsprinsippet er å bruke standardiserte og gjennomgåtte algoritmer i godt vedlikeholdte biblioteker. Egne sammensetninger og flere krypteringslag skal ikke markedsføres som sikrere uten en eksplisitt trusselmodell og etterprøvbar dokumentasjon."
+        ]
+      },
+      {
+        "heading": "Mål sikkerhet på kontroller, ikke prosentpoeng",
+        "paragraphs": [
+          "Det er ikke faglig forsvarlig å si at et prosjekt blir 10 prosent sikrere bare ved å installere et bibliotek. Bruk målbare kontroller, sikkerhetstester og konkrete funn. For webapplikasjoner er OWASP ASVS relevant, mens OWASP MASVS er relevant for mobilapper. https://owasp.org/www-project-application-security-verification-standard/"
+        ]
+      },
+      {
+        "heading": "Forslag til verifisering",
+        "paragraphs": [
+          "Dokumenter nøkkelrotasjon, gjenoppretting, håndtering av kompromitterte enheter, kryptering under overføring og lagring, avhengigheter og trusselmodell. Gjør testvektorer og revisjonsrapporter tilgjengelige, og merk tydelig hva som er eksperimentelt."
+        ]
+      },
+      {
+        "heading": "Kvantepåstander krever presisjon",
+        "paragraphs": [
+          "Postkvantealgoritmer kan kjøres på klassisk maskinvare. Tilgang til en kvantedatamaskin eller en kvantetilfeldighetskilde er ikke alene en sikkerhetssertifisering. Først etter reelle implementasjonstester og uavhengig revisjon kan konkrete garantier vurderes."
+        ]
+      }
+    ]
+  },
+  {
     "slug": "hva-er-kvanteteknologi-forklart-uten-mysterier",
     "title": "Hva er kvantefysikk? Kvantemekanikk og kvanteteknologi forklart",
     "excerpt": "Hva er kvantefysikk og kvantemekanikk? Lær hvordan kvanteteknologi, kvantedatamaskiner og kvantesikkerhet fungerer – enkelt forklart med eksempler.",
