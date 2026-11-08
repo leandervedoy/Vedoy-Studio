@@ -44,6 +44,7 @@ const sections: NavSection[] = [
       { href: "/studio/analytics", icon: "↗", label: "Statistics" },
       { href: "/studio/advertize", icon: "◉", label: "Advertize", vedoyOwnerOnly: true },
       { href: "/studio/cashback", icon: "◈", label: "Cashback" },
+      { href: "/studio/pay", icon: "◉", label: "Vedoy Pay" },
  { href: "/studio/news", icon: "▤", label: "Vedøy News" },
  { href: "/studio/account", icon: "◎", label: "Konto og profil" },
       { href: "/studio/vedi", icon: "✦", label: "Vedi AI", locked: true },
