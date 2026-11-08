@@ -1,6 +1,7 @@
 import "server-only";
 import { getIntegrationStatuses, type IntegrationHealth } from "@/lib/integration-status";
 import { isUsingDatabase } from "@/lib/repository";
+import { logEvent } from "@/lib/platform/observability";
 
 export type PlatformHealth = "healthy" | "degraded";
 
@@ -32,9 +33,11 @@ export async function getPlatformHealth(): Promise<PlatformHealthReport> {
     ...integrations.map(({ id, name, status, detail }) => ({ id, name, status, detail }))
   ];
 
-  return {
+  const report: PlatformHealthReport = {
     status: checks.some((check) => unhealthy.has(check.status)) ? "degraded" : "healthy",
     checkedAt: new Date().toISOString(),
     checks
   };
+  logEvent(report.status === "healthy" ? "info" : "warn", "platform.health_checked", { status: report.status, checks: checks.map(({ id, status }) => ({ id, status })) });
+  return report;
 }

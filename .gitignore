@@ -9,6 +9,7 @@ out
 *.tsbuildinfo
 .DS_Store
 packages/booking/dist
+packages/*/dist (# Name clash */
 
 # Local version snapshots stay outside the published repository history.
 backups/*/

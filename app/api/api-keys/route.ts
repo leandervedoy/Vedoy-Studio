@@ -1,20 +1,31 @@
 import { NextResponse } from "next/server";
 import { getSession } from "@/lib/auth";
 import { createApiKey, listApiKeys } from "@/lib/repository";
+import { apiKeyCreateSchema } from "@/lib/platform/contracts";
+import { getPlatformContext } from "@/lib/platform/request-context";
+import { errorResponse } from "@/lib/platform/observability";
+import { revokeApiKey } from "@/lib/platform/api-keys";
 
 export async function GET() {
-  if (!(await getSession())) return NextResponse.json({ error: "Ikke innlogget." }, { status: 401 });
+  const context = await getPlatformContext();
+  if (!(await getSession())) return errorResponse("Ikke innlogget.", context.requestId, 401);
   return NextResponse.json({ keys: await listApiKeys() });
 }
 
 export async function POST(request: Request) {
-  if (!(await getSession())) return NextResponse.json({ error: "Ikke innlogget." }, { status: 401 });
-  const body = await request.json() as { name?: string; scopes?: string[] };
-  if (!body.name || body.name.trim().length < 2) {
-    return NextResponse.json({ error: "Gi nøkkelen et navn." }, { status: 400 });
-  }
-  const allowedScopes = ["booking:read", "booking:write", "analytics:read", "projects:read"];
-  const scopes = (body.scopes ?? ["booking:read"]).filter((scope) => allowedScopes.includes(scope));
-  const created = await createApiKey(body.name, scopes);
+  const context = await getPlatformContext();
+  if (!(await getSession())) return errorResponse("Ikke innlogget.", context.requestId, 401);
+  const parsed = apiKeyCreateSchema.safeParse(await request.json().catch(() => null));
+  if (!parsed.success) return errorResponse("Ugyldig API-nøkkel.", context.requestId, 400, "INVALID_API_KEY");
+  const created = await createApiKey(parsed.data.name, parsed.data.scopes);
   return NextResponse.json(created, { status: 201 });
+}
+
+export async function DELETE(request: Request) {
+  const context = await getPlatformContext();
+  if (!(await getSession())) return errorResponse("Ikke innlogget.", context.requestId, 401);
+  const id = new URL(request.url).searchParams.get("id");
+  if (!id) return errorResponse("Mangler nøkkel-ID.", context.requestId, 400);
+  await revokeApiKey(id, context.organizationId, context.actorEmail);
+  return NextResponse.json({ revoked: true, requestId: context.requestId });
 }

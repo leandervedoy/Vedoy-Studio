@@ -4,6 +4,10 @@ import { attachBookingCheckoutSession, createBooking, createGrowthNotification, 
 import { bookingPaymentsReady, createBookingCheckoutSession } from "@/lib/booking-payments";
 import { bookingServices } from "@/lib/booking-config";
 import { sendAdminLeadEmail } from "@/lib/lead-email";
+import { bookingCreateSchema } from "@/lib/platform/contracts";
+import { getPlatformContext } from "@/lib/platform/request-context";
+import { errorResponse, logEvent } from "@/lib/platform/observability";
+import { enqueueJob } from "@/lib/platform/jobs";
 
 export async function GET(request: Request) {
   const url = new URL(request.url);
@@ -41,65 +45,27 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
+  const context = await getPlatformContext();
   const origin = request.headers.get("origin");
   if (origin) {
     const host = request.headers.get("x-forwarded-host")?.split(",")[0].trim() || request.headers.get("host") || new URL(request.url).host;
-    if (new URL(origin).host.toLowerCase() !== host.toLowerCase()) return NextResponse.json({ error: "Ugyldig forespørsel." }, { status: 403 });
+    if (new URL(origin).host.toLowerCase() !== host.toLowerCase()) return errorResponse("Ugyldig forespørsel.", context.requestId, 403, "CSRF_ORIGIN");
   }
-  let body: {
-    serviceId?: string;
-    serviceName?: string;
-    planId?: string;
-    staffId?: string;
-    location?: string;
-    customFields?: Record<string, string | boolean>;
-    startsAt?: string;
-    endsAt?: string;
-    customerName?: string;
-    customerEmail?: string;
-    customerPhone?: string;
-    notes?: string;
-  };
+  let body: unknown;
   try {
-    body = await request.json() as typeof body;
+    body = await request.json();
   } catch {
-    return NextResponse.json({ error: "Ugyldig forespørsel." }, { status: 400 });
+    return errorResponse("Ugyldig forespørsel.", context.requestId, 400, "INVALID_JSON");
   }
-
-  if (!body.serviceId || !body.serviceName || !body.startsAt || !body.endsAt || !body.customerName || !body.customerEmail) {
-    return NextResponse.json({ error: "Mangler nødvendig bookinginformasjon." }, { status: 400 });
-  }
-  if (body.serviceId.length > 120 || body.serviceName.length > 160 || body.customerName.length > 160 || body.customerEmail.length > 254 || (body.notes?.length ?? 0) > 4000) {
-    return NextResponse.json({ error: "Én eller flere verdier er for lange." }, { status: 400 });
-  }
-  if (!/^\S+@\S+\.\S+$/.test(body.customerEmail)) {
-    return NextResponse.json({ error: "E-postadressen ser ikke riktig ut." }, { status: 400 });
-  }
-  const startsAt = new Date(body.startsAt);
-  const endsAt = new Date(body.endsAt);
-  if (!Number.isFinite(startsAt.getTime()) || !Number.isFinite(endsAt.getTime())) {
-    return NextResponse.json({ error: "Dato eller klokkeslett er ugyldig." }, { status: 400 });
-  }
-  if (endsAt <= startsAt) {
-    return NextResponse.json({ error: "Sluttid må være etter starttid." }, { status: 400 });
-  }
+  const parsed = bookingCreateSchema.safeParse(body);
+  if (!parsed.success) return errorResponse("Ugyldig bookinginformasjon.", context.requestId, 400, "INVALID_BOOKING");
+  const bookingInput = parsed.data;
 
   try {
-    const service = bookingServices.find((item) => item.id === body.serviceId);
+    const service = bookingServices.find((item) => item.id === bookingInput.serviceId);
     const paymentsReady = bookingPaymentsReady();
     const booking = await createBooking({
-      serviceId: body.serviceId,
-      serviceName: body.serviceName,
-      planId: body.planId,
-      staffId: body.staffId,
-      location: body.location,
-      customFields: body.customFields,
-      startsAt: body.startsAt,
-      endsAt: body.endsAt,
-      customerName: body.customerName,
-      customerEmail: body.customerEmail,
-      customerPhone: body.customerPhone,
-      notes: body.notes,
+      ...bookingInput,
       paymentRequired: paymentsReady,
       paymentAmountNok: paymentsReady ? service?.price : undefined
     });
@@ -110,6 +76,7 @@ export async function POST(request: Request) {
         await createGrowthNotification({ userEmail: process.env.ADMIN_EMAIL, type: "booking", title: "Ny bookingforespørsel", detail: `${booking.customerName} har forespurt ${booking.serviceName}.`, href: "/studio/booking" });
       } catch (error) { console.error("booking_notification_failed", error); }
     }
+    await enqueueJob({ organizationId: context.organizationId, type: "notification", payload: { bookingId: booking.id, event: "booking.created" } });
     try {
       await sendAdminLeadEmail({
         subject: `Ny bookingforespørsel · ${booking.serviceName}`,
@@ -117,8 +84,9 @@ export async function POST(request: Request) {
         text: [`Kunde: ${booking.customerName}`, `E-post: ${booking.customerEmail}`, booking.customerPhone ? `Telefon: ${booking.customerPhone}` : "", `Tjeneste: ${booking.serviceName}`, `Start: ${booking.startsAt}`, `Slutt: ${booking.endsAt}`, booking.location ? `Lokasjon: ${booking.location}` : "", booking.notes ? `Notat: ${booking.notes}` : ""].filter(Boolean).join("\n")
       });
     } catch (error) { console.error("booking_email_failed", error); }
-    return NextResponse.json({ booking: checkout?.id ? { ...booking, stripeCheckoutSessionId: checkout.id } : booking, checkoutUrl: checkout?.url || null }, { status: 201 });
+    logEvent("info", "booking.created", { requestId: context.requestId, organizationId: context.organizationId, bookingId: booking.id });
+    return NextResponse.json({ booking: checkout?.id ? { ...booking, stripeCheckoutSessionId: checkout.id } : booking, checkoutUrl: checkout?.url || null, requestId: context.requestId }, { status: 201 });
   } catch (error) {
-    return NextResponse.json({ error: error instanceof Error ? error.message : "Bookingen kunne ikke lagres." }, { status: 409 });
+    return errorResponse(error instanceof Error ? error.message : "Bookingen kunne ikke lagres.", context.requestId, 409, "BOOKING_CONFLICT");
   }
 }

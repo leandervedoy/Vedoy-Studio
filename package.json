@@ -33,6 +33,7 @@
     "verify:notes": "node scripts/verify-notes-api.mjs",
     "verify:services": "node --env-file-if-exists=.env.local scripts/verify-services.mjs",
     "verify:services-api": "node --env-file-if-exists=.env.local scripts/verify-services-api.mjs",
+    "test": "node --test tests/*.test.mjs",
     "postinstall": "npm run build:booking && npm run build:notes"
   },
   "dependencies": {

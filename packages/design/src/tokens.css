@@ -1,0 +1,4 @@
+/* Vedøy Design v0.1.0: shared tokens. Apps may override semantic tokens, not primitives. */
+:root { --vedoy-ink:#171714; --vedoy-paper:#f7f5ef; --vedoy-line:#dedbd0; --vedoy-focus:#2563eb; --vedoy-radius:18px; --vedoy-motion:200ms; }
+:focus-visible { outline: 3px solid var(--vedoy-focus); outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; } }
