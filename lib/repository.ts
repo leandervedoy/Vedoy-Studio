@@ -1119,7 +1119,9 @@ export async function getSharedStudioNote(token: string): Promise<StudioNote | n
 }
 
 export async function listWorkTimeEntries(ownerEmail: string): Promise<WorkTimeEntry[]> {
-  const sql = requireDatabase();
+  // Studio dashboard remains usable in the explicit demo mode. Mutations still require PostgreSQL.
+  const sql = getSql();
+  if (!sql) return [];
   const rows = await sql<WorkTimeEntry[]>`
     select id, organization_id as "organizationId", owner_email as "ownerEmail",
       started_at as "startedAt", ended_at as "endedAt", note
