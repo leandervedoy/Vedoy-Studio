@@ -21,7 +21,7 @@ const unhealthy = new Set<PlatformCheck["status"]>(["misconfigured", "degraded",
 
 /** A safe operational snapshot for pages, monitors and load balancers. Never includes credentials. */
 export async function getPlatformHealth(): Promise<PlatformHealthReport> {
-  const integrations = await getIntegrationStatuses();
+  const integrations = await getIntegrationStatuses({ probeRemote: false });
   const checks: PlatformCheck[] = [
     {
       id: "storage",

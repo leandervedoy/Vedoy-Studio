@@ -15,7 +15,7 @@ function hasValue(value: string | undefined): boolean {
   return Boolean(value?.trim());
 }
 
-export async function getIntegrationStatuses(): Promise<IntegrationStatus[]> {
+export async function getIntegrationStatuses(options: { probeRemote?: boolean } = {}): Promise<IntegrationStatus[]> {
   const stripeKey = process.env.STRIPE_SECRET_KEY;
   const stripePayments = process.env.STRIPE_BOOKING_PAYMENTS_ENABLED;
   const stripeWebhook = process.env.STRIPE_WEBHOOK_SECRET;
@@ -29,7 +29,7 @@ export async function getIntegrationStatuses(): Promise<IntegrationStatus[]> {
 
   if ([stripeKey, stripeWebhook, stripePayments].some(Boolean) && ![stripeKey, stripeWebhook, stripePayments].every(hasValue)) {
     stripe = { ...stripe, status: "misconfigured", detail: "Stripe er delvis konfigurert. Legg inn secret key, booking payments flag og webhook secret.", demo: true };
-  } else if (hasValue(stripeKey) && stripePayments === "true" && hasValue(stripeWebhook)) {
+  } else if (hasValue(stripeKey) && stripePayments === "true" && hasValue(stripeWebhook) && options.probeRemote !== false) {
     try {
       await getStripe().balance.retrieve();
       stripe = { id: "stripe", name: "Stripe", status: "healthy", detail: "Stripe API svarer. Betalinger kan aktiveres etter webhook-test.", demo: false };
@@ -38,6 +38,8 @@ export async function getIntegrationStatuses(): Promise<IntegrationStatus[]> {
       const status = ["authentication_error", "invalid_api_key"].includes(code) ? "misconfigured" : code === "api_connection_error" ? "degraded" : "unavailable";
       stripe = { id: "stripe", name: "Stripe", status, detail: `Stripe svarte med ${code}. Se Stripe Status ved leverandørfeil.`, demo: true };
     }
+  } else if (hasValue(stripeKey) && stripePayments === "true" && hasValue(stripeWebhook)) {
+    stripe = { id: "stripe", name: "Stripe", status: "degraded", detail: "Stripe er konfigurert. Ekstern API-test kjøres ikke i helsesjekken.", demo: false };
   }
 
   return [
