@@ -115,7 +115,21 @@ export async function listBuilderPages(): Promise<BuilderPage[]> {
     from studio_pages where organization_id = ${organizationId}
     order by updated_at desc
   `;
-  return rows.map(pageFromRow);
+  const pages = rows.map(pageFromRow);
+  if (!pages.length) return pages;
+  const blocks = await sql<Record<string, unknown>[]>`
+    select id, page_id, block_type, position, content
+    from studio_page_blocks where organization_id = ${organizationId}
+    order by position asc
+  `;
+  const blocksByPage = new Map<string, BuilderBlock[]>();
+  for (const row of blocks) {
+    const block = blockFromRow(row);
+    const pageBlocks = blocksByPage.get(block.pageId) || [];
+    pageBlocks.push(block);
+    blocksByPage.set(block.pageId, pageBlocks);
+  }
+  return pages.map((page) => ({ ...page, blocks: blocksByPage.get(page.id) || [] }));
 }
 
 export async function getBuilderPageById(id: string): Promise<BuilderPage | null> {
