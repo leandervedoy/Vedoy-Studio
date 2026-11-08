@@ -6,6 +6,7 @@ import styles from "../insights.module.css";
 import { ProjectScreenshotGallery } from "@/components/project-screenshot-gallery";
 import { STUDIO_SCREENSHOTS } from "@/lib/project-screenshots";
 import { QuantumInteractiveArticle } from "@/components/insights/quantum-interactive-article";
+import { AdvertizePlacement } from "@/components/advertize-placement";
 
 type PageProps = { params: Promise<{ slug: string }> };
 
@@ -49,6 +50,7 @@ export default async function InsightArticlePage({params}: PageProps) {
           </section>)}
         </div>
       )}
+      <AdvertizePlacement slot="studio-home" title="Relevant fra Vedøy" />
       {found.slug === "fra-ide-til-fungerende-teknologi-utviklingsdag-vedoy" ? <ProjectScreenshotGallery
         title="Se prosjektene fra utviklingsdagen."
         intro="Skjermbilder fra Bank, Collective og Hosting. Flere funksjoner er prototyper eller demoer, ikke ferdiglanserte produkter."

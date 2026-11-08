@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getNewsPost } from "@/lib/repository";
 import { decodeNewsCategory } from "@/lib/news-taxonomy";
+import { AdvertizePlacement } from "@/components/advertize-placement";
 
 export const dynamic = "force-dynamic";
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
@@ -23,5 +24,6 @@ export default async function NewsArticle({ params }: { params: Promise<{ slug: 
     </p>
     <p className="news-article__lead">{post.excerpt}</p>
     <div className="news-article__body">{post.content.split(/\n\n+/).map((paragraph, index) => <p key={index}>{paragraph}</p>)}</div>
+    <AdvertizePlacement slot="studio-home" title="Relevant fra Vedøy" />
   </main>;
 }

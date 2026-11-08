@@ -45,7 +45,7 @@ export async function ServicePricing({ type }: { type: PricingType }) {
         <ul>{plan.features.map(feature => <li key={feature}>{feature}</li>)}</ul>
       </article>)}</div> : <p>Ingen publisert fast prosjektpris for {c.subject}. Vi avklarer omfanget og sender et uforpliktende tilbud.</p>}
     <div className="website-pricing__notice"><strong>Klare rammer før du bestemmer deg</strong><p>Priser på publiserte produkter hentes fra Vedøy Developer Portal / Vedoy Pricing. Eventuelle leverandørkostnader, domene, ekstrautvikling og MVA avklares før avtale. For skreddersøm tilbyr vi individuell prosjektpris.</p></div>
-    <Link href={"/?need=" + encodeURIComponent(c.need) + "&source=service-pricing#kontakt"} className="editorial-button">Få konkret tilbud <span aria-hidden="true">↗</span></Link>
+    <div className="service-pricing-actions"><Link href="/pricing#kalkulator" className="editorial-button">Finn riktig pris <span aria-hidden="true">↗</span></Link><Link href={"/?need=" + encodeURIComponent(c.need) + "&source=service-pricing#kontakt"} className="editorial-outline">Få konkret tilbud</Link></div>
     <section className="business-subscriptions">
       <div className="business-subscriptions__heading"><div><p className="editorial-kicker lime">VEDØY GROWTH</p><h2>Drift og<br /><em>oppfølging.</em></h2></div><p>Vedøy Growth kan kombineres med nettsider og utvikling. Her er publiserte Growth-planer.</p></div>
       <div className="business-subscriptions__grid">

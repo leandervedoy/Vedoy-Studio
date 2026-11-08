@@ -10,8 +10,8 @@ import type { SessionPayload } from "@/lib/types";
 
 type Profile = Pick<SessionPayload, "name" | "avatarUrl">;
 const links = [
-  ["tjenester", "services"], ["plattform", "platform"], ["prosjekter", "projects"], ["demoer", "demos"],
-  ["profilprodukter", "clothing"], ["kontakt", "contact"],
+  ["/#tjenester", "services"], ["/pricing#kalkulator", "pricing"], ["/#plattform", "platform"], ["/#prosjekter", "projects"], ["/#demoer", "demos"],
+  ["/#profilprodukter", "clothing"], ["/#kontakt", "contact"],
 ] as const;
 
 export function MarketingHeader({ variant = "editorial", initialProfile }: {
@@ -63,7 +63,7 @@ export function MarketingHeader({ variant = "editorial", initialProfile }: {
       <Image src="/imgs/Logos/Vedoy_Logo_W.png" width={160} height={62} alt="Vedøy" priority />
     </Link>
     <nav id={menuId} className={`marketing-navigation${open ? " is-open" : ""}`} aria-label={t("navigation")}>
-      {links.map(([anchor, key]) => <Link key={anchor} href={`/${"#"}${anchor}`} onClick={() => setOpen(false)}>{t(key)}</Link>)}
+      {links.map(([href, key]) => <Link key={href} href={href} onClick={() => setOpen(false)}>{t(key)}</Link>)}
     </nav>
     <div className="marketing-header__actions">
       <label className="marketing-language">
