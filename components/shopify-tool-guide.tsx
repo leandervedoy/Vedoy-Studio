@@ -4,14 +4,14 @@ const options = [
     title: "Payhip for enkel handel.",
     text: "Riktig for digitale produkter, kurs, medlemskap, coaching og mindre vareutvalg. Vedøy bygger uttrykket og oppsettet, mens Payhip håndterer checkout og produktlevering.",
     tools: ["Payhip", "Direkte checkout", "Digitale produkter", "Medlemskap"],
-    fit: "Payhip Free: $0/mnd + 5 % per salg. Plus: $29/mnd + 2 %. Pro: $99/mnd uten Payhip-transaksjonsgebyr. Stripe/PayPal-gebyrer kommer i tillegg, og Vedøy-drift prises separat."
+    fit: "Payhips planer og transaksjonsgebyrer endres av leverandøren. Vi avklarer gjeldende plan, Stripe/PayPal-gebyrer og Vedøy-leveransen før avtale."
   },
   {
     label: "02 · BUTIKK I VEKST",
     title: "Shopify for mer handel.",
     text: "Riktig når bedriften trenger større vareutvalg, lager, frakt, rabatter og flere integrasjoner. Vi kan sette opp Shopify eller bygge en egen Next.js-front mot Shopify.",
     tools: ["Shopify", "Produkter og lager", "Frakt", "Storefront API"],
-    fit: "Shopify har ikke ren pay-as-you-go: Basic er fra 289 kr/mnd ved årlig fakturering (389 kr/mnd månedlig), pluss kort-/betalingsgebyrer og eventuelle apper. Vedøy-drift prises separat."
+    fit: "Shopify krever et løpende abonnement. Gjeldende abonnement, betalingsgebyrer og eventuelle apper bekreftes direkte mot Shopify før avtale."
   },
   {
     label: "03 · SKREDDERSYDD",
@@ -27,7 +27,7 @@ export function EcommercePlatformGuide() {
     <section className="shopify-tool-guide" id="velg-handelsplattform">
       <div className="shopify-tool-guide__heading">
         <div><p className="editorial-kicker lime">VELG HANDELSPLATTFORM</p><h2>Payhip eller<br /><em>Shopify?</em></h2></div>
-        <p>Kunden velger ikke på teknisk navn alene. Vi anbefaler Payhip når enkelhet og lav pris er viktigst, og Shopify når butikken trenger mer lager, frakt, vekst og integrasjoner. Vedøy-drift har samme faste grunnpris på 299 kr/mnd for begge.</p>
+        <p>Kunden velger ikke på teknisk navn alene. Vi anbefaler Payhip når enkelhet og lav pris er viktigst, og Shopify når butikken trenger mer lager, frakt, vekst og integrasjoner. Vedøy-priser hentes fra den publiserte priskatalogen; leverandørpriser bekreftes før avtale.</p>
       </div>
       <div className="shopify-tool-guide__options">
         {options.map((option) => (
@@ -46,6 +46,7 @@ export function EcommercePlatformGuide() {
         <div className="shopify-tool-guide__links">
           <a href="/#kontakt">Be om plattformvalg <span aria-hidden>↗</span></a>
           <a href="https://payhip.com/pricing" target="_blank" rel="noreferrer">Se Payhip-priser <span aria-hidden>↗</span></a>
+          <a href="https://www.shopify.com/no/pricing" target="_blank" rel="noreferrer">Se Shopify-priser <span aria-hidden>↗</span></a>
         </div>
       </div>
     </section>
