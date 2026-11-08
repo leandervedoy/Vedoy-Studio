@@ -52,6 +52,7 @@
     "backups",
     "published-versions",
     "packages/booking/src",
-    "packages/booking/dist"
+    "packages/booking/dist",
+    "apps/vedoy-jobs"
   ]
 }
