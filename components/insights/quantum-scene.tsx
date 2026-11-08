@@ -215,7 +215,7 @@ function createNetwork() {
   ] as const;
   for (const [index, position] of points.entries()) {
     const s = sphere(index % 2 ? 0.22 : 0.28, index % 2 ? GOLD : AQUA);
-    s.position.set(...position);
+    s.position.set(position[0], position[1], position[2]);
     g.add(s);
   }
   for (const [start, end] of [[0, 2], [0, 5], [1, 3], [1, 4], [2, 3], [2, 5], [3, 4], [4, 5]] as const) {
