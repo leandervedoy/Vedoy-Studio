@@ -22,6 +22,21 @@ export default function DevelopersPage() {
         <p>Her samles dokumentasjon, GitHub, API-er og gjenbrukbare biblioteker etter hvert som Vedøy-plattformen blir mer moden. Siden er laget for utviklere, samarbeidspartnere og kunder som vil forstå hva som kan kobles sammen.</p>
         <div className="hero-actions"><a className="editorial-button" href="https://discord.gg/uAt7v6ksuC" target="_blank" rel="noreferrer">Join our Discord <span>↗</span></a><Link className="editorial-outline" href="/#plattform">Se økosystemet</Link></div>
       </section>
+      <section className="developers-resources" aria-label="Vedoy-utviklingsrammeverk">
+        <article>
+          <small>MODULÆRT RAMMEVERK · PLANLAGT</small>
+          <h2>Vedoy Forge</h2>
+          <p>Et rammeverk under utvikling som skal samle web, apper, 2D/3D, spill, språkadaptere, Forma og Motion. Se mål, moduler og gjeldende status.</p>
+          <Link href="/developers/forge" className="editorial-outline">Utforsk Forge ↗</Link>
+        </article>
+        <article>
+          <small>DESIGNSYSTEM · BETA</small>
+          <h2>Vedoy Forma</h2>
+          <p>Responsivt UI-bibliotek med Flexbox, Grid, design tokens, 50 UI-eksempler og interaktiv menybygger. Skjemaene er frontend-demoer.</p>
+          <Link href="/developers/forma" className="editorial-outline">Les om Forma ↗</Link>{" "}
+          <Link href="/developers/forma/components" className="editorial-outline">Se 50 komponenter ↗</Link>
+        </article>
+      </section>
       <section className="developers-resources">
         {resources.map((resource) => <article key={resource.label}><small>{resource.label}</small><h2>{resource.label}</h2><p>{resource.text}</p></article>)}
       </section>

@@ -1,0 +1,28 @@
+{
+  "name": "@vedoy/forma",
+  "version": "0.1.0-beta.1",
+  "private": true,
+  "description": "Vedoy Forma: responsive layout, visual primitives and accessible UI patterns",
+  "type": "module",
+  "style": "./styles.css",
+  "main": "./index.js",
+  "module": "./index.js",
+  "exports": {
+    ".": "./index.js",
+    "./styles.css": "./styles.css"
+  },
+  "files": [
+    "styles.css",
+    "index.js",
+    "index.d.ts",
+    "README.md"
+  ],
+  "sideEffects": [
+    "./styles.css"
+  ],
+  "scripts": {
+    "test": "node --test tests/*.test.mjs"
+  },
+  "license": "UNLICENSED",
+  "types": "./index.d.ts"
+}
