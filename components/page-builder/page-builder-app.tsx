@@ -5,6 +5,7 @@ import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
 import type { BuilderPage, PageBlockType } from "@/lib/page-builder";
 import { ForgeCanvas } from "@/components/page-builder/forge-canvas";
+import { ForgeDesignTool } from "@/components/page-builder/forge-design-tool";
 
 type ApiError = { error?: string };
 const blockLabels: Record<PageBlockType, string> = { hero: "Hero", features: "Funksjoner", pricing: "Priser", contact: "Kontakt" };
@@ -35,6 +36,7 @@ export function PageBuilderApp({ initialPages }: { initialPages: BuilderPage[] }
   const [customAgent, setCustomAgent] = useState<BuilderAgent>({ name: "Min agent", instructions: "" });
   const [notice, setNotice] = useState("");
   const [selectedBlockId, setSelectedBlockId] = useState("");
+  const [isDesignToolOpen, setIsDesignToolOpen] = useState(false);
   const selected = pages.find((page) => page.id === selectedId);
   const selectedBlock = selected?.blocks.find((block) => block.id === selectedBlockId) || selected?.blocks[0];
   const agent = agentKey === "custom" ? customAgent : builderAgents[agentKey];
@@ -133,6 +135,7 @@ export function PageBuilderApp({ initialPages }: { initialPages: BuilderPage[] }
       <form className="builder-create" onSubmit={createPage}>
         <p>Ny side</p><input value={title} onChange={(event) => setTitle(event.target.value)} placeholder="Sidetittel" required /><input value={slug} onChange={(event) => setSlug(event.target.value)} placeholder="url-navn (valgfritt)" /><button type="submit">+ Opprett utkast</button>
       </form>
+      <section className="forge-tools"><p className="builder-kicker">VERKTØY</p><button type="button" onClick={() => setIsDesignToolOpen(true)}><span>✦</span> UI Sketch</button><small>Skisser knapper og UI med Excalidraw.</small></section>
     </aside>
       <section className="builder-editor">
       {selected ? <header className="builder-editor-header"><div><p className="builder-kicker">VEDØY FORGE · VISUELL RUNTIME</p><h1>{selected.title}</h1></div><div className="builder-actions"><a href={`/${selected.slug}?preview=1`} target="_blank" rel="noreferrer">Åpne preview ↗</a><button onClick={togglePublish} className={selected.visibility === "published" ? "is-live" : ""}>{selected.visibility === "published" ? "● Live" : "Publiser side"}</button></div></header> : null}
@@ -142,5 +145,6 @@ export function PageBuilderApp({ initialPages }: { initialPages: BuilderPage[] }
       {notice && <p className="builder-notice">{notice}</p>}
     </section>
     {selected ? <ForgeCanvas blocks={selected.blocks} selectedBlockId={selectedBlock?.id || ""} onSelect={setSelectedBlockId} onAdd={addBlock} /> : null}
+    <ForgeDesignTool isOpen={isDesignToolOpen} onClose={() => setIsDesignToolOpen(false)} projectKey={selected?.id} />
   </main>;
 }
