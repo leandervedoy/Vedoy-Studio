@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server";
-import { isUsingDatabase } from "@/lib/repository";
+import { getPlatformHealth } from "@/lib/platform-health";
 
+export const dynamic = "force-dynamic";
+
+/** Public, credential-free health endpoint for uptime checks. */
 export async function GET() {
-  return NextResponse.json({
-    ok: true,
-    service: "vedoy-studio",
-    database: isUsingDatabase() ? "postgres" : "demo-memory",
-    time: new Date().toISOString()
+  const report = await getPlatformHealth();
+  return NextResponse.json(report, {
+    headers: { "Cache-Control": "no-store, max-age=0" }
   });
 }

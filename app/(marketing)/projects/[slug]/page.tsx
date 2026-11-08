@@ -75,6 +75,17 @@ const projectOverrides: Record<string, ProjectDetail> = {
       { href: "/#kontakt", label: "Bestill kalenderoppsett" }
     ],
     note: "Vedøy Calendar er ikke en ekstern kalenderkonto ennå. Booking og timer kan vises i Studio, mens Google/Microsoft-synk settes opp som en egen integrasjon når kunden trenger det."
+  },
+  forge: {
+    title: "Vedøy Forge",
+    text: "Vedøy Forge er den interne beta-arbeidsflaten for å gjøre en sideidé om til et kontrollert utkast, bygge den av blokker og publisere først når en autorisert person godkjenner det.",
+    points: ["Utkast starter privat og blir ikke offentlig automatisk", "Sider bygges av hero-, funksjons-, pris- og kontaktblokker", "AI Co-Pilot kan hjelpe med innhold, men publisering krever uttrykkelig tillatelse", "Tilgang krever Studio-innlogging og riktig rolle"],
+    actionHref: "/admin/builder",
+    actionLabel: "Åpne Forge",
+    status: "Beta",
+    category: "Bygg / intern arbeidsflate",
+    secondaryActions: [{ href: "/#kontakt", label: "Be om en avklaring" }],
+    note: "Forge er en intern beta, ikke en selvbetjent kundeeditor. Utkast og publisering krever innlogging, database og korrekt tilgang."
   }
 };
 

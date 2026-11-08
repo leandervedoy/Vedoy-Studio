@@ -26,13 +26,24 @@ export const studioProducts: StudioProduct[] = [
   {
     id: "builder",
     name: "Vedøy Builder",
-    description: "Start fra ferdige, rolige maler og bygg en profesjonell nettside raskere.",
+    description: "En tilgangsstyrt beta for å forme og publisere sider fra rolige maler og tydelige blokker.",
     icon: "▦",
-    href: "/projects/builder",
+    href: "/admin/builder",
     group: "Bygg",
-    status: "planned",
+    status: "beta",
     accent: "#8b5cf6",
     highlights: ["Seksjoner", "Tema", "Publisering"]
+  },
+  {
+    id: "forge",
+    name: "Vedøy Forge",
+    description: "Arbeidsinngangen for Vedøys egne nettsideutkast, blokker og kontrollert publisering.",
+    icon: "⌘",
+    href: "/admin/builder",
+    group: "Bygg",
+    status: "beta",
+    accent: "#f97316",
+    highlights: ["Utkast", "Sideblokker", "Kontrollert publisering"]
   },
   {
     id: "commerce",
