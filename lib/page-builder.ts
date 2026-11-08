@@ -191,6 +191,32 @@ export async function updateTextBlock(input: { pageId: string; blockId: string; 
   return { ...existing, content };
 }
 
+export async function updateBuilderBlock(input: { pageId: string; blockId: string; content: Partial<PageBlockContent> }): Promise<BuilderBlock> {
+  const sql = getSql();
+  if (!sql) throw new Error("Databasen er ikke konfigurert.");
+  const page = await getBuilderPageById(input.pageId);
+  const existing = page?.blocks.find((block) => block.id === input.blockId);
+  if (!existing) throw new Error("Elementet finnes ikke på denne siden.");
+  const source = input.content;
+  const content: PageBlockContent = { ...existing.content };
+  if (typeof source.eyebrow === "string") content.eyebrow = source.eyebrow.trim().slice(0, 180);
+  if (typeof source.heading === "string") content.heading = source.heading.trim().slice(0, 180);
+  if (typeof source.body === "string") content.body = source.body.trim().slice(0, 1000);
+  if (typeof source.ctaLabel === "string") content.ctaLabel = source.ctaLabel.trim().slice(0, 80);
+  if (typeof source.ctaHref === "string") content.ctaHref = source.ctaHref.trim().slice(0, 300);
+  if (Array.isArray(source.items)) {
+    content.items = source.items.slice(0, 6).flatMap((item) => {
+      if (!item || typeof item !== "object") return [];
+      const value = item as { title?: unknown; text?: unknown; price?: unknown };
+      if (typeof value.title !== "string" || typeof value.text !== "string") return [];
+      return [{ title: value.title.trim().slice(0, 120), text: value.text.trim().slice(0, 300), ...(typeof value.price === "string" ? { price: value.price.trim().slice(0, 80) } : {}) }];
+    });
+  }
+  await sql`update studio_page_blocks set content = ${sql.json(content)}, updated_at = now() where id = ${existing.id} and organization_id = ${organizationId}`;
+  await sql`update studio_pages set updated_at = now() where id = ${input.pageId}`;
+  return { ...existing, content };
+}
+
 export async function publishPage(pageId: string, visibility: PageVisibility): Promise<BuilderPage> {
   const sql = getSql();
   if (!sql) throw new Error("Databasen er ikke konfigurert.");
