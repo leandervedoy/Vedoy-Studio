@@ -1168,6 +1168,9 @@ h1, h2, h3, h4 { letter-spacing: -.035em; }
 .service-process article { min-height:210px; padding:26px 28px 20px 0; border-right:1px solid #293029; margin-right:28px; }
 .service-process article:last-child { border:0; }
 .service-process article p { margin:75px 0 0; color:#c4cac1; line-height:1.65; }
+.service-advertise { padding:30px max(24px,10vw); background:#eef0e7; border-top:1px solid #c8cec3; border-bottom:1px solid #c8cec3; }
+.service-advertise__placement { max-width:620px!important; margin:0 auto!important; }
+.service-advertise__placement>span { color:#5d6e5e!important; }
 .service-detail-cta { padding:95px 10vw; background:#0a0d0a; border-top:1px solid #242a24; text-align:center; }
 .website-capabilities { padding:90px 10vw; background:#eef0e7; color:#111510; border-top:1px solid #c8cec3; }
 .website-capabilities__heading { display:grid; grid-template-columns:1fr 1fr; gap:7vw; align-items:end; margin-bottom:42px; }
@@ -1293,6 +1296,7 @@ h1, h2, h3, h4 { letter-spacing: -.035em; }
   .service-detail-combined__body>div+div { padding-left:0; border-left:0; border-top:1px solid #242a24; padding-top:32px; }
   .service-detail-grid>article+article { padding-left:7vw; border-left:0; border-top:1px solid #242a24; }
   .service-process,.service-detail-cta,.hosting-configurator { padding:85px 7vw; }
+  .service-advertise { padding:26px 7vw; }
   .shopify-tool-guide { padding:85px 7vw; }
   .shopify-tool-guide__options { grid-template-columns:1fr; }
   .shopify-tool-guide__options article { min-height:0; }
@@ -1306,6 +1310,7 @@ h1, h2, h3, h4 { letter-spacing: -.035em; }
   .service-detail-header .editorial-cta { padding:11px 12px; font-size:10px; }
   .service-detail-hero h1,.order-result-page h1 { font-size:56px; }
   .service-process>div,.config-options { grid-template-columns:1fr; }
+  .service-advertise { padding:22px 24px; }
   .service-process article { min-height:155px; margin-right:0; border-right:0; }
   .service-process article p { margin-top:36px; }
   .config-block,.config-summary { padding:30px 22px; }
