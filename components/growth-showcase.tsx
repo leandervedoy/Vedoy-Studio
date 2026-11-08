@@ -9,7 +9,7 @@ export async function GrowthShowcase() {
     <div className="growth-showcase__intro">
       <div><p className="editorial-kicker lime">VEDØY GROWTH · ARBEIDSOMRÅDE FOR BEDRIFTER</p><h2>Se hele<br /><em>virksomheten.</em></h2></div>
       <div><p>Vedøy Growth samler kunder, prosjekter, booking, timer og oppfølging. Velg tilgang etter hva bedriften trenger, og start med en uforpliktende forespørsel.</p>
-        <div className="growth-showcase__actions"><Link href="/login?next=/studio" className="editorial-button">Åpne Growth <span aria-hidden="true">↗</span></Link><Link href="/start-bedrift?plan=trial&source=home" className="editorial-outline">Søk om prøveperiode</Link><Link href="/pricing#growth-priser" className="editorial-outline">Se priser</Link></div>
+        <div className="growth-showcase__actions"><Link href="/projects/growth" className="editorial-button">Se Growth <span aria-hidden="true">↗</span></Link><Link href="/start-bedrift?plan=trial&source=home" className="editorial-outline">Søk om prøveperiode</Link><Link href="/pricing#kalkulator" className="editorial-outline">Finn riktig pris</Link></div>
       </div>
     </div>
     <div className="growth-preview" aria-label="Illustrasjon av Vedøy Growth-styrebord">

@@ -19,7 +19,6 @@ import { DeveloperResources } from "@/components/developer-resources";
 import { getSession, isAdminSession } from "@/lib/auth";
 import { listStudioServices } from "@/lib/services";
 import { listPublishedContent } from "@/lib/vedoy-catalog";
-import { NewsFeed } from "@/components/news/news-feed";
 import { InsightsPreview } from "@/components/insights/insights-preview";
 
 const upcomingServices = [
@@ -72,7 +71,6 @@ export default async function HomePage() {
       eyebrow="05 / ARBEID FRA VEDØY LAB"
     />
   </section>
-  <NewsFeed title="Nytt fra Vedøy." intro="Prosjektoppdateringer, lanseringer og innblikk i det vi bygger." limit={3} />
   <ScrollIconField variant="orbit" />
   <section className="hosting-section" id="hosting"><div><p className="editorial-kicker lime">{c("05 · HOSTING + FULLSTACK · BESTILL NÅ")}</p><h2>{c("Vi bygger.")}<br />{c("Vi kan også")}<br /><em>{c("holde det på.")}</em></h2><p>{c("Bestill hosting, web-apper, nettbutikker og andre fullstack-apper med rammeverk som passer prosjektet — for eksempel Next.js, React, Vue, Node eller Shopify.")}</p><p className="hosting-section__note"><strong>{c("Trygg bestilling:")}</strong> {c("Du sender en forespørsel, ikke en automatisk betaling. Vi avklarer løsning, leverandør, pris og levering før noe kjøpes eller registreres.")}</p><div className="hosting-section__actions"><Link href="/tjenester/hosting-og-domene#konfigurer-hosting" className="editorial-button">{c("Bestill hosting")} <span>↗</span></Link><Link href="/bestill-domene-og-epost" className="editorial-outline">{c("Bestill domene og e-post")}</Link></div></div><div className="infra-panel"><header><span><i /> {c("VEDØY INFRA / KONFIGURER")}</span><b>{c("BESTILL NÅ")}</b></header><div className="infra-map"><span className="infra-node node-ssl">{c("SSL")}<small>{c("KLART")}</small></span><span className="infra-node node-backup">{c("BACKUP")}<small>{c("VALGBART")}</small></span><span className="infra-node node-dns">{c("DNS")}<small>{c("AVKLARES")}</small></span><span className="infra-node node-client">{c("KUNDE")}<small>{c("nettleser")}</small></span><span className="infra-node node-edge">{c("EDGE")}<small>{c("Vercel")}</small></span><span className="infra-node node-app">{c("APP")}<small>{c("Next.js")}</small></span><span className="infra-node node-data">{c("DATA")}<small>{c("sikker")}</small></span></div></div><EditorialFloatIcons variant="hosting" /></section>
   <section className="products-section" id="profilprodukter"><div className="products-copy"><p className="editorial-kicker lime">{c("06 · PROFILPRODUKTER")}</p><h2>{c("Bedriften på skjermen.")}<br />{c("Og ute i")} <em>{c("verden.")}</em></h2><p>{c("Last opp logoen din og se en rask visualisering på utvalgte plagg. Vi hjelper med produktvalg, plassering, design og produksjon.")}</p><div className="products-copy__actions"><Link href="/tjenester/profilprodukter#bestill-profilprodukter" className="dark-button">{c("Åpne bestillingsskjema")} <span>↗</span></Link><ClothingRequestModal /></div></div><ProductCustomizer showRequestForm={false} /></section>
