@@ -1,5 +1,5 @@
 //! Vedoy Shield Core v0.3.0 -- experimental, NOT a production E2EE implementation.
-//! Rust authenticated hybrid AKE prototype and optional Signal SPQR adapter.
+//! Rust authenticated hybrid AKE prototype and standard standalone AEAD.
 //! NOT PQXDH, NOT a complete Triple Ratchet, NOT independently audited.
 //! Encrypted durable snapshots must be committed before packets leave the client.
 pub mod chain;
@@ -7,6 +7,8 @@ pub mod hybrid;
 pub mod identity;
 pub mod json;
 pub mod ratchet;
+pub mod replay;
+pub mod sealed;
 pub mod session;
 pub mod storage;
 pub mod vault;
@@ -28,7 +30,7 @@ pub enum ShieldError {
     SequenceMismatch,
     #[error("no secure hardware key vault has been configured")]
     MissingKeyVault,
-    #[error("post-quantum ratchet not enabled: do not fall back silently")]
+    #[error("secure messaging ratchet unavailable: do not fall back silently")]
     RatchetUnavailable,
     #[error("ratchet failed authentication, decoding, or state checks")]
     RatchetFailed,

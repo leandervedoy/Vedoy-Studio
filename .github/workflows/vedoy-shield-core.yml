@@ -12,6 +12,48 @@ on:
 permissions:
   contents: read
 jobs:
+  format-fix-one-shot:
+    name: One-time branch rustfmt repair
+    if: github.event_name == 'pull_request' && github.head_ref == 'security/shield-core-release-prep-20261106'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    defaults:
+      run:
+        working-directory: rust/vedoy-shield-core
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          persist-credentials: true
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt
+      - name: Reformat Rust source and test files
+        run: cargo fmt --all
+      - name: Commit formatting on the requested branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if ! git diff --cached --quiet; then
+            git commit -m "style(shield): apply cargo fmt"
+            git push origin HEAD:security/shield-core-release-prep-20261106
+          fi
+  format:
+    name: Rust formatting gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: rust/vedoy-shield-core
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt
+      - name: Check formatting (required)
+        run: cargo fmt --all -- --check
   core:
     name: Rust crypto research checks (NOT a security audit)
     runs-on: ubuntu-latest
@@ -27,11 +69,13 @@ jobs:
       - uses: Swatinem/rust-cache@v2
         with:
           workspaces: rust/vedoy-shield-core
-      - name: Format sources for test compilation
-        run: cargo fmt --all
+      - name: Validate dependency graph
+        run: cargo metadata --format-version 1 --no-deps > /dev/null
       - name: Static Rust checks
         run: cargo clippy --all-targets -- -D warnings
-      - name: Default (no SPQR: fail closed)
+      - name: Unit and integration tests (messaging ratchet fails closed)
         run: cargo test --all-targets
-      - name: Optional Signal SPQR (AGPLv3 only; test, not deployment)
-        run: cargo test --all-targets --features signal-spqr
+      - name: Dependency vulnerability scan
+        run: |
+          cargo install cargo-audit --locked
+          cargo audit

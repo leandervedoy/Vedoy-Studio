@@ -2,7 +2,7 @@
 
 ## Product boundaries
 
-- **Rust library:** hybrid experimental handshake, optional Signal SPQR, envelope, local encrypted snapshots.
+- **Rust library:** hybrid experimental handshake, messaging ratchet disabled (fail closed), envelope, local encrypted snapshots.
 - **React Native / Sent:** UI, notifications, React Native native-bridge, lifecycle, user consent. NOT delivered here.
 - **Mobile system:** Android Keystore / iOS Keychain (hardware-backed where supported); PIN lockout and biometric gates. NOT connected here.
 - **Relay and VPN:** WireGuard/Proton optional; do not treat exit IP hopping as an E2EE guarantee. NOT delivered here.
@@ -12,14 +12,14 @@
 
 1. Users verify and pin each other's identity key; no blind trust-on-first-use silently.
 2. Server delivers signed asynchronous prekeys; sender performs an audited authenticated PQXDH exchange (current `hybrid.rs` is research-only).
-3. Both devices create postquantum ratchet state from agreed secret; complete classical DH ratchet in parallel.
+3. Both devices initialize a separately reviewed post-quantum-capable messaging ratchet; no such implementation is included in this branch.
 4. Devices enter password #2 and PIN to unlock wrapped local state, additionally gated by hardware keystore.
 5. `queue_message` prepares next state + encrypted envelope; saves both in one encrypted file **before** a sendable packet is returned.
 6. Network transports an authenticated JSON ciphertext packet. Relays do not see plaintext or private keys.
 7. Receiver atomically commits the updated ratchet state + received plaintext inside encrypted local inbox before returning it to UI.
 8. Sender removes outbox packet only after an authenticated delivery receipt; retries use identical saved packet, not re-encryption with consumed message keys.
 
-## JSON
+## Standalone authenticated data encryption\n\n`sealed::seal_payload` and `sealed::open_payload` use an existing RustCrypto XChaCha20-Poly1305 implementation with random nonces and context-bound authenticated data. The caller must supply a securely managed 32-byte symmetric key. This is **not** a replacement for end-to-end session establishment, ratcheting, or recipient identity verification. Use test data only until the overall product has been reviewed.\n\n## JSON
 
 A `SentPacket` has `chat_id` and an `envelope`. The envelope contains `version: 3`, `sequence`, `message_id`, `public_seed`, `nonce`, `pq_ratchet_chunk`, and `ciphertext`. Byte vectors are encoded as JSON arrays by serde by default, not base64. A future compact binary framing can be introduced under a new wire version.
 
