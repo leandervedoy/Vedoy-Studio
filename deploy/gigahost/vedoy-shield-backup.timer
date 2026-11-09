@@ -1,0 +1,12 @@
+# Disabled-by-default example. Only enable after real restore tests pass.
+[Unit]
+Description=Schedule Vedoy Shield Restic backup
+
+[Timer]
+OnCalendar=*-*-* 02:30:00
+RandomizedDelaySec=25m
+Persistent=true
+Unit=vedoy-shield-backup.service
+
+[Install]
+WantedBy=timers.target

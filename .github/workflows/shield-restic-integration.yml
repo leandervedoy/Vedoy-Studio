@@ -1,0 +1,35 @@
+name: Shield Restic encrypted backup integration
+
+on:
+  pull_request:
+    paths:
+      - 'tools/vedoy-shield/backup/**'
+      - 'deploy/gigahost/**'
+      - 'docs/vedoy-shield-gigahost-restic-backup.md'
+      - 'tests/cloud-tenant-isolation.test.mjs'
+      - '.github/workflows/shield-restic-integration.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Restic from Ubuntu repositories for disposable integration test
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y restic
+          restic version
+      - name: Test real encrypted backup and restored SHA-256 contents
+        run: node --test tools/vedoy-shield/backup/restic-runner.test.mjs
+      - name: Install existing application test dependencies
+        run: npm ci --ignore-scripts
+      - name: Cloud cross-tenant offline regression tests
+        run: node --test tests/cloud-tenant-isolation.test.mjs
