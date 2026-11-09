@@ -6,6 +6,7 @@ import styles from "../insights.module.css";
 import { ProjectScreenshotGallery } from "@/components/project-screenshot-gallery";
 import { STUDIO_SCREENSHOTS } from "@/lib/project-screenshots";
 import { QuantumInteractiveArticle } from "@/components/insights/quantum-interactive-article";
+import { InsightsStandardArticle } from "@/components/insights/standard-article";
 import { AdvertizePlacement } from "@/components/advertize-placement";
 
 type PageProps = { params: Promise<{ slug: string }> };
@@ -42,13 +43,7 @@ export default async function InsightArticlePage({params}: PageProps) {
       {found.slug === "hva-er-kvanteteknologi-forklart-uten-mysterier" ? (
         <QuantumInteractiveArticle sections={found.sections} />
       ) : (
-        <div className={styles.articleBody}>
-          {found.sections.map((section,index) => <section key={section.heading}>
-            <div className={styles.chapterNumber}>{String(index+1).padStart(2,"0")}</div>
-            <h2>{section.heading}</h2>
-            {section.paragraphs.map((paragraph,i) => <p key={i}>{paragraph}</p>)}
-          </section>)}
-        </div>
+        <InsightsStandardArticle sections={found.sections} />
       )}
       <AdvertizePlacement slot="studio-home" title="Relevant fra Vedøy" />
       {found.slug === "fra-ide-til-fungerende-teknologi-utviklingsdag-vedoy" ? <ProjectScreenshotGallery
