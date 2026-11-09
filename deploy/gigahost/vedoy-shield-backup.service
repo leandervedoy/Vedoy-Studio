@@ -1,0 +1,35 @@
+# Disabled-by-default example. Do NOT enable before reviewing the runbook.
+# /etc/systemd/system/vedoy-shield-backup.service
+[Unit]
+Description=Vedoy Shield encrypted Restic backup and restore verification
+Documentation=https://github.com/leandervedoy/Vedoy-Studio/blob/main/docs/vedoy-shield-gigahost-restic-backup.md
+Wants=network-online.target
+After=network-online.target
+ConditionPathIsDirectory=/srv/vedoy-cloud-snapshots/consistent
+
+[Service]
+Type=oneshot
+User=vedoy-backup
+Group=vedoy-backup
+UMask=0077
+EnvironmentFile=/etc/vedoy-shield/backup.env
+Environment=SHIELD_BACKUP_STATE_DIR=/var/lib/vedoy-shield-backup
+StateDirectory=vedoy-shield-backup
+StateDirectoryMode=0700
+ReadOnlyPaths=/srv/vedoy-cloud-snapshots/consistent
+ReadWritePaths=/var/lib/vedoy-shield-backup
+ExecStart=/usr/bin/node /opt/vedoy-studio/tools/vedoy-shield/backup/restic-runner.mjs backup --source /srv/vedoy-cloud-snapshots/consistent --state /var/lib/vedoy-shield-backup
+TimeoutStartSec=12h
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectControlGroups=true
+ProtectKernelModules=true
+LockPersonality=true
+RestrictSUIDSGID=true
+
+# Any failure leaves existing files untouched. Wire systemd failure notifications
+# to Vedoy Shield monitoring before production deployment.
