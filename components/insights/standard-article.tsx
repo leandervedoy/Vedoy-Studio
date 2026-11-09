@@ -9,7 +9,7 @@ export function InsightsStandardArticle({ sections }: { sections: InsightArticle
   const [introOpen, setIntroOpen] = useState(false);
   const [preferences, setPreferences] = useState<ReaderPreferences>(DEFAULT_PREFERENCES);
   const [started, setStarted] = useState(false);
-  const paragraphsToDisplay = preferences.depth === "brief" ? 1 : preferences.depth === "standard" ? 2 : Number.POSITIVE_INFINITY;
+  const paragraphsToDisplay = !started ? Number.POSITIVE_INFINITY : preferences.depth === "brief" ? 1 : preferences.depth === "standard" ? 2 : Number.POSITIVE_INFINITY;
   return (
     <div>
       {introOpen && (
