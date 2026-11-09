@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import type { InsightArticle } from "@/lib/insights-articles";
 import articleStyles from "../../app/insights/insights.module.css";
 import styles from "./quantum-interactive-article.module.css";
+import { DEFAULT_PREFERENCES, ReaderPreferenceIntro, type ReaderPreferences } from "./reader-preference-intro";
 
 type Mode = "choose" | "read" | "explore";
 type Props = { sections: InsightArticle["sections"] };
@@ -151,38 +152,15 @@ function KnowledgeCheck() {
 export function QuantumInteractiveArticle({ sections }: Props) {
   const [mode, setMode] = useState<Mode>("choose");
   const [chapter, setChapter] = useState(0);
-  const firstChoice = useRef<HTMLButtonElement>(null);
-  const lastChoice = useRef<HTMLButtonElement>(null);
+  const [preferences, setPreferences] = useState<ReaderPreferences>(DEFAULT_PREFERENCES);
 
-  useEffect(() => {
-    if (mode !== "choose") return;
-    const previousOverflow = document.body.style.overflow;
-    const previouslyFocused = document.activeElement instanceof HTMLElement ? document.activeElement : null;
-    document.body.style.overflow = "hidden";
-    firstChoice.current?.focus();
-    const handleKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setMode("read");
-      if (event.key !== "Tab") return;
-      if (event.shiftKey && document.activeElement === firstChoice.current) {
-        event.preventDefault();
-        lastChoice.current?.focus();
-      } else if (!event.shiftKey && document.activeElement === lastChoice.current) {
-        event.preventDefault();
-        firstChoice.current?.focus();
-      }
-    };
-    document.addEventListener("keydown", handleKey);
-    return () => {
-      document.body.style.overflow = previousOverflow;
-      document.removeEventListener("keydown", handleKey);
-      previouslyFocused?.focus();
-    };
-  }, [mode]);
-
-  function choose(next: Mode) {
+  function choose(next: Mode, nextPreferences: ReaderPreferences = preferences) {
+    setPreferences(nextPreferences);
     setMode(next);
     if (next === "explore") setChapter(0);
   }
+
+  const maxParagraphs = preferences.depth === "brief" ? 1 : preferences.depth === "standard" ? 2 : Number.POSITIVE_INFINITY;
 
   function navigateTo(index: number) {
     setChapter(Math.max(0, Math.min(index, sections.length - 1)));
@@ -192,36 +170,25 @@ export function QuantumInteractiveArticle({ sections }: Props) {
   return (
     <div id="quantum-experience" className={styles.experience}>
       {mode === "choose" && (
-        <div className={styles.overlay} role="presentation">
-          <div className={styles.dialog} role="dialog" aria-modal="true" aria-labelledby="quantum-mode-title" aria-describedby="quantum-mode-description">
-            <span className={styles.kicker}>VEDOY INSIGHTS / VELG OPPLEVELSE</span>
-            <span className={styles.heroIcon} aria-hidden="true">✦</span>
-            <h2 id="quantum-mode-title">Hvordan vil du utforske kvantefysikk?</h2>
-            <p id="quantum-mode-description">Velg hvordan du vil lese artikkelen. Du kan bytte når som helst.</p>
-            <div className={styles.modeCards}>
-              <button type="button" ref={firstChoice} className={styles.modeCard} onClick={() => choose("explore")}>
-                <span className={styles.modeCardIcon} aria-hidden="true">✳</span>
-                <strong>Utforsk interaktivt</strong>
-                <span>Gå gjennom kapitler, prøv en qubit-simulator og test deg selv.</span>
-                <span className={styles.modeLink}>Start opplevelsen →</span>
-              </button>
-              <button type="button" ref={lastChoice} className={styles.modeCard} onClick={() => choose("read")}>
-                <span className={styles.modeCardIcon} aria-hidden="true">☷</span>
-                <strong>Les vanlig artikkel</strong>
-                <span>Les hele teksten i ditt eget tempo, med alle kilder tilgjengelig.</span>
-                <span className={styles.modeLink}>Åpne artikkelen →</span>
-              </button>
-            </div>
-          </div>
-        </div>
+        <ReaderPreferenceIntro onBegin={(readingMode, nextPreferences) => choose(readingMode, nextPreferences)} />
       )}
 
       <div className={styles.toolbar}>
         <div>
           <span className={styles.kicker}>TO MÅTER Å LÆRE PÅ</span>
-          <p>{mode === "explore" ? "Interaktiv artikkel" : "Vanlig artikkel"}</p>
+          <p>{mode === "explore" ? "Interaktiv artikkel" : "Vanlig artikkel"} · {preferences.depth === "deep" ? "Detaljert" : preferences.depth === "brief" ? "Kort" : "Vanlig"} nivå</p>
         </div>
-        <button type="button" className={styles.switchMode} onClick={() => setMode("choose")}>Bytt lesemodus ↗</button>
+        <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, color: "#cde2c9" }}>
+          Detaljnivå
+          <select aria-label="Detaljnivå" value={preferences.depth}
+            style={{ padding: 8, color: "#eef8eb", background: "#17251a", border: "1px solid #567157", borderRadius: 8 }}
+            onChange={(event) => setPreferences((previous) => ({ ...previous, depth: event.target.value as ReaderPreferences["depth"] }))}>
+            <option value="brief">Kort</option>
+            <option value="standard">Vanlig</option>
+            <option value="deep">Detaljert</option>
+          </select>
+        </label>
+        <button type="button" className={styles.switchMode} onClick={() => setMode("choose")}>Bytt lesemodus / personvern ↗</button>
       </div>
 
       {mode !== "explore" ? (
@@ -230,7 +197,7 @@ export function QuantumInteractiveArticle({ sections }: Props) {
             <section key={section.heading}>
               <div className={articleStyles.chapterNumber}>{String(index + 1).padStart(2, "0")}</div>
               <h2>{section.heading}</h2>
-              {section.paragraphs.map((paragraph, index) => <p key={index}>{paragraph}</p>)}
+              {section.paragraphs.slice(0, maxParagraphs).map((paragraph, index) => <p key={index}>{paragraph}</p>)}
             </section>
           ))}
         </div>
@@ -251,7 +218,7 @@ export function QuantumInteractiveArticle({ sections }: Props) {
             <section key={sections[chapter].heading}>
               <div className={articleStyles.chapterNumber}>{String(chapter + 1).padStart(2, "0")}</div>
               <h2>{sections[chapter].heading}</h2>
-              {sections[chapter].paragraphs.map((paragraph, index) => <p key={index}>{paragraph}</p>)}
+              {sections[chapter].paragraphs.slice(0, maxParagraphs).map((paragraph, index) => <p key={index}>{paragraph}</p>)}
             </section>
           </div>
           {chapter === 0 && <ConceptExplorer />}
