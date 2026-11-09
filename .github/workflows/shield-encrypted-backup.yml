@@ -1,0 +1,44 @@
+name: Vedoy Shield encrypted repository backup
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "20 3 * * 1"
+
+permissions:
+  contents: read
+
+jobs:
+  encrypted-backup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      SHIELD_BACKUP_PASSPHRASE: ${{ secrets.SHIELD_BACKUP_PASSPHRASE }}
+    steps:
+      - name: Verify encryption secret is configured
+        run: |
+          if [ -z "$SHIELD_BACKUP_PASSPHRASE" ]; then
+            echo "Missing SHIELD_BACKUP_PASSPHRASE; refusing unencrypted backup."
+            exit 1
+          fi
+      - name: Checkout complete history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Create Git history bundle
+        run: git bundle create "$RUNNER_TEMP/vedoy-studio.bundle" --all
+      - name: Encrypt Git bundle using Shield backup envelope
+        run: node scripts/shield-backup.mjs encrypt "$RUNNER_TEMP/vedoy-studio.bundle" "$RUNNER_TEMP/vedoy-studio.bundle.shield"
+      - name: Verify authentication and bundle restore format
+        run: |
+          node scripts/shield-backup.mjs decrypt "$RUNNER_TEMP/vedoy-studio.bundle.shield" "$RUNNER_TEMP/verified.bundle"
+          git bundle verify "$RUNNER_TEMP/verified.bundle"
+          cmp "$RUNNER_TEMP/vedoy-studio.bundle" "$RUNNER_TEMP/verified.bundle"
+      - name: Upload encrypted artifact only
+        uses: actions/upload-artifact@v4
+        with:
+          name: vedoy-studio-shield-${{ github.run_id }}
+          path: ${{ runner.temp }}/vedoy-studio.bundle.shield
+          retention-days: 14
+          if-no-files-found: error
