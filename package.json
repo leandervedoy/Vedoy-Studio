@@ -65,5 +65,8 @@
   },
   "engines": {
     "node": ">=20.19"
-  }
+  },
+  "browserslist": [
+    "baseline widely available"
+  ]
 }
