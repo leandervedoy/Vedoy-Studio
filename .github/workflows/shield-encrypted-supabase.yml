@@ -1,0 +1,70 @@
+name: Shield backup - Supabase Postgres
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "5 4 * * 1"
+
+permissions:
+  contents: read
+
+jobs:
+  supabase-postgres:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Verify backup prerequisites
+        env:
+          PGHOST: ${{ secrets.SHIELD_SUPABASE_PGHOST }}
+          PGUSER: ${{ secrets.SHIELD_SUPABASE_PGUSER }}
+          PGPASSWORD: ${{ secrets.SHIELD_SUPABASE_PGPASSWORD }}
+          SHIELD_BACKUP_PASSPHRASE: ${{ secrets.SHIELD_BACKUP_PASSPHRASE }}
+        run: |
+          if [ -z "$PGHOST" ] || [ -z "$PGUSER" ] || [ -z "$PGPASSWORD" ] || [ -z "$SHIELD_BACKUP_PASSPHRASE" ]; then
+            echo "::error::Shield database backup secrets are missing. No partial/unencrypted backup will run."
+            exit 1
+          fi
+      - name: Produce Postgres 17 custom-format dump
+        env:
+          PGHOST: ${{ secrets.SHIELD_SUPABASE_PGHOST }}
+          PGUSER: ${{ secrets.SHIELD_SUPABASE_PGUSER }}
+          PGPASSWORD: ${{ secrets.SHIELD_SUPABASE_PGPASSWORD }}
+          PGDATABASE: postgres
+          PGSSLMODE: verify-full
+        run: |
+          set -eu
+          umask 077
+          # Hostname must belong to the intended Supabase project, never an arbitrary host.
+          case "$PGHOST" in
+            db.niedmgyyougvgiiuwcvw.supabase.co) ;;
+            *) echo "::error::Unexpected Supabase database host. Refusing backup."; exit 1 ;;
+          esac
+          # The official postgres image has an up-to-date root CA trust store.
+          docker run --rm --network host \
+            -e PGHOST -e PGUSER -e PGPASSWORD -e PGDATABASE -e PGSSLMODE \
+            -v "$RUNNER_TEMP:/backup" postgres:17 \
+            pg_dump --format=custom --no-owner --no-acl --file=/backup/vedoy-supabase.dump
+          test -s "$RUNNER_TEMP/vedoy-supabase.dump"
+      - name: Encrypt and verify backup, then delete temporary plaintext
+        env:
+          SHIELD_BACKUP_PASSPHRASE: ${{ secrets.SHIELD_BACKUP_PASSPHRASE }}
+        run: |
+          set -eu
+          node scripts/shield-backup.mjs encrypt "$RUNNER_TEMP/vedoy-supabase.dump" "$RUNNER_TEMP/vedoy-supabase.dump.shield"
+          node scripts/shield-backup.mjs decrypt "$RUNNER_TEMP/vedoy-supabase.dump.shield" "$RUNNER_TEMP/verified.dump"
+          cmp "$RUNNER_TEMP/vedoy-supabase.dump" "$RUNNER_TEMP/verified.dump"
+          docker run --rm -v "$RUNNER_TEMP:/backup:ro" postgres:17 pg_restore --list /backup/verified.dump > /dev/null
+          rm -f "$RUNNER_TEMP/vedoy-supabase.dump" "$RUNNER_TEMP/verified.dump"
+      - name: Upload encrypted dump only
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: shield-supabase-postgres-${{ github.run_id }}
+          path: ${{ runner.temp }}/vedoy-supabase.dump.shield
+          retention-days: 14
+          if-no-files-found: error
+      - name: Clean up temporary files
+        if: always()
+        run: rm -f "$RUNNER_TEMP/vedoy-supabase.dump" "$RUNNER_TEMP/verified.dump"

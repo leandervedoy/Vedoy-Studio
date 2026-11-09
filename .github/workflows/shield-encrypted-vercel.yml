@@ -1,0 +1,49 @@
+name: Shield backup - Vercel metadata
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "45 3 * * 1"
+
+permissions:
+  contents: read
+
+jobs:
+  vercel-metadata:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Verify sanitizer tests
+        run: node --test tests/shield-vercel-export.test.mjs
+      - name: Export allowlisted Vercel metadata
+        env:
+          VERCEL_TOKEN: ${{ secrets.SHIELD_VERCEL_READ_TOKEN }}
+          VERCEL_TEAM_ID: team_3ZoNGAMStJSxGrqTs9xAc5YJ
+          VERCEL_PROJECT_ID: prj_K5sVV1TAkhCQ9BJt7xNMQqRgVrOO
+        run: |
+          if [ -z "$VERCEL_TOKEN" ]; then
+            echo "::error::SHIELD_VERCEL_READ_TOKEN is not configured."
+            exit 1
+          fi
+          umask 077
+          node scripts/shield-export-vercel.mjs "$RUNNER_TEMP/vedoy-vercel-config.json"
+      - name: Shield encrypt and authenticate
+        env:
+          SHIELD_BACKUP_PASSPHRASE: ${{ secrets.SHIELD_BACKUP_PASSPHRASE }}
+        run: |
+          node scripts/shield-backup.mjs encrypt "$RUNNER_TEMP/vedoy-vercel-config.json" "$RUNNER_TEMP/vedoy-vercel-config.json.shield"
+          node scripts/shield-backup.mjs decrypt "$RUNNER_TEMP/vedoy-vercel-config.json.shield" "$RUNNER_TEMP/verified-vercel.json"
+          cmp "$RUNNER_TEMP/vedoy-vercel-config.json" "$RUNNER_TEMP/verified-vercel.json"
+      - name: Upload encrypted artifact only
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: shield-vercel-metadata-${{ github.run_id }}
+          path: ${{ runner.temp }}/vedoy-vercel-config.json.shield
+          retention-days: 14
+          if-no-files-found: error
+      - name: Remove temporary plaintext
+        if: always()
+        run: rm -f "$RUNNER_TEMP/vedoy-vercel-config.json" "$RUNNER_TEMP/verified-vercel.json"
