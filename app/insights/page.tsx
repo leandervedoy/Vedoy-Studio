@@ -14,7 +14,7 @@ export default function InsightsIndex() {
   return <main className={styles.page}>
     <nav className={styles.navigation} aria-label="Hovednavigasjon">
       <Link href="/" className={styles.brand}>VEDØY <span>INSIGHTS</span></Link>
-      <div className={styles.navlinks}><Link href="/news">Nyheter</Link><Link href="/">Vedoy Studio</Link></div>
+      <div className={styles.navlinks}><Link href="/">Vedoy Studio</Link></div>
     </nav>
     <section className={styles.hero}>
       <p className={styles.eyebrow}>VEDOY INSIGHTS / PERSPEKTIVER OG ANALYSE</p>

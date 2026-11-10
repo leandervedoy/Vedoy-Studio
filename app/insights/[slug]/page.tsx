@@ -32,7 +32,7 @@ export default async function InsightArticlePage({params}: PageProps) {
   return <main className={styles.page}>
     <nav className={styles.navigation} aria-label="Hovednavigasjon">
       <Link href="/insights" className={styles.brand}>VEDØY <span>INSIGHTS</span></Link>
-      <div className={styles.navlinks}><Link href="/news">Nyheter</Link><Link href="/">Vedoy Studio</Link></div>
+      <div className={styles.navlinks}><Link href="/">Vedoy Studio</Link></div>
     </nav>
     <article className={styles.article}>
       <Link href="/insights" className={styles.back}>← Alle innsikter</Link>
