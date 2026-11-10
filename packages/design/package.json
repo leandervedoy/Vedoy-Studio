@@ -1,1 +1,12 @@
-{"name":"@vedoy/design","version":"0.1.0","private":true,"files":["src"],"exports":{"./tokens.css":"./src/tokens.css"}}
+{
+  "name": "@vedoy/design",
+  "version": "0.1.0",
+  "private": true,
+  "files": [
+    "src"
+  ],
+  "exports": {
+    "./tokens.css": "./src/tokens.css",
+    "./article-sections": "./src/article-sections.tsx"
+  }
+}
