@@ -1,0 +1,26 @@
+.page{background:#080b12;color:#f6f8fb;min-height:100vh;font-family:Inter,system-ui,-apple-system,sans-serif}
+.page *{box-sizing:border-box}.page a{text-decoration:none}.shell{width:min(calc(100% - 40px),1180px);margin-inline:auto}
+.header{min-height:80px;border-bottom:1px solid #252d3d;display:flex;justify-content:space-between;align-items:center;gap:20px}
+.header nav{display:flex;gap:20px;flex-wrap:wrap}.header nav a{font-size:13px;color:#b6c1cb}.header nav a:hover{color:#fff}
+.logo{font-size:18px;font-weight:850;letter-spacing:.1em;color:#f6f8fb}.logo span{font-weight:500;color:#6dff9c}
+.hero{display:grid;grid-template-columns:1.03fr .97fr;gap:clamp(32px,5vw,80px);align-items:center;padding:clamp(65px,8vw,140px) 0}
+.eyebrow{font-size:11px;letter-spacing:.18em;color:#6dff9c;font-weight:850}.hero h1{font-size:clamp(52px,6vw,88px);line-height:1;letter-spacing:-.07em;margin:22px 0}.hero h1 em{color:#6dff9c;font-style:normal}
+.hero p{color:#b3c0cf;font-size:17px;line-height:1.7;max-width:610px}.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px}
+.primary,.secondary{display:inline-flex;min-height:48px;align-items:center;justify-content:center;padding:12px 20px;border-radius:12px;font-weight:750;font-size:14px}
+.primary{background:#6dff9c;color:#06130b!important}.secondary{background:#151b29;border:1px solid #354052;color:#fff!important}
+.draft{color:#929daf!important;font-size:13px!important;margin-top:17px!important}
+.mock{border:1px solid #31483a;border-radius:24px;overflow:hidden;background:radial-gradient(circle at 78% 18%,#24493b,transparent 58%),#0f1420;box-shadow:0 30px 70px #0006}
+.mocktop{display:flex;align-items:center;gap:7px;padding:17px 20px;background:#121924;border-bottom:1px solid #273344}
+.mocktop i{width:9px;height:9px;border-radius:50%;background:#647084}.mocktop i:first-child{background:#ff777a}.mocktop i:nth-child(2){background:#ffd273}.mocktop i:nth-child(3){background:#6dff9c}.mocktop code{margin-left:auto;color:#9daac1;font-size:11px}
+.mockbody{padding:clamp(24px,4vw,48px)}.mock h2{font-size:clamp(34px,4vw,52px);line-height:1.1;letter-spacing:-.055em;margin:22px 0 13px}.mock h2 span{color:#6dff9c}
+.mock p{font-size:14px;color:#abb9c6}.buttons{display:flex;gap:9px;margin:25px 0}.buttons b{background:#6dff9c;color:#06130b;font-size:12px;padding:13px 17px;border-radius:10px}.buttons b+ b{border:1px solid #344051;background:#161f2c;color:#f6f8fb}
+.tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.tiles div{padding:22px;border:1px solid #374252;background:#141d2a;border-radius:13px;display:grid;gap:5px}.tiles strong{font-size:14px}.tiles span{font-size:11px;color:#929daf}
+.section{padding:clamp(55px,8vw,100px) 0;border-top:1px solid #252d3d}.section h2{font-size:clamp(31px,3.7vw,51px);line-height:1.1;letter-spacing:-.05em;margin:15px 0 34px;max-width:760px}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.feature{padding:26px;background:#0f1420;border:1px solid #252d3d;border-radius:17px}.feature small{color:#6dff9c;font-weight:800}.feature h3{font-size:20px;margin:28px 0 10px}.feature p{color:#aab9c9;font-size:14px;line-height:1.6;margin:0}
+.footnote{font-size:14px;color:#929daf}.pricegrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:30px}.price{background:#0f1420;border:1px solid #252d3d;border-radius:15px;padding:23px}.price span{display:block;font-size:12px;color:#929daf;font-weight:700}.price strong{display:block;font-size:clamp(23px,2.5vw,32px);margin-top:10px}
+.notice{border:1px solid #385442;background:#132118;border-radius:15px;padding:23px;margin-top:18px}.notice strong{color:#6dff9c}.notice p{font-size:13px;color:#c3d4c7;margin:7px 0 0}
+.footer{display:flex;align-items:center;justify-content:space-between;gap:20px;min-height:100px;border-top:1px solid #252d3d;color:#929daf;font-size:13px}.footer a{color:#6dff9c}.page a:focus-visible{outline:2px solid #6dff9c;outline-offset:4px}
+@media(max-width:860px){.hero{grid-template-columns:1fr}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.header{flex-wrap:wrap;padding:16px 0}.hero{padding:58px 0}.grid,.pricegrid{grid-template-columns:repeat(2,minmax(0,1fr))}.feature,.price{padding:18px}.footer{flex-direction:column;align-items:flex-start;justify-content:center;padding:20px 0}}
+@media(max-width:360px){.grid,.pricegrid{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){.page *{animation:none!important;transition:none!important}}
