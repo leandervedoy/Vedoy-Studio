@@ -1,0 +1,60 @@
+/* Vedøy Design: reusable article blocks, scoped to this package. */
+.articleSections { border-top: 1px solid #39483a; }
+.section {
+  display: grid;
+  grid-template-columns: 80px minmax(0, 1fr);
+  column-gap: 35px;
+  padding: 44px 0 48px;
+  border-bottom: 1px solid #28382b;
+}
+.chapterNumber {
+  color: #b9ff39;
+  font: 800 12px ui-monospace, monospace;
+  padding-top: 12px;
+}
+.content { min-width: 0; }
+.heading {
+  color: inherit;
+  font-size: clamp(25px, 3vw, 39px);
+  font-weight: 750;
+  letter-spacing: -.045em;
+  line-height: 1.15;
+  margin: 0 0 20px;
+}
+.paragraph, .question p {
+  color: #bdcbbb;
+  font-size: 17px;
+  line-height: 1.9;
+  margin: 0 0 15px;
+  max-width: 790px;
+}
+.highlight {
+  background: #16251a;
+  border: 1px solid #486b38;
+  border-left: 4px solid #b9ff39;
+  border-radius: 12px;
+  margin: 8px 0 0;
+  padding: 22px 24px 10px;
+}
+.quote {
+  border-left: 3px solid #b9ff39;
+  margin: 10px 0;
+  padding: 0 0 0 24px;
+}
+.quote .paragraph { color: #e4f1dd; font-size: clamp(18px, 2.4vw, 23px); }
+.points, .sources { color: #c6d6c2; font-size: 16px; line-height: 1.8; padding-left: 24px; }
+.points li, .sources li { margin-bottom: 10px; }
+.sources a { color: #b9ff39; text-decoration: underline; text-underline-offset: 3px; overflow-wrap: anywhere; }
+.sources a:hover { color: #e4ff9c; }
+.questions { display: grid; gap: 12px; margin-top: 22px; }
+.question { background: #142017; border: 1px solid #3c553d; border-radius: 10px; padding: 14px 20px; }
+.question summary { color: #ecf6e6; cursor: pointer; font-size: 16px; font-weight: 700; }
+.question summary:focus-visible, .sources a:focus-visible { outline: 3px solid #b9ff39; outline-offset: 4px; }
+.question p { margin-top: 14px; margin-bottom: 0; }
+@media (max-width: 640px) {
+  .section { grid-template-columns: 1fr; padding-top: 30px; }
+  .chapterNumber { padding: 0 0 15px; }
+  .paragraph, .question p { font-size: 16px; }
+  .highlight { padding: 18px 18px 8px; }
+}
+@media (prefers-reduced-motion: reduce) { .question { scroll-behavior: auto; } }
