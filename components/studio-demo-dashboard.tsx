@@ -8,7 +8,7 @@ const studioMenu: { label: string; items: DemoNavItem[] }[] = [
   { label: "Oversikt", items: [{ label: "Dashboard", icon: "⌂" }, { label: "Team", icon: "◌" }, { label: "Bedriftsoppsett", icon: "✦" }] },
   { label: "Bygg", items: [{ label: "Tjenester", icon: "≡" }, { label: "Domener", icon: "◎" }, { label: "Hosting og prosjekter", icon: "△" }, { label: "Nettsidebygger", icon: "▦" }] },
   { label: "Drift", items: [{ label: "Henvendelser", icon: "✦" }, { label: "Vedøy Canvas", icon: "▤" }, { label: "Timeregistrering", icon: "◷" }, { label: "Booking", icon: "□" }, { label: "Kunder og CRM", icon: "◉" }, { label: "E-post", icon: "✉" }, { label: "Vedøy Assist", icon: "☺" }] },
-  { label: "Voks", items: [{ label: "Statistics", icon: "↗" }, { label: "Vedøy News", icon: "▤" }, { label: "Konto og profil", icon: "◎" }, { label: "Vedi AI", icon: "✦" }, { label: "Academy", icon: "◇" }] },
+  { label: "Voks", items: [{ label: "Statistics", icon: "↗" }, { label: "Konto og profil", icon: "◎" }, { label: "Vedi AI", icon: "✦" }, { label: "Academy", icon: "◇" }] },
   { label: "Utvikle", items: [{ label: "API og nøkler", icon: "{}" }, { label: "Databaser", icon: "◫" }, { label: "Overvåkning", icon: "⌁" }] }
 ];
 

@@ -15,7 +15,7 @@ import { ServiceShowcase } from "@/components/service-showcase";
 import { ProjectScreenshotGallery } from "@/components/project-screenshot-gallery";
 import { STUDIO_SCREENSHOTS } from "@/lib/project-screenshots";
 import { isDomainProviderConfigured } from "@/lib/vercel-domains";
-import { AdvertizePlacement } from "@/components/advertize-placement";
+import { MonetizedInsightsSection } from "@/components/insights/monetized-insights-section";
 
 const serviceCtas: Record<string, { label: string; href: string }> = {
   nettsider: { label: "Be om tilbud på nettside", href: "/?need=Nettside&source=service-nettsider#kontakt" },
@@ -92,8 +92,8 @@ export default async function ServicePage({ params, searchParams }: { params: Pr
       {isClothing ? <section className="clothing-detail-section" id="bestill-profilprodukter"><div><p className="editorial-kicker lime">VEDØY COLLECTIVE · BESTILL NÅ</p><h2>Velg plagg.<br /><em>Last opp logo.</em></h2><p>Bruk et eksempelplagg eller lim inn lenken til hvilket som helst produkt i Vedøy Collective-katalogen. Velg antall og last opp logo. Vi følger opp med riktig trykkmetode, korrektur og et konkret tilbud før noe bestilles.</p><div className="clothing-partner-note"><strong>Slik fungerer det</strong><span>1. Velg plagg og last opp logo</span><span>2. Send antall, størrelser og detaljer</span><span>3. Vi avklarer produksjon og sender tilbud</span><small>Ingen automatisk betaling eller kjøp skjer når skjemaet sendes.</small></div></div><ProductCustomizer /></section> : null}
       {isEcommerce ? <EcommercePlatformGuide /> : null}
       {!isUpcoming && !isWebsite && !isWebApp && !isStore && !isEcommerce && !isClothing ? <ServicePricing type="general" /> : null}
-      {!isUpcoming ? <section className="service-advertise" aria-label="Relevant fra Vedøy"><AdvertizePlacement slot="studio-home" title="Relevant fra Vedøy" className="service-advertise__placement" /></section> : null}
       <section className="service-detail-cta"><p className="editorial-kicker lime">{isUpcoming ? "MELD INTERESSE · IKKE TIL SALGS ENNÅ" : "NESTE STEG"}</p><h2>La oss gjøre det<br /><em>konkret.</em></h2><p>{service.nextStep}</p><Link href={serviceCta.href} className="editorial-button">{serviceCta.label} <span>↗</span></Link></section>
+      <MonetizedInsightsSection />
     </main>
   );
 }

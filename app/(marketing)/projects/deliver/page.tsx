@@ -4,6 +4,7 @@ import { DeliverSavingsCalculator, DeliverChannelPicker } from "@/components/pro
 import styles from "@/components/projects/vedoy-deliver.module.css";
 import { ProjectScreenshotGallery } from "@/components/project-screenshot-gallery";
 import { DELIVER_SCREENSHOTS } from "@/lib/project-screenshots";
+import { MonetizedInsightsSection } from "@/components/insights/monetized-insights-section";
 
 export const metadata: Metadata = {
   title: "Vedoy Deliver – én ordreoversikt, flere salgskanaler",
@@ -102,6 +103,7 @@ export default function VedoyDeliverPage() {
           <a className={styles.primary} href="/?need=Vedoy%20Deliver&source=deliver#kontakt">Meld interesse ↗</a>
         </div>
       </div>
+      <MonetizedInsightsSection />
     </main>
   );
 }

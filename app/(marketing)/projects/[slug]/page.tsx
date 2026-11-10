@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { studioProducts } from "@/lib/products";
-import { NewsFeed } from "@/components/news/news-feed";
-import { hasNewsProject } from "@/lib/news-taxonomy";
+import { MonetizedInsightsSection } from "@/components/insights/monetized-insights-section";
 import { ProjectScreenshotGallery } from "@/components/project-screenshot-gallery";
 import { STUDIO_SCREENSHOTS } from "@/lib/project-screenshots";
 
@@ -25,7 +24,7 @@ const projectOverrides: Record<string, ProjectDetail> = {
     title: "Sent",
     text: "Vedøys meldingsplattform med fokus på privatliv, sikker kommunikasjon og kontroll over egne data.",
     points: ["Private meldinger og grupper", "Personvern som utgangspunkt", "Sikkerhetsfunksjoner i utvikling"],
-    actionHref: "/news?project=sent",
+    actionHref: "/insights",
     actionLabel: "Følg utviklingen",
     status: "Beta",
     category: "Kommunikasjon / sikkerhet",
@@ -169,7 +168,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           <Link className="editorial-outline" href="/#kontakt">Snakk med Vedøy Studio</Link>
         </div>
       </div>
-      {hasNewsProject(slug) ? <NewsFeed project={slug} title={`Nyheter om ${project.title}`} intro="Kun oppdateringer som tilhører dette prosjektet." limit={4} /> : null}
+      <MonetizedInsightsSection />
     </main>
   );
 }
