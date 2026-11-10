@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import type { InsightArticle } from "@/lib/insights-articles";
-import articleStyles from "@/app/insights/insights.module.css";
+import { ArticleSections } from "@/packages/design/src/article-sections";
 import { DEFAULT_PREFERENCES, ReaderPreferenceIntro, type ReaderPreferences } from "./reader-preference-intro";
 
 export function InsightsStandardArticle({ sections }: { sections: InsightArticle["sections"] }) {
@@ -42,15 +42,7 @@ export function InsightsStandardArticle({ sections }: { sections: InsightArticle
           </button>
         </div>
       </div>
-      <div className={articleStyles.articleBody}>
-        {sections.map((section, index) => (
-          <section key={section.heading}>
-            <div className={articleStyles.chapterNumber}>{String(index + 1).padStart(2, "0")}</div>
-            <h2>{section.heading}</h2>
-            {section.paragraphs.slice(0, paragraphsToDisplay).map((paragraph, index) => <p key={index}>{paragraph}</p>)}
-          </section>
-        ))}
-      </div>
+      <ArticleSections sections={sections} paragraphLimit={paragraphsToDisplay} />
     </div>
   );
 }
