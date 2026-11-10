@@ -10,7 +10,14 @@ export type InsightArticle = {
   editor?: string;
   disclosure?: string;
   articleCta?: { eyebrow: string; title: string; description: string; href: string; linkText: string };
-  sections: ReadonlyArray<{ heading: string; paragraphs: ReadonlyArray<string> }>;
+  sections: ReadonlyArray<{
+    heading: string;
+    paragraphs: ReadonlyArray<string>;
+    kind?: "text" | "highlight" | "quote" | "sources" | "faq";
+    points?: ReadonlyArray<string>;
+    sources?: ReadonlyArray<{ label: string; href: string }>;
+    questions?: ReadonlyArray<{ question: string; answer: string }>;
+  }>;
 };
 
 export const INSIGHT_ARTICLES: readonly InsightArticle[] = [
