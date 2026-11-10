@@ -1,11 +1,11 @@
-/** Draft metadata: do not expose purchase links before secure fulfillment and tax review. */
+/** Public preview metadata: do not expose purchase links before secure fulfillment and tax review. */
 export const vedoyClearCssProduct = {
-  id: "vedoy-clear-css-essentials",
-  slug: "vedoy-clear-css",
-  title: "Vedoy Clear CSS – Essentials",
+  id: "vedoy-css-digital-simplicity",
+  slug: "vedoy-css-digital-simplicity",
+  title: "Vedoy CSS Digital Simplicity",
   version: "1.0.0",
   category: "Utviklerverktøy",
-  status: "draft" as const,
+  status: "listed" as const,
   delivery: "secure-download-pending" as const,
   type: "digital_download" as const,
   license: "single_project_commercial" as const,

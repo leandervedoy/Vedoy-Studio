@@ -13,7 +13,7 @@ export default function DigitalProductsPage(){
     <h2 style={{fontSize:30,margin:"17px 0 10px"}}>{product.title}</h2>
     <p style={{color:"#b6c3cc",maxWidth:700}}>Responsivt rammeverk med komponenter, lys/mørk modus og valgfri animasjon. Basert på css.vedoystudio.no.</p>
     <p style={{fontSize:22,fontWeight:750}}>29 kr <span style={{color:"#aebcc6",fontWeight:400,fontSize:15}}>/ $4 / €3 / £3</span></p>
-    <Link href="/produkter/vedoy-clear-css" style={{display:"inline-block",background:"#6dff9c",color:"#06130b",padding:"13px 19px",borderRadius:11,fontWeight:800}}>Se produktet ↗</Link>
+    <Link href="/produkter/vedoy-css-digital-simplicity" style={{display:"inline-block",background:"#6dff9c",color:"#06130b",padding:"13px 19px",borderRadius:11,fontWeight:800}}>Se produktet ↗</Link>
    </article>
   </div>
  </main>;
